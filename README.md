@@ -96,6 +96,8 @@ v0.3独立验收见 `docs/QUICK_ACCEPTANCE.md`。
 
 ## 独立账号与腾讯云
 
+腾讯云访问：[Awesome My Workbench](https://vivid-dream.online/)；运行版本与验证证据见 [腾讯云发布记录](docs/TENCENT_DEPLOYMENT.md)。
+
 `main` 的 v0.7 提供独立登录、管理员邀请、账号禁用、改密及会话管理。用户、工作台和示例/个人空间分别隔离；管理员不会自动取得其他用户的健康资料。使用 Node 24 LTS，`npm test` 串行运行隔离回归。
 
 生产配置参照 `.env.example`，设计和验收条件见 [账号与部署设计](docs/ACCOUNTS_AND_TENCENT.md)。发布目录中的 `deploy/install-release.sh RELEASE_ID DOMAIN` 安装独立 systemd 服务及 Nginx 虚拟主机；需要事先安装独立 Node24 runtime、配置域名及有效证书。脚本只在环境文件不存在时创建配置；已有配置保持原值。

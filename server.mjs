@@ -2,7 +2,7 @@ import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import { migrateAccounts, createAccounts } from './lib/accounts.mjs';
 const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='production';
@@ -209,6 +209,13 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname.startsWith('/api/'))return json(res,404,{error:'接口不存在'});
  if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'方法不支持'});
  const relative=url.pathname==='/'?'index.html':decodeURIComponent(url.pathname).slice(1);const p=path.resolve(root,'public',relative);if(!p.startsWith(path.join(root,'public')+path.sep)||!fs.existsSync(p)||!fs.statSync(p).isFile())return json(res,404,{error:'页面不存在'});
- res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':'no-store'});fs.createReadStream(p).pipe(res);
+ // Only verified content-addressed public code can be cached across sessions.
+ const assetMatch=/^\/assets\/app\.([a-f0-9]{64})\.(js|css)$/.exec(url.pathname);
+ const publicRoot=fs.realpathSync(path.join(root,'public'));
+ if(!fs.realpathSync(p).startsWith(publicRoot+path.sep))return json(res,404,{error:'页面不存在'});
+ const bytes=fs.readFileSync(p);
+ const immutable=!!assetMatch&&createHash('sha256').update(bytes).digest('hex')===assetMatch[1];
+ res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':bytes.length});
+ if(req.method==='HEAD')return res.end();res.end(bytes);
  }catch(e){json(res,e.status||400,{error:e.message||'请求失败'})}});
 server.listen(Number(process.env.PORT||3100),host,()=>console.log(`Health workbench http://localhost:${process.env.PORT||3100}`));

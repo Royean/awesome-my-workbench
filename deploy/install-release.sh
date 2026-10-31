@@ -10,6 +10,7 @@ base=/opt/awesome-my-workbench
 source_dir="$base/releases/$release"
 test -f "$source_dir/server.mjs"
 test -x "$base/node/bin/node"
+"$base/node/bin/node" "$source_dir/scripts/build-public.mjs"
 test -f "/etc/letsencrypt/live/$domain/fullchain.pem"
 getent passwd aw-workbench >/dev/null || useradd --system --home-dir /var/lib/awesome-my-workbench --shell /sbin/nologin aw-workbench
 install -d -o aw-workbench -g aw-workbench -m 0700 /var/lib/awesome-my-workbench /var/backups/awesome-my-workbench

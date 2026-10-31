@@ -1,6 +1,7 @@
+import { fetchJSON } from './request.js';
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-export function createAccount({openDrawer, closeDrawer, toast = () => {}} = {}) {
+export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized} = {}) {
   let enabled = false, user = null, invite = new URLSearchParams(location.hash.slice(1)).get('invite');
   const esc = escapeHTML;
   const field = (label, name, type = 'text', extra = '') => `<label class="account-field"><span>${label}</span><input name="${name}" type="${type}" ${extra}></label>`;
@@ -8,6 +9,7 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}} = {}) 
   const submit = label => `<button class="account-button account-primary" type="submit">${label}</button>`;
   const date = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? '未知' : d.toLocaleString('zh-CN', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}); };
   function handleUnauthorized() {
+    onUnauthorized?.();
     user = null;
     document.querySelector('#app')?.replaceChildren();
     document.querySelector('#overlay')?.replaceChildren();
@@ -15,13 +17,8 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}} = {}) 
     location.reload();
   }
   async function request(path, options = {}, allowUnauthorized = false) {
-    const response = await fetch(`/api/auth${path}`, {credentials:'same-origin', ...options, headers:{'Content-Type':'application/json', ...options.headers}});
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      if (response.status === 401 && !allowUnauthorized) handleUnauthorized();
-      throw Object.assign(new Error(body.error || (response.status === 429 ? '尝试次数较多，请稍后再试。' : '操作失败，请重试。')), {status:response.status});
-    }
-    return body;
+    try {return await fetchJSON(`/api/auth${path}`,options);}
+    catch(error) {if(error.status===401&&!allowUnauthorized)handleUnauthorized();throw error;}
   }
   const write = (path, body, method = 'POST', allow = false) => request(path, {method, body:JSON.stringify(body)}, allow);
   function bindForm(form, action) {
@@ -45,10 +42,12 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}} = {}) 
     root.querySelector('#account-retry')?.addEventListener('click', () => location.reload());
     root.querySelector('#account-back-login')?.addEventListener('click', () => { invite = null; history.replaceState(null, '', location.pathname + location.search); gate(); });
     bindForm(root.querySelector('form'), async data => {
-      if (invite) { await write('/accept-invitation', {...data, token:invite}, 'POST', true); invite = null; }
-      else await write('/login', data, 'POST', true);
+      const result = invite ? await write('/accept-invitation', {...data, token:invite}, 'POST', true) : await write('/login', data, 'POST', true);
+      invite = null;
+      user = result.user;
       history.replaceState(null, '', location.pathname + location.search);
-      handleUnauthorized();
+      if(onAuthenticated)await onAuthenticated(user);
+      else location.reload();
     });
     root.querySelector('input')?.focus();
   }

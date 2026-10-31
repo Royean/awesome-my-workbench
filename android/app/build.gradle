@@ -1,0 +1,30 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'dev.awesome.myworkbench'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'dev.awesome.myworkbench'
+        minSdk 26
+        targetSdk 36
+        versionCode 700
+        versionName '0.7.0'
+    }
+    signingConfigs {
+        release {
+            if (System.getenv('WORKBENCH_KEYSTORE')) {
+                storeFile file(System.getenv('WORKBENCH_KEYSTORE'))
+                storePassword System.getenv('WORKBENCH_STORE_PASSWORD')
+                keyAlias 'awesome-my-workbench'
+                keyPassword System.getenv('WORKBENCH_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+        }
+        debug { applicationIdSuffix '.debug' }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}

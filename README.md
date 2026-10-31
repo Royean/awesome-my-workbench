@@ -105,3 +105,7 @@ v0.3独立验收见 `docs/QUICK_ACCEPTANCE.md`。
 首位管理员由服务器 CLI 的 `create-admin-invitation --email EMAIL --name NAME` 建立，一次性令牌只在初始化时输出，24 小时有效，使用者自行设置密码；没有默认密码或公开注册。邀请码应私下交付，不写入 Git、Issue 或日志。会员邀请由登录后的“我的 → 账号与安全 → 成员管理”执行。当前不发送邮件、不自动迁移 Sites 或本机已有资料。
 
 注意：`cloud` 分支仍是原 Sites 平台版本，未移植独立账号服务。不要把 `main` 的账号页面直接同步到 Sites 并据此声称具有同样的账户管理功能。
+
+## Android安装包
+
+原生Android封装位于`android/`，连接同一腾讯云账号与数据库；构建、签名和使用边界见[Android说明](docs/ANDROID.md)。APK及密钥不提交到源码仓库，下载地址和实际安装验收在发布记录中维护。

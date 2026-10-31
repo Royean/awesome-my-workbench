@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.awesome.myworkbench",
+      "sha256_cert_fingerprints": [
+        "3A:10:4D:13:AB:13:57:4B:CA:06:2F:AA:83:DA:D2:97:20:24:09:A5:55:1B:18:34:20:40:65:47:F0:A6:D5:A6"
+      ]
+    }
+  }
+]

@@ -63,8 +63,13 @@ function validate(kind,b){
   if(clean.outcome==='跳过'&&!clean.note.trim())throw new Error('请填写跳过原因');
   if(clean.date>today())throw new Error('不能记录未来日期的服用结果');
  }
+ if(kind==='meal'){
+  clean.rawText=String(b.rawText||'').slice(0,5000);
+  if(b.attachmentIds!==undefined&&(!Array.isArray(b.attachmentIds)||b.attachmentIds.length>4||b.attachmentIds.some(id=>typeof id!=='string')))throw new Error('餐食附件最多4个');
+  clean.attachmentIds=[...new Set(b.attachmentIds||[])];
+ }
  if(kind==='task')clean.done=Boolean(b.done);
- if(kind==='file')clean.size=Number(b.size)||0;
+ if(kind==='file'){clean.size=Number(b.size)||0;clean.intakeStatus=clean.visitId?'已关联':String(b.intakeStatus||'待整理');clean.fileCategory=String(b.fileCategory||'一般资料').slice(0,80);}
  return clean;
 }
 function put(space,kind,body,id=randomUUID()){
@@ -73,6 +78,7 @@ function put(space,kind,body,id=randomUUID()){
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw new Error('关联就诊不存在或不在当前空间');}
  if(kind==='file'&&clean.visitId){const conflict=getAll(space).find(x=>x.kind==='report'&&x.fileId===id&&x.visitId!==clean.visitId);if(conflict)throw new Error('原件已被其他就诊的报告关联，请先调整报告关联');}
  if(kind==='report'&&clean.fileId){const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.fileId,space);if(!f){if(original.fileId!==clean.fileId)throw new Error('关联原件不存在或不在当前空间')}else{const file=JSON.parse(f.body);if(file.visitId&&file.visitId!==clean.visitId)throw new Error('原件属于另一次就诊，请选择同次就诊的资料');}}
+ if(kind==='meal')for(const fileId of clean.attachmentIds){if(!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space)&&!(original.attachmentIds||[]).includes(fileId))throw new Error('餐食附件不存在或不在当前空间');}
  if(kind==='dose'){
   const medRow=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='medication'").get(clean.medicationId,space);if(!medRow)throw new Error('用药方案不存在或不在当前空间');const med=JSON.parse(medRow.body);
   if(clean.date<med.date||(med.endDate&&clean.date>med.endDate))throw new Error('服用记录日期需在方案起止范围内');
@@ -105,7 +111,7 @@ if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body))};
 async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=new Error('上传内容超过限制');e.status=413;throw e;}chunks.push(c)}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw new Error('请求格式无效')}}
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml'};
-const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp'};
+const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 const server=http.createServer(async(req,res)=>{try{
  if(!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(req.headers.host||''))return json(res,403,{error:'仅支持本机访问'});
  const url=new URL(req.url,'http://localhost');const space=url.searchParams.get('space')==='demo'?'demo':'personal';
@@ -127,6 +133,26 @@ const server=http.createServer(async(req,res)=>{try{
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw new Error('该记录已存在');
   const clean=validate(deleted.kind,JSON.parse(deleted.body));if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw new Error('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);return json(res,200,restored);
  }
+ if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
+  const b=await readBody(req);const attachments=b.attachments||[];
+  if(!Array.isArray(attachments)||attachments.length>4)throw new Error('最多保存4个附件');
+  const rawText=String(b.text||'');const text=rawText.trim();if(!text&&!attachments.length)throw new Error('写一句话、添加照片或录一段语音即可保存');
+  if(rawText.length>5000)throw new Error('文字最多5000个字符');
+  const staged=[];let total=0;
+  for(const attachment of attachments){
+   const name=path.basename(String(attachment.name||''));const ext=path.extname(name).toLowerCase();const type=allowedFiles[ext];
+   if(!type||(!type.startsWith('image/')&&!type.startsWith('audio/')))throw new Error('餐食附件仅支持JPG、PNG、WEBP照片与WEBM、M4A、OGG、MP3音频');
+   const bytes=Buffer.from(String(attachment.content||''),'base64');total+=bytes.length;if(!bytes.length||total>10*1024*1024)throw new Error('附件合计需大于0且不超过10MB');
+   const storageName=randomUUID()+ext;staged.push({id:randomUUID(),name,type,bytes,storageName});
+  }
+  const mealType=String(b.mealType||'餐食');const date=b.date||today();
+  const body={title:(text||`${mealType} · ${staged.some(f=>f.type.startsWith('image/'))?'照片':'语音'}待整理`).slice(0,120),date,time:b.time||'',mealType,note:String(b.note||''),rawText,attachmentIds:staged.map(f=>f.id)};
+  validate('meal',body);const written=[];
+  db.exec('BEGIN');try{
+   for(const file of staged){const p=path.join(dataDir,'uploads',file.storageName);fs.writeFileSync(p,file.bytes,{mode:0o600});written.push(p);put(space,'file',{title:file.name,date,time:b.time||'',name:file.name,mime:file.type,size:file.bytes.length,storageName:file.storageName,fileCategory:'餐食附件',intakeStatus:'待整理',note:file.type.startsWith('audio/')?'原始录音，尚未自动转写':'原始照片，尚未自动识别'},file.id);}
+   const meal=put(space,'meal',body);db.exec('COMMIT');return json(res,201,meal);
+  }catch(error){db.exec('ROLLBACK');for(const p of written)try{fs.unlinkSync(p)}catch{}throw error;}
+ }
  if(url.pathname==='/api/upload'&&req.method==='POST'){
   const b=await readBody(req);const name=path.basename(String(b.name||''));const ext=path.extname(name).toLowerCase();if(!allowedFiles[ext])throw new Error('支持 PDF、PNG、JPG、WEBP 和 TXT');
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw new Error('文件需大于0且不超过10MB');
@@ -142,6 +168,6 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname.startsWith('/api/'))return json(res,404,{error:'接口不存在'});
  if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'方法不支持'});
  const relative=url.pathname==='/'?'index.html':decodeURIComponent(url.pathname).slice(1);const p=path.resolve(root,'public',relative);if(!p.startsWith(path.join(root,'public')+path.sep)||!fs.existsSync(p)||!fs.statSync(p).isFile())return json(res,404,{error:'页面不存在'});
- res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':'no-store'});fs.createReadStream(p).pipe(res);
+ res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':'no-store'});fs.createReadStream(p).pipe(res);
  }catch(e){json(res,e.status||400,{error:e.message||'请求失败'})}});
 server.listen(Number(process.env.PORT||3100),'127.0.0.1',()=>console.log(`Health workbench http://localhost:${process.env.PORT||3100}`));

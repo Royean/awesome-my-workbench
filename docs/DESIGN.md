@@ -22,3 +22,7 @@
 ## v0.2 就医详情审查
 
 UI/UX /root/health_design审查 medical-detail.png、medication.png、medical-mobile.png，确认就诊关联、报告补充状态、用药方案与执行区层次清楚，无明显横向溢出。按建议进一步去除详情页重复通用页首、收紧手机就诊卡；将待记录行按钮改为“记录服用”；手机保留AI未连接文字并加宽服用日期框。关键行为由 /root/medical_review 独立走通，见 MEDICAL_ACCEPTANCE.md。
+
+## v0.3 快捷记录审查
+
+UI/UX /root/health_design只读审查 quick-exercise.png 与 quick.js/CSS，确认项目→时长→快捷值→最近复用的顺序清楚，底部保存和折叠备注减少填写负担。按意见补充数值框focus-within、明确标签、选择项aria-pressed与勾选；辅助文字加深并放大，最近记录入口标注“填入”。核心入口前置到首页，保留完整编辑表单供稍后补充。

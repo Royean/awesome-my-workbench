@@ -18,3 +18,7 @@
 
 设计Agent已审查桌面截图，视觉方向通过。按建议放大任务与时间线文字、加深辅助色；助手按钮明确显示未连接；新增类型选择器；扩大任务触控区；移动端优先展示计划。
 桌面与390px窄屏截图见 desktop.png、mobile.png。当前未接模型，助手只提供明确标注的本地统计摘要。
+
+## v0.2 就医详情审查
+
+UI/UX /root/health_design审查 medical-detail.png、medication.png、medical-mobile.png，确认就诊关联、报告补充状态、用药方案与执行区层次清楚，无明显横向溢出。按建议进一步去除详情页重复通用页首、收紧手机就诊卡；将待记录行按钮改为“记录服用”；手机保留AI未连接文字并加宽服用日期框。关键行为由 /root/medical_review 独立走通，见 MEDICAL_ACCEPTANCE.md。

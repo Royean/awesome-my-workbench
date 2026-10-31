@@ -17,6 +17,18 @@ server {
     add_header X-Content-Type-Options nosniff always;
     add_header Referrer-Policy no-referrer always;
     add_header Strict-Transport-Security "max-age=31536000" always;
+    location = /.well-known/assetlinks.json {
+        alias /var/www/awesome-my-workbench-download/assetlinks.json;
+        default_type application/json;
+        add_header Cache-Control "no-store";
+    }
+    location ^~ /download/ {
+        alias /var/www/awesome-my-workbench-download/;
+        types { application/vnd.android.package-archive apk; text/plain txt; application/json json; }
+        autoindex off;
+        add_header Cache-Control "no-store";
+        add_header X-Content-Type-Options nosniff always;
+    }
     location / {
         proxy_pass http://127.0.0.1:3180;
         proxy_http_version 1.1;

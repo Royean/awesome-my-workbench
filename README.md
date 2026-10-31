@@ -108,4 +108,4 @@ v0.3独立验收见 `docs/QUICK_ACCEPTANCE.md`。
 
 ## Android安装包
 
-原生Android封装位于`android/`，连接同一腾讯云账号与数据库；构建、签名和使用边界见[Android说明](docs/ANDROID.md)。APK及密钥不提交到源码仓库，下载地址和实际安装验收在发布记录中维护。
+原生Android封装位于`android/`，连接同一腾讯云账号与数据库；构建、签名和使用边界见[Android说明](docs/ANDROID.md)。[下载Android APK](https://vivid-dream.online/download/awesome-my-workbench-0.7.0.apk)，签名及当前安装验收限制见[安装包交付记录](docs/ANDROID_RELEASE.md)。APK及密钥不提交到源码仓库。

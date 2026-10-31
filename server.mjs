@@ -15,7 +15,7 @@ db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEX
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
 const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
-const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose'];
+const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water'];
 const validDate=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&!Number.isNaN(new Date(v+'T12:00:00Z').getTime())&&new Date(v+'T12:00:00Z').toISOString().slice(0,10)===v;
 const validTime=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分'};
@@ -27,7 +27,18 @@ function validate(kind,b){
  for(const key of ['hospital','department','status','type','mealType','category','time','visitId','unit','name','mime','storageName'])if(b[key]!==undefined)clean[key]=String(b[key]).slice(0,250);
  if(clean.time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(clean.time))throw new Error('时间格式需为 HH:MM');
  if(kind==='visit'&&!['待就诊','已完成','待复查'].includes(clean.status))throw new Error('就医状态无效');
- if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw new Error('运动时长需大于0且不超过1440分钟');clean.duration=Number(b.duration);}
+ if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw new Error('运动时长需大于0且不超过1440分钟');clean.duration=Number(b.duration);
+  if(b.distance!==undefined&&b.distance!==''){if(!Number.isFinite(Number(b.distance))||Number(b.distance)<=0||Number(b.distance)>1000)throw new Error('距离需大于0且不超过1000公里');clean.distance=Number(b.distance);}
+  clean.feeling=String(b.feeling||'');if(!['','轻松','适中','吃力','不适'].includes(clean.feeling))throw new Error('身体感受选项无效');
+  if(b.exercises!==undefined&&(!Array.isArray(b.exercises)||b.exercises.length>30))throw new Error('最多记录30个训练动作');
+  clean.exercises=(b.exercises||[]).map(m=>{const name=String(m.name||'').trim();const sets=Number(m.sets),reps=Number(m.reps),weight=Number(m.weight||0);if(!name||name.length>100||!Number.isInteger(sets)||sets<1||sets>100||!Number.isInteger(reps)||reps<1||reps>500||!Number.isFinite(weight)||weight<0||weight>1000)throw new Error('请完整填写动作、组数、次数和有效重量（可为0）');return {name,sets,reps,weight}});
+ }
+ if(kind==='water'){if(!Number.isFinite(Number(b.volume))||Number(b.volume)<=0||Number(b.volume)>5000)throw new Error('饮水量需大于0且不超过5000毫升');clean.volume=Number(b.volume);}
+ if(kind==='favorite'){
+  if(!['meal','exercise'].includes(b.targetKind))throw new Error('收藏类型无效');clean.targetKind=b.targetKind;clean.sourceId=String(b.sourceId||'').slice(0,100);
+  const t=validate(b.targetKind,{...b.template,title:b.template?.title||clean.title,date:clean.date});delete t.date;delete t.time;delete t.attachmentIds;delete t.rawText;delete t.visitId;clean.template=t;
+ }
+
  if(kind==='metric'){
   if(!units[clean.type])throw new Error('请选择监测项目');
   if(!Number.isFinite(Number(b.value))||Number(b.value)<=0||Number(b.value)>10000)throw new Error('请输入有效监测数值');
@@ -64,7 +75,7 @@ function validate(kind,b){
   if(clean.date>today())throw new Error('不能记录未来日期的服用结果');
  }
  if(kind==='meal'){
-  clean.rawText=String(b.rawText||'').slice(0,5000);
+  clean.rawText=String(b.rawText||'').slice(0,5000);clean.portion=String(b.portion||'').slice(0,120);
   if(b.attachmentIds!==undefined&&(!Array.isArray(b.attachmentIds)||b.attachmentIds.length>4||b.attachmentIds.some(id=>typeof id!=='string')))throw new Error('餐食附件最多4个');
   clean.attachmentIds=[...new Set(b.attachmentIds||[])];
  }
@@ -134,23 +145,23 @@ const server=http.createServer(async(req,res)=>{try{
   const clean=validate(deleted.kind,JSON.parse(deleted.body));if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw new Error('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
-  const b=await readBody(req);const attachments=b.attachments||[];
-  if(!Array.isArray(attachments)||attachments.length>4)throw new Error('最多保存4个附件');
-  const rawText=String(b.text||'');const text=rawText.trim();if(!text&&!attachments.length)throw new Error('写一句话、添加照片或录一段语音即可保存');
+  const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw new Error('保留附件无效');
+  if(!Array.isArray(attachments)||attachments.length+keep.length>4)throw new Error('最多保存4个附件');
+  const rawText=String(b.text??existing?.rawText??'');const text=rawText.trim();if(!text&&!attachments.length&&!keep.length)throw new Error('写一句话、添加照片或录一段语音即可保存');
   if(rawText.length>5000)throw new Error('文字最多5000个字符');
-  const staged=[];let total=0;
+  const staged=[];let total=keep.reduce((sum,id)=>sum+(getAll(space).find(f=>f.id===id&&f.kind==='file')?.size||0),0);if(total>10*1024*1024)throw new Error('附件合计不能超过10MB');
   for(const attachment of attachments){
    const name=path.basename(String(attachment.name||''));const ext=path.extname(name).toLowerCase();const type=allowedFiles[ext];
    if(!type||(!type.startsWith('image/')&&!type.startsWith('audio/')))throw new Error('餐食附件仅支持JPG、PNG、WEBP照片与WEBM、M4A、OGG、MP3音频');
    const bytes=Buffer.from(String(attachment.content||''),'base64');total+=bytes.length;if(!bytes.length||total>10*1024*1024)throw new Error('附件合计需大于0且不超过10MB');
    const storageName=randomUUID()+ext;staged.push({id:randomUUID(),name,type,bytes,storageName});
   }
-  const mealType=String(b.mealType||'餐食');const date=b.date||today();
-  const body={title:(text||`${mealType} · ${staged.some(f=>f.type.startsWith('image/'))?'照片':'语音'}待整理`).slice(0,120),date,time:b.time||'',mealType,note:String(b.note||''),rawText,attachmentIds:staged.map(f=>f.id)};
+  const mealType=String(b.mealType||existing?.mealType||'餐食');const date=b.date||existing?.date||today();
+  const body={...existing,title:(text||existing?.title||`${mealType} · ${staged.some(f=>f.type.startsWith('image/'))?'照片':'语音'}待整理`).slice(0,120),date,time:b.time??existing?.time??'',mealType,note:String(b.note??existing?.note??''),rawText,portion:String(b.portion??existing?.portion??''),attachmentIds:[...keep,...staged.map(f=>f.id)]};
   validate('meal',body);const written=[];
   db.exec('BEGIN');try{
    for(const file of staged){const p=path.join(dataDir,'uploads',file.storageName);fs.writeFileSync(p,file.bytes,{mode:0o600});written.push(p);put(space,'file',{title:file.name,date,time:b.time||'',name:file.name,mime:file.type,size:file.bytes.length,storageName:file.storageName,fileCategory:'餐食附件',intakeStatus:'待整理',note:file.type.startsWith('audio/')?'原始录音，尚未自动转写':'原始照片，尚未自动识别'},file.id);}
-   const meal=put(space,'meal',body);db.exec('COMMIT');return json(res,201,meal);
+   const meal=put(space,'meal',body,existing?.id||randomUUID());db.exec('COMMIT');return json(res,existing?200:201,meal);
   }catch(error){db.exec('ROLLBACK');for(const p of written)try{fs.unlinkSync(p)}catch{}throw error;}
  }
  if(url.pathname==='/api/upload'&&req.method==='POST'){

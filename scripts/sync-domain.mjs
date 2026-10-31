@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=path.resolve(import.meta.dirname,'..');
+const source=fs.readFileSync(path.resolve(root,'../health-workbench/server.mjs'),'utf8');
+const domain=source.slice(source.indexOf('const today='),source.indexOf('function put(')).replace(/const getAll=[^\n]+\n/,'');
+const base=source.slice(source.indexOf("if(!getAll('demo').length){")+"if(!getAll('demo').length){".length,source.indexOf('// Versioned demonstration content;')).trim().replace(/}\s*$/,'');
+const medical=source.slice(source.indexOf(" const visit=getAll('demo').find"),source.indexOf(" db.prepare('INSERT INTO app_meta"));
+const output=`// Generated from ../health-workbench/server.mjs. Run node scripts/sync-domain.mjs after domain changes.\n${domain}\nexport {today,day,kinds,validate};\nexport function demoRecords(){const records=[];const getAll=()=>records;const put=(_space,kind,body,id=crypto.randomUUID())=>{const item={id,kind,...validate(kind,body)};records.push(item);return item};\n${base}\n${medical}\nreturn records;}\n`;
+fs.writeFileSync(path.join(root,'app/health-domain.mjs'),output);
+console.log('Synced domain validation and fictional demo records');

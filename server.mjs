@@ -4,15 +4,23 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
+import { migrateAccounts, createAccounts } from './lib/accounts.mjs';
+const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='production';
+const appOrigin=process.env.APP_ORIGIN;
+if(process.env.NODE_ENV==='production'&&(!appOrigin||!/^https:\/\/[^/]+$/.test(appOrigin)))throw new Error('production requires APP_ORIGIN=https://your-domain');
+if(appOrigin&&new URL(appOrigin).origin!==appOrigin)throw new Error('APP_ORIGIN must be an exact origin without trailing slash');
+const host=process.env.HOST||'127.0.0.1';
+if(!authEnabled&&!['127.0.0.1','localhost','::1'].includes(host))throw new Error('Remote listening requires AUTH_REQUIRED=1');
 const root=path.dirname(fileURLToPath(import.meta.url));
 const dataDir=process.env.HEALTH_DATA_DIR||path.join(root,'data');
 fs.mkdirSync(path.join(dataDir,'uploads'),{recursive:true,mode:0o700});
 fs.chmodSync(dataDir,0o700);fs.chmodSync(path.join(dataDir,'uploads'),0o700);
 const db=new DatabaseSync(path.join(dataDir,'health.sqlite'));
 fs.chmodSync(path.join(dataDir,'health.sqlite'),0o600);
+migrateAccounts(db);
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
-db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL)');
+db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 const builtinWorkbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'金融',type:'finance'}];
 const getWorkbenches=()=>[...builtinWorkbenches,...db.prepare('SELECT id,name,type FROM workbenches ORDER BY rowid').all()];
 const validateWorkbench=b=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw new Error('工作台名称需为1–24个字符，类型需为other');return {id:randomUUID(),name:b.name.trim(),type:'other'}};
@@ -124,20 +132,36 @@ if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
  db.prepare('INSERT INTO app_meta VALUES(?,?)').run('medical-demo-v1','seeded');
 }
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body))};
-async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=new Error('上传内容超过限制');e.status=413;throw e;}chunks.push(c)}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw new Error('请求格式无效')}}
+async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=new Error('上传内容超过限制');e.status=413;throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=new Error('登录状态已失效，请重新登录');error.status=401;throw error;}}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw new Error('请求格式无效')}}
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
+const accounts=createAccounts({db,enabled:authEnabled,origin:appOrigin,json,readBody});
 const server=http.createServer(async(req,res)=>{try{
- if(!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(req.headers.host||''))return json(res,403,{error:'仅支持本机访问'});
- const url=new URL(req.url,'http://localhost');const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';const workbenches=getWorkbenches();const workbench=workbenches.find(x=>x.id===workbenchId);if(!workbench)return json(res,404,{error:'工作台不存在'});const space=workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`;const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw new Error('此工作台仅支持备忘与待办');};
+ res.setHeader('X-Content-Type-Options','nosniff');
+ if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
+ const requestHost=req.headers.host||'';
+ if(appOrigin?requestHost!==new URL(appOrigin).host:!(/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestHost)))return json(res,403,{error:'访问主机无效'});
+ const url=new URL(req.url,'http://localhost');
+ if(url.pathname==='/healthz'&&req.method==='GET')return json(res,200,{status:'ok'});
  if(req.method!=='GET'&&req.method!=='HEAD'){
-  const origin=req.headers.origin; if(origin&&origin!==`http://${req.headers.host}`)return json(res,403,{error:'只接受同源操作'});
-  if(req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'只接受同源操作'});
-  if(!req.headers['content-type']?.startsWith('application/json'))return json(res,415,{error:'需使用 JSON 请求'});
+  const expected=appOrigin||`http://${requestHost}`;const origin=req.headers.origin;
+  if((authEnabled&&origin!==expected)||(origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'只接受同源操作'});
+  if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
  }
- if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req));db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
+ const user=authEnabled?accounts.session(req):null;
+ if(user&&!['/api/auth/login','/api/auth/accept-invitation'].includes(url.pathname))req.authSnapshot=user;
+ if(await accounts.handle(req,res,url,user))return;
+ if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return json(res,401,{error:'请先登录'});
+ const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
+ const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
+ // Static assets remain available before login; data scopes are resolved only by the authenticated user.
+ const workbench=workbenches.find(x=>x.id===workbenchId);if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
+ const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
+ if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
+ const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw new Error('此工作台仅支持备忘与待办');};
+ if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req));if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
  if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
- if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{workbenches,workbench,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{"name":"Captain","focus":"建立可持续的健康习惯"}'),today:today()})}
+ if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{workbenches,workbench,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'})),today:today()})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);const clean={name:String(b.name||'Captain').slice(0,40),focus:String(b.focus||'').slice(0,180)};db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return json(res,200,clean)}
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw new Error('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});
@@ -187,4 +211,4 @@ const server=http.createServer(async(req,res)=>{try{
  const relative=url.pathname==='/'?'index.html':decodeURIComponent(url.pathname).slice(1);const p=path.resolve(root,'public',relative);if(!p.startsWith(path.join(root,'public')+path.sep)||!fs.existsSync(p)||!fs.statSync(p).isFile())return json(res,404,{error:'页面不存在'});
  res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':'no-store'});fs.createReadStream(p).pipe(res);
  }catch(e){json(res,e.status||400,{error:e.message||'请求失败'})}});
-server.listen(Number(process.env.PORT||3100),'127.0.0.1',()=>console.log(`Health workbench http://localhost:${process.env.PORT||3100}`));
+server.listen(Number(process.env.PORT||3100),host,()=>console.log(`Health workbench http://localhost:${process.env.PORT||3100}`));

@@ -89,7 +89,17 @@ v0.3独立验收见 `docs/QUICK_ACCEPTANCE.md`。
 
 ## GitHub代码分支
 
-- `main`：Node.js + SQLite 的本地版，包含开发历史、测试及手机版多工作台代码。
+- `main`：Node.js + SQLite 的本地及腾讯云独立托管版本，包含手机版多工作台、账号系统及部署配置。
 - `cloud`：Vinext + D1 + R2 的线上部署版，包含登录保护和云端数据库迁移。
 
 两分支是同一应用的不同运行版本。若需要同步开发，请分别检出为相邻目录 `health-workbench` 与 `health-workbench-online`；云端的同步脚本会从相邻本地版读取业务验证与页面源码。仓库不含真实数据库、用户附件或访问凭据。
+
+## 独立账号与腾讯云
+
+`main` 的 v0.7 提供独立登录、管理员邀请、账号禁用、改密及会话管理。用户、工作台和示例/个人空间分别隔离；管理员不会自动取得其他用户的健康资料。使用 Node 24 LTS，`npm test` 串行运行隔离回归。
+
+生产配置参照 `.env.example`，设计和验收条件见 [账号与部署设计](docs/ACCOUNTS_AND_TENCENT.md)。发布目录中的 `deploy/install-release.sh RELEASE_ID DOMAIN` 安装独立 systemd 服务及 Nginx 虚拟主机；需要事先安装独立 Node24 runtime、配置域名及有效证书。脚本只在环境文件不存在时创建配置；已有配置保持原值。
+
+首位管理员由服务器 CLI 的 `create-admin-invitation --email EMAIL --name NAME` 建立，一次性令牌只在初始化时输出，24 小时有效，使用者自行设置密码；没有默认密码或公开注册。邀请码应私下交付，不写入 Git、Issue 或日志。会员邀请由登录后的“我的 → 账号与安全 → 成员管理”执行。当前不发送邮件、不自动迁移 Sites 或本机已有资料。
+
+注意：`cloud` 分支仍是原 Sites 平台版本，未移植独立账号服务。不要把 `main` 的账号页面直接同步到 Sites 并据此声称具有同样的账户管理功能。

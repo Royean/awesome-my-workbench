@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS schema_migrations(version INTEGER PRIMARY KEY, applied_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, name TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('admin','user')), password_hash TEXT, disabled INTEGER NOT NULL DEFAULT 0 CHECK(disabled IN (0,1)), created_at INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS sessions(id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, token_hash TEXT NOT NULL UNIQUE, created_at INTEGER NOT NULL, last_seen_at INTEGER NOT NULL, expires_at INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS sessions_user ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS sessions_expiry ON sessions(expires_at);
+CREATE TABLE IF NOT EXISTS invitations(id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, token_hash TEXT NOT NULL UNIQUE, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL, consumed_at INTEGER);
+CREATE INDEX IF NOT EXISTS invitations_user ON invitations(user_id);
+CREATE INDEX IF NOT EXISTS invitations_expiry ON invitations(expires_at);
+CREATE TABLE IF NOT EXISTS audit_events(id TEXT PRIMARY KEY, actor_id TEXT REFERENCES users(id), action TEXT NOT NULL, target_id TEXT, created_at INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS audit_events_created ON audit_events(created_at);
+CREATE TABLE IF NOT EXISTS auth_attempts(key TEXT PRIMARY KEY, failures INTEGER NOT NULL, window_start INTEGER NOT NULL, blocked_until INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS user_workbenches(user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, id TEXT NOT NULL, name TEXT NOT NULL, type TEXT NOT NULL, PRIMARY KEY(user_id,id));
+CREATE TABLE IF NOT EXISTS data_scopes(user_id TEXT NOT NULL, workbench_id TEXT NOT NULL, base_space TEXT NOT NULL CHECK(base_space IN ('personal','demo')), space TEXT NOT NULL UNIQUE, PRIMARY KEY(user_id,workbench_id,base_space), FOREIGN KEY(user_id,workbench_id) REFERENCES user_workbenches(user_id,id) ON DELETE CASCADE);
+INSERT OR IGNORE INTO schema_migrations VALUES(1,unixepoch()*1000);

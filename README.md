@@ -86,3 +86,10 @@ v0.3独立验收见 `docs/QUICK_ACCEPTANCE.md`。
 ## 线上访问
 
 [打开私有线上版本](https://zhiheng-health-workbench.epiccurry16.chatgpt.site)，需要登录。线上与本机数据独立，本机已有真实记录没有自动上传。发布信息见 `docs/DEPLOYMENT.md`。
+
+## GitHub代码分支
+
+- `main`：Node.js + SQLite 的本地版，包含开发历史、测试及手机版多工作台代码。
+- `cloud`：Vinext + D1 + R2 的线上部署版，包含登录保护和云端数据库迁移。
+
+两分支是同一应用的不同运行版本。若需要同步开发，请分别检出为相邻目录 `health-workbench` 与 `health-workbench-online`；云端的同步脚本会从相邻本地版读取业务验证与页面源码。仓库不含真实数据库、用户附件或访问凭据。

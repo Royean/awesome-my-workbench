@@ -12,10 +12,14 @@ const db=new DatabaseSync(path.join(dataDir,'health.sqlite'));
 fs.chmodSync(path.join(dataDir,'health.sqlite'),0o600);
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
+db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL)');
+const builtinWorkbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'金融',type:'finance'}];
+const getWorkbenches=()=>[...builtinWorkbenches,...db.prepare('SELECT id,name,type FROM workbenches ORDER BY rowid').all()];
+const validateWorkbench=b=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw new Error('工作台名称需为1–24个字符，类型需为other');return {id:randomUUID(),name:b.name.trim(),type:'other'}};
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
 const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
-const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water'];
+const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note'];
 const validDate=v=>typeof v==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(v)&&!Number.isNaN(new Date(v+'T12:00:00Z').getTime())&&new Date(v+'T12:00:00Z').toISOString().slice(0,10)===v;
 const validTime=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分'};
@@ -121,21 +125,23 @@ if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
 }
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body))};
 async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=new Error('上传内容超过限制');e.status=413;throw e;}chunks.push(c)}try{return JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw new Error('请求格式无效')}}
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 const server=http.createServer(async(req,res)=>{try{
  if(!/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(req.headers.host||''))return json(res,403,{error:'仅支持本机访问'});
- const url=new URL(req.url,'http://localhost');const space=url.searchParams.get('space')==='demo'?'demo':'personal';
+ const url=new URL(req.url,'http://localhost');const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';const workbenches=getWorkbenches();const workbench=workbenches.find(x=>x.id===workbenchId);if(!workbench)return json(res,404,{error:'工作台不存在'});const space=workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`;const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw new Error('此工作台仅支持备忘与待办');};
  if(req.method!=='GET'&&req.method!=='HEAD'){
   const origin=req.headers.origin; if(origin&&origin!==`http://${req.headers.host}`)return json(res,403,{error:'只接受同源操作'});
   if(req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'只接受同源操作'});
   if(!req.headers['content-type']?.startsWith('application/json'))return json(res,415,{error:'需使用 JSON 请求'});
  }
- if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{"name":"Captain","focus":"建立可持续的健康习惯"}'),today:today()})}
+ if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req));db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
+ if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
+ if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{workbenches,workbench,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{"name":"Captain","focus":"建立可持续的健康习惯"}'),today:today()})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);const clean={name:String(b.name||'Captain').slice(0,40),focus:String(b.focus||'').slice(0,180)};db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return json(res,200,clean)}
- if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(kind==='file')throw new Error('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
+ if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw new Error('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});
-  if(req.method==='PUT'){const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
   if(req.method==='DELETE'){if(old.kind==='medication'&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===id))throw new Error('该方案已有服用记录，请停用以保留历史，或先移除服用记录');db.exec('BEGIN');try{db.prepare('INSERT OR REPLACE INTO deleted_items VALUES(?,?,?,?,?)').run(id,space,old.kind,old.body,Date.now()+12000);db.prepare('DELETE FROM items WHERE id=? AND space=?').run(id,space);db.exec('COMMIT')}catch(err){db.exec('ROLLBACK');throw err}return json(res,200,{deleted:{id,kind:old.kind,...JSON.parse(old.body)}})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
@@ -175,7 +181,7 @@ const server=http.createServer(async(req,res)=>{try{
   const file=getAll(space).find(x=>x.kind==='file'&&x.id===url.pathname.split('/').pop());if(!file)return json(res,404,{error:'文件不存在'});
   const p=path.join(dataDir,'uploads',path.basename(file.storageName));if(!fs.existsSync(p))return json(res,404,{error:'文件内容缺失'});const safeMime=allowedFiles[path.extname(file.storageName).toLowerCase()]||'application/octet-stream';res.writeHead(200,{'Content-Type':safeMime,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; sandbox; frame-ancestors 'self'",'Content-Disposition':`${url.searchParams.get('inline')==='1'?'inline':'attachment'}; filename*=UTF-8''${encodeURIComponent(file.name)}`});fs.createReadStream(p).pipe(res);return;
  }
- if(url.pathname==='/api/export'&&req.method==='GET'){return json(res,200,{exportedAt:new Date().toISOString(),space,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}')})}
+ if(url.pathname==='/api/export'&&req.method==='GET'){return json(res,200,{exportedAt:new Date().toISOString(),space:baseSpace,workbench,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}')})}
  if(url.pathname.startsWith('/api/'))return json(res,404,{error:'接口不存在'});
  if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'方法不支持'});
  const relative=url.pathname==='/'?'index.html':decodeURIComponent(url.pathname).slice(1);const p=path.resolve(root,'public',relative);if(!p.startsWith(path.join(root,'public')+path.sep)||!fs.existsSync(p)||!fs.statSync(p).isFile())return json(res,404,{error:'页面不存在'});

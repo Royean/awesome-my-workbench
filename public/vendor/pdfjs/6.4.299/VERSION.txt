@@ -1,0 +1,5 @@
+pdfjs-dist 6.4.299
+Source: https://registry.npmjs.org/pdfjs-dist/-/pdfjs-dist-6.4.299.tgz
+SHA512: AVl138zALtfaAPvADulE0PZThbYzCBS79nL4pOSL/6Sm/4AH5A21BD9VHt97OlCuzJuCpmeZtAtkinisF4Vb1g==
+License: Apache-2.0; see LICENSE.
+Legacy minified browser build and original CMaps, fonts, WASM.

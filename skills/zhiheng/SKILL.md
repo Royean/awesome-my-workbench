@@ -135,7 +135,7 @@ description: 通过 MCP 读写「知衡」个人健康工作台（餐食、运�
 | `not_found` | 工作台：「没有找到这个工作台，请从你的工作台里选一个」，并按 `error.hint`（「用 list_workbenches 获取可用工作台」）调 `list_workbenches`，用 `name` 列出可选工作台；`hint` 只给助手看，**不要转述工具名**。记录：「没找到这条记录，可能已在网页删除。我重新查一下。」 | 先 `list_workbenches`/`list_records` |
 | `internal_error`（500）/ 网络超时 | 「知衡那边出错了，这条**可能没记上**，我先查一下。」 | 写入类：**先用 `list_records` 查是否已写入**，确认没写入才重试 1 次；读取类可直接重试 1 次 |
 | `mcp_disabled`（404） | 知衡还没开启助手连接，暂时用不了，请在网页上操作。 | **不重试** |
-| `unknown_tool`（JSON-RPC） | 我这边调用出了问题，没有记上。 | **不重试**；只用上面列出的 5 个工具 |
+| `unknown_tool`（JSON-RPC） | 我这边调用出了问题，没有记上。 | **不重试**；只用 tools/list 返回的工具 |
 | 其他协议错误：`method_not_allowed`（405）/ `unsupported_media_type`（415）/ `unsupported_protocol_version`（400） | 「知衡的连接配置有问题，这次没有记上，需要检查一下连接设置。」 | **不重试**（客户端配置问题，重试不会成功） |
 
 ## 示例

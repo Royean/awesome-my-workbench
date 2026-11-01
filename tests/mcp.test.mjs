@@ -122,7 +122,7 @@ test('visit/report/medication/dose: read, create, update via MCP with full text 
  assert.equal(d.outcome,'已服用');assert.equal(d.title,'示例药 A');assert.equal(d.medicationId,m.id);
  const du=(await ok(tokenA,'update_record',{id:d.id,time:'08:20',note:'饭后'})).updated;assert.equal(du.time,'08:20');assert.equal(du.outcome,'已服用');
  assert.match(await err(tokenA,'update_record',{id:d.id,date:shift(-1)}),/只能改服用结果、时间和备注/);
- assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'跳过',note:''})).message,'请填写跳过原因');
+ assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'跳过',note:''})).message,'跳过要写原因，比如“忘带药”');
  const ds=(await ok(tokenA,'update_record',{id:d.id,outcome:'跳过',note:'胃不舒服'})).updated;assert.equal(ds.outcome,'跳过');assert.equal(ds.time,'');
  assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'已服用'})).message,'请记录实际服用时间');
  assert.equal((await ok(tokenA,'update_record',{id:d.id,outcome:'已服用',time:'09:00'})).updated.time,'09:00');
@@ -134,7 +134,7 @@ test('visit/report/medication/dose: read, create, update via MCP with full text 
 test('dose: 跳过 needs a reason, future rejected, medication missing',async()=>{
  const v=(await ok(tokenA,'create_record',{kind:'visit',title:'看诊',date:shift(-1)})).created;
  const m=(await ok(tokenA,'create_record',{kind:'medication',title:'示例药 B',date:shift(-1),visitId:v.id,dosage:'1 粒',route:'口服',frequency:'按需',scheduleMode:'asNeeded'})).created;
- const noReason=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过'});assert.equal(noReason.message,'请填写跳过原因');leak(noReason.message);
+ const noReason=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过'});assert.equal(noReason.message,'跳过要写原因，比如“忘带药”');leak(noReason.message);
  const skip=(await ok(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过',time:'08:00',note:'忘了带药'})).created;assert.equal(skip.outcome,'跳过');assert.equal(skip.time,'');assert.equal(skip.note,'忘了带药');
  const fut=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:shift(1),time:'08:00'});assert.equal(fut.code,'future_date');leak(fut.message);
  const nm=await errc(tokenA,'create_record',{kind:'dose',medicationId:'nope',time:'08:00'});assert.equal(nm.code,'not_found');assert.match(nm.hint,/list_records kind=medication/);leak(nm.message);

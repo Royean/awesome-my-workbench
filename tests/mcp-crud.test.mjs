@@ -47,7 +47,7 @@ test('web deletes also land in 最近删除; 12s undo still works and clears the
  assert.equal((await req('/api/trash',{headers:web()})).body.items.some(x=>x.id===a.id),false);
  await req(`/api/items/${a.id}`,{method:'DELETE',body:{},headers:web()});
  const r=await req('/api/trash/restore',{method:'POST',body:{id:a.id},headers:web()});assert.equal(r.status,200);assert.equal(r.body.title,'网页备忘');
- assert.equal((await req('/api/trash/restore',{method:'POST',body:{id:a.id},headers:web()})).status,400);
+ assert.equal((await req('/api/trash/restore',{method:'POST',body:{id:a.id},headers:web()})).status,404);
 });
 test('cascade follows web: medication with doses blocked; deleting a visit keeps its reports/medications; restore needs parent first',async()=>{
  const v=(await ok('create_record',{kind:'visit',title:'复诊',date:day(-3),status:'已完成'})).created;
@@ -119,4 +119,50 @@ test('settings: water goal used by get_today and the web; web PUT keeps it; rang
  assert.equal((await err('update_settings',{})).code,'validation_failed');
  const tools=(await req('/mcp',{method:'POST',body:{jsonrpc:'2.0',id:1,method:'tools/list'},headers:{Authorization:`Bearer ${token}`}})).body.result.tools.map(t=>t.name);
  for(const t of tools)assert.doesNotMatch(t,/password|token|account|admin|user/);
+});
+
+test('web 最近删除 covers all workbenches of the current space; workbench name; restore via web in another workbench',async()=>{
+ const f=(await ok('create_record',{workbench:'finance',kind:'note',title:'金融备忘'})).created;await ok('delete_record',{workbench:'finance',id:f.id});
+ const h=(await ok('create_record',{kind:'water',volume:120})).created;await ok('delete_record',{id:h.id});
+ const list=(await req('/api/trash',{headers:web()})).body.items;const fi=list.find(x=>x.id===f.id);assert.equal(fi.workbench,'finance');assert.equal(fi.workbenchName,'金融');assert.ok(list.some(x=>x.id===h.id&&x.workbench==='health'));
+ for(let i=1;i<list.length;i++)assert.ok(list[i-1].deletedAt>=list[i].deletedAt);
+ assert.equal((await req('/api/trash?space=demo',{headers:web()})).body.items.some(x=>x.id===f.id),false);
+ const r=await req('/api/trash/restore',{method:'POST',body:{id:f.id},headers:web()});assert.equal(r.status,200);assert.equal(r.body.workbench,'finance');
+ assert.ok((await ok('list_records',{workbench:'finance'})).records.some(x=>x.id===f.id));
+});
+test('restore withParent (MCP and web): parent restored first, then child; without it the error names withParent',async()=>{
+ const v=(await ok('create_record',{kind:'visit',title:'眼科',date:day(-4),status:'已完成'})).created;
+ const m=(await ok('create_record',{kind:'medication',title:'眼药水',date:day(-4),visitId:v.id,dosage:'1 滴',route:'滴眼',frequency:'每日两次',times:['08:00','20:00']})).created;
+ const d=(await ok('create_record',{kind:'dose',medicationId:m.id,date:day(-3),time:'08:01'})).created;
+ await ok('delete_record',{id:d.id});await ok('delete_record',{id:m.id});await ok('delete_record',{id:v.id});
+ const e=await err('restore_record',{id:d.id});assert.equal(e.code,'parent_deleted');assert.match(e.hint,/withParent/);
+ const web1=await req('/api/trash/restore',{method:'POST',body:{id:d.id},headers:web()});assert.equal(web1.status,400);assert.equal(web1.body.code,'parent_deleted');assert.equal(web1.body.parentKind,'medication');
+ const r=(await ok('restore_record',{id:d.id,withParent:true})).restored;assert.equal(r.id,d.id);
+ const all=(await ok('list_records',{kind:'all'})).records;for(const id of [v.id,m.id,d.id])assert.ok(all.some(x=>x.id===id),id);
+ const rep=(await ok('create_record',{kind:'report',title:'验光',date:day(-4),visitId:v.id})).created;await ok('delete_record',{id:rep.id});await ok('delete_record',{id:v.id});
+ const w=await req('/api/trash/restore',{method:'POST',body:{id:rep.id,withParent:true},headers:web()});assert.equal(w.status,200);assert.equal(w.body.parentRestored.id,v.id);
+});
+test('records whose visit/medication was deleted still read fine: visit {deleted, inTrash}; web state lists trashed ids',async()=>{
+ const v=(await ok('create_record',{kind:'visit',title:'牙科',date:day(-5),status:'已完成'})).created;
+ const rep=(await ok('create_record',{kind:'report',title:'牙片',date:day(-5),visitId:v.id})).created;
+ const m=(await ok('create_record',{kind:'medication',title:'漱口水',date:day(-5),visitId:v.id,dosage:'10 毫升',route:'含漱',frequency:'每日一次',times:['21:00']})).created;
+ await ok('delete_record',{id:v.id});
+ const recs=(await ok('list_records',{kind:'all'})).records;assert.deepEqual(recs.find(x=>x.id===rep.id).visit,{deleted:true,inTrash:true});assert.deepEqual(recs.find(x=>x.id===m.id).visit,{deleted:true,inTrash:true});
+ assert.ok((await req('/api/state',{headers:web()})).body.trashedIds.includes(v.id));
+ const db=new DatabaseSync(path.join(dir,'health.sqlite'));db.prepare('DELETE FROM trash_items WHERE id=?').run(v.id);db.close();
+ assert.deepEqual((await ok('list_records',{kind:'report'})).records.find(x=>x.id===rep.id).visit,{deleted:true,inTrash:false});
+ assert.equal((await ok('update_record',{id:rep.id,content:'补充'})).updated.content,'补充');
+});
+test('designer copy: skip reason, plan dates, duplicate times (web and MCP)',async()=>{
+ const v=(await ok('create_record',{kind:'visit',title:'内科',date:day(-3),status:'已完成'})).created;
+ const start=day(-2),end=day(-1);const md=d=>`${Number(d.slice(5,7))}月${Number(d.slice(8,10))}日`;
+ const m=(await ok('create_record',{kind:'medication',title:'药 D',date:start,endDate:end,visitId:v.id,dosage:'1 片',route:'口服',frequency:'每日一次',times:['08:00']})).created;
+ assert.equal((await err('create_record',{kind:'dose',medicationId:m.id,date:day(-3),time:'08:00'})).message,`这个方案从 ${md(start)}开始，服药日期不能早于这天`);
+ assert.equal((await err('create_record',{kind:'dose',medicationId:m.id,date:day(0),time:'00:00'})).message,`这个方案到 ${md(end)}结束，服药日期不能晚于这天`);
+ assert.equal((await err('create_record',{kind:'dose',medicationId:m.id,date:end,outcome:'跳过'})).message,'跳过要写原因，比如“忘带药”');
+ assert.equal((await err('create_record',{kind:'medication',title:'x',visitId:v.id,dosage:'1',route:'口服',frequency:'每日',times:['08:00','20:00','08:00']})).message,'08:00 填了两次，每个时间只填一次');
+ const wb=b=>req('/api/items',{method:'POST',body:b,headers:web()});
+ assert.equal((await wb({kind:'medication',title:'x',date:day(-1),visitId:v.id,dosage:'1',route:'口服',frequency:'每日',times:['09:00','09:00']})).body.error,'09:00 填了两次，每个时间只填一次');
+ assert.equal((await wb({kind:'dose',title:'x',medicationId:m.id,date:day(-3),outcome:'已服用',time:'08:00'})).body.error,`这个方案从 ${md(start)}开始，服药日期不能早于这天`);
+ assert.equal((await wb({kind:'dose',title:'x',medicationId:m.id,date:end,outcome:'跳过'})).body.error,'跳过要写原因，比如“忘带药”');
 });

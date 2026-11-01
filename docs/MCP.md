@@ -36,11 +36,11 @@
 | `visit` 就医 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
 | `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就医（`visitId`）；日期可以是未来 |
 | `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就医；开始/结束日期可以是未来 |
-| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「请填写跳过原因」）；规则与网页相同；不能记未来日期 |
+| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「跳过要写原因，比如“忘带药”」）；规则与网页相同；不能记未来日期 |
 
 - 缺少 `visitId` → `validation_failed`；`visitId` 在本空间不存在 → `not_found`；两者都带 `hint`（仅助手可见）：先 `list_records kind=visit`，没有就先新建就医。服药的 `medicationId` 同理（hint 指向 `list_records kind=medication`）。
 - 工具描述要求：写入用药或服药前，助手必须把**药名、剂量、时间**完整念一遍，用户明确回答「对」之后才写；记「跳过」时先问用户原因，再念**药名、计划服用时间、跳过原因**，用户回答「对」才写。
-- 服药（网页与 MCP 共用校验）：日期为今天时，已服用的实际时间不能晚于现在（`future_date`，「服药时间不能晚于现在，现在是 14:40」）；MCP 另有更明确的错误：「服药日期不能早于用药开始日期」「计划时间不在这个用药方案里」「请记录实际服用时间」。用药按时服用时：「服用时间不能重复」等时间错误先于名称错误报出。
+- 服药（网页与 MCP 共用校验）：日期为今天时，已服用的实际时间不能晚于现在（`future_date`，「服药时间不能晚于现在，现在是 14:40」）；MCP 另有更明确的错误：「这个方案从 10月31日开始，服药日期不能早于这天」「计划时间不在这个用药方案里」「请记录实际服用时间」。用药按时服用时：「08:00 填了两次，每个时间只填一次」等时间错误先于名称错误报出。
 - 旧报告没有关联就医时，修改（网页与 MCP）不强制补就医；新建仍必须关联。
 - 日期规则与网页完全一致（过去日期的「待就诊」也允许）：就医、报告、用药可以是未来日期；服药、餐食、运动、指标、饮水不能。
 
@@ -65,8 +65,9 @@
 
 - 存储：新表 `trash_items`（`migrations/003-trash.sql`），与网页 12 秒撤销（`deleted_items`）分开；**网页删除也进入最近删除**，网页 12 秒撤销照常可用，撤销后同时移出最近删除。30 天到期，启动时和每次查看/恢复时清理。
 - 连带规则与网页完全相同：已有服药记录的用药方案不能删（「该方案已有服用记录，请停用以保留历史，或先移除服用记录」，`validation_failed`）；删除就医**不会**连带删除报告和用药。
-- 恢复时上级记录必须在：报告/用药需要所属就医，服药需要用药方案。上级也在最近删除里 → `parent_deleted`（「它所属的就医记录也在最近删除里，请先恢复那条就医记录」，`hint` 给出上级 ID）；上级已彻底不在 → `parent_missing`。不会自动连带恢复上级。
-- 网页：设置页「最近删除」卡片（标题、类型、日期、删除时间、AI 删除的标「AI 助手删除」、恢复按钮，恢复后提示）；接口 `GET /api/trash`、`POST /api/trash/restore {id}`。
+- 恢复时上级记录必须在：报告/用药需要所属就医，服药需要用药方案。上级也在最近删除里 → 默认报 `parent_deleted`（`hint` 提示问用户后带 `withParent: true`）；带 `withParent: true` 时先恢复上级（逐级，例如服药→用药方案→就医）再恢复本条，返回 `parentRestored`。上级已彻底不在 → `parent_missing`。
+- 就医被删、报告/用药还在时，读取正常：报告/用药返回 `visit: {deleted: true, inTrash: true|false}`；服药的用药方案被删时返回 `medication: {deleted: true, inTrash}`。网页「所属就诊」显示「就诊已删除 · 可在最近删除恢复」（在最近删除里）或「就诊已删除」（已过期）。
+- 网页：「我的 → 最近删除」（所有工作台、当前数据空间；数量为 0 时不显示），按今天/昨天/日期分组，每条两行：「类型 · 标题」与「AI 助手删除/你删除 · 时间 · 还剩 N 天（· 非健康工作台名）」，右侧「恢复」。上级也被删时确认「所属就诊也已删除，一起恢复？」/「所属用药方案也已删除，一起恢复？」。恢复后提示「已恢复 · 查看」。没有批量操作和手动彻底删除。接口：`GET /api/trash`（当前数据空间所有工作台）、`POST /api/trash/restore {id, withParent?}`。
 
 ### 收藏
 
@@ -81,10 +82,9 @@
 | `get_settings` / `update_settings` | 每日饮水目标 `waterGoalMl`（100–10000 毫升，默认 2000）与关注目标 `focus`；按工作台+数据空间保存 |
 
 - 饮水目标同时用于 `get_today` 的 `goalMl` 和网页（设置页可改，每日回顾显示「目标」）。网页保存设置时不会抹掉饮水目标。
-- 工作台「停用/启用」暂未提供（网页也没有这一概念，待产品确认）。
 - 账号、密码、令牌、成员管理永远不通过 MCP 提供。
 
-**不提供**：附件内容读取与上传（下一步）、工作台停用。
+**不提供**：附件内容读取与上传（下一步）。
 
 ## 错误约定与错误码
 

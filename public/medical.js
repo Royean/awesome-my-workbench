@@ -5,7 +5,7 @@ export function createMedical(ctx){
  const all=k=>ctx.items.filter(x=>x.kind===k),find=id=>ctx.items.find(x=>x.id===id);
  const sort=a=>[...a].sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||'')));
  const badge=(text,cls='')=>`<span class="pill ${cls}">${esc(text)}</span>`;
- const visitLink=id=>{const v=find(id);return v?`<button class="text-btn visit-link" data-action="med-open:${id}">${icon('visit',12)} ${esc(v.title)} · ${v.date} ${icon('arrow',11)}</button>`:id?'<small class="muted">原就诊已移除，历史记录保留</small>':''};
+ const visitLink=id=>{const v=find(id);return v?`<button class="text-btn visit-link" data-action="med-open:${id}">${icon('visit',12)} ${esc(v.title)} · ${v.date} ${icon('arrow',11)}</button>`:id?`<small class="muted visit-gone">${(ctx.trashedIds||[]).includes(id)?'就诊已删除 · 可在最近删除恢复':'就诊已删除'}</small>`:''};
  const titleAction=(label,action,ic='plus')=>btn(label,action,'',ic);
  const actions=(x,extra='')=>`<div class="row-actions">${extra}<button class="icon-btn" data-action="${['medication','report','dose'].includes(x.kind)?'med-edit':'edit'}:${x.id}" aria-label="编辑${esc(x.title)}">${icon('edit',15)}</button><button class="icon-btn" data-action="delete:${x.id}" aria-label="删除${esc(x.title)}">${icon('trash',15)}</button></div>`;
  const panelEmpty=(ic,title,text,action,label)=>`<div class="medical-empty">${icon(ic,29)}<h3>${title}</h3><p>${text}</p>${action?btn(label,action,'','plus'):''}</div>`;

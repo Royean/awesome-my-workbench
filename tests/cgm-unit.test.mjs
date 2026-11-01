@@ -12,7 +12,7 @@ const response=(data,status=200)=>new Response(JSON.stringify(data),{status,head
 const loginResponse=()=>response({code:200,data:{access_token:token,expires_in:1209600}});
 function fixture(t){
  const dataDir=fs.mkdtempSync(path.join(os.tmpdir(),'workbench-cgm-')),db=new DatabaseSync(path.join(dataDir,'health.sqlite'));migrateAccounts(db);
- for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,name,role,disabled,created_at) VALUES(?,?,?,?,?,?)').run(id,id+'@example.invalid','Fictional','user',0,T);db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(id,'health','健康','health');db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(id,'health','personal','account:'+id+':health:personal');}
+ for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,name,role,disabled,created_at) VALUES(?,?,?,?,?,?)').run(id,id+'@example.invalid','Fictional','user',0,T);db.prepare('INSERT INTO user_workbenches(user_id,id,name,type) VALUES(?,?,?,?)').run(id,'health','健康','health');db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(id,'health','personal','account:'+id+':health:personal');}
  let time=T,rows=[{t:T-300000,v:5.4,s:1},{t:T-600000,v:5.2}],gate=null,fail=null;const calls=[];
  const fetchImpl=async(url,options)=>{calls.push({url,options});if(url.endsWith('/password/login'))return loginResponse();if(gate)await gate;if(fail)return fail();return response({code:200,data:{glucoseInfos:rows}});};
  const cgm=createCgm({db,dataDir,fetchImpl,now:()=>time});

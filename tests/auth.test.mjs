@@ -67,6 +67,7 @@ test('password/session revocation, user disable, reset invitation and last admin
  assert.equal((await api('/api/state',{cookie:userCookie})).status,200);
  const profile=await api('/api/auth/profile',{method:'PATCH',cookie:userCookie,body:{name:'New name',role:'admin'}});assert.equal(profile.body.user.role,'user');
  assert.equal((await api('/api/auth/users/'+adminId,{method:'PATCH',body:{disabled:true}})).status,409);assert.equal((await api('/api/auth/users/'+adminId+'/reset-invitation',{method:'POST',body:{}})).status,409);assert.equal((await api('/api/state')).status,200);
+ {const r=await api('/api/auth/users/'+userId,{method:'PATCH',body:{disabled:'yes'}});assert.equal(r.status,400);assert.equal(r.body.error,'启用状态不对');}
  assert.equal((await api('/api/auth/users/'+userId,{method:'PATCH',body:{disabled:true}})).status,200);assert.equal((await api('/api/state',{cookie:userCookie})).status,401);
  const reset=await api('/api/auth/users/'+userId+'/reset-invitation',{method:'POST',body:{}});assert.equal(reset.status,200);
  const accepted=await api('/api/auth/accept-invitation',{method:'POST',cookie:null,body:{token:reset.body.token,password}});assert.equal(accepted.status,200);userCookie=accepted.cookie;

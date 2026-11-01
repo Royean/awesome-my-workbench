@@ -148,6 +148,19 @@ test('401 bodies carry token_missing / token_invalid; PAT on token management is
  assert.equal((await req('/api/state')).body.code,'token_missing');
  const pm=await req('/api/auth/tokens',{headers:{Authorization:`Bearer ${tokenA}`}});assert.equal(pm.status,403);assert.equal(pm.body.code,'token_forbidden');
 });
+test('malformed Bearer values are token_invalid; no Bearer scheme at all is token_missing; token list keeps last4',async()=>{
+ const send=(authorization,path='/mcp')=>req(path,path==='/mcp'?{method:'POST',body:{jsonrpc:'2.0',id:1,method:'ping'},headers:{Authorization:authorization}}:{headers:{Authorization:authorization}});
+ for(const h of ['Bearer abc','Bearer wrong_'+'C'.repeat(43),'Bearer ','Bearer','bearer abc','Bearer a b']){for(const path of ['/mcp','/api/state']){const r=await send(h,path);assert.equal(r.status,401,h+path);assert.equal(r.body.code,'token_invalid',h+path);leak(r.body.error);}}
+ for(const h of ['Basic dXNlcjpwYXNz','Token zh_pat_'+'D'.repeat(43)]){for(const path of ['/mcp','/api/state']){const r=await send(h,path);assert.equal(r.status,401);assert.equal(r.body.code,'token_missing',h+path);}}
+ const t=await mint(cookieA);const list=await req('/api/auth/tokens',{headers:web(cookieA)});assert.equal(list.status,200);assert.ok(list.body.tokens.some(x=>x.last4===t.slice(-4)));
+ for(const [m,path] of [['GET','/api/auth/tokens'],['POST','/api/auth/tokens'],['DELETE','/api/auth/tokens/x']]){const r=await req(path,{method:m,body:m==='POST'?{name:'x'}:m==='DELETE'?{}:undefined,headers:{Authorization:`Bearer ${t}`}});assert.equal(r.status,403,m);assert.equal(r.body.code,'token_forbidden',m);}
+});
+test('web API validation messages are plain Chinese without field names or format codes',async()=>{
+ const wb=async b=>(await req('/api/workbenches',{method:'POST',body:b,headers:web(cookieA)})).body.error;
+ assert.equal(await wb({type:'health',name:'体检'}),'新建的工作台只能记备忘和待办');
+ assert.equal(await wb({type:'other',name:''}),'工作台名称需为1–24个字');
+ const t=await req('/api/items?space=personal&workbench=health',{method:'POST',body:{kind:'meal',title:'早餐',date:today(),time:'25:00'},headers:web(cookieA)});assert.equal(t.status,400);assert.equal(t.body.error,'时间格式不对，例如 08:30');
+});
 test('429 rate limit includes Retry-After seconds and rate_limited code',async()=>{
  const t=await mint(cookieA);let r;for(let i=0;i<125;i++){r=await rpc(t,'ping');if(r.status===429)break;}
  assert.equal(r.status,429);const ra=Number(r.headers.get('retry-after'));assert.ok(Number.isInteger(ra)&&ra>=1&&ra<=60,String(ra));assert.equal(r.body.error.data.code,'rate_limited');assert.equal(r.body.error.data.retryAfter,ra);

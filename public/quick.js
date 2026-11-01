@@ -44,6 +44,7 @@ export function createQuick(ctx){
   }
   if(kind==='meal')previews();
   if(kind==='file')document.querySelector('#capture-report').onchange=e=>{const file=e.target.files[0];document.querySelector('#capture-file-info').innerHTML=file?`<div class="notice">${esc(file.name)} · ${Math.ceil(file.size/1024)} KB</div>`:''};
+  ctx.markDrawerBaseline?.();
   const encode=file=>new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve({name:file.name,content:reader.result.split(',')[1]});reader.onerror=()=>reject(Error('读取文件失败，请重试'));reader.readAsDataURL(file)});
   form.onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('#capture-save');submit.disabled=true;submit.textContent='正在保存…';try{const data=Object.fromEntries(new FormData(form));let record;
    if(kind==='meal'){if(!data.text.trim()&&!attachments.length&&!keepAttachmentIds.length)throw Error('写一句话、添加照片或录一段语音即可保存');if(attachments.reduce((sum,f)=>sum+f.size,0)>10*1024*1024)throw Error('附件合计不能超过10MB');const encoded=await Promise.all(attachments.map(encode));record=await ctx.api('/api/capture-meal',{method:'POST',body:JSON.stringify({...data,mealType:type,attachments:encoded,...(preset.id?{mealId:preset.id,keepAttachmentIds}: {})})},capturedSpace,capturedWorkbench);}

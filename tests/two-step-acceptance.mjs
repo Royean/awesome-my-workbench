@@ -15,6 +15,7 @@ const state=async()=>(await (await get(server.base+'/api/state?space=personal'))
 const post=(body)=>fetch(server.base+'/api/items?space=personal',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
 const browser=await chromium.launch({headless:true,channel:'chrome'});
 const results=[];
+const toastText=()=>page.locator('#toast').evaluate(t=>[...t.children].map(c=>c.textContent.trim()).join(' '));
 let page;const assertAboveNav=async()=>{const [t,n]=await page.evaluate(()=>[document.querySelector('#toast').getBoundingClientRect().bottom,document.querySelector('.bottom-tabs').getBoundingClientRect().top]);assert.ok(t<=n,`toast bottom ${t} ≤ nav top ${n}`);const b=await page.locator('#toast button').boundingBox();assert.ok(b.width>=44&&b.height>=44,'撤销 ≥44 '+JSON.stringify(b));};
 try{
  const today=(await state()).today;
@@ -34,8 +35,8 @@ try{
  await waitFor(async()=>(await count('meal'))===1,{message:'meal not saved'});results.push(['记一餐（打字）',taps]);assert.ok(taps<=2);
  const meal=(await state()).items.find(x=>x.kind==='meal');assert.equal(meal.mealType,mealType.replace('✓','').trim());
  // 记一餐 via 最近吃过: card → chip (saves)
- await home();await tap('[data-action="qc-open:meal"]');await page.locator('[data-recent="0"]').waitFor();await page.locator('[data-recent="0"]').dblclick();taps++;
- await waitFor(async()=>(await count('meal'))===2,{message:'recent meal not saved'});const rt=page.locator('#toast');await rt.getByText(`已记 ${mealType.replace('✓','').trim()} · 虚构午饭：番茄鸡蛋面`,{exact:true}).waitFor();assert.equal(await rt.locator('button').textContent(),'撤销');assert.ok(await rt.locator('span').first().evaluate(s=>s.getBoundingClientRect().height<=24&&s.getBoundingClientRect().right<=390),'toast text one line');await assertAboveNav();await page.waitForTimeout(600);assert.equal(await count('meal'),2,'double tap on 最近吃过 → exactly 1 meal');await page.waitForTimeout(300);await page.screenshot({path:SHOTS+'/twostep-meal-recent.png'});results.push(['记一餐（最近吃过）',taps]);assert.ok(taps<=2);
+ await home();await tap('[data-action="qc-open:meal"]');await page.locator('[data-recent="0"]').waitFor();{const rb=await page.locator('[data-recent="0"]').boundingBox();assert.ok(rb.height>=44,'最近吃过 ≥44 '+rb.height);}await page.locator('[data-recent="0"]').dblclick();taps++;
+ await waitFor(async()=>(await count('meal'))===2,{message:'recent meal not saved'});const rt=page.locator('#toast');await rt.getByText(`已记 ${mealType.replace('✓','').trim()} · 虚构午饭：番茄鸡蛋面`,{exact:true}).waitFor();assert.equal(await rt.locator('button').textContent(),'撤销');assert.ok(await rt.locator('span').first().evaluate(s=>s.getBoundingClientRect().height<=24&&s.getBoundingClientRect().right<=390),'toast text one line');assert.match(await toastText(),/^已记 .+ · .+ · 撤销$/);await assertAboveNav();await page.waitForTimeout(600);assert.equal(await count('meal'),2,'double tap on 最近吃过 → exactly 1 meal');await page.waitForTimeout(300);await page.screenshot({path:SHOTS+'/twostep-meal-recent.png'});results.push(['记一餐（最近吃过）',taps]);assert.ok(taps<=2);
  // 记运动: card → 保存 with last type/duration
  await home();await tap('[data-action="qc-open:exercise"]');await page.locator('#capture-form').waitFor();
  assert.equal(await page.inputValue('#capture-duration'),'25');assert.match(await page.locator('[data-choice="exerciseType"] .selected').textContent(),/跑步/);
@@ -55,13 +56,13 @@ try{
  await home();const chip=page.locator('[data-action="qc-water:250"]');const box=await chip.boundingBox();assert.ok(box.height>=48&&box.width>=48,'chip ≥48px '+JSON.stringify(box));
  await page.waitForTimeout(450);await page.screenshot({path:SHOTS+'/twostep-today.png'});await page.locator('[data-action="qc-water:250"]').dblclick();taps++;
  await waitFor(async()=>(await count('water'))===1,{message:'water not saved'});results.push(['记饮水',taps]);assert.ok(taps<=1);
- await page.locator('#toast').getByText('已记 250 ml').waitFor();await page.waitForTimeout(600);assert.equal(await count('water'),1,'double tap → exactly 1 water');await assertAboveNav();await page.waitForTimeout(450);await page.screenshot({path:SHOTS+'/twostep-water-toast.png'});
+ await page.locator('#toast').getByText('已记 250 ml').waitFor();assert.equal(await toastText(),'已记 250 ml · 撤销');await page.waitForTimeout(600);assert.equal(await count('water'),1,'double tap → exactly 1 water');await assertAboveNav();await page.waitForTimeout(450);await page.screenshot({path:SHOTS+'/twostep-water-toast.png'});
  await page.locator('#toast button',{hasText:'撤销'}).tap();
  await waitFor(async()=>(await count('water'))===0,{message:'water undo failed'});await page.locator('#toast').getByText('已撤销').waitFor();
  // 合并：toast 仍显示时再点不同量 → 一个 toast 合计，撤销一起撤。
  const wt=page.locator('#toast');await page.waitForTimeout(2100);
  await page.locator('[data-action="qc-water:250"]').tap();await wt.getByText('已记 250 ml',{exact:true}).waitFor();
- await page.locator('[data-action="qc-water:500"]').tap();await wt.getByText('已记 750 ml',{exact:true}).waitFor();
+ await page.locator('[data-action="qc-water:500"]').tap();await wt.getByText('已记 750 ml',{exact:true}).waitFor();assert.equal(await toastText(),'已记 750 ml · 撤销');
  await waitFor(async()=>(await count('water'))===2,{message:'250+500 not both saved'});await page.waitForTimeout(300);await page.screenshot({path:SHOTS+'/twostep-water-merged.png'});
  await wt.locator('button',{hasText:'撤销'}).tap();await waitFor(async()=>(await count('water'))===0,{message:'merged undo did not remove both'});await wt.getByText('已撤销').waitFor();
  // 并发：不同量连点不等待，均保存且不丢。
@@ -82,7 +83,11 @@ try{
  await page.waitForTimeout(200);await page.screenshot({path:SHOTS+'/twostep-discard.png'});
  await page.locator('#discard-keep').tap();await confirmBox.waitFor({state:'detached'});assert.equal(await page.inputValue('#capture-text'),'半句话');assert.equal(await page.evaluate(()=>document.activeElement?.id),'capture-text','focus back to text');
  await page.locator('.drawer-scrim').tap({position:{x:20,y:20}});await confirmBox.waitFor();await page.keyboard.press('Escape');await confirmBox.waitFor({state:'detached'});assert.equal(await page.inputValue('#capture-text'),'半句话');
- await page.keyboard.press('Escape');await confirmBox.waitFor();await page.locator('#discard-yes').tap();await page.locator('#capture-form').waitFor({state:'detached'});
+ await page.keyboard.press('Escape');await confirmBox.waitFor();await page.locator('#discard-yes').tap();
+ // 打开后立即输入并按 Esc（不等待任何定时器）也要确认。
+ for(const kind of ['meal','metric','exercise']){await page.evaluate(k=>{const b=document.querySelector(`[data-action="qc-open:${k}"]`);b.click();const f=document.querySelector('#capture-form');const el=k==='meal'?f.querySelector('#capture-text'):k==='metric'?f.querySelector('#capture-value'):f.querySelector('#capture-duration');el.value=k==='exercise'?'55':'9';el.dispatchEvent(new Event('input',{bubbles:true}));document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));},kind);
+  assert.equal(await confirmBox.count(),1,kind+': immediate type + Esc must confirm');await page.locator('#discard-yes').tap();await page.locator('#capture-form').waitFor({state:'detached'});}
+await page.locator('#capture-form').waitFor({state:'detached'});
  await page.locator('[data-action="qc-open:exercise"]').tap();await page.locator('#capture-duration').waitFor();await page.waitForTimeout(50);await page.fill('#capture-duration','40');
  await page.locator('.drawer-foot [data-action="close"]').tap();await confirmBox.waitFor();await page.locator('#discard-yes').tap();await page.locator('#capture-form').waitFor({state:'detached'});
  assert.equal(await count('meal'),2,'discarded meal not saved');console.log('ok discard confirm');

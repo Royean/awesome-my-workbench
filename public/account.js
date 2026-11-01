@@ -2,6 +2,11 @@ import { fetchJSON } from './request.js';
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized, loginQuery = () => ''} = {}) {
+  let pendingReveal = null;
+  const revealing = () => !!(pendingReveal && document.querySelector('.account-token-reveal'));
+  addEventListener('popstate', () => { if (!revealing()) return; history.pushState({tokenReveal:true}, '', location.href); pendingReveal(); });
+  // Returns true when closing must wait for the token-saved confirmation (which then closes the drawer itself).
+  function guardClose() { if (!revealing()) { pendingReveal = null; return false; } pendingReveal(() => closeDrawer?.()); return true; }
   let enabled = false, user = null, invite = new URLSearchParams(location.hash.slice(1)).get('invite');
   const esc = escapeHTML;
   const field = (label, name, type = 'text', extra = '') => `<label class="account-field"><span>${label}</span><input name="${name}" type="${type}" ${extra}></label>`;
@@ -102,13 +107,17 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuth
   function section(title, content) { return `<section class="account-section"><h3>${title}</h3>${content}</section>`; }
   async function open() {
     if (!enabled || !user) return;
-    openDrawer(`<div class="account-panel"><div class="account-identity"><span class="account-avatar">${esc((user.name || user.email || 'A').slice(0,1).toUpperCase())}</span><div><strong>${esc(user.name || '我的账号')}</strong><p>${esc(user.email)}</p><span class="account-tag">${user.role === 'admin' ? '管理员' : '成员'}</span></div></div>${section('个人资料', `<form id="account-profile">${field('昵称','name','text',`value="${esc(user.name)}" autocomplete="nickname" required maxlength="80"`)}${error}${submit('保存昵称')}</form>`)}${section('修改密码', `<form id="account-password">${field('当前密码','currentPassword','password','autocomplete="current-password" required maxlength="128"')}${field('新密码','newPassword','password','autocomplete="new-password" required minlength="12" maxlength="128"')}<p class="account-muted account-hint">使用 12–128 个字符。修改后，其他设备需要重新登录。</p>${error}${submit('更新密码')}</form>`)}${section('登录会话','<div id="account-sessions" aria-live="polite"><p class="account-muted">正在读取会话…</p></div>')}${user.role === 'admin' ? section('成员管理', `<p class="account-muted">通过邀请为成员建立独立账号。禁用将撤销登录；重置邀请会使现有登录和旧邀请链接失效。</p><form id="account-invite">${field('受邀邮箱','email','email','required autocomplete="email" inputmode="email" maxlength="254"')}${field('昵称（选填）','name','text','maxlength="80"')}${error}${submit('生成邀请链接')}</form><div id="account-invite-result" aria-live="polite"></div><div id="account-users" aria-live="polite"><p class="account-muted">正在读取成员…</p></div>`) : ''}<button class="account-button account-danger account-full" id="account-logout" type="button">退出登录</button><p class="account-error" id="account-action-error" role="alert"></p></div>`, '账号与安全', '管理个人资料、密码和登录设备');
+    openDrawer(`<div class="account-panel"><div class="account-identity"><span class="account-avatar">${esc((user.name || user.email || 'A').slice(0,1).toUpperCase())}</span><div><strong>${esc(user.name || '我的账号')}</strong><p>${esc(user.email)}</p><span class="account-tag">${user.role === 'admin' ? '管理员' : '成员'}</span></div></div>${section('个人资料', `<form id="account-profile">${field('昵称','name','text',`value="${esc(user.name)}" autocomplete="nickname" required maxlength="80"`)}${error}${submit('保存昵称')}</form>`)}${section('修改密码', `<form id="account-password">${field('当前密码','currentPassword','password','autocomplete="current-password" required maxlength="128"')}${field('新密码','newPassword','password','autocomplete="new-password" required minlength="12" maxlength="128"')}<p class="account-muted account-hint">使用 12–128 个字符。修改后，其他设备需要重新登录。</p>${error}${submit('更新密码')}</form>`)}${section('登录会话','<div id="account-sessions" aria-live="polite"><p class="account-muted">正在读取会话…</p></div>')}${section('个人访问令牌', `<p class="account-muted">给 AI 助手（Codex、Claude 等）连接知衡用，不再使用请立即吊销</p><form id="account-token">${field('名称','name','text','maxlength="40" placeholder="例如：Codex" autocomplete="off" aria-describedby="account-token-name-error"')}<p class="account-error account-field-error" id="account-token-name-error" role="alert"></p>${error}${submit('生成令牌')}</form><div id="account-token-result" aria-live="polite"></div><div id="account-tokens" aria-live="polite"><p class="account-muted">正在读取令牌…</p></div>`)}${user.role === 'admin' ? section('成员管理', `<p class="account-muted">通过邀请为成员建立独立账号。禁用将撤销登录；重置邀请会使现有登录和旧邀请链接失效。</p><form id="account-invite">${field('受邀邮箱','email','email','required autocomplete="email" inputmode="email" maxlength="254"')}${field('昵称（选填）','name','text','maxlength="80"')}${error}${submit('生成邀请链接')}</form><div id="account-invite-result" aria-live="polite"></div><div id="account-users" aria-live="polite"><p class="account-muted">正在读取成员…</p></div>`) : ''}<button class="account-button account-danger account-full" id="account-logout" type="button">退出登录</button><p class="account-error" id="account-action-error" role="alert"></p></div>`, '账号与安全', '管理个人资料、密码和登录设备');
     const panel = document.querySelector('.account-panel');
     bindForm(panel.querySelector('#account-profile'), async data => { const result = await write('/profile', data, 'PATCH'); user = result.user || {...user,...data}; panel.querySelector('.account-identity strong').textContent = user.name; panel.querySelector('.account-avatar').textContent = (user.name || user.email).slice(0,1).toUpperCase(); toast('昵称已保存'); });
     bindForm(panel.querySelector('#account-password'), async (data, form) => { await write('/password', data); form.reset(); toast('密码已更新'); await sessions(panel); });
+    const tokenForm = panel.querySelector('#account-token'), nameInput = tokenForm.querySelector('[name=name]'), nameError = tokenForm.querySelector('#account-token-name-error');
+    nameInput.addEventListener('input', () => { nameError.textContent = ''; nameInput.removeAttribute('aria-invalid'); });
+    tokenForm.addEventListener('submit', event => { if (nameInput.value.trim()) return; event.preventDefault(); event.stopImmediatePropagation(); nameError.textContent = '请填写名称'; nameInput.setAttribute('aria-invalid', 'true'); nameInput.focus(); });
+    bindForm(tokenForm, async (data, form) => { const result = await write('/tokens', data); showToken(panel, result); form.reset(); await tokens(panel); });
     bindForm(panel.querySelector('#account-invite'), async (data, form) => { const result = await write('/invitations', data); showInvite(panel, result); form.reset(); await users(panel); });
     panel.querySelector('#account-logout').addEventListener('click', async event => { event.currentTarget.disabled = true; try { await write('/logout', {}); handleUnauthorized(); } catch (err) { panel.querySelector('#account-action-error').textContent = err.message; event.target.disabled = false; } });
-    await Promise.all([sessions(panel), user.role === 'admin' ? users(panel) : Promise.resolve()]);
+    await Promise.all([sessions(panel), tokens(panel), user.role === 'admin' ? users(panel) : Promise.resolve()]);
   }
   function retry(target, message, action) {
     target.innerHTML = `<p class="account-error" role="alert">${esc(message)}</p><button class="account-button" type="button">重试</button>`;
@@ -122,6 +131,45 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuth
       target.innerHTML = list.length ? list.map(s => `<div class="account-row"><div><strong>${s.current ? '当前设备' : '登录会话'}</strong><p>登录 ${esc(date(s.createdAt))}</p><p>最近活动 ${esc(date(s.lastSeenAt))}</p><p>到期 ${esc(date(s.expiresAt))}</p></div><button type="button" class="account-button ${s.current ? 'account-danger' : ''}" data-session="${esc(s.id)}">${s.current ? '退出此设备' : '撤销'}</button></div>`).join('') : '<p class="account-muted">没有活跃会话。</p>';
       for (const button of target.querySelectorAll('[data-session]')) button.addEventListener('click', async () => { const session = list.find(s => String(s.id) === button.dataset.session); button.disabled = true; try { await request('/sessions/' + encodeURIComponent(button.dataset.session), {method:'DELETE'}); if (session?.current) handleUnauthorized(); else { toast('会话已撤销'); await sessions(panel); } } catch (err) { retry(target, err.message, () => sessions(panel)); } });
     } catch (err) { if (target.isConnected) retry(target, err.message, () => sessions(panel)); }
+  }
+  // Inline two-step confirmation shown inside `host`; resolves true only on the explicit confirm button.
+  function confirmInline(host, {message, confirmLabel, cancelLabel = '取消', danger = false}) {
+    return new Promise(resolve => {
+      const box = document.createElement('div'); box.className = 'account-confirm'; box.setAttribute('role', 'alertdialog'); box.setAttribute('aria-label', message);
+      box.innerHTML = `<p class="${danger ? 'account-confirm-warning' : ''}">${esc(message)}</p><div class="account-confirm-actions"><button type="button" class="account-button" data-confirm-cancel>${esc(cancelLabel)}</button><button type="button" class="account-button ${danger ? 'account-confirm-danger' : 'account-primary'}" data-confirm-ok>${esc(confirmLabel)}</button></div>`;
+      host.querySelector('.account-confirm')?.remove(); host.append(box);
+      const done = value => { box.remove(); resolve(value); };
+      box.querySelector('[data-confirm-cancel]').addEventListener('click', () => done(false));
+      box.querySelector('[data-confirm-ok]').addEventListener('click', () => done(true));
+      box.querySelector('[data-confirm-cancel]').focus();
+    });
+  }
+  async function tokens(panel) {
+    const target = panel.querySelector('#account-tokens');
+    try {
+      const {tokens: list = []} = await request('/tokens');
+      if (!target.isConnected) return;
+      target.innerHTML = list.length ? list.map(t => `<div class="account-token-item" data-token-row="${esc(t.id)}"><div class="account-row"><div><strong>${esc(t.name)}${t.last4 ? ` <span class="account-token-tail">…${esc(t.last4)}</span>` : ''}</strong><p>创建时间 ${esc(date(t.createdAt))}</p><p>最近使用时间 ${t.lastUsedAt ? esc(date(t.lastUsedAt)) : '从未使用'}</p></div><button type="button" class="account-button account-danger" data-token="${esc(t.id)}" aria-label="吊销 ${esc(t.name)}">吊销</button></div></div>`).join('') : '<p class="account-muted">还没有个人访问令牌。</p>';
+      for (const button of target.querySelectorAll('[data-token]')) button.addEventListener('click', async () => {
+        const row = target.querySelector(`[data-token-row="${CSS.escape(button.dataset.token)}"]`);
+        button.disabled = true;
+        const ok = await confirmInline(row, {message:'吊销后用这个令牌的助手会立刻断开', confirmLabel:'确认吊销', danger:true});
+        if (!ok) { button.disabled = false; button.focus(); return; }
+        try { await request('/tokens/' + encodeURIComponent(button.dataset.token), {method:'DELETE'}); toast('令牌已吊销'); await tokens(panel); } catch (err) { retry(target, err.message, () => tokens(panel)); }
+      });
+    } catch (err) { if (target.isConnected) retry(target, err.message, () => tokens(panel)); }
+  }
+  function showToken(panel, result) {
+    const target = panel.querySelector('#account-token-result');
+    target.innerHTML = `<div class="account-invitation account-token-reveal"><strong>「${esc(result.name)}」的令牌</strong><p class="account-token-once">只显示这一次</p><p class="account-token-note">关闭后无法再次查看。请保存到密码管理器或助手的环境变量，切勿分享或提交到代码库。</p><label class="account-field"><span>令牌</span><input readonly aria-label="个人访问令牌" value="${esc(result.token)}"></label><div class="account-token-actions"><button class="account-button account-primary account-copy" type="button" data-copy-token>复制</button><button class="account-button account-quiet" type="button" data-dismiss-token>关闭</button></div><p class="account-copy-status" role="status"></p></div>`;
+    const copy = target.querySelector('[data-copy-token]');
+    copy.addEventListener('click', async () => { try { await navigator.clipboard.writeText(result.token); copy.textContent = '已复制'; clearTimeout(copy._t); copy._t = setTimeout(() => { if (copy.isConnected) copy.textContent = '复制'; }, 2000); } catch { target.querySelector('input').select(); target.querySelector('.account-copy-status').textContent = '请长按或使用键盘复制已选中的令牌。'; } });
+    const dismiss = target.querySelector('[data-dismiss-token]'), input = target.querySelector('input');
+    input.focus(); input.select();
+    // Every way out (关闭 button, Esc, the drawer ×/scrim, browser back) goes through the same confirmation while the token is visible.
+    pendingReveal = async (afterClose) => { if (dismiss.disabled) return; dismiss.disabled = true; const ok = await confirmInline(target.querySelector('.account-token-reveal'), {message:'确定已保存？关闭后无法再次查看', confirmLabel:'已保存，关闭', cancelLabel:'返回'}); if (ok) { pendingReveal = null; target.replaceChildren(); if (history.state?.tokenReveal) history.back(); afterClose?.(); } else { dismiss.disabled = false; dismiss.focus(); } };
+    dismiss.addEventListener('click', () => pendingReveal?.());
+    history.pushState({tokenReveal:true}, '', location.href);
   }
   function showInvite(panel, result) {
     const target = panel.querySelector('#account-invite-result');
@@ -139,5 +187,5 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuth
       for (const button of target.querySelectorAll('[data-toggle-user],[data-reset-user]')) button.addEventListener('click', async () => { button.disabled = true; try { if (button.dataset.toggleUser) { const member = list.find(m => String(m.id) === button.dataset.toggleUser); await write('/users/' + encodeURIComponent(member.id), {disabled:!member.disabled}, 'PATCH'); toast(member.disabled ? '成员已启用' : '成员已禁用'); } else { showInvite(panel, await write('/users/' + encodeURIComponent(button.dataset.resetUser) + '/reset-invitation', {})); toast('新的邀请链接已生成'); panel.querySelector('#account-invite-result').scrollIntoView({block:'nearest',behavior:'smooth'}); } await users(panel); } catch (err) { panel.querySelector('#account-action-error').textContent = err.message; button.disabled = false; } });
     } catch (err) { if (target.isConnected) retry(target, err.message, () => users(panel)); }
   }
-  return {initialize, open, handleUnauthorized, get enabled() {return enabled;}, get user() {return user;}};
+  return {initialize, open, handleUnauthorized, guardClose, get enabled() {return enabled;}, get user() {return user;}};
 }

@@ -13,7 +13,9 @@
 - ACC-05：相同用户不同工作台、不同用户相同工作台、示例/个人空间，均隔离列表、创建、编辑、删除、撤销、导出、关联对象及附件下载。未知工作台返回 404。
 - ACC-06：重启后账号、工作台、记录及会话保留；旧本地资料保持原状，不自动归属首个管理员。
 - ACC-07：生产强制 HTTPS 来源配置、HttpOnly/Secure/SameSite Cookie、精确同源写入和认证限流；无认证的开发模式只监听回环地址。
-- ACC-08：360/390px 登录、邀请激活、账号管理及工作台切换可操作，错误可恢复，无横向溢出。
+- ACC-08：原生 App 会话。`POST /api/auth/app-login`（请求体同 `/api/auth/login`，限流与 scrypt 校验完全相同）在响应体返回不透明随机令牌 `{token,tokenType:'Bearer',expiresAt,user,me,state}`，不设置 Cookie；服务端只存令牌 SHA-256，写入同一 `sessions` 表，与网页会话同样 30 天滑动续期、可在会话列表中查看与撤销、`/api/auth/logout` 即吊销。携带 `Authorization: Bearer <token>` 且**不带会话 Cookie**的请求只通过令牌认证，因此免除 Origin 校验；只要带了会话 Cookie，就按原有 Host+Origin 规则校验（Bearer 头不能绕过）。Host 校验对所有请求不变。app-login 若带 Origin 则必须为本站。
+- ACC-10：个人访问令牌（PAT）。登录用户在「账号与安全 → 访问令牌」中按名称生成令牌（`zh_pat_` 前缀 + 32 字节随机值），令牌只在生成时显示一次，服务端只存 SHA-256（`access_tokens` 表，迁移 002）；列表显示名称、创建时间、最近使用时间，可随时撤销；每账号最多 20 个，不自动过期。生成/列出/撤销接口 `/api/auth/tokens` 只接受网页 Cookie 会话（非 GET 仍要求同源 Origin），Bearer（无论 PAT 还是 App 令牌）一律 403。PAT 通过 `Authorization: Bearer` 访问 `/api/*` 数据接口（以及后续的 `/mcp`），免除 Origin 校验但 Host 校验不变；PAT 不能访问账号与安全接口（会话、改密、资料、成员管理），只允许 `/api/auth/me` 与用自身 `logout` 吊销自己。改密、禁用账号、重置邀请会撤销该账号全部 PAT。
+- ACC-08b：360/390px 登录、邀请激活、账号管理及工作台切换可操作，错误可恢复，无横向溢出。
 - ACC-09：腾讯云独立系统账号及 systemd 服务、回环端口反代、HTTPS、重启恢复、每日数据库及附件备份；保留服务器既有服务。
 
 ## 参考 Trek 与取舍

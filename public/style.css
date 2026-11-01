@@ -19,3 +19,4 @@
 #toast>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #toast button{min-height:44px;min-width:44px}
 .load-error-banner .stale-retry{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none}.load-error-banner .stale-retry.busy{cursor:default}.load-error-banner .stale-retry.busy .stale-retry-label{visibility:hidden}.load-error-banner .stale-retry.busy::after{content:'';position:absolute;width:13px;height:13px;border:2px solid #d4dad8;border-top-color:#5b7f6f;border-radius:50%;animation:refresh-spin .8s linear infinite}
+#toast .toast-sep{margin:0 -12px;opacity:.7;flex:none}.quick-recent button{min-height:44px}

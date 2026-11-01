@@ -50,6 +50,7 @@
 - 程序：回环 `127.0.0.1:3180`，由现有 Nginx 独立虚拟主机反代。
 - 数据：`/var/lib/awesome-my-workbench/health.sqlite` 与 `uploads/`，仅服务账号可读写。
 - 环境：`/etc/awesome-my-workbench.env`，参照 `.env.example`；生产设置 `NODE_ENV=production`、`AUTH_REQUIRED=1`、`APP_ORIGIN=https://实际域名`、`TRUST_PROXY=1`。
+- 可选 `APP_EXTRA_ORIGINS=https://direct.实际域名`（逗号分隔的精确 https 源，不含路径/尾斜杠，启动时校验，非法即拒绝启动）：用于绕过 CDN 的直连测试域名。允许的主机 = `APP_ORIGIN` + 额外源；写操作/登录的 Origin 必须等于与请求 Host 对应的那个源（Host A + Origin B 仍 403）。会话 Cookie 为 host-only（不设 Domain），两个域名各自登录；Secure/HSTS 跟随匹配到的源。服务端目前不生成绝对链接（邀请返回 token），如将来生成，统一使用 `APP_ORIGIN`。
 - 备份：每日上海时间 03:20 后随机 10 分钟内执行，保留最近 7 份于 `/var/backups/awesome-my-workbench/`；在线 SQLite backup 后复制不可变附件并做完整性检查。是同机备份，不能抵御整机/磁盘丢失；异地备份尚未配置。
 - 证书：使用现有域名证书；ACME 验证路径和续期 reload 应单独核实。
 

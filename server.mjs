@@ -162,7 +162,7 @@ function bootstrapPayload(user,url){
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  if(!workbench||!space)return {me,state:null};
  const settings=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
- return {me,state:{space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today()}};
+ return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today()}};
 }
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
@@ -196,7 +196,7 @@ const server=http.createServer(async(req,res)=>{try{
  const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw bad('此工作台仅支持备忘与待办');};
  if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req));if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
  if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
- if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()})}
+ if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);const clean={name:String(b.name||'Captain').slice(0,40),focus:String(b.focus||'').slice(0,180)};db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return json(res,200,clean)}
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});

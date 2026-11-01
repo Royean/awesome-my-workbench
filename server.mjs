@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import zlib from 'node:zlib';
-import { migrateAccounts, createAccounts, publicUser, bearerToken, hasSessionCookie } from './lib/accounts.mjs';
+import { migrateAccounts, createAccounts, publicUser, bearerToken, hasSessionCookie, digest } from './lib/accounts.mjs';
+import { createMcp, MCP_PROTOCOL_VERSIONS } from './lib/mcp.mjs';
 const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='production';
 const appOrigin=process.env.APP_ORIGIN;
 if(process.env.NODE_ENV==='production'&&(!appOrigin||!/^https:\/\/[^/]+$/.test(appOrigin)))throw new Error('production requires APP_ORIGIN=https://your-domain');
@@ -164,6 +165,26 @@ function bootstrapPayload(user,url){
  const settings=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
  return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today()}};
 }
+// Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
+const mcp=createMcp({db,put,getAll,today,validDate});
+const mcpRate=new Map();const MCP_RATE=Number(process.env.MCP_RATE_PER_MINUTE||120);
+async function handleMcp(req,res){
+ const unauthorized=message=>{res.writeHead(401,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','WWW-Authenticate':'Bearer realm="zhiheng"'});res.end(JSON.stringify({error:message}));};
+ if(req.method!=='POST'){res.setHeader('Allow','POST');return json(res,405,{error:'MCP 仅支持 POST（不提供 SSE 流）'});}
+ if(!authEnabled)return json(res,404,{error:'MCP 需要开启账户功能（AUTH_REQUIRED=1）'});
+ if(hasSessionCookie(req))return unauthorized('MCP 不接受 Cookie 登录，请使用 Authorization: Bearer 访问令牌');
+ const token=bearerToken(req);if(!token)return unauthorized('缺少访问令牌');
+ const user=accounts.session({headers:{authorization:req.headers.authorization}});if(!user)return unauthorized('访问令牌无效或已撤销');
+ const version=req.headers['mcp-protocol-version'];if(version&&!MCP_PROTOCOL_VERSIONS.includes(version))return json(res,400,{jsonrpc:'2.0',id:null,error:{code:-32600,message:`不支持的协议版本：${version}`}});
+ if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
+ const key=digest(token),now=Date.now(),bucket=mcpRate.get(key);if(!bucket||now-bucket.start>=60000)mcpRate.set(key,{start:now,n:1});else if(++bucket.n>MCP_RATE)return json(res,429,{jsonrpc:'2.0',id:null,error:{code:-32000,message:'请求过于频繁，请稍后重试'}});
+ if(mcpRate.size>1000)for(const [k,v] of mcpRate)if(now-v.start>=60000)mcpRate.delete(k);
+ let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>1024*1024)return json(res,413,{jsonrpc:'2.0',id:null,error:{code:-32600,message:'请求体超过 1MB'}});chunks.push(c);}
+ let msg;try{msg=JSON.parse(Buffer.concat(chunks).toString());}catch{return json(res,400,{jsonrpc:'2.0',id:null,error:{code:-32700,message:'JSON 解析失败'}});}
+ let out;try{out=mcp.handle(user,msg,version);}catch(e){console.error('[mcp-error]',e);return json(res,500,{jsonrpc:'2.0',id:msg?.id??null,error:{code:-32603,message:'服务器内部错误'}});}
+ if(out.status===202){res.writeHead(202,{'Cache-Control':'no-store'});return res.end();}
+ return json(res,out.status,out.body);
+}
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
  if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
@@ -171,6 +192,7 @@ const server=http.createServer(async(req,res)=>{try{
  if(appOrigin?requestHost!==new URL(appOrigin).host:!(/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestHost)))return json(res,403,{error:'访问主机无效'});
  const url=new URL(req.url,'http://localhost');
  if(url.pathname==='/healthz'&&req.method==='GET')return json(res,200,{status:'ok'});
+ if(url.pathname==='/mcp')return handleMcp(req,res);
  if(req.method!=='GET'&&req.method!=='HEAD'){
   const expected=appOrigin||`http://${requestHost}`;const origin=req.headers.origin;
   // Native app exemption (never for cookie auth): a request with a Bearer token and no session cookie authenticates only via that token, so a forged cross-site browser request cannot ride an ambient credential. App login issues the token in the body and sets no cookie; it is exempt only when no session cookie is sent and any Origin present is ours.

@@ -18,10 +18,10 @@ before(async()=>{dir=await mkdtemp(path.join(os.tmpdir(),'health-medical-'));awa
 after(async()=>{await stop();await rm(dir,{recursive:true,force:true})});
 test('personal never seeded; visit/report/medication/task original text and links persist',async()=>{
  assert.deepEqual((await api('/api/state')).body.items,[]);
- const text='医生及用户原始记录\n<svg onload=alert(1)>原文 & “引号”';
+ const text='医生及用户原始记录\n<svg onload=alert(1)>原文 & 「引号」';
  const v=await add('visit',{status:'已完成',doctor:'虚构医生',reason:text,assessment:text,instructions:text,note:'旧版note原文'});
  const r=await add('report',{visitId:v.id,status:'已归档',type:'检验报告',source:'虚构纸质原件',content:text.repeat(100)});
- const m=await med(v.id);const t=await add('task',{visitId:v.id,category:'就医',done:false});
+ const m=await med(v.id);const t=await add('task',{visitId:v.id,category:'就诊',done:false});
  await stop();await start();const all=(await api('/api/state')).body.items;
  for(const x of [v,r,m,t])assert.deepEqual(all.find(a=>a.id===x.id),x);
  assert.equal((await update(v,{title:'已编辑'})).body.note,'旧版note原文');

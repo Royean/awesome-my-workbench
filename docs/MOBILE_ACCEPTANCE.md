@@ -6,7 +6,7 @@
 
 ## API与兼容
 
-新增 `tests/workbench.test.mjs`，固定3106、新系统临时目录，5/5通过。旧基础9、就医7、快捷6、日常9分别用TEST_PORT/MEDICAL_TEST_PORT/QUICK_TEST_PORT/DAILY_TEST_PORT=3106依次运行，31/31通过；合计36/36，全部测试退出后清理自己的临时数据。
+新增 `tests/workbench.test.mjs`，固定3106、新系统临时目录，5/5通过。旧基础9、就诊7、快捷6、日常9分别用TEST_PORT/MEDICAL_TEST_PORT/QUICK_TEST_PORT/DAILY_TEST_PORT=3106依次运行，31/31通过；合计36/36，全部测试退出后清理自己的临时数据。
 
 - 预先创建旧版SQLite健康meal（无workbench字段），新服务读出ID、kind、标题、原文逐字段一致；省略workbench参数等于health，finance初始无健康记录。
 - health/finance/custom及personal/demo之间记录、设置、导出、编辑、删除与撤销墓碑隔离；越域ID编辑/删除/restore返回404，工作台不存在404。

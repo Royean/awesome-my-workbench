@@ -58,11 +58,11 @@ test('GET /mcp is 405; auth: missing/invalid token 401 with WWW-Authenticate; co
  // Revoked token stops working.
  const t=await mint(cookieA);const list=(await req('/api/auth/tokens',{headers:{Cookie:cookieA}})).body.tokens;assert.equal((await req('/api/auth/tokens/'+list[0].id,{method:'DELETE',body:{},headers:web(cookieA)})).status,200);assert.equal((await rpc(t,'ping')).status,401);
 });
-test('tools/list publishes exactly the v1 tools with strict schemas (no delete)',async()=>{
+test('tools/list publishes exactly the tools with strict schemas',async()=>{
  const {tools}=(await rpc(tokenA,'tools/list')).body.result;
- assert.deepEqual(tools.map(t=>t.name).sort(),['create_record','get_today','list_records','list_workbenches','update_record']);
+ assert.deepEqual(tools.map(t=>t.name).sort(),['create_record','create_workbench','delete_record','get_settings','get_today','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings']);
  for(const t of tools){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.match(t.description,/[\u4e00-\u9fa5]/);}
- const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','note','task']);assert.deepEqual(create.inputSchema.required,['kind']);
+ const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','favorite','note','task']);assert.deepEqual(create.inputSchema.required,['kind']);
  assert.equal(create.inputSchema.properties.attachmentIds,undefined);
 });
 test('list_workbenches and get_today',async()=>{
@@ -99,16 +99,12 @@ test('validation errors come back as isError tool results with the web validator
  assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',attachmentIds:['a']}),/^助手不能添加或更换附件，请到网页操作$/);
  assert.match(await err(tokenA,'update_record',{id:'missing'}),/没有找到这条记录/);
 });
-test('disallowed kinds rejected; finance workbench refuses health records; file/favorite stay out of MCP',async()=>{
- for(const kind of ['file','favorite'])assert.match(await err(tokenA,'create_record',{kind,title:'x'}),/记录类型只能是/);
- for(const kind of ['visit','medication','dose','report'])assert.match(await err(tokenA,'create_record',{workbench:'finance',kind,title:'x'}),/只能记备忘和待办/);
+test('disallowed kinds rejected; finance workbench refuses health records; file stays out of MCP',async()=>{
+ assert.match(await err(tokenA,'create_record',{kind:'file',title:'x'}),/记录类型只能是/);
+ for(const kind of ['visit','medication','dose','report','favorite'])assert.match(await err(tokenA,'create_record',{workbench:'finance',kind,title:'x'}),/只能记备忘和待办/);
  assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'water',volume:200}),/^「金融」工作台只能记备忘和待办，饮水请记到「健康」工作台$/);
- assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'meal',title:'午饭'}),/只能记备忘和待办/);
- const fav=await req('/api/items',{method:'POST',body:{kind:'favorite',title:'常吃',date:'2026-10-01',targetKind:'meal',template:{title:'燕麦'}},headers:web(cookieA)});assert.equal(fav.status,201);
- assert.match(await err(tokenA,'update_record',{id:fav.body.id,title:'x'}),/不支持在助手里修改/);
- assert.equal((await ok(tokenA,'list_records',{})).records.some(r=>r.kind==='favorite'||r.kind==='file'),false);
- assert.equal((await ok(tokenA,'get_today',{})).records.some(r=>r.kind==='favorite'||r.kind==='file'),false);
- for(const k of ['favorite','file'])assert.ok(!(await rpc(tokenA,'tools/list')).body.result.tools.find(t=>t.name==='create_record').inputSchema.properties.kind.enum.includes(k));
+ assert.equal((await ok(tokenA,'list_records',{})).records.some(r=>r.kind==='file'),false);
+ assert.ok(!(await rpc(tokenA,'tools/list')).body.result.tools.find(t=>t.name==='create_record').inputSchema.properties.kind.enum.includes('file'));
 });
 const shift=n=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+n);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d);};
 const noStorage=o=>{const t=JSON.stringify(o);assert.doesNotMatch(t,/storageName|fileId|attachmentIds|uploads|base64|ZmFrZQ/,t);};
@@ -126,7 +122,7 @@ test('visit/report/medication/dose: read, create, update via MCP with full text 
  assert.equal(d.outcome,'已服用');assert.equal(d.title,'示例药 A');assert.equal(d.medicationId,m.id);
  const du=(await ok(tokenA,'update_record',{id:d.id,time:'08:20',note:'饭后'})).updated;assert.equal(du.time,'08:20');assert.equal(du.outcome,'已服用');
  assert.match(await err(tokenA,'update_record',{id:d.id,date:shift(-1)}),/只能改服用结果、时间和备注/);
- assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'跳过',note:''})).message,'请填写跳过原因');
+ assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'跳过',note:''})).message,'跳过要写原因，比如「忘带药」');
  const ds=(await ok(tokenA,'update_record',{id:d.id,outcome:'跳过',note:'胃不舒服'})).updated;assert.equal(ds.outcome,'跳过');assert.equal(ds.time,'');
  assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'已服用'})).message,'请记录实际服用时间');
  assert.equal((await ok(tokenA,'update_record',{id:d.id,outcome:'已服用',time:'09:00'})).updated.time,'09:00');
@@ -138,7 +134,7 @@ test('visit/report/medication/dose: read, create, update via MCP with full text 
 test('dose: 跳过 needs a reason, future rejected, medication missing',async()=>{
  const v=(await ok(tokenA,'create_record',{kind:'visit',title:'看诊',date:shift(-1)})).created;
  const m=(await ok(tokenA,'create_record',{kind:'medication',title:'示例药 B',date:shift(-1),visitId:v.id,dosage:'1 粒',route:'口服',frequency:'按需',scheduleMode:'asNeeded'})).created;
- const noReason=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过'});assert.equal(noReason.message,'请填写跳过原因');leak(noReason.message);
+ const noReason=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过'});assert.equal(noReason.message,'跳过要写原因，比如「忘带药」');leak(noReason.message);
  const skip=(await ok(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过',time:'08:00',note:'忘了带药'})).created;assert.equal(skip.outcome,'跳过');assert.equal(skip.time,'');assert.equal(skip.note,'忘了带药');
  const fut=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:shift(1),time:'08:00'});assert.equal(fut.code,'future_date');leak(fut.message);
  const nm=await errc(tokenA,'create_record',{kind:'dose',medicationId:'nope',time:'08:00'});assert.equal(nm.code,'not_found');assert.match(nm.hint,/list_records kind=medication/);leak(nm.message);
@@ -232,7 +228,7 @@ test('malformed Bearer values are token_invalid; no Bearer scheme at all is toke
 test('web API validation messages are plain Chinese without field names or format codes',async()=>{
  const wb=async b=>(await req('/api/workbenches',{method:'POST',body:b,headers:web(cookieA)})).body.error;
  assert.equal(await wb({type:'health',name:'体检'}),'新建的工作台只能记备忘和待办');
- assert.equal(await wb({type:'other',name:''}),'工作台名称需为1–24个字');
+ assert.equal(await wb({type:'other',name:''}),'工作台名称需为 1–24 个字');
  const t=await req('/api/items?space=personal&workbench=health',{method:'POST',body:{kind:'meal',title:'早餐',date:today(),time:'25:00'},headers:web(cookieA)});assert.equal(t.status,400);assert.equal(t.body.error,'时间格式不对，例如 08:30');
 });
 test('429 rate limit includes Retry-After seconds and rate_limited code',async()=>{

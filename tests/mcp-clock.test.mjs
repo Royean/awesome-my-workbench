@@ -40,14 +40,14 @@ test('dose time later than now (Asia/Shanghai) is future_date — MCP create/upd
  assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-11-02',time:'08:00'})).code,'future_date');
 });
 test('dose: specific errors for start date, planned time, missing time',async()=>{
- assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-29',time:'08:00'})).message,'服药日期不能早于用药开始日期');
- assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-29'})).message,'服药日期不能早于用药开始日期');
+ assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-29',time:'08:00'})).message,'这个方案从 10月30日开始，服药日期不能早于这天');
+ assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-29'})).message,'这个方案从 10月30日开始，服药日期不能早于这天');
  assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-31',scheduledTime:'12:00',time:'12:00'})).message,'计划时间不在这个用药方案里');
  assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-31',scheduledTime:'12:00'})).message,'计划时间不在这个用药方案里');
  assert.equal((await err('create_record',{kind:'dose',medicationId:med.id,date:'2026-10-31'})).message,'请记录实际服用时间');
 });
 test('medication: duplicate times reported before missing title',async()=>{
- assert.equal((await err('create_record',{kind:'medication',visitId:visit.id,dosage:'1 片',route:'口服',frequency:'每日两次',times:['08:00','08:00']})).message,'服用时间不能重复');
+ assert.equal((await err('create_record',{kind:'medication',visitId:visit.id,dosage:'1 片',route:'口服',frequency:'每日两次',times:['08:00','08:00']})).message,'08:00 填了两次，每个时间只填一次');
  assert.equal((await err('create_record',{kind:'medication',title:'x',visitId:visit.id,dosage:'1 片',route:'口服',frequency:'每日',times:[]})).message,'按时服用需要至少填一个服用时间');
 });
 test('legacy report without visit can be updated (MCP and web); create still needs a visit',async()=>{

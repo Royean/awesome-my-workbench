@@ -25,7 +25,9 @@ db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEX
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 const builtinWorkbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'金融',type:'finance'}];
 const getWorkbenches=()=>[...builtinWorkbenches,...db.prepare('SELECT id,name,type FROM workbenches ORDER BY rowid').all()];
-const validateWorkbench=b=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台只能记备忘和待办':'工作台名称需为1–24个字');return {id:randomUUID(),name:b.name.trim(),type:'other'}};
+// Names are unique within one account's workbenches (compared after trim); renaming to its own name is fine.
+const assertUniqueWorkbenchName=(list,name,selfId)=>{const n=String(name).trim();const self=list.find(w=>w.id===selfId);if(self&&String(self.name).trim()===n)return;if(list.some(w=>w.id!==selfId&&String(w.name).trim()===n))throw bad(`已经有叫「${n}」的工作台了`,'name');};
+const validateWorkbench=(b,existing=[])=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台只能记备忘和待办':'工作台名称需为 1–24 个字');assertUniqueWorkbenchName(existing,b.name);return {id:randomUUID(),name:b.name.trim(),type:'other'}};
 // Clock: ZH_TEST_NOW (ISO) is honoured only under NODE_ENV=test so tests can pin "now".
 const now=()=>process.env.NODE_ENV==='test'&&process.env.ZH_TEST_NOW?new Date(process.env.ZH_TEST_NOW):new Date();
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(now());
@@ -40,6 +42,7 @@ const FUTURE_CHECKED=['meal','exercise','metric','water'];
 const futureDateError=t=>bad(`不能记录未来的日期，今天是 ${Number(t.slice(5,7))}月${Number(t.slice(8,10))}日`,'date','future_date');
 const isPlainObject=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const dateError=field=>bad(DATE_ERROR,field);
+const md=d=>`${Number(d.slice(5,7))}月${Number(d.slice(8,10))}日`;
 const validTime=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分'};
 // opts.original: the stored record when updating (lets legacy records keep missing optional links).
@@ -51,14 +54,14 @@ function validate(kind,b,opts={}){
  const clean={title:b.title.trim(),date:b.date,note:String(b.note||'').slice(0,5000)};
  for(const key of ['hospital','department','status','type','mealType','category','time','visitId','unit','name','mime','storageName'])if(b[key]!==undefined)clean[key]=String(b[key]).slice(0,250);
  if(clean.time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(clean.time))throw bad('时间格式不对，例如 08:30');
- if(kind==='visit'&&!['待就诊','已完成','待复查'].includes(clean.status))throw bad('就医状态无效');
- if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw bad('运动时长需大于0且不超过1440分钟');clean.duration=Number(b.duration);
-  if(b.distance!==undefined&&b.distance!==''){if(!Number.isFinite(Number(b.distance))||Number(b.distance)<=0||Number(b.distance)>1000)throw bad('距离需大于0且不超过1000公里');clean.distance=Number(b.distance);}
+ if(kind==='visit'&&!['待就诊','已完成','待复查'].includes(clean.status))throw bad('就诊状态无效');
+ if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw bad('运动时长需大于 0 且不超过 1440 分钟');clean.duration=Number(b.duration);
+  if(b.distance!==undefined&&b.distance!==''){if(!Number.isFinite(Number(b.distance))||Number(b.distance)<=0||Number(b.distance)>1000)throw bad('距离需大于 0 且不超过 1000 公里');clean.distance=Number(b.distance);}
   clean.feeling=String(b.feeling||'');if(!['','轻松','适中','吃力','不适'].includes(clean.feeling))throw bad('身体感受选项无效');
-  if(b.exercises!==undefined&&(!Array.isArray(b.exercises)||b.exercises.length>30))throw bad('最多记录30个训练动作','exercises');
-  if((b.exercises||[]).some(m=>!isPlainObject(m)))throw bad('训练动作格式无效，每个动作需包含名称、组数和次数','exercises');clean.exercises=(b.exercises||[]).map(m=>{const name=String(m.name||'').trim();const sets=Number(m.sets),reps=Number(m.reps),weight=Number(m.weight||0);if(!name||name.length>100||!Number.isInteger(sets)||sets<1||sets>100||!Number.isInteger(reps)||reps<1||reps>500||!Number.isFinite(weight)||weight<0||weight>1000)throw bad('请完整填写动作、组数、次数和有效重量（可为0）');return {name,sets,reps,weight}});
+  if(b.exercises!==undefined&&(!Array.isArray(b.exercises)||b.exercises.length>30))throw bad('最多记录 30 个训练动作','exercises');
+  if((b.exercises||[]).some(m=>!isPlainObject(m)))throw bad('训练动作格式无效，每个动作需包含名称、组数和次数','exercises');clean.exercises=(b.exercises||[]).map(m=>{const name=String(m.name||'').trim();const sets=Number(m.sets),reps=Number(m.reps),weight=Number(m.weight||0);if(!name||name.length>100||!Number.isInteger(sets)||sets<1||sets>100||!Number.isInteger(reps)||reps<1||reps>500||!Number.isFinite(weight)||weight<0||weight>1000)throw bad('请完整填写动作、组数、次数和有效重量（可为 0）');return {name,sets,reps,weight}});
  }
- if(kind==='water'){if(!Number.isFinite(Number(b.volume))||Number(b.volume)<=0||Number(b.volume)>5000)throw bad('饮水量需大于0且不超过5000毫升');clean.volume=Number(b.volume);}
+ if(kind==='water'){if(!Number.isFinite(Number(b.volume))||Number(b.volume)<=0||Number(b.volume)>5000)throw bad('饮水量需大于 0 且不超过 5000 毫升');clean.volume=Number(b.volume);}
  if(kind==='favorite'){
   if(b.template!==undefined&&!isPlainObject(b.template))throw bad('收藏模板格式无效','template');if(!['meal','exercise'].includes(b.targetKind))throw bad('收藏类型无效');clean.targetKind=b.targetKind;clean.sourceId=String(b.sourceId||'').slice(0,100);
   const t=validate(b.targetKind,{...b.template,title:b.template?.title||clean.title,date:clean.date});delete t.date;delete t.time;delete t.attachmentIds;delete t.rawText;delete t.visitId;clean.template=t;
@@ -68,7 +71,7 @@ function validate(kind,b,opts={}){
   if(!units[clean.type])throw bad('请选择监测项目');
   if(!Number.isFinite(Number(b.value))||Number(b.value)<=0||Number(b.value)>10000)throw bad('请输入有效监测数值');
   clean.value=Number(b.value);clean.unit=units[clean.type];
-  if(clean.type==='pressure'){if(!Number.isFinite(Number(b.secondary))||Number(b.secondary)<=0||Number(b.secondary)>=clean.value)throw bad('舒张压需大于0且低于收缩压');clean.secondary=Number(b.secondary);}
+  if(clean.type==='pressure'){if(!Number.isFinite(Number(b.secondary))||Number(b.secondary)<=0||Number(b.secondary)>=clean.value)throw bad('舒张压需大于 0 且低于收缩压');clean.secondary=Number(b.secondary);}
  }
  if(kind==='visit')for(const key of ['doctor','reason','assessment','instructions'])clean[key]=String(b[key]||'').slice(0,8000);
  if(kind==='report'){
@@ -86,7 +89,8 @@ function validate(kind,b,opts={}){
   clean.endDate=String(b.endDate||'');if(clean.endDate&&!validDate(clean.endDate))throw dateError('endDate');if(clean.endDate&&clean.endDate<clean.date)throw bad('结束日期不能早于开始日期','endDate');
   clean.scheduleMode=b.scheduleMode==='asNeeded'?'asNeeded':'scheduled';
   if(clean.scheduleMode==='scheduled'){
-   if(!Array.isArray(b.times)||b.times.length<1||b.times.length>12||b.times.some(t=>!validTime(t))||new Set(b.times).size!==b.times.length)throw bad('请填写1–12个不重复的有效服用时间','times');
+   const dupTime=Array.isArray(b.times)?b.times.find((t,i)=>b.times.indexOf(t)!==i):null;if(dupTime&&validTime(dupTime))throw bad(`${dupTime} 填了两次，每个时间只填一次`,'times');
+   if(!Array.isArray(b.times)||b.times.length<1||b.times.length>12||b.times.some(t=>!validTime(t))||new Set(b.times).size!==b.times.length)throw bad('请填写 1–12 个不重复的有效服用时间','times');
    clean.times=[...b.times].sort();
   }else clean.times=[];
  }
@@ -98,12 +102,12 @@ function validate(kind,b,opts={}){
   if(clean.outcome==='已服用'&&!clean.time)throw bad('请记录实际服用时间');
   if(clean.outcome==='已服用'&&clean.date===today()&&clean.time>nowHM())throw bad(`服药时间不能晚于现在，现在是 ${nowHM()}`,'time','future_date');
   if(clean.outcome==='跳过')clean.time='';
-  if(clean.outcome==='跳过'&&!clean.note.trim())throw bad('请填写跳过原因');
+  if(clean.outcome==='跳过'&&!clean.note.trim())throw bad('跳过要写原因，比如「忘带药」');
   if(clean.date>today())throw bad('不能记录未来日期的服用结果');
  }
  if(kind==='meal'){
   clean.rawText=String(b.rawText||'').slice(0,5000);clean.portion=String(b.portion||'').slice(0,120);
-  if(b.attachmentIds!==undefined&&(!Array.isArray(b.attachmentIds)||b.attachmentIds.length>4||b.attachmentIds.some(id=>typeof id!=='string')))throw bad('餐食附件最多4个');
+  if(b.attachmentIds!==undefined&&(!Array.isArray(b.attachmentIds)||b.attachmentIds.length>4||b.attachmentIds.some(id=>typeof id!=='string')))throw bad('餐食附件最多 4 个');
   clean.attachmentIds=[...new Set(b.attachmentIds||[])];
  }
  if(kind==='task')clean.done=Boolean(b.done);
@@ -125,7 +129,8 @@ function put(space,kind,body,id=randomUUID(),via){
  if(kind==='meal')for(const fileId of clean.attachmentIds){if(!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space)&&!(original.attachmentIds||[]).includes(fileId))throw bad('餐食附件不存在或不在当前空间');}
  if(kind==='dose'){
   const medRow=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='medication'").get(clean.medicationId,space);if(!medRow)throw bad('用药方案不存在或不在当前空间');const med=JSON.parse(medRow.body);
-  if(clean.date<med.date||(med.endDate&&clean.date>med.endDate))throw bad('服用记录日期需在方案起止范围内');
+  if(clean.date<med.date)throw bad(`这个方案从 ${md(med.date)}开始，服药日期不能早于这天`,'date');
+  if(med.endDate&&clean.date>med.endDate)throw bad(`这个方案到 ${md(med.endDate)}结束，服药日期不能晚于这天`,'date');
   if(clean.scheduledTime&&med.scheduleMode==='asNeeded')throw bad('按需用药不设置计划服用时段');
   if(clean.scheduledTime&&!med.times.includes(clean.scheduledTime)&&!(original.scheduledTime===clean.scheduledTime&&original.medicationId===clean.medicationId))throw bad('计划时段不属于该用药方案，补记可不选择计划时段');
   if(clean.scheduledTime){const duplicate=getAll(space).find(x=>x.kind==='dose'&&x.id!==id&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime);if(duplicate)throw bad('该时段已有记录，请编辑原记录');}
@@ -139,16 +144,76 @@ if(!getAll('demo').length){
  put('demo','visit',{title:'复诊咨询',date:day(5),hospital:'示例门诊',department:'全科',status:'待就诊',note:'整理近期记录，准备就诊问题清单。'});
  for(const [i,title,duration,type] of [[0,'傍晚轻松走',35,'步行'],[-1,'全身力量练习',40,'力量训练'],[-3,'公园慢跑',30,'跑步']])put('demo','exercise',{title,date:day(i),duration,type,note:'主观感受：轻松 · 示例记录'});
  for(const [mealType,title,time] of [['早餐','燕麦、鸡蛋与牛奶','08:00'],['午餐','杂粮饭、时蔬与鸡肉','12:20']])put('demo','meal',{title,date:today(),mealType,time,note:'餐食组成示例，不代表个性化膳食建议'});
- for(const [title,category,time,done] of [['晨间监测','监测','07:30',true],['记录今天的午餐','饮食','12:30',true],['户外步行 30 分钟','锻炼','18:00',false],['整理复诊问题清单','就医','20:00',false]])put('demo','task',{title,date:today(),category,time,done,note:'示例计划，自行设置'});
+ for(const [title,category,time,done] of [['晨间监测','监测','07:30',true],['记录今天的午餐','饮食','12:30',true],['户外步行 30 分钟','锻炼','18:00',false],['整理复诊问题清单','就诊','20:00',false]])put('demo','task',{title,date:today(),category,time,done,note:'示例计划，自行设置'});
 }
 // Versioned demonstration content; never seed the personal space.
 db.exec('CREATE TABLE IF NOT EXISTS app_meta(key TEXT PRIMARY KEY, value TEXT NOT NULL)');
+// 「最近删除」 trash (30 days). Web and MCP deletes both land here; the web's 12-second undo (deleted_items) keeps working alongside.
+db.exec(fs.readFileSync(path.join(root,'migrations','003-trash.sql'),'utf8'));
+const TRASH_MS=30*24*3600*1000;
+const purgeTrash=()=>db.prepare('DELETE FROM trash_items WHERE expires_at<=?').run(Date.now());
+purgeTrash();
+// Same rule as the web: a medication that already has dose records cannot be deleted (deleting a visit does not cascade; its reports/medications stay, linked to a removed visit).
+function softDelete(space,id,via){
+ const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return null;
+ if(old.kind==='medication'&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===id))throw bad('该方案已有服用记录，请停用以保留历史，或先移除服用记录');
+ const now=Date.now();
+ db.exec('BEGIN');try{
+  if(via==='web')db.prepare('INSERT OR REPLACE INTO deleted_items VALUES(?,?,?,?,?)').run(id,space,old.kind,old.body,now+12000);
+  db.prepare('INSERT OR REPLACE INTO trash_items VALUES(?,?,?,?,?,?,?)').run(id,space,old.kind,old.body,now,via,now+TRASH_MS);
+  db.prepare('DELETE FROM items WHERE id=? AND space=?').run(id,space);db.exec('COMMIT');
+ }catch(err){db.exec('ROLLBACK');throw err}
+ return {id,kind:old.kind,...JSON.parse(old.body)};
+}
+// Settings per data scope: name/focus (web) and waterGoalMl (daily water goal, default 2000ml; used by get_today and the web).
+function writeSettings(space,b){
+ const cur=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}');const clean={name:String(cur.name||'Captain').slice(0,40),focus:String(cur.focus||'').slice(0,180),...(cur.waterGoalMl?{waterGoalMl:cur.waterGoalMl}:{})};
+ if(b.name!==undefined)clean.name=String(b.name||'Captain').slice(0,40);
+ if(b.focus!==undefined)clean.focus=String(b.focus||'').slice(0,180);
+ if(b.waterGoalMl!==undefined&&b.waterGoalMl!==''){const v=Number(b.waterGoalMl);if(!Number.isInteger(v)||v<100||v>10000)throw bad('每日饮水目标需在 100–10000 毫升之间','waterGoalMl');clean.waterGoalMl=v;}
+ db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return clean;
+}
+const PARENT_NAMES={visit:'就诊记录',medication:'用药方案'};
+// Restoring needs the parent back first (visit for report/medication, medication for dose); otherwise a plain error.
+function parentOf(kind,body){if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
+// restorable:false + reason when the parent (visit / medication) is gone for good (neither live nor in the trash).
+function listTrash(space){purgeTrash();return db.prepare('SELECT id,kind,body,deleted_at,deleted_via,expires_at FROM trash_items WHERE space=? ORDER BY deleted_at DESC').all(space).map(r=>{const b=JSON.parse(r.body),p=parentOf(r.kind,b);
+ const gone=p&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(p.id,space,p.kind)&&!db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(p.id,space);
+ return {id:r.id,kind:r.kind,...b,deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString(),restorable:!gone,...(gone?{reason:`所属${p.kind==='visit'?'就诊':'用药方案'}已清除，无法恢复`}:{})};});}
+// Ancestors that are in the trash, nearest first (dose → medication → visit), stopping at the first one not in the trash.
+function trashedChain(space,parent){const out=[];while(parent){const r=db.prepare('SELECT body FROM trash_items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind);if(!r)break;const b=JSON.parse(r.body);out.push({...parent,title:b.title});parent=parentOf(parent.kind,b);}return out;}
+// 「所属就诊也已删除」/「所属用药方案也已删除」/「用药方案和所属就诊也已删除」
+const KN=k=>k==='visit'?'就诊':'用药方案';
+const chainText=chain=>{const n=c=>`${KN(c.kind)}「${c.title}」`;return chain.length>1?`${chain.slice(0,-1).map(n).join('、')}和所属${n(chain.at(-1))}也已删除`:`所属${n(chain[0])}也已删除`;};
+// opts.withParent: when the parent (visit / medication) is also in the trash, restore it first (recursively), then this record.
+function restoreFromTrash(space,id,opts={}){
+ purgeTrash();
+ const t=db.prepare('SELECT * FROM trash_items WHERE id=? AND space=?').get(String(id||''),space);if(!t)throw bad('最近删除里没有这条记录，可能已超过 30 天或已恢复','id','not_found');
+ if(db.prepare('SELECT id FROM items WHERE id=?').get(t.id))throw bad('这条记录已经恢复过了');
+ const body=JSON.parse(t.body);const parent=parentOf(t.kind,body);let parentRestored=null;
+ if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
+  const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
+  if(inTrash&&opts.withParent)parentRestored=restoreFromTrash(space,parent.id,opts);
+  else if(inTrash){const chain=trashedChain(space,parent);throw Object.assign(bad(`${chainText(chain)}，需要一起恢复`,undefined,'parent_deleted'),{parentId:parent.id,parentKind:parent.kind,parentKinds:chain.map(c=>c.kind),parentIds:chain.map(c=>c.id)});}
+  else throw Object.assign(bad(`它所属的${PARENT_NAMES[parent.kind]}已经不在了，无法恢复`,undefined,'parent_missing'),{parentKind:parent.kind});
+ }
+ if(t.kind==='dose'&&body.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===body.medicationId&&x.date===body.date&&x.scheduledTime===body.scheduledTime))throw bad('该时段已有服用结果，不能恢复为重复记录');
+ db.exec('BEGIN');try{db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(t.id,space,t.kind,t.body);db.prepare('DELETE FROM trash_items WHERE id=?').run(t.id);db.prepare('DELETE FROM deleted_items WHERE id=?').run(t.id);db.exec('COMMIT');}catch(err){db.exec('ROLLBACK');throw err}
+ return {id:t.id,kind:t.kind,...body,restoredCount:1+(parentRestored?.restoredCount||0),...(parentRestored?{parentRestored:{id:parentRestored.id,kind:parentRestored.kind,title:parentRestored.title}}:{})};
+}
+// Ids of visits/medications in this space's trash (so the web can say 「就诊已删除 · 可在最近删除恢复」).
+const trashedIds=space=>db.prepare("SELECT id FROM trash_items WHERE space=? AND kind IN ('visit','medication') AND expires_at>?").all(space,Date.now()).map(r=>r.id);
+// All data scopes of one base space (personal/demo) for the current user, across workbenches.
+function userScopes(user,base){
+ if(authEnabled&&user)return db.prepare('SELECT w.id,w.name,d.space FROM user_workbenches w JOIN data_scopes d ON d.user_id=w.user_id AND d.workbench_id=w.id WHERE w.user_id=? AND d.base_space=? ORDER BY w.rowid').all(user.id,base);
+ return getWorkbenches().map(w=>({id:w.id,name:w.name,space:w.id==='health'?base:`${base}::${w.id}`}));
+}
 if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
  const visit=getAll('demo').find(x=>x.kind==='visit');
  if(visit){
   put('demo','report',{title:'示例门诊记录',date:visit.date,visitId:visit.id,type:'就诊记录',status:'已归档',source:'示例健康中心 · 纸质记录手录',content:'这是一份虚构的界面演示记录。\n主诉、检查所见和医生结论应按原文录入。\n这里没有真实诊断或个性化医疗建议。',note:'仅演示如何将报告与同次就诊关联。'});
   put('demo','medication',{title:'示例药物 A（非真实处方）',date:today(),endDate:day(7),visitId:visit.id,dosage:'示例用量，请勿参考用药',route:'按处方指定途径',frequency:'按处方录入',scheduleMode:'scheduled',times:['08:00','20:00'],status:'进行中',prescriber:'示例医生',note:'虚构方案，仅供体验已服用、跳过及历史记录交互。'});
-  put('demo','task',{title:'复查前整理报告和服用记录',date:day(5),visitId:visit.id,category:'就医',time:'09:00',done:false,note:'示例复查安排，由用户自行确认。'});
+  put('demo','task',{title:'复查前整理报告和服用记录',date:day(5),visitId:visit.id,category:'就诊',time:'09:00',done:false,note:'示例复查安排，由用户自行确认。'});
  }
  db.prepare('INSERT INTO app_meta VALUES(?,?)').run('medical-demo-v1','seeded');
 }
@@ -179,10 +244,10 @@ function bootstrapPayload(user,url){
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  if(!workbench||!space)return {me,state:null};
  const settings=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
- return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today()}};
+ return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today(),trashedIds:trashedIds(space)}};
 }
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
-const mcp=createMcp({db,put,getAll,today,validDate,nowHM});
+const mcp=createMcp({db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName});
 const mcpRate=new Map();const MCP_RATE=Number(process.env.MCP_RATE_PER_MINUTE||120);
 async function handleMcp(req,res){
  const unauthorized=(code,message)=>{res.writeHead(401,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','WWW-Authenticate':`Bearer realm="zhiheng", error="invalid_token"`});res.end(JSON.stringify({error:message,code}));};
@@ -231,34 +296,38 @@ const server=http.createServer(async(req,res)=>{try{
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  const readSettings=()=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
+ // 「最近删除」 covers every workbench of the current base space (personal or demo).
+ if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
+ if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
  const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw bad('此工作台仅支持备忘与待办');};
- if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req));if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
+ if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
  if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
- if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()})}
- if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);const clean={name:String(b.name||'Captain').slice(0,40),focus:String(b.focus||'').slice(0,180)};db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return json(res,200,clean)}
+ if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space)})}
+ if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
+
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});
   if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
-  if(req.method==='DELETE'){if(old.kind==='medication'&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===id))throw bad('该方案已有服用记录，请停用以保留历史，或先移除服用记录');db.exec('BEGIN');try{db.prepare('INSERT OR REPLACE INTO deleted_items VALUES(?,?,?,?,?)').run(id,space,old.kind,old.body,Date.now()+12000);db.prepare('DELETE FROM items WHERE id=? AND space=?').run(id,space);db.exec('COMMIT')}catch(err){db.exec('ROLLBACK');throw err}return json(res,200,{deleted:{id,kind:old.kind,...JSON.parse(old.body)}})}
+  if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());
-  if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过12秒'});
+  if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过 12 秒'});
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
-  const deletedBody=JSON.parse(deleted.body);const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);return json(res,200,restored);
+  const deletedBody=JSON.parse(deleted.body);const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
   const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw bad('保留附件无效');
-  if(!Array.isArray(attachments)||attachments.length+keep.length>4)throw bad('最多保存4个附件','attachments');if(attachments.some(a=>!isPlainObject(a)))throw bad('附件格式无效','attachments');
+  if(!Array.isArray(attachments)||attachments.length+keep.length>4)throw bad('最多保存 4 个附件','attachments');if(attachments.some(a=>!isPlainObject(a)))throw bad('附件格式无效','attachments');
   const rawText=String(b.text??existing?.rawText??'');const text=rawText.trim();if(!text&&!attachments.length&&!keep.length)throw bad('写一句话、添加照片或录一段语音即可保存');
-  if(rawText.length>5000)throw bad('文字最多5000个字符');
-  const staged=[];let total=keep.reduce((sum,id)=>sum+(getAll(space).find(f=>f.id===id&&f.kind==='file')?.size||0),0);if(total>10*1024*1024)throw bad('附件合计不能超过10MB');
+  if(rawText.length>5000)throw bad('文字最多 5000 个字符');
+  const staged=[];let total=keep.reduce((sum,id)=>sum+(getAll(space).find(f=>f.id===id&&f.kind==='file')?.size||0),0);if(total>10*1024*1024)throw bad('附件合计不能超过 10MB');
   for(const attachment of attachments){
    const name=path.basename(String(attachment.name||''));const ext=path.extname(name).toLowerCase();const type=allowedFiles[ext];
    if(!type||(!type.startsWith('image/')&&!type.startsWith('audio/')))throw bad('餐食附件仅支持JPG、PNG、WEBP照片与WEBM、M4A、OGG、MP3音频');
-   const bytes=Buffer.from(String(attachment.content||''),'base64');total+=bytes.length;if(!bytes.length||total>10*1024*1024)throw bad('附件合计需大于0且不超过10MB');
+   const bytes=Buffer.from(String(attachment.content||''),'base64');total+=bytes.length;if(!bytes.length||total>10*1024*1024)throw bad('附件合计需大于 0 且不超过 10MB');
    const storageName=randomUUID()+ext;staged.push({id:randomUUID(),name,type,bytes,storageName});
   }
   const mealType=String(b.mealType||existing?.mealType||'餐食');const date=b.date||existing?.date||today();
@@ -271,9 +340,9 @@ const server=http.createServer(async(req,res)=>{try{
  }
  if(url.pathname==='/api/upload'&&req.method==='POST'){
   const b=await readBody(req);const name=path.basename(String(b.name||''));const ext=path.extname(name).toLowerCase();if(!allowedFiles[ext])throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
-  const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于0且不超过10MB');
+  const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
-  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就医记录不存在');
+  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
   fs.writeFileSync(path.join(dataDir,'uploads',storageName),bytes,{mode:0o600});return json(res,201,put(space,'file',body));
  }
  if(url.pathname.startsWith('/api/files/')&&req.method==='GET'){
@@ -294,5 +363,5 @@ const server=http.createServer(async(req,res)=>{try{
  const {body,encoding}=compressed(p,bytes,type,req.headers['accept-encoding'],immutable);
  res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
  if(req.method==='HEAD')return res.end();res.end(body);
- }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
+ }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{}),...(e.parentKind?{parentKind:e.parentKind}:{}),...(e.parentKinds?{parentKinds:e.parentKinds}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
 server.listen(Number(process.env.PORT??3100),host,()=>console.log(`Health workbench http://localhost:${server.address().port}`));

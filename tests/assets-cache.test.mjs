@@ -4,7 +4,7 @@ import { mkdtemp, mkdir, writeFile, readFile, readdir, cp, rm } from 'node:fs/pr
 import os from 'node:os';
 import path from 'node:path';
 import net from 'node:net';
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { buildPublic } from '../scripts/build-public.mjs';
 import { startServer, stopProcess } from './helpers.mjs';
@@ -24,7 +24,7 @@ async function fixture() {
   return { root, publicDir };
 }
 
-test('public build is deterministic, isolates module scope, keeps await and old assets', async () => {
+test('public build is deterministic, isolates module scope, keeps await, and deletes nothing outside git', async () => {
   const { root, publicDir } = await fixture();
   try {
     const first = await buildPublic(publicDir), html = await readFile(path.join(publicDir, 'index.html'), 'utf8');
@@ -42,9 +42,31 @@ test('public build is deterministic, isolates module scope, keeps await and old 
     assert.equal(changed.stylesheet, first.stylesheet);
     assert.ok((await readFile(bundle)).length);
     await writeFile(path.join(publicDir, 'mobile.css'), '.mobile{color:blue}');
-    assert.notEqual((await buildPublic(publicDir)).stylesheet, first.stylesheet);
+    const third = await buildPublic(publicDir);assert.notEqual(third.stylesheet, first.stylesheet);
+    // Outside git the build cannot see the committed index.html, so it deletes nothing.
+    assert.ok((await readFile(bundle)).length);
     await writeFile(path.join(publicDir, 'app.js'), "import missing from './shared.js';\n");
     await assert.rejects(buildPublic(publicDir), /Unsupported module syntax/);
+  } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('assets referenced by the committed and on-disk index.html survive rebuilds; only unreferenced bundles go', async () => {
+  const { root, publicDir } = await fixture();
+  const git = (...a) => { const r = spawnSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', ...a], { cwd: root, encoding: 'utf8' }); assert.equal(r.status, 0, r.stderr); };
+  try {
+    git('init', '-q'); const committed = await buildPublic(publicDir); git('add', '-A'); git('commit', '-qm', 'v1');
+    await writeFile(path.join(publicDir, 'shared.js'), 'export function shared(){return 20;}\n');
+    const second = await buildPublic(publicDir);
+    await writeFile(path.join(publicDir, 'shared.js'), 'export function shared(){return 30;}\n');
+    await writeFile(path.join(publicDir, 'mobile.css'), '.mobile{color:blue}');
+    const third = await buildPublic(publicDir);
+    const names = (await readdir(path.join(publicDir, 'assets'))).filter(n => !/\.(br|gz)$/.test(n)).sort();
+    // committed v1 (js+css), the on-disk previous (second js), and current (third js+css)
+    assert.deepEqual(names, [...new Set([committed.javascript, committed.stylesheet, second.javascript, third.javascript, third.stylesheet].map(p => path.basename(p)))].sort());
+    await writeFile(path.join(publicDir, 'shared.js'), 'export function shared(){return 40;}\n');
+    const fourth = await buildPublic(publicDir);
+    await assert.rejects(readFile(path.join(publicDir, second.javascript.slice(1))));
+    for (const p of [committed.javascript, committed.stylesheet, third.javascript, fourth.javascript]) assert.ok((await readFile(path.join(publicDir, p.slice(1)))).length);
   } finally { await rm(root, { recursive: true, force: true }); }
 });
 

@@ -18,7 +18,7 @@ before(async()=>{dir=await mkdtemp(path.join(os.tmpdir(),'health-quick-'));await
 after(async()=>{await stop();await rm(dir,{recursive:true,force:true})});
 test('sentence capture preserves full original text, defaults date and survives restart',async()=>{
  assert.deepEqual((await api('/api/state')).body.items,[]);
- const text='  '+'虚构晚餐：米饭、青菜与鸡蛋\n<svg onload=alert(1)> & “原始文字”'.repeat(30)+'  ';
+ const text='  '+'虚构晚餐：米饭、青菜与鸡蛋\n<svg onload=alert(1)> & 「原始文字」'.repeat(30)+'  ';
  const r=await capture({text});assert.equal(r.status,201,JSON.stringify(r.body));assert.equal(r.body.rawText,text);assert.equal(r.body.date,date);assert.ok(r.body.mealType);assert.deepEqual(r.body.attachmentIds,[]);
  await stop();await start();assert.deepEqual((await api('/api/state')).body.items.find(x=>x.id===r.body.id),r.body);
  assert.ok(!(await api('/api/state','GET',undefined,'demo')).body.items.some(x=>x.id===r.body.id));

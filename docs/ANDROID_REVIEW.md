@@ -36,7 +36,7 @@
 - 系统栏、屏幕缺口和键盘 Insets 有显式处理；旋转由 Activity 配置处理，进程重建尝试恢复 WebView 状态。
 - Gradle 从环境变量读取签名配置；构建输出、local.properties 与 keystore 被 Android 目录的 Git 忽略规则排除。
 - `allowBackup=false`，并为 Android 12+ 的 cloud backup/device transfer 排除 root、file、database、sharedpref、external，避免迁移 WebView Cookie 等本地资料。
-- “打开网页版”使用系统浏览器选择器并排除自身 Activity；App Links 仅匹配 `/`，保留首页及其 fragment 邀请链接，避免 APK 下载路径被应用自己接管。
+- 「打开网页版」使用系统浏览器选择器并排除自身 Activity；App Links 仅匹配 `/`，保留首页及其 fragment 邀请链接，避免 APK 下载路径被应用自己接管。
 
 ## 待设备验收与非阻断限制
 

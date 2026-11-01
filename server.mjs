@@ -10,6 +10,12 @@ const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='produ
 const appOrigin=process.env.APP_ORIGIN;
 if(process.env.NODE_ENV==='production'&&(!appOrigin||!/^https:\/\/[^/]+$/.test(appOrigin)))throw new Error('production requires APP_ORIGIN=https://your-domain');
 if(appOrigin&&new URL(appOrigin).origin!==appOrigin)throw new Error('APP_ORIGIN must be an exact origin without trailing slash');
+// Optional extra exact origins (e.g. a direct non-CDN test hostname). Generated links never use them; they only widen the Host/Origin allow-list.
+const isLoopback=h=>/^(localhost|127\.0\.0\.1)$/.test(h);
+const extraOrigins=(process.env.APP_EXTRA_ORIGINS||'').split(',').map(x=>x.trim()).filter(Boolean).map(o=>{let u;try{u=new URL(o)}catch{throw new Error(`APP_EXTRA_ORIGINS contains an invalid origin: ${o}`)}if(u.origin!==o)throw new Error(`APP_EXTRA_ORIGINS entries must be exact origins without path or trailing slash: ${o}`);if(u.protocol!=='https:'&&!(u.protocol==='http:'&&isLoopback(u.hostname)&&process.env.NODE_ENV!=='production'))throw new Error(`APP_EXTRA_ORIGINS entries must use https: ${o}`);return o;});
+if(extraOrigins.length&&!appOrigin)throw new Error('APP_EXTRA_ORIGINS requires APP_ORIGIN');
+const allowedOrigins=appOrigin?[appOrigin,...extraOrigins]:[];
+const originForHost=host=>allowedOrigins.find(o=>new URL(o).host===host);
 const host=process.env.HOST||'127.0.0.1';
 if(!authEnabled&&!['127.0.0.1','localhost','::1'].includes(host))throw new Error('Remote listening requires AUTH_REQUIRED=1');
 const root=path.dirname(fileURLToPath(import.meta.url));
@@ -166,13 +172,14 @@ function bootstrapPayload(user,url){
 }
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
- if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
+
  const requestHost=req.headers.host||'';
- if(appOrigin?requestHost!==new URL(appOrigin).host:!(/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestHost)))return json(res,403,{error:'访问主机无效'});
+ const matchedOrigin=appOrigin?originForHost(requestHost):undefined;res.appOrigin=matchedOrigin;if(matchedOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
+ if(appOrigin?!matchedOrigin:!(/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(requestHost)))return json(res,403,{error:'访问主机无效'});
  const url=new URL(req.url,'http://localhost');
  if(url.pathname==='/healthz'&&req.method==='GET')return json(res,200,{status:'ok'});
  if(req.method!=='GET'&&req.method!=='HEAD'){
-  const expected=appOrigin||`http://${requestHost}`;const origin=req.headers.origin;
+  const expected=matchedOrigin||`http://${requestHost}`;const origin=req.headers.origin;
   if((authEnabled&&origin!==expected)||(origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'只接受同源操作'});
   if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
  }

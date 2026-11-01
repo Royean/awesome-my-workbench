@@ -56,3 +56,10 @@ test('revoked, unknown and malformed tokens are 401; revoke via web works; disab
  assert.equal((await req('/api/state',{headers:bearer(b.token)})).status,401);
  assert.equal((await req('/api/auth/tokens',{headers:{Cookie:cookie}})).body.tokens.length,0);
 });
+test('token list exposes non-secret last4; legacy rows without last4 migrate safely',async()=>{
+ const m=await mint('Tail');assert.equal(m.status,201);assert.equal(m.body.last4,m.body.token.slice(-4));
+ const list=await req('/api/auth/tokens',{headers:web()});assert.equal(list.body.tokens.find(t=>t.id===m.body.id).last4,m.body.token.slice(-4));
+ const {migrateAccounts}=await import('../lib/accounts.mjs');const legacy=new DatabaseSync(':memory:');
+ legacy.exec("CREATE TABLE users(id TEXT PRIMARY KEY);CREATE TABLE access_tokens(id TEXT PRIMARY KEY, user_id TEXT NOT NULL, name TEXT NOT NULL, token_hash TEXT NOT NULL UNIQUE, created_at INTEGER NOT NULL, last_used_at INTEGER);INSERT INTO users VALUES('u');INSERT INTO access_tokens VALUES('t','u','old','h',1,NULL);");
+ migrateAccounts(legacy);migrateAccounts(legacy);assert.equal(legacy.prepare("SELECT last4 FROM access_tokens WHERE id='t'").get().last4,null);legacy.close();
+});

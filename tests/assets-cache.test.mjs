@@ -24,7 +24,7 @@ async function fixture() {
   return { root, publicDir };
 }
 
-test('public build is deterministic, isolates module scope, keeps await and old assets', async () => {
+test('public build is deterministic, isolates module scope, keeps await, keeps the previous build and cleans older ones', async () => {
   const { root, publicDir } = await fixture();
   try {
     const first = await buildPublic(publicDir), html = await readFile(path.join(publicDir, 'index.html'), 'utf8');
@@ -42,7 +42,11 @@ test('public build is deterministic, isolates module scope, keeps await and old 
     assert.equal(changed.stylesheet, first.stylesheet);
     assert.ok((await readFile(bundle)).length);
     await writeFile(path.join(publicDir, 'mobile.css'), '.mobile{color:blue}');
-    assert.notEqual((await buildPublic(publicDir)).stylesheet, first.stylesheet);
+    const third = await buildPublic(publicDir);assert.notEqual(third.stylesheet, first.stylesheet);
+    // Only the current and the previous build stay; the first JS bundle (two builds old) is cleaned up.
+    await assert.rejects(readFile(bundle));
+    const left = (await readdir(path.join(publicDir, 'assets'))).sort();
+    assert.deepEqual(left, [third.javascript, third.stylesheet, first.stylesheet].flatMap(p => [p, p + '.br', p + '.gz'].map(x => path.basename(x))).sort());
     await writeFile(path.join(publicDir, 'app.js'), "import missing from './shared.js';\n");
     await assert.rejects(buildPublic(publicDir), /Unsupported module syntax/);
   } finally { await rm(root, { recursive: true, force: true }); }

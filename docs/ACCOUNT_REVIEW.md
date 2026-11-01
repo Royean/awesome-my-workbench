@@ -16,9 +16,9 @@
 | 编号 | 级别 | 原复现及影响 | 修复与复核 |
 | --- | --- | --- | --- |
 | R-01 | P1 | 登录成员开始 POST `/api/items`，仅发送 JSON 首字符，管理员禁用成员成功后补齐 body；原版本仍返回 201，失效会话可完成在途写入。账户 profile/管理写入存在相同等待窗口。 | `readBody` 收齐内容后重新验证请求认证快照，对比有效 session、用户与角色；独立原样复现现返回 401。作者新增真实分块请求用例，禁用和撤销均拒绝写入。 |
-| R-02 | P1 | 当前管理员在成员管理点击自己的“重置邀请”：后端撤销自己的 session，UI 随后刷新成员列表收到 401 并 reload，刚生成的 token 未复制即丢失，唯一管理员需 CLI 恢复。 | UI 隐藏当前账号的重置操作；后端当前账号 reset 返回 409。独立接口复测 409，后续成员列表仍 200。 |
+| R-02 | P1 | 当前管理员在成员管理点击自己的「重置邀请」：后端撤销自己的 session，UI 随后刷新成员列表收到 401 并 reload，刚生成的 token 未复制即丢失，唯一管理员需 CLI 恢复。 | UI 隐藏当前账号的重置操作；后端当前账号 reset 返回 409。独立接口复测 409，后续成员列表仍 200。 |
 | R-03 | P2 | 未登录页的 hashchange 和 Ctrl/Cmd+K 仍可触发业务导航/抽屉，覆盖登录 gate。后端数据 API 仍有认证，未形成数据读取。 | `applicationReady` 统一保护 render、navigate、点击、键盘与 hashchange；401 立即撤销该标记。已复核代码，浏览器交互由独立验收承接。 |
-| R-04 | P2 | 成员 API 无 activated/status，新邀请但未设密码的账户显示“已启用”。 | API 返回 `password_hash IS NOT NULL` 的布尔 activated，不返回 hash；测试核查已激活与待激活账户。 |
+| R-04 | P2 | 成员 API 无 activated/status，新邀请但未设密码的账户显示「已启用」。 | API 返回 `password_hash IS NOT NULL` 的布尔 activated，不返回 hash；测试核查已激活与待激活账户。 |
 
 另外复核了作者补充的 128 字符密码上限、邀请创建及重置事务、首位管理员 activation invitation；未发现上述修复引入新的明显越权或秘密持久化。
 

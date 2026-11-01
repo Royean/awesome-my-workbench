@@ -80,7 +80,11 @@ export async function buildPublic(publicDir = path.resolve(import.meta.dirname, 
     html = html.replace('<script type="module" src="/app.js"></script>', jsTag);
   }
   await fs.mkdir(path.join(publicDir, 'assets'), { recursive: true });
-  // Retain old hashes: an open tab or a deployment in progress may still need them.
+  // Keep the current bundle plus the one the previous index.html referenced (an open tab or a deployment
+  // in progress may still need it); older hashed bundles are removed so they don't accumulate.
+  let previousIndex = '';
+  try { previousIndex = await fs.readFile(path.join(publicDir, 'index.html'), 'utf8'); } catch {}
+  const keep = new Set([jsPath, cssPath, ...(previousIndex.match(/\/assets\/app\.[a-f0-9]{64}\.(?:js|css)/g) || [])].map(p => path.basename(p)));
   await fs.writeFile(path.join(publicDir, jsPath.slice(1)), javascript);
   await fs.writeFile(path.join(publicDir, cssPath.slice(1)), css);
   // Pre-compressed siblings served by server.mjs; deterministic for identical input.
@@ -92,6 +96,10 @@ export async function buildPublic(publicDir = path.resolve(import.meta.dirname, 
   const temporaryIndex = path.join(publicDir, 'index.html.build');
   await fs.writeFile(temporaryIndex, html);
   await fs.rename(temporaryIndex, path.join(publicDir, 'index.html'));
+  for (const name of await fs.readdir(path.join(publicDir, 'assets'))) {
+    const m = /^(app\.[a-f0-9]{64}\.(?:js|css))(?:\.br|\.gz)?$/.exec(name);
+    if (m && !keep.has(m[1])) await fs.rm(path.join(publicDir, 'assets', name), { force: true });
+  }
   return { javascript: jsPath, stylesheet: cssPath, modules: [...modules.keys()] };
 }
 

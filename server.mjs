@@ -1,3 +1,4 @@
+import { validateReportObservations } from './lib/report-observations.mjs';
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -79,6 +80,7 @@ function validate(kind,b,opts={}){
  }
  if(kind==='visit')for(const key of ['doctor','reason','assessment','instructions'])clean[key]=String(b[key]||'').slice(0,8000);
  if(kind==='report'){
+  try{clean.observations=validateReportObservations(b.observations);}catch(e){throw bad(e.message,'observations');}
   clean.type=String(b.type||'就诊记录');if(!['就诊记录','检验报告','影像报告','处方','出院记录','其他'].includes(clean.type))throw bad('报告分类无效');
   clean.status=String(b.status||'待补充');if(!['待出报告','待补充','待核对','已归档'].includes(clean.status))throw bad('报告状态无效');
   clean.source=String(b.source||'').slice(0,250);clean.content=String(b.content||'').slice(0,20000);clean.fileId=String(b.fileId||'').slice(0,100);

@@ -57,3 +57,7 @@ claude mcp add --transport http zhiheng https://vivid-dream.online/mcp --header 
 ## 测试
 
 `node --test tests/mcp.test.mjs`（真实服务进程、临时数据库、虚构本地账号）。
+
+## AI 使用说明
+
+给 AI 助手的使用指南（工具选择、字段与单位、日期约定、写入前确认）见 [`skills/zhiheng/SKILL.md`](../skills/zhiheng/SKILL.md)。

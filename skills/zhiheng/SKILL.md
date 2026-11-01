@@ -30,8 +30,8 @@ description: 通过 MCP 读写「知衡」个人健康工作台（餐食、运�
 
 - 默认 `workbench: "health"`、`space: "personal"`（真实数据）。`demo` 是示例数据，只在用户明确要求时使用。
 - 健康类（meal/exercise/metric/water/visit/report/medication/dose）只能写入 health 工作台；金融等其他工作台只能写 `note`（备忘）和 `task`（待办）。
-- **附件只能看名字和类型**：报告的 `attachment`、餐食的 `attachments` 只有文件名和类型，读不到内容。不能上传、添加或更换附件（照片/语音/原件），请用户到网页操作。
-- 不支持：附件内容、账号/密码/令牌。
+- **报告原件可上传但不能读取内容或替换**：以 tools/list 为准。先复述文件名、检查日期、目标工作台/空间和关联报告，获得确认后，用 upload_attachment 传原件标准Base64及SHA-256（PDF、PNG、JPG/JPEG、WEBP、TXT，最大10MiB）；用 list_attachments 核对编号/文件摘要，再用 attach_report_file 关联已有报告。批量导入可一次确认明确清单，授权持续有效。同名同日同标题/备注同内容的重试复用原件，先查询避免重复。普通 create_record/update_record 仍不能直接设置附件。餐食照片/语音上传及附件替换请到网页操作。
+- 不支持：附件内容读取、账号/密码/令牌。
 
 ## 日期与时间
 

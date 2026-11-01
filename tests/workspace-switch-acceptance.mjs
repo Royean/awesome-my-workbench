@@ -60,7 +60,7 @@ try{
   reset();delay['finance@demo']=3000;await setSpace(p,'demo');await p.locator('main .home-skeleton').waitFor({timeout:500});assert.equal(await p.locator('.bottom-tabs').isVisible(),true);assert.equal(await p.locator('text=正在切换数据空间').count(),0);
   await p.locator('main .home-skeleton').waitFor({state:'detached',timeout:4500});assert.equal(await finance(p).count(),0);pass('切换数据空间同样保留导航、内容区骨架屏');
   // No cache + failure → error state with 重试 in content area, not infinite skeleton; retry recovers.
-  reset();mode['*']='abort';await act(p,'shell-switch:health');await p.locator('main .empty').filter({hasText:'暂时无法加载工作台'}).waitFor({timeout:3000});assert.equal(await p.locator('.bottom-tabs').isVisible(),true);assert.equal(await p.locator('.home-skeleton').count(),0);
+  reset();mode['*']='abort';await act(p,'shell-switch:health');await p.locator('main .load-error-banner').filter({hasText:'没连上服务器，内容还没加载出来'}).waitFor({timeout:3000});assert.equal(await p.locator('.bottom-tabs').isVisible(),true);assert.equal(await p.locator('.home-skeleton').count(),0);
   reset();await p.locator('main button',{hasText:'重试'}).click();await p.locator('main h1',{hasText:'健康总览'}).waitFor({timeout:3000});
   assert.deepEqual(errors,[]);await c.close();pass('无缓存且失败：内容区错误态+「重试」，导航保留，重试成功');}
 

@@ -83,7 +83,7 @@ export async function buildPublic(publicDir = path.resolve(import.meta.dirname, 
   // Retain old hashes: an open tab or a deployment in progress may still need them.
   await fs.writeFile(path.join(publicDir, jsPath.slice(1)), javascript);
   await fs.writeFile(path.join(publicDir, cssPath.slice(1)), css);
-  // Pre-compressed siblings for server.mjs and nginx gzip_static; deterministic for identical input.
+  // Pre-compressed siblings served by server.mjs; deterministic for identical input.
   for (const [asset, content] of [[jsPath, javascript], [cssPath, css]]) {
     const file = path.join(publicDir, asset.slice(1)), bytes = Buffer.from(content);
     await fs.writeFile(file + '.br', zlib.brotliCompressSync(bytes, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 11, [zlib.constants.BROTLI_PARAM_SIZE_HINT]: bytes.length } }));

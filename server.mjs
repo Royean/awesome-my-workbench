@@ -165,7 +165,7 @@ const server=http.createServer(async(req,res)=>{try{
  const user=authEnabled?accounts.session(req):null;
  if(user&&!['/api/auth/login','/api/auth/accept-invitation'].includes(url.pathname))req.authSnapshot=user;
  if(await accounts.handle(req,res,url,user))return;
- // Single startup round trip: account state plus the requested workbench state. Unauthenticated sessions get only {me}, as /api/auth/me would.
+ // Single startup round trip ({me,state}): account state plus the requested workbench state. Unauthenticated sessions get only {me}, as /api/auth/me would.
  const isBootstrap=url.pathname==='/api/bootstrap';
  if(isBootstrap&&req.method!=='GET')return json(res,405,{error:'方法不支持'});
  if(isBootstrap&&authEnabled&&!user)return json(res,200,{me:{enabled:true,user:null}});
@@ -176,7 +176,7 @@ const server=http.createServer(async(req,res)=>{try{
  const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  const readSettings=()=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
- if(isBootstrap){const me={enabled:authEnabled,user:user?publicUser(user):null};if(!workbench||!space)return json(res,200,{me,workbenches,settings:null,state:null});const settings=readSettings();return json(res,200,{me,workbenches,settings,state:{space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today()}})}
+ if(isBootstrap){const me={enabled:authEnabled,user:user?publicUser(user):null};if(!workbench||!space)return json(res,200,{me,state:null});return json(res,200,{me,state:{space:baseSpace,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()}})}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
  const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw new Error('此工作台仅支持备忘与待办');};

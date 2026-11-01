@@ -56,10 +56,10 @@ test('bootstrap without accounts matches /api/auth/me + /api/state', async () =>
   assert.equal(boot.status, 200); assert.equal(boot.headers.get('cache-control'), 'no-store');
   const body = await boot.json(), state = await (await fetch(base + '/api/state?space=demo&workbench=health')).json();
   assert.deepEqual(body.me, await (await fetch(base + '/api/auth/me')).json());
-  assert.deepEqual(body.workbenches, state.workbenches); assert.deepEqual(body.settings, state.settings);
-  assert.deepEqual(body.state.items, state.items); assert.equal(body.state.space, 'demo');
+  assert.deepEqual(Object.keys(body).sort(), ['me', 'state']);
+  const { space, ...rest } = body.state; assert.equal(space, 'demo'); assert.deepEqual(rest, state);
   const missing = await (await fetch(base + '/api/bootstrap?workbench=nope')).json();
-  assert.equal(missing.state, null); assert.equal((await fetch(base + '/api/state?workbench=nope')).status, 404);
+  assert.deepEqual(Object.keys(missing).sort(), ['me', 'state']); assert.equal(missing.state, null); assert.equal((await fetch(base + '/api/state?workbench=nope')).status, 404);
   assert.equal((await fetch(base + '/api/bootstrap', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })).status, 405);
 });
 
@@ -77,7 +77,8 @@ test('bootstrap with accounts: unauthenticated gets only me, authenticated gets 
   const me = await (await fetch(base + '/api/auth/me', { headers: { Cookie } })).json();
   const state = await (await fetch(base + '/api/state?space=personal&workbench=health', { headers: { Cookie } })).json();
   assert.deepEqual(body.me, me); assert.equal(body.me.user.email, 'admin@example.invalid');
-  assert.deepEqual(body.workbenches, state.workbenches); assert.deepEqual(body.state.items, state.items); assert.deepEqual(body.settings, state.settings);
+  assert.deepEqual(Object.keys(body).sort(), ['me', 'state']);
+  const { space, ...rest } = body.state; assert.equal(space, 'personal'); assert.deepEqual(rest, state);
   const bad = await fetch(base + '/api/bootstrap', { headers: { Cookie: 'workbench_session=forged' } });
   assert.deepEqual(await bad.json(), { me: { enabled: true, user: null } });
 });

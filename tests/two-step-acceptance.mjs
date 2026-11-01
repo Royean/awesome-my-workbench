@@ -33,8 +33,8 @@ try{
  await waitFor(async()=>(await count('meal'))===1,{message:'meal not saved'});results.push(['记一餐（打字）',taps]);assert.ok(taps<=2);
  const meal=(await state()).items.find(x=>x.kind==='meal');assert.equal(meal.mealType,mealType.replace('✓','').trim());
  // 记一餐 via 最近吃过: card → chip (saves)
- await home();await tap('[data-action="qc-open:meal"]');await page.locator('[data-recent="0"]').waitFor();await page.waitForTimeout(450);await page.screenshot({path:SHOTS+'/twostep-meal-recent.png'});await tap('[data-recent="0"]');
- await waitFor(async()=>(await count('meal'))===2,{message:'recent meal not saved'});results.push(['记一餐（最近吃过）',taps]);assert.ok(taps<=2);
+ await home();await tap('[data-action="qc-open:meal"]');await page.locator('[data-recent="0"]').waitFor();await tap('[data-recent="0"]');
+ await waitFor(async()=>(await count('meal'))===2,{message:'recent meal not saved'});const rt=page.locator('#toast');await rt.getByText(`已记 ${mealType.replace('✓','').trim()} · 虚构午饭：番茄鸡蛋面`,{exact:true}).waitFor();assert.equal(await rt.locator('button').textContent(),'撤销');assert.ok(await rt.locator('span').first().evaluate(s=>s.getBoundingClientRect().height<=24&&s.getBoundingClientRect().right<=390),'toast text one line');await page.waitForTimeout(300);await page.screenshot({path:SHOTS+'/twostep-meal-recent.png'});results.push(['记一餐（最近吃过）',taps]);assert.ok(taps<=2);
  // 记运动: card → 保存 with last type/duration
  await home();await tap('[data-action="qc-open:exercise"]');await page.locator('#capture-form').waitFor();
  assert.equal(await page.inputValue('#capture-duration'),'25');assert.match(await page.locator('[data-choice="exerciseType"] .selected').textContent(),/跑步/);

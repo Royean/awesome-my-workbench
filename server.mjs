@@ -152,7 +152,18 @@ function compressed(file,bytes,type,accept,immutable){
  if(immutable){compressCache.set(key,body);if(compressCache.size>64)compressCache.delete(compressCache.keys().next().value);}
  return {body,encoding};
 }
-const accounts=createAccounts({db,enabled:authEnabled,origin:appOrigin,json,readBody});
+const accounts=createAccounts({db,enabled:authEnabled,origin:appOrigin,json,readBody,bootstrap:(u,url)=>bootstrapPayload(u,url)});
+// Shared by GET /api/bootstrap and a successful POST /api/auth/login, so both return the identical {me,state} for one user.
+function bootstrapPayload(user,url){
+ const me={enabled:authEnabled,user:user?publicUser(user):null};
+ const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
+ const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
+ const workbench=workbenches.find(x=>x.id===workbenchId);
+ const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
+ if(!workbench||!space)return {me,state:null};
+ const settings=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
+ return {me,state:{space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today()}};
+}
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
  if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
@@ -179,7 +190,7 @@ const server=http.createServer(async(req,res)=>{try{
  const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  const readSettings=()=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
- if(isBootstrap){const me={enabled:authEnabled,user:user?publicUser(user):null};if(!workbench||!space)return json(res,200,{me,state:null});return json(res,200,{me,state:{space:baseSpace,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()}})}
+ if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
  const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw bad('此工作台仅支持备忘与待办');};

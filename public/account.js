@@ -1,7 +1,7 @@
 import { fetchJSON } from './request.js';
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized} = {}) {
+export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized, loginQuery = () => ''} = {}) {
   let enabled = false, user = null, invite = new URLSearchParams(location.hash.slice(1)).get('invite');
   const esc = escapeHTML;
   const field = (label, name, type = 'text', extra = '') => `<label class="account-field"><span>${label}</span><input name="${name}" type="${type}" ${extra}></label>`;
@@ -41,6 +41,7 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuth
     root.innerHTML = `<main class="account-gate"><div class="account-brand"><span class="account-mark" aria-hidden="true">A</span><span>Awesome My Workbench</span></div><section class="account-card"><p class="account-eyebrow">我的工作台</p><h1>${invite ? '激活你的账号' : '欢迎回来'}</h1><p class="account-muted">${invite ? '设置密码，开始使用属于你的工作台。' : '登录后，继续记录与安排你的日常。'}</p>${message ? `<p class="account-error" role="alert">${esc(message)}</p><button type="button" class="account-button account-primary" id="account-retry">重新连接</button>` : `<form id="account-gate-form">${invite ? field('昵称', 'name', 'text', 'autocomplete="nickname" maxlength="80"') : field('邮箱', 'email', 'email', 'autocomplete="username" required maxlength="254" inputmode="email" autocapitalize="none" spellcheck="false"')}${field(invite ? '设置密码' : '密码', 'password', 'password', `autocomplete="${invite ? 'new-password' : 'current-password'}" required ${invite ? 'minlength="12" maxlength="128"' : 'maxlength="128"'}`)}${invite ? '<p class="account-muted account-hint">密码需为 12–128 个字符，建议使用独立长密码。</p>' : ''}${error}${submit(invite ? '激活并进入工作台' : '登录')}</form><p class="account-footnote">${invite ? '邀请仅可使用一次。链接失效时，请联系管理员重新邀请。' : '暂不开放公开注册，请联系管理员获取邀请。'}</p>${invite ? '<button class="account-button account-quiet" id="account-back-login" type="button">返回登录</button>' : ''}`}</section><p class="account-bottom">把生活的每一部分，放在一起。</p></main>`;
     root.querySelector('#account-retry')?.addEventListener('click', () => location.reload());
     root.querySelector('#account-back-login')?.addEventListener('click', () => { invite = null; history.replaceState(null, '', location.pathname + location.search); gate(); });
+    if (!invite && !message) { bindLogin(root.querySelector('form')); root.querySelector('input')?.focus(); return; }
     bindForm(root.querySelector('form'), async data => {
       const result = invite ? await write('/accept-invitation', {...data, token:invite}, 'POST', true) : await write('/login', data, 'POST', true);
       invite = null;
@@ -50,6 +51,37 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuth
       else location.reload();
     });
     root.querySelector('input')?.focus();
+  }
+  // Login: one request. Button shows spinner + 「登录中…」 at fixed width, inputs locked; slow hint at 3s, abort at 15s.
+  function bindLogin(form) {
+    if (!form) return;
+    const button = form.querySelector('[type="submit"]'), alert = form.querySelector('.account-error');
+    const hint = document.createElement('p'); hint.className = 'account-slow'; hint.setAttribute('aria-live', 'polite'); button.after(hint);
+    const inputs = [...form.querySelectorAll('input')];
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (form.dataset.busy) return;
+      const data = Object.fromEntries(new FormData(form)), label = button.textContent;
+      button.style.width = button.offsetWidth ? button.offsetWidth + 'px' : '';
+      form.dataset.busy = 'true'; alert.textContent = ''; hint.textContent = '';
+      button.disabled = true; button.setAttribute('aria-busy', 'true'); button.innerHTML = '<span class="account-spinner" aria-hidden="true"></span>登录中…';
+      for (const input of inputs) input.readOnly = true;
+      const slow = setTimeout(() => { hint.textContent = '网络较慢，正在连接…'; }, 3000);
+      let result;
+      try { result = await fetchJSON(`/api/auth/login${loginQuery()}`, {method:'POST', body:JSON.stringify(data), timeoutMs:15000}); }
+      catch (err) {
+        clearTimeout(slow); delete form.dataset.busy;
+        button.disabled = false; button.removeAttribute('aria-busy'); button.textContent = label; button.style.width = '';
+        for (const input of inputs) input.readOnly = false;
+        if (err.timeout) hint.textContent = '连接超时，请重试'; else { hint.textContent = ''; alert.textContent = err.message || '连接失败，请重试。'; }
+        const pw = form.querySelector('[name=password]'); pw?.focus(); pw?.select?.();
+        return;
+      }
+      clearTimeout(slow); hint.textContent = '';
+      user = result.user;
+      history.replaceState(null, '', location.pathname + location.search);
+      if (onAuthenticated) await onAuthenticated(user, result); else location.reload();
+    });
   }
   // `prefetched` is the `me` object from /api/bootstrap; without it, fall back to /api/auth/me.
   async function initialize(prefetched) {

@@ -82,3 +82,31 @@ test('bootstrap with accounts: unauthenticated gets only me, authenticated gets 
   const bad = await fetch(base + '/api/bootstrap', { headers: { Cookie: 'workbench_session=forged' } });
   assert.deepEqual(await bad.json(), { me: { enabled: true, user: null } });
 });
+
+test('login response carries the /api/bootstrap payload for the same user; failures carry none', async () => {
+  const base = await start(true);
+  const post = (route, body, Cookie) => fetch(base + route, { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: base, ...(Cookie ? { Cookie } : {}) }, body: JSON.stringify(body) });
+  const wrong = await post('/api/auth/login?space=personal&workbench=health', { email: 'admin@example.invalid', password: 'wrong-password-xx' });
+  assert.equal(wrong.status, 401); assert.equal(wrong.headers.get('set-cookie'), null);
+  const wrongBody = await wrong.json(); assert.deepEqual(Object.keys(wrongBody), ['error']);
+  const login = await post('/api/auth/login?space=personal&workbench=health', { email: 'admin@example.invalid', password });
+  assert.equal(login.status, 200); assert.equal(login.headers.get('cache-control'), 'no-store');
+  const Cookie = login.headers.get('set-cookie').split(';')[0];
+  const { user, ...payload } = await login.json();
+  assert.equal(user.email, 'admin@example.invalid'); assert.ok(!JSON.stringify(payload).includes('password_hash'));
+  const boot = await (await fetch(base + '/api/bootstrap?space=personal&workbench=health', { headers: { Cookie } })).json();
+  assert.deepEqual(payload, boot); assert.deepEqual(payload.me.user, user); assert.ok(payload.state);
+  // Requested scope is honoured, unknown workbench yields state:null like bootstrap.
+  const fin = await post('/api/auth/login?space=demo&workbench=finance', { email: 'admin@example.invalid', password });
+  const finBody = await fin.json(); assert.equal(finBody.state.space, 'demo'); assert.equal(finBody.state.workbench.id, 'finance');
+  assert.equal((await (await post('/api/auth/login?workbench=nope', { email: 'admin@example.invalid', password })).json()).state, null);
+  // No cross-account leak: a member's login payload never contains the admin's records.
+  assert.equal((await post('/api/items?space=personal&workbench=health', { kind: 'note', title: '管理员私有备忘', date: '2026-01-01' }, Cookie)).status, 201);
+  const inv = await (await post('/api/auth/invitations', { email: 'member@example.invalid', name: '成员' }, Cookie)).json();
+  assert.equal((await post('/api/auth/accept-invitation', { token: inv.token, password })).status, 200);
+  const member = await post('/api/auth/login?space=personal&workbench=health', { email: 'member@example.invalid', password }, Cookie);
+  const mb = await member.json(); const mCookie = member.headers.get('set-cookie').split(';')[0];
+  assert.equal(mb.me.user.email, 'member@example.invalid'); assert.equal(JSON.stringify(mb).includes('管理员私有备忘'), false);
+  const { user: _u, ...mPayload } = mb;
+  assert.deepEqual(mPayload, await (await fetch(base + '/api/bootstrap?space=personal&workbench=health', { headers: { Cookie: mCookie } })).json());
+});

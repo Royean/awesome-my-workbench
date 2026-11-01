@@ -7,6 +7,7 @@ import net from 'node:net';
 import { spawn } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { buildPublic } from '../scripts/build-public.mjs';
+import { startServer, stopProcess } from './helpers.mjs';
 
 const repository = path.resolve(import.meta.dirname, '..');
 async function fixture() {
@@ -83,19 +84,9 @@ test('only matching public content hashes cache; HEAD, APIs and user files remai
     await writeFile(path.join(publicDir, 'service-worker.js'), '// no cache');
     const mismatch = `/assets/app.${'0'.repeat(64)}.js`;
     await writeFile(path.join(publicDir, mismatch.slice(1)), 'wrong content');
-    const listener = net.createServer();
-    await new Promise(resolve => listener.listen(0, '127.0.0.1', resolve));
-    const port = listener.address().port;
-    await new Promise(resolve => listener.close(resolve));
-    const base = `http://127.0.0.1:${port}`;
-    proc = spawn(process.execPath, [path.join(root, 'server.mjs')], { cwd: root, env: { ...process.env, NODE_ENV: 'test', AUTH_REQUIRED: '0', APP_ORIGIN: '', HOST: '127.0.0.1', PORT: String(port), HEALTH_DATA_DIR: path.join(root, 'data') }, stdio: 'ignore' });
-    let ready = false;
-    for (let n = 0; n < 100; n++) {
-      if (proc.exitCode !== null) throw Error('isolated server exited');
-      try { if ((await fetch(base + '/healthz')).ok) { ready = true; break; } } catch {}
-      await new Promise(resolve => setTimeout(resolve, 30));
-    }
-    assert.ok(ready, 'isolated server starts');
+    const server = await startServer({ cwd: root, script: path.join(root, 'server.mjs'), env: { NODE_ENV: 'test', AUTH_REQUIRED: '0', APP_ORIGIN: '', HOST: '127.0.0.1', HEALTH_DATA_DIR: path.join(root, 'data') } });
+    proc = server.proc;
+    const base = server.base;
     for (const asset of [built.javascript, built.stylesheet]) {
       const get = await fetch(base + asset), head = await fetch(base + asset, { method: 'HEAD' });
       assert.equal(get.status, 200);
@@ -115,7 +106,7 @@ test('only matching public content hashes cache; HEAD, APIs and user files remai
     assert.equal(await response.text(), 'fictional user bytes');
     assert.equal(await (await fetch(base + '/', { method: 'HEAD' })).text(), '');
   } finally {
-    if (proc && proc.exitCode === null) { proc.kill(); await new Promise(resolve => proc.once('exit', resolve)); }
+    await stopProcess(proc);
     await rm(root, { recursive: true, force: true });
   }
 });

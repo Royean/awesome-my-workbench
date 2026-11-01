@@ -6,10 +6,11 @@ import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import {randomUUID} from 'node:crypto';
 import path from 'node:path';
-const cwd=path.resolve(import.meta.dirname,'..'),port=Number(process.env.TEST_PORT||3101),base=`http://127.0.0.1:${port}`;
+let cwd=path.resolve(import.meta.dirname,'..'),base=undefined;
+import {startServer,stopProcess} from './helpers.mjs';
 let dir,proc;
-async function start(){proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,PORT:String(port),HEALTH_DATA_DIR:dir},stdio:'ignore'});for(let n=0;n<100;n++){try{if((await fetch(base+'/api/state')).ok)return}catch{}await new Promise(r=>setTimeout(r,50))}throw Error('isolated server did not start')}
-async function stop(){if(proc?.exitCode===null){proc.kill();await new Promise(r=>proc.once('exit',r))}}
+async function start(){const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;}
+async function stop(){await stopProcess(proc);proc=undefined;}
 async function api(route,method='GET',body,space='personal',headers={}){const r=await fetch(base+route+(route.includes('?')?'&':'?')+'space='+space,{method,headers:{'Content-Type':'application/json',...headers},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()}}
 const record=(kind,extra={})=>({kind,title:'独立验收虚构记录',date:'2026-10-31',...(kind==='visit'?{status:'待就诊'}:kind==='exercise'?{duration:30}:kind==='metric'?{type:'weight',value:65}:{}),...extra});
 before(async()=>{dir=await mkdtemp(path.join(os.tmpdir(),'health-acceptance-'));await start()});

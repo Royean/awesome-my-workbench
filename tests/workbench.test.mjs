@@ -5,11 +5,12 @@ import {mkdtemp,rm} from 'node:fs/promises';
 import {DatabaseSync} from 'node:sqlite';
 import os from 'node:os';
 import path from 'node:path';
-const cwd=path.resolve(import.meta.dirname,'..'),port=3106,base=`http://127.0.0.1:${port}`;
+let cwd=path.resolve(import.meta.dirname,'..'),base=undefined;
+import {startServer,stopProcess} from './helpers.mjs';
 let dir,proc,custom;
 const legacy={id:'legacy-health',kind:'meal',title:'虚构旧版健康餐食',date:'2026-10-01',note:'迁移前原文'};
-async function start(){try{await fetch(base+'/api/state');throw Error('test port occupied')}catch(e){if(e.message==='test port occupied')throw e}proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,PORT:String(port),HEALTH_DATA_DIR:dir},stdio:'ignore'});for(let n=0;n<100;n++){if(proc.exitCode!==null)throw Error('isolated process exited');try{if((await fetch(base+'/api/state')).ok)return}catch{}await new Promise(r=>setTimeout(r,50))}throw Error('isolated server did not start')}
-async function stop(){if(proc?.exitCode===null){proc.kill();await new Promise(r=>proc.once('exit',r))}}
+async function start(){const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;}
+async function stop(){await stopProcess(proc);proc=undefined;}
 async function api(route,method='GET',body,wb='health',space='personal'){const r=await fetch(base+route+(route.includes('?')?'&':'?')+'space='+space+'&workbench='+encodeURIComponent(wb),{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()}}
 const add=(kind,wb,extra={})=>api('/api/items','POST',{kind,title:'虚构工作台记录',date:'2026-10-01',...extra},wb);
 before(async()=>{dir=await mkdtemp(path.join(os.tmpdir(),'health-workbench-qa-'));const db=new DatabaseSync(path.join(dir,'health.sqlite'));db.exec('CREATE TABLE items(id TEXT PRIMARY KEY,space TEXT NOT NULL,kind TEXT NOT NULL,body TEXT NOT NULL)');const {id,kind,...body}=legacy;db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,'personal',kind,JSON.stringify(body));db.close();await start()});

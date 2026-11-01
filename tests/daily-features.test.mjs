@@ -4,11 +4,12 @@ import {spawn} from 'node:child_process';
 import {mkdtemp,rm,readdir} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-const cwd=path.resolve(import.meta.dirname,'..'),port=Number(process.env.DAILY_TEST_PORT||3106),base=`http://127.0.0.1:${port}`;
-if(port===3100)throw Error('Never run acceptance against user port 3100');
+let cwd=path.resolve(import.meta.dirname,'..'),base=undefined;
+import {startServer,stopProcess} from './helpers.mjs';
+
 let dir,proc,date;
-async function start(){try{await fetch(base+'/api/state');throw Error('test port already occupied')}catch(e){if(e.message==='test port already occupied')throw e}proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,PORT:String(port),HEALTH_DATA_DIR:dir},stdio:'ignore'});for(let n=0;n<100;n++){if(proc.exitCode!==null)throw Error('isolated server exited');try{const r=await fetch(base+'/api/state');if(r.ok){date=(await r.json()).today;return}}catch{}await new Promise(r=>setTimeout(r,50))}throw Error('isolated server did not start')}
-async function stop(){if(proc?.exitCode===null){proc.kill();await new Promise(r=>proc.once('exit',r))}}
+async function start(){const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;date=(await (await fetch(base+'/api/state')).json()).today;}
+async function stop(){await stopProcess(proc);proc=undefined;}
 async function api(route,method='GET',body,space='personal'){const r=await fetch(base+route+(route.includes('?')?'&':'?')+'space='+space,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()}}
 const add=(kind,extra={},space)=>api('/api/items','POST',{kind,title:'独立验收虚构记录',date,...extra},space);
 const capture=(body,space)=>api('/api/capture-meal','POST',body,space);

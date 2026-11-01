@@ -29,3 +29,18 @@ test('GET /install.md serves docs/AGENT-INSTALL.md publicly as markdown, without
   assert.notEqual(post.status, 200);
   assert.equal((await fetch(server.base + '/skills/zhiheng/SKILL.md')).status, 404);
 });
+
+test('the SKILL.md copy embedded in docs/AGENT-INSTALL.md matches skills/zhiheng/SKILL.md exactly', async () => {
+  const doc = await readFile(path.join(cwd, 'docs/AGENT-INSTALL.md'), 'utf8');
+  const skill = await readFile(path.join(cwd, 'skills/zhiheng/SKILL.md'), 'utf8');
+  const m = /\n## 附：SKILL\.md\n\n````markdown\n([\s\S]*?)\n````\n/.exec(doc);
+  assert.ok(m, 'appendix block not found');
+  assert.equal(m[1], skill.replace(/\n$/, ''));
+});
+
+test('install guide never tells a client config to hold the raw token', async () => {
+  const doc = await readFile(path.join(cwd, 'docs/AGENT-INSTALL.md'), 'utf8');
+  assert.doesNotMatch(doc, /--header\s+"Authorization: Bearer \$\{?ZHIHENG_TOKEN/);
+  assert.match(doc, /--header 'Authorization: Bearer \$\{ZHIHENG_TOKEN\}'/);
+  assert.doesNotMatch(doc, /experimental_use_rmcp_client/);
+});

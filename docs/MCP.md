@@ -74,6 +74,18 @@ curl -s "${H[@]}" $URL -d '{"jsonrpc":"2.0","id":4,"method":"tools/call","params
 claude mcp add --transport http zhiheng https://vivid-dream.online/mcp --header "Authorization: Bearer $ZHIHENG_TOKEN"
 ```
 
+Codex（CLI / IDE 扩展）：先设置环境变量 `ZHIHENG_TOKEN`（如 `export ZHIHENG_TOKEN=...`，写进 shell 配置文件），再在 `~/.codex/config.toml` 中加入：
+
+```toml
+[mcp_servers.zhiheng]
+url = "https://vivid-dream.online/mcp"
+bearer_token_env_var = "ZHIHENG_TOKEN"
+```
+
+> 较旧版本的 Codex 若不支持 streamable HTTP，需在 `config.toml` 顶层额外加 `experimental_use_rmcp_client = true`（新版本无需）。配置项说明见 [Codex MCP 文档](https://developers.openai.com/codex/mcp)。
+
+另外，把 `skills/zhiheng/SKILL.md` 复制到助手的 skills 目录（如 `~/.codex/skills/zhiheng/SKILL.md`），让助手了解知衡工具的用法。
+
 ## 测试
 
 `node --test tests/mcp.test.mjs`（真实服务进程、临时数据库、虚构本地账号）。

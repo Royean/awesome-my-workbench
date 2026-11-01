@@ -22,7 +22,7 @@
 | 工具 | 作用 |
 |---|---|
 | `list_workbenches` | 列出工作台（health / finance / 自建）、数据空间（personal / demo）及每个工作台允许写入的类型 |
-| `get_today` | 今天（Asia/Shanghai）的记录与汇总：饮水合计/目标（`goalMl`：取服务端饮水目标设置，没有设置时为 2000ml；**目前没有这项设置，所以固定为 2000ml**）、运动分钟、餐食数、未完成待办 |
+| `get_today` | 今天（Asia/Shanghai）的记录与汇总：饮水合计/目标（`goalMl`：取该空间的饮水目标设置 `waterGoalMl`，没有设置时为 2000ml）、运动分钟、餐食数、未完成待办 |
 | `list_records` | 按 `kind`（meal/exercise/metric/water/visit/report/medication/dose/note/task/all）、`from`/`to`（YYYY-MM-DD，含）、`limit`（默认 50，最大 200）查询，最新在前 |
 | `create_record` | 新建 meal/exercise/metric/water/visit/report/medication/dose/note/task |
 | `update_record` | 按 `id` 修改上述类型记录，只传要改的字段（服药记录只能改 `time`/`note`） |
@@ -55,7 +55,36 @@
 - 这些字段只能由服务端在 MCP 路径设置：网页 API 请求体里的同名字段会被 `validate()` 丢弃；网页编辑、删除后撤销都会**保留**已有标记（历史不被抹掉）。网页编辑本身不更新 `lastAiEditAt`。
 - 网页在记录列表/详情（首页时间线、今日用药、记录列表、每日回顾含饮水明细、就医列表与详情标题、报告、用药方案与服药记录）显示 12px 小标签「来自 AI 助手 · {最后一次 AI 修改时间}」（今天/昨天/M月D日，跨年带年份）；读屏文字为「由 AI 助手记录，最后修改于 …」。
 
-**不提供**：删除、附件内容与上传、收藏（favorite）。
+### 删除与「最近删除」
+
+| 工具 | 作用 |
+|---|---|
+| `delete_record` | 按 `id` 删除一条记录（所有 MCP 类型，含 favorite；附件 `file` 不行）。返回被删记录摘要和 `restorableDays: 30` |
+| `list_deleted` | 列出本工作台/空间最近 30 天删除的记录（`deletedAt`、`deletedVia: web|mcp`、`expiresAt`） |
+| `restore_record` | 按 `id` 恢复，ID 与内容（含来源标记）不变 |
+
+- 存储：新表 `trash_items`（`migrations/003-trash.sql`），与网页 12 秒撤销（`deleted_items`）分开；**网页删除也进入最近删除**，网页 12 秒撤销照常可用，撤销后同时移出最近删除。30 天到期，启动时和每次查看/恢复时清理。
+- 连带规则与网页完全相同：已有服药记录的用药方案不能删（「该方案已有服用记录，请停用以保留历史，或先移除服用记录」，`validation_failed`）；删除就医**不会**连带删除报告和用药。
+- 恢复时上级记录必须在：报告/用药需要所属就医，服药需要用药方案。上级也在最近删除里 → `parent_deleted`（「它所属的就医记录也在最近删除里，请先恢复那条就医记录」，`hint` 给出上级 ID）；上级已彻底不在 → `parent_missing`。不会自动连带恢复上级。
+- 网页：设置页「最近删除」卡片（标题、类型、日期、删除时间、AI 删除的标「AI 助手删除」、恢复按钮，恢复后提示）；接口 `GET /api/trash`、`POST /api/trash/restore {id}`。
+
+### 收藏
+
+`favorite`（仅 health 工作台）：`title`、`targetKind`（meal/exercise）、`template`（字段同对应记录，按网页规则校验）、`sourceId`。可查、建、改、删。
+
+### 工作台与设置
+
+| 工具 | 作用 |
+|---|---|
+| `create_workbench` | 新建工作台（只能记备忘和待办），名称 1–24 字 |
+| `rename_workbench` | 自建工作台改名；健康、金融不能改名 |
+| `get_settings` / `update_settings` | 每日饮水目标 `waterGoalMl`（100–10000 毫升，默认 2000）与关注目标 `focus`；按工作台+数据空间保存 |
+
+- 饮水目标同时用于 `get_today` 的 `goalMl` 和网页（设置页可改，每日回顾显示「目标」）。网页保存设置时不会抹掉饮水目标。
+- 工作台「停用/启用」暂未提供（网页也没有这一概念，待产品确认）。
+- 账号、密码、令牌、成员管理永远不通过 MCP 提供。
+
+**不提供**：附件内容读取与上传（下一步）、工作台停用。
 
 ## 错误约定与错误码
 
@@ -71,6 +100,7 @@
 | `rate_limited` | 429 | 请求过于频繁；带 `Retry-After` 秒数（`error.data.retryAfter` 相同） | 等待 `Retry-After` 秒后重试 1 次 |
 | `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数）；报告/用药缺就医（带 `hint`）；服药「跳过」缺原因、「已服用」缺时间；服药修改了结果/时间/备注以外的内容；尝试设置附件 | 修正后重试（写入需重新向用户确认） |
 | `future_date` | 工具 / 网页 400 | meal/exercise/metric/water/dose 的日期晚于今天（与网页相同） | 向用户确认日期 |
+| `parent_deleted` / `parent_missing` | 工具 / 网页 400 | 恢复时上级记录在最近删除里 / 已不在 | 先恢复上级 / 告诉用户无法恢复 |
 | `not_found` | 工具 | 工作台/数据空间/记录不存在（或不属于当前账号）；报告/用药关联的就医、服药关联的用药方案不存在（带 `hint`） | 重新 `list_workbenches` / `list_records` |
 | `forbidden_kind` | 工具 | 该工作台不能写这类记录，或这类记录不能通过助手修改 | 换工作台，或请用户到网页操作 |
 | `mcp_disabled` | 404 | 服务未开启助手连接 | 不重试 |

@@ -58,11 +58,11 @@ test('GET /mcp is 405; auth: missing/invalid token 401 with WWW-Authenticate; co
  // Revoked token stops working.
  const t=await mint(cookieA);const list=(await req('/api/auth/tokens',{headers:{Cookie:cookieA}})).body.tokens;assert.equal((await req('/api/auth/tokens/'+list[0].id,{method:'DELETE',body:{},headers:web(cookieA)})).status,200);assert.equal((await rpc(t,'ping')).status,401);
 });
-test('tools/list publishes exactly the v1 tools with strict schemas (no delete)',async()=>{
+test('tools/list publishes exactly the tools with strict schemas',async()=>{
  const {tools}=(await rpc(tokenA,'tools/list')).body.result;
- assert.deepEqual(tools.map(t=>t.name).sort(),['create_record','get_today','list_records','list_workbenches','update_record']);
+ assert.deepEqual(tools.map(t=>t.name).sort(),['create_record','create_workbench','delete_record','get_settings','get_today','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings']);
  for(const t of tools){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.match(t.description,/[\u4e00-\u9fa5]/);}
- const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','note','task']);assert.deepEqual(create.inputSchema.required,['kind']);
+ const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','favorite','note','task']);assert.deepEqual(create.inputSchema.required,['kind']);
  assert.equal(create.inputSchema.properties.attachmentIds,undefined);
 });
 test('list_workbenches and get_today',async()=>{
@@ -99,16 +99,12 @@ test('validation errors come back as isError tool results with the web validator
  assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',attachmentIds:['a']}),/^助手不能添加或更换附件，请到网页操作$/);
  assert.match(await err(tokenA,'update_record',{id:'missing'}),/没有找到这条记录/);
 });
-test('disallowed kinds rejected; finance workbench refuses health records; file/favorite stay out of MCP',async()=>{
- for(const kind of ['file','favorite'])assert.match(await err(tokenA,'create_record',{kind,title:'x'}),/记录类型只能是/);
- for(const kind of ['visit','medication','dose','report'])assert.match(await err(tokenA,'create_record',{workbench:'finance',kind,title:'x'}),/只能记备忘和待办/);
+test('disallowed kinds rejected; finance workbench refuses health records; file stays out of MCP',async()=>{
+ assert.match(await err(tokenA,'create_record',{kind:'file',title:'x'}),/记录类型只能是/);
+ for(const kind of ['visit','medication','dose','report','favorite'])assert.match(await err(tokenA,'create_record',{workbench:'finance',kind,title:'x'}),/只能记备忘和待办/);
  assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'water',volume:200}),/^「金融」工作台只能记备忘和待办，饮水请记到「健康」工作台$/);
- assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'meal',title:'午饭'}),/只能记备忘和待办/);
- const fav=await req('/api/items',{method:'POST',body:{kind:'favorite',title:'常吃',date:'2026-10-01',targetKind:'meal',template:{title:'燕麦'}},headers:web(cookieA)});assert.equal(fav.status,201);
- assert.match(await err(tokenA,'update_record',{id:fav.body.id,title:'x'}),/不支持在助手里修改/);
- assert.equal((await ok(tokenA,'list_records',{})).records.some(r=>r.kind==='favorite'||r.kind==='file'),false);
- assert.equal((await ok(tokenA,'get_today',{})).records.some(r=>r.kind==='favorite'||r.kind==='file'),false);
- for(const k of ['favorite','file'])assert.ok(!(await rpc(tokenA,'tools/list')).body.result.tools.find(t=>t.name==='create_record').inputSchema.properties.kind.enum.includes(k));
+ assert.equal((await ok(tokenA,'list_records',{})).records.some(r=>r.kind==='file'),false);
+ assert.ok(!(await rpc(tokenA,'tools/list')).body.result.tools.find(t=>t.name==='create_record').inputSchema.properties.kind.enum.includes('file'));
 });
 const shift=n=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+n);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d);};
 const noStorage=o=>{const t=JSON.stringify(o);assert.doesNotMatch(t,/storageName|fileId|attachmentIds|uploads|base64|ZmFrZQ/,t);};

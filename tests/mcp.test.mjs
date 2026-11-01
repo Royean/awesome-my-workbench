@@ -122,7 +122,7 @@ test('visit/report/medication/dose: read, create, update via MCP with full text 
  const m=(await ok(tokenA,'create_record',{kind:'medication',title:'示例药 A',date:shift(-1),endDate:shift(10),visitId:v.id,dosage:'1 片',route:'口服',frequency:'每日两次',times:['20:00','08:00'],prescriber:'王医生'})).created;
  assert.deepEqual(m.times,['08:00','20:00']);assert.equal(m.status,'进行中');assert.equal(m.dosage,'1 片');
  assert.equal((await ok(tokenA,'update_record',{id:m.id,dosage:'半片'})).updated.dosage,'半片');
- const d=(await ok(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),time:'08:05',scheduledTime:'08:00'})).created;
+ const d=(await ok(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:shift(-1),time:'08:05',scheduledTime:'08:00'})).created;
  assert.equal(d.outcome,'已服用');assert.equal(d.title,'示例药 A');assert.equal(d.medicationId,m.id);
  const du=(await ok(tokenA,'update_record',{id:d.id,time:'08:20',note:'饭后'})).updated;assert.equal(du.time,'08:20');assert.equal(du.outcome,'已服用');
  assert.match(await err(tokenA,'update_record',{id:d.id,date:shift(-1)}),/只能改服用结果、时间和备注/);
@@ -173,10 +173,7 @@ test('provenance: MCP marks records; web body cannot set or wipe the markers',as
  const we=await req(`/api/items/${c.id}`,{method:'PUT',body:{title:'网页改过',createdVia:'web',lastAiEditAt:'2020-01-01T00:00:00Z'},headers:web(cookieA)});assert.equal(we.status,200);
  assert.equal(we.body.title,'网页改过');assert.equal(we.body.createdVia,'mcp');assert.equal(we.body.lastAiEditAt,c.lastAiEditAt);assert.equal(we.body.aiCreatedAt,c.aiCreatedAt);
  const wu=await req(`/api/items/${w.body.id}`,{method:'PUT',body:{title:'网页再改'},headers:web(cookieA)});assert.equal(wu.body.lastAiEditAt,undefined);
- assert.equal(c.lastUserEditAt,undefined);assert.equal(w.body.lastUserEditAt,undefined);assert.ok(we.body.lastUserEditAt>=c.lastAiEditAt);assert.notEqual(we.body.lastUserEditAt,'2020-01-01T00:00:00Z');
- const spoof=await req(`/api/items/${w.body.id}`,{method:'PUT',body:{title:'伪造',lastUserEditAt:'2099-01-01T00:00:00Z'},headers:web(cookieA)});assert.notEqual(spoof.body.lastUserEditAt,'2099-01-01T00:00:00Z');assert.ok(spoof.body.lastUserEditAt);
- const pw=await req('/api/items',{method:'POST',body:{kind:'note',title:'新',date:today(),lastUserEditAt:'2099-01-01T00:00:00Z'},headers:web(cookieA)});assert.equal(pw.body.lastUserEditAt,undefined);
- const ai=(await ok(tokenA,'update_record',{id:w.body.id,note:'助手补充'})).updated;assert.equal(ai.createdVia,undefined);assert.ok(ai.lastAiEditAt);assert.equal(ai.lastUserEditAt,spoof.body.lastUserEditAt);assert.ok(ai.lastAiEditAt>=ai.lastUserEditAt);
+ const ai=(await ok(tokenA,'update_record',{id:w.body.id,note:'助手补充'})).updated;assert.equal(ai.createdVia,undefined);assert.ok(ai.lastAiEditAt);
  const del=await req(`/api/items/${c.id}`,{method:'DELETE',body:{},headers:web(cookieA)});assert.equal(del.status,200);
  const back=await req('/api/restore',{method:'POST',body:{id:c.id},headers:web(cookieA)});assert.equal(back.body.createdVia,'mcp');
 });

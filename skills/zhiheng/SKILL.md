@@ -55,7 +55,7 @@ description: 通过 MCP 读写「知衡」个人健康工作台（餐食、运�
 - **visit 就医**：`title`（必填）、`hospital`、`department`、`status`（待就诊/已完成/待复查；不填时未来为待就诊、否则已完成）、`doctor`、`reason`、`assessment`（医生结论）、`instructions`（医嘱）。
 - **report 报告**：`visitId`（必填）、`title`、`type`（就诊记录/检验报告/影像报告/处方/出院记录/其他）、`status`（待出报告/待补充/待核对/已归档）、`source`、`content`（原文和检查数值，可读可改，按原文录入，不解读）。
 - **medication 用药**：`visitId`（必填）、`title`（药名）、`dosage`（单次用量）、`route`（途径）、`frequency`（频次）、`scheduleMode`（scheduled 按时/asNeeded 按需）、`times`（按时服用的时间列表）、`status`（进行中/已停用/已完成）、`date`（开始）、`endDate`、`prescriber`。
-- **dose 服药**：`medicationId`（必填，先 `list_records kind=medication`）、`date`、`outcome`（已服用（默认）/跳过）、`time`（已服用时必填：实际服用时间）、`scheduledTime`（计划时段，可选）、`note`（跳过时必填：跳过原因）。改服药记录只能改结果、时间和备注。
+- **dose 服药**：`medicationId`（必填，先 `list_records kind=medication`）、`date`、`outcome`（已服用（默认）/跳过）、`time`（已服用时必填：实际服用时间）、`scheduledTime`（计划时段，可选）、`note`（跳过时必填：跳过原因）。改服药记录只能改结果、时间和备注。已服用必须有实际服用时间（用户没说就问「几点吃的？」），今天的服用时间不能晚于现在。
 
 **先有就医，再有报告和用药**：记报告或用药前先 `list_records kind=visit` 找到是哪次就医（问用户确认）；没有就先建一条就医记录（同样先确认），再记报告/用药。
 

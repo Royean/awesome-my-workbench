@@ -42,7 +42,7 @@ export function showFieldError(form, error) {
 }
 
 // 「来自 AI 助手」 tag for records created or changed through the assistant (MCP). Markers come from the server only:
-// createdVia/aiCreatedAt/lastAiEditAt (MCP writes) and lastUserEditAt (web edits).
+// createdVia/aiCreatedAt/lastAiEditAt, set only by MCP writes.
 const SH = { timeZone: 'Asia/Shanghai' };
 const ymd = d => new Intl.DateTimeFormat('en-CA', { ...SH, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
 export function aiWhen(iso, now = new Date()) {
@@ -54,21 +54,11 @@ export function aiWhen(iso, now = new Date()) {
   const [Y, M, D] = day.split('-').map(Number);
   return `${day.slice(0, 4) !== today.slice(0, 4) ? Y + '年' : ''}${M}月${D}日 ${hm}`;
 }
-const ms = v => { const t = Date.parse(v || ''); return Number.isNaN(t) ? 0 : t; };
-// Pure: returns {text, label} or null.
+// Pure: returns {text, label} or null. Simple rule: 「来自 AI 助手 · {time of last AI change}」.
 export function aiTagInfo(item, now = new Date()) {
   if (!item || !(item.lastAiEditAt || item.aiCreatedAt || item.createdVia === 'mcp')) return null;
-  const byAi = item.createdVia === 'mcp', ai = item.lastAiEditAt || item.aiCreatedAt, userAfter = ms(item.lastUserEditAt) > ms(ai);
-  const text = userAfter ? `${byAi ? 'AI 助手创建' : 'AI 助手修改过'} · 你修改过` : `${byAi ? '来自 AI 助手' : 'AI 助手修改过'}${ai ? ' · ' + aiWhen(ai, now) : ''}`;
-  const events = [];
-  if (byAi) events.push({ t: ms(item.aiCreatedAt), s: `AI 助手 ${aiWhen(item.aiCreatedAt, now)} 创建`.replace(/ +/g, ' ') });
-  else events.push({ t: -1, s: '你创建' });
-  if (item.lastAiEditAt && (!byAi || ms(item.lastAiEditAt) > ms(item.aiCreatedAt))) events.push({ t: ms(item.lastAiEditAt), s: `AI 助手 ${aiWhen(item.lastAiEditAt, now)} 修改` });
-  if (item.lastUserEditAt) events.push({ t: ms(item.lastUserEditAt), user: true, s: `你 ${aiWhen(item.lastUserEditAt, now)} ` });
-  events.sort((a, b) => a.t - b.t);
-  // Chronological; the user's own later edit reads 「又修改」 when anything came before it.
-  const label = events.map((e, i) => e.user ? e.s + (i > 0 ? '又修改' : '修改') : e.s).join('，');
-  return { text, label };
+  const when = aiWhen(item.lastAiEditAt || item.aiCreatedAt, now);
+  return { text: `来自 AI 助手${when ? ' · ' + when : ''}`, label: `由 AI 助手记录${when ? '，最后修改于 ' + when : ''}` };
 }
 const escAttr = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 export function aiTag(item) {

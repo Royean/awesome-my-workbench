@@ -97,7 +97,7 @@ export function createCgmUI(ctx){
    if(!/^1\d{10}$/.test(username)||!password||password.length>128){target.innerHTML='<p class="form-error">请填写有效手机号、平台密码，并确认同步授权。</p>';return;}
    const ticket=++epoch;controller?.abort();const abort=new AbortController();controller=abort;writing=true;submit.disabled=true;submit.textContent='正在验证并同步…';target.replaceChildren();
    try{
-    await ctx.api('/api/cgm/connections',{method:'POST',body:JSON.stringify({provider:String(values.get('provider')),username,password,consent:true}),signal:abort.signal,timeoutMs:60000},sourceSpace,sourceWorkbench);
+    await ctx.api('/api/cgm/connections',{method:'POST',body:JSON.stringify({provider:String(values.get('provider')),username,password,consent:true}),signal:abort.signal,timeoutMs:100000},sourceSpace,sourceWorkbench);
     if(!current(key,ticket)||!form.isConnected)return;writing=false;form.elements.password.value='';ctx.closeDrawer();ctx.toast('CGM 已连接，自动同步已开启');await refresh();
    }catch(e){if(!current(key,ticket)||abort.signal.aborted||!form.isConnected)return;target.innerHTML=`<p class="form-error">${esc(safeError(e,true))}</p>`;}
    finally{if(current(key,ticket))writing=false;if(form.isConnected&&scopeKey()===key){submit.disabled=!form.elements.consent.checked;submit.textContent='连接并同步';}}
@@ -107,7 +107,7 @@ export function createCgmUI(ctx){
   if(!supported()||busy||writing)return;ensureScope();const key=identity,ticket=++epoch,sourceSpace=ctx.space,sourceWorkbench=ctx.workbench;
   controller?.abort();const abort=new AbortController();controller=abort;busy=true;writing=true;error='';paint();
   try{
-   await ctx.api('/api/cgm/connections/'+encodeURIComponent(id)+(action==='disconnect'?'':'/'+action),{method:action==='disconnect'?'DELETE':'POST',body:JSON.stringify({}),signal:abort.signal,timeoutMs:60000},sourceSpace,sourceWorkbench);
+   await ctx.api('/api/cgm/connections/'+encodeURIComponent(id)+(action==='disconnect'?'':'/'+action),{method:action==='disconnect'?'DELETE':'POST',body:JSON.stringify({}),signal:abort.signal,timeoutMs:100000},sourceSpace,sourceWorkbench);
    if(!current(key,ticket))return;
    writing=false;if(action==='disconnect')ctx.closeDrawer();ctx.toast(({sync:'CGM 同步已完成',pause:'已暂停自动同步',resume:'自动同步已继续',disconnect:'已断开连接，历史数据保留'})[action]);busy=false;await refresh();
   }catch(e){if(!current(key,ticket)||abort.signal.aborted)return;writing=false;busy=false;error=safeError(e);paint();ctx.toast(error);}

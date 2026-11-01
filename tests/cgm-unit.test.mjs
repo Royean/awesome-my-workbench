@@ -14,7 +14,7 @@ function fixture(t){
  const dataDir=fs.mkdtempSync(path.join(os.tmpdir(),'workbench-cgm-')),db=new DatabaseSync(path.join(dataDir,'health.sqlite'));migrateAccounts(db);
  for(const id of ['a','b']){db.prepare('INSERT INTO users(id,email,name,role,disabled,created_at) VALUES(?,?,?,?,?,?)').run(id,id+'@example.invalid','Fictional','user',0,T);db.prepare('INSERT INTO user_workbenches(user_id,id,name,type) VALUES(?,?,?,?)').run(id,'health','健康','health');db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(id,'health','personal','account:'+id+':health:personal');}
  let time=T,rows=[{t:T-300000,v:5.4,s:1},{t:T-600000,v:5.2}],gate=null,fail=null;const calls=[];
- const fetchImpl=async(url,options)=>{calls.push({url,options});if(url.endsWith('/password/login'))return loginResponse();if(gate)await gate;if(fail)return fail();return response({code:200,data:{glucoseInfos:rows}});};
+ const fetchImpl=async(url,options)=>{calls.push({url,options});if(url.endsWith('/password/login'))return loginResponse();if(gate)await gate;if(fail)return fail();return response({code:200,data:{glucoseDataList:[{glucoseInfos:rows}]}});};
  const cgm=createCgm({db,dataDir,fetchImpl,now:()=>time});
  t.after(()=>{cgm.stop();db.close();fs.rmSync(dataDir,{recursive:true,force:true});});
  return {db,cgm,dataDir,calls,scope:'account:a:health:personal',other:'account:b:health:personal',setRows:v=>rows=v,setGate:v=>gate=v,setFail:v=>fail=v,setTime:v=>time=v};
@@ -102,4 +102,13 @@ test('CGM disconnected historical fingerprints still require the original key',a
  assert.equal(fs.existsSync(keyPath),false);assert.equal(f.db.prepare('SELECT count(*) n FROM cgm_connections').get().n,0);
  assert.equal(f.db.prepare('SELECT account_key FROM cgm_readings LIMIT 1').get().account_key,originalKey);
  assert.equal(f.cgm.readings(f.scope,{date:'2026-11-01'}).summary.count,2);
+});
+
+test('SiLite flattens bounded myself device lists and rejects malformed nested shapes',async()=>{
+ const read=data=>createSilite({now:()=>T,fetchImpl:async()=>response({code:200,data})}).pull(token);
+ const r=await read({glucoseDataList:[{glucoseInfos:[{t:T-300000,v:5.2}]},{glucoseInfos:[{t:T,v:5.5}]}]});
+ assert.deepEqual(r.points.map(p=>p.value),[5.2,5.5]);
+ assert.deepEqual((await read({glucoseDataList:[]})).points,[]);
+ assert.deepEqual((await read({glucoseDataList:[{glucoseInfos:null}]})).points,[]);
+ for(const data of [{glucoseDataList:{}},{glucoseDataList:[null]},{glucoseDataList:[{glucoseInfos:{}}]},{glucoseDataList:[{glucoseInfos:Array(6000).fill({t:T,v:5})},{glucoseInfos:Array(4001).fill({t:T,v:5})}]},{glucoseDataList:Array(101).fill({})}])await assert.rejects(read(data),e=>e.code==='cgm_protocol_error');
 });

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import zlib from 'node:zlib';
-import { migrateAccounts, createAccounts, publicUser } from './lib/accounts.mjs';
+import { migrateAccounts, createAccounts, publicUser, bearerToken, hasSessionCookie } from './lib/accounts.mjs';
 const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='production';
 const appOrigin=process.env.APP_ORIGIN;
 if(process.env.NODE_ENV==='production'&&(!appOrigin||!/^https:\/\/[^/]+$/.test(appOrigin)))throw new Error('production requires APP_ORIGIN=https://your-domain');
@@ -173,7 +173,9 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/healthz'&&req.method==='GET')return json(res,200,{status:'ok'});
  if(req.method!=='GET'&&req.method!=='HEAD'){
   const expected=appOrigin||`http://${requestHost}`;const origin=req.headers.origin;
-  if((authEnabled&&origin!==expected)||(origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'只接受同源操作'});
+  // Native app exemption (never for cookie auth): a request with a Bearer token and no session cookie authenticates only via that token, so a forged cross-site browser request cannot ride an ambient credential. App login issues the token in the body and sets no cookie; it is exempt only when no session cookie is sent and any Origin present is ours.
+  const noCookie=!hasSessionCookie(req);const appRequest=authEnabled&&noCookie&&(bearerToken(req)||(url.pathname==='/api/auth/app-login'&&(!origin||origin===expected)));
+  if(!appRequest&&((authEnabled&&origin!==expected)||(origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site'))return json(res,403,{error:'只接受同源操作'});
   if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
  }
  const user=authEnabled?accounts.session(req,res,{renew:url.pathname.startsWith('/api/')}):null;

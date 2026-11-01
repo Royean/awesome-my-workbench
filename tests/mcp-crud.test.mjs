@@ -187,3 +187,11 @@ test('workbench names are unique per account (trimmed), web and MCP, create and 
  assert.equal((await ok('create_workbench',{name:'读书'},tokenB)).created.name,'读书');
  const wb=await req('/api/workbenches',{method:'POST',body:{type:'other',name:'书法'},headers:web()});assert.equal(wb.status,201);
 });
+
+test('legacy duplicate workbench names can still be renamed to (or saved with) their own current name',async()=>{
+ const a=(await ok('create_workbench',{name:'旧名甲'})).created,b=(await ok('create_workbench',{name:'旧名乙'})).created;
+ {const d=new DatabaseSync(path.join(dir,'health.sqlite'));d.prepare('UPDATE user_workbenches SET name=? WHERE id=?').run('旧名甲',b.id);d.close();}
+ assert.equal((await ok('rename_workbench',{workbench:b.id,name:'旧名甲'})).renamed.name,'旧名甲');
+ assert.equal((await ok('rename_workbench',{workbench:a.id,name:' 旧名甲 '})).renamed.name,'旧名甲');
+ assert.equal((await err('rename_workbench',{workbench:a.id,name:'健康'})).message,'已经有叫「健康」的工作台了');
+});

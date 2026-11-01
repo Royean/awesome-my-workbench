@@ -36,7 +36,7 @@
 | `visit` 就诊 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
 | `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就诊（`visitId`）；日期可以是未来 |
 | `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就诊；开始/结束日期可以是未来 |
-| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「跳过要写原因，比如「忘带药」」）；规则与网页相同；不能记未来日期 |
+| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「跳过要写原因，比如『忘带药』」）；规则与网页相同；不能记未来日期 |
 
 - 缺少 `visitId` → `validation_failed`；`visitId` 在本空间不存在 → `not_found`；两者都带 `hint`（仅助手可见）：先 `list_records kind=visit`，没有就先新建就诊。服药的 `medicationId` 同理（hint 指向 `list_records kind=medication`）。
 - 工具描述要求：写入用药或服药前，助手必须把**药名、剂量、时间**完整念一遍，用户明确回答「对」之后才写；记「跳过」时先问用户原因，再念**药名、计划服用时间、跳过原因**，用户回答「对」才写。
@@ -90,7 +90,7 @@
 
 - 工具错误（参数/业务校验失败）→ 正常的 `tools/call` 结果：`isError: true`，`content[0].text` 为给用户看的中文原因，`structuredContent.error = {code, message, hint?}`。`hint` 仅给助手看（如工作台不存在时为「用 list_workbenches 获取可用工作台」），不要转述给用户；给用户的文案是「没有找到这个工作台，请从你的工作台里选一个」。
 - HTTP 层错误（401/404/405/415）→ JSON 正文 `{error, code}`；JSON-RPC 层错误（400/413/429/500 等）→ `error.data.code`。
-- `message`/`error` 文案为纯中文，不含字段名、内部 id、环境变量或表达式（例：「运动时长需在 1–1440 分钟之间」「「金融」工作台只能记备忘和待办，饮水请记到「健康」工作台」「不能记录未来的日期，今天是 11月1日」）。客户端请按 `code` 判断，不要解析文案。
+- `message`/`error` 文案为纯中文，不含字段名、内部 id、环境变量或表达式（例：「运动时长需在 1–1440 分钟之间」「『金融』工作台只能记备忘和待办，饮水请记到『健康』工作台」「不能记录未来的日期，今天是 11月1日」）。客户端请按 `code` 判断，不要解析文案。
 
 | code | 位置 | 含义 | 建议处理 |
 |---|---|---|---|

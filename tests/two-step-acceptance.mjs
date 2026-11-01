@@ -58,6 +58,17 @@ try{
  await page.locator('#toast').getByText('已记 250 ml').waitFor();await page.waitForTimeout(600);assert.equal(await count('water'),1,'double tap → exactly 1 water');await assertAboveNav();await page.waitForTimeout(450);await page.screenshot({path:SHOTS+'/twostep-water-toast.png'});
  await page.locator('#toast button',{hasText:'撤销'}).tap();
  await waitFor(async()=>(await count('water'))===0,{message:'water undo failed'});await page.locator('#toast').getByText('已撤销').waitFor();
+ // 合并：toast 仍显示时再点不同量 → 一个 toast 合计，撤销一起撤。
+ const wt=page.locator('#toast');await page.waitForTimeout(2100);
+ await page.locator('[data-action="qc-water:250"]').tap();await wt.getByText('已记 250 ml',{exact:true}).waitFor();
+ await page.locator('[data-action="qc-water:500"]').tap();await wt.getByText('已记 750 ml',{exact:true}).waitFor();
+ await waitFor(async()=>(await count('water'))===2,{message:'250+500 not both saved'});await page.waitForTimeout(300);await page.screenshot({path:SHOTS+'/twostep-water-merged.png'});
+ await wt.locator('button',{hasText:'撤销'}).tap();await waitFor(async()=>(await count('water'))===0,{message:'merged undo did not remove both'});await wt.getByText('已撤销').waitFor();
+ // 并发：不同量连点不等待，均保存且不丢。
+ await page.locator('[data-action="qc-water:350"]').tap();await page.locator('[data-action="qc-water:150"]').tap();
+ await wt.getByText('已记 500 ml',{exact:true}).waitFor();await waitFor(async()=>(await count('water'))===2,{message:'concurrent different amounts dropped'});
+ await wt.locator('button',{hasText:'撤销'}).tap();await waitFor(async()=>(await count('water'))===0,{message:'concurrent undo'});await wt.getByText('已撤销').waitFor();await page.waitForTimeout(2100);
+ console.log('ok water merge');
  await page.locator('[data-action="qc-water:150"]').tap();await page.locator('#toast').getByText('已记 150 ml').waitFor();const t0=Date.now();await page.locator('#toast').waitFor({state:'hidden',timeout:8000});const dur=Date.now()-t0;assert.ok(dur>=3800&&dur<=5200,'toast ~4.5s, got '+dur);console.log('ok water undo, toast',dur,'ms');
 
  // 半填关闭确认：×、遮罩、取消、Esc 均先询问；未填写直接关闭。

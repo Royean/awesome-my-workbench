@@ -60,7 +60,7 @@ test('GET /mcp is 405; auth: missing/invalid token 401 with WWW-Authenticate; co
 });
 test('tools/list publishes exactly the tools with strict schemas',async()=>{
  const {tools}=(await rpc(tokenA,'tools/list')).body.result;
- assert.deepEqual(tools.map(t=>t.name).sort(),['create_record','create_workbench','delete_record','get_settings','get_today','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings']);
+ assert.deepEqual(tools.map(t=>t.name).sort(),['attach_report_file','create_record','create_workbench','delete_record','get_settings','get_today','list_attachments','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings','upload_attachment']);
  for(const t of tools){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.match(t.description,/[\u4e00-\u9fa5]/);}
  const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','favorite','note','task']);assert.deepEqual(create.inputSchema.required,['kind']);
  assert.equal(create.inputSchema.properties.attachmentIds,undefined);

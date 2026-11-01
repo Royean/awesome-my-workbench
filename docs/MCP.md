@@ -15,7 +15,7 @@
 2. 不用时在同一页面撤销；改密码、禁用账号会撤销全部令牌。
 3. App 登录（`/api/auth/app-login`）得到的会话令牌也可用，但推荐为每个 AI 客户端单独生成 PAT，便于单独撤销。
 
-缺少/无效/已撤销令牌 → `401` + `WWW-Authenticate: Bearer`，JSON 正文 `{error, code}`（见下方错误码）。**带 Cookie 的请求一律 401**（即使同时带了 Bearer），浏览器无法被跨站驱动。Host 校验照常生效。限流：每令牌每分钟 120 次（`MCP_RATE_PER_MINUTE` 可调），超出返回 `429` + `Retry-After: <秒>`（到当前 60 秒窗口结束），等待后再试；请求体上限 1MB。
+缺少/无效/已撤销令牌 → `401` + `WWW-Authenticate: Bearer`，JSON 正文 `{error, code}`（见下方错误码）。**带 Cookie 的请求一律 401**（即使同时带了 Bearer），浏览器无法被跨站驱动。Host 校验照常生效。限流：每令牌每分钟 120 次（`MCP_RATE_PER_MINUTE` 可调），超出返回 `429` + `Retry-After: <秒>`（到当前 60 秒窗口结束），等待后再试；普通请求体上限 1MiB；仅 upload_attachment 允许 14MiB JSON 包络，原件最大 10MiB。读取完整请求后重新验证令牌，撤销或账号禁用的在途上传不能落盘。
 
 ## 工具
 
@@ -47,7 +47,7 @@
 ### 附件
 
 - 附件（`file`）不出现在 `list_records`/`get_today` 中；报告只返回 `attachment: {name, type}`，餐食只返回 `attachments: [{name, type}]`。**永远不返回**文件内容、`storageName`、存储路径、`fileId`/`attachmentIds`。
-- MCP 不能新建/修改附件，也不能设置或更换报告的原件、餐食的附件：参数里带 `fileId`/`attachmentIds` 等会被拒绝（`validation_failed`，「助手不能添加或更换附件，请到网页操作」）。修改报告/餐食的其他字段时原有附件保持不变。
+- 通用 create_record/update_record 不能设置或更换附件：参数里带 `fileId`/`attachmentIds` 等会被拒绝（`validation_failed`，「助手不能添加或更换附件，请到网页操作」）。修改报告/餐食的其他字段时原有附件保持不变。
 
 ### 来源标记（provenance）
 
@@ -84,7 +84,7 @@
 - 饮水目标同时用于 `get_today` 的 `goalMl` 和网页（设置页可改，每日回顾显示「目标」）。网页保存设置时不会抹掉饮水目标。
 - 账号、密码、令牌、成员管理永远不通过 MCP 提供。
 
-**不提供**：附件内容读取与上传（下一步）。
+**不提供**：附件内容读取、餐食附件上传、附件替换。报告原件上传见下节。
 
 ## 错误约定与错误码
 
@@ -145,3 +145,18 @@ bearer_token_env_var = "ZHIHENG_TOKEN"
 ## 测试
 
 `node --test tests/mcp.test.mjs`（真实服务进程、临时数据库、虚构本地账号）。
+
+
+## 报告原件上传
+
+新增 3 个工具（总计 15 个，以 tools/list 为准）：
+
+- `upload_attachment`: `name`、标准 `contentBase64`、原件 `sha256` 必填；可填 `date`、`title`、`note` 和工作台/空间。仅健康工作台，PDF、PNG、JPG/JPEG、WEBP、TXT，0 < size ≤ 10MiB。文件名不得含路径/控制字符，解码后校验 SHA-256。服务器生成存储名，0600保存。响应只有安全元数据、编号、摘要和 reused，永不回传内容或磁盘路径。
+- `list_attachments`: 同账号同工作台同空间，默认50、最多200个原件，返回 total/returned/files，只为返回页读取摘要。遗失原件显示 missing=true、sha256=null，不令整个列表失败。
+- `attach_report_file`: `reportId`、`fileId` 必填。在同一空间内，将原件添加到已有有效就诊的报告。已有另一原件时拒绝替换；跨就诊、餐食附件、磁盘原件缺失均拒绝。原件和报告关联在同一SQLite事务提交。
+
+所有写入前须复述文件名、检查日期、目标工作台及关联报告并获得用户确认。批量可一次列明范围确认，不能自行补充诊断、处方或完成状态。不会从用户提供的远程URL代为抓取文件，调用方先读取原件，校验来源后编码。
+
+上传重试：同空间、同文件名、同日期、同标题、同备注、同实际字节复用已有原件，返回相同编号。不会覆盖或恢复已删除原件；更改备注/标题视为新资料。传输失败先查询再重试；报告关联重复调用不会改变时间戳。普通记录仍禁止直接写 fileId/attachmentIds，需使用专用关联工具。上传不创建就诊或报告。
+
+文件落盘/登记失败会回滚事务并清理本次新建文件；上传错误不记录原件内容或访问令牌。无新增数据库迁移；网页原件下载的账号隔离与安全响应头保持生效。

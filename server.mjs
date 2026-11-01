@@ -247,7 +247,39 @@ function bootstrapPayload(user,url){
  return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today(),trashedIds:trashedIds(space)}};
 }
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
-const mcp=createMcp({db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName});
+// MCP originals use the same private file rows and download authorization as the web.
+const fileDigest=f=>{const p=path.join(dataDir,'uploads',path.basename(f.storageName));return fs.existsSync(p)?{sha256:createHash('sha256').update(fs.readFileSync(p)).digest('hex')}:{sha256:null,missing:true};};
+const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,type:f.mime,size:f.size,visitId:f.visitId||'',...fileDigest(f)});
+const listAttachments=(space,limit)=>{const files=getAll(space).filter(f=>f.kind==='file'&&f.fileCategory!=='餐食附件').sort((a,b)=>b.date.localeCompare(a.date));return {total:files.length,returned:Math.min(limit,files.length),files:files.slice(0,limit).map(f=>attachmentMeta(space,f))};};
+function uploadAttachment(space,b){
+ const name=b.name;if(/[\\/\x00-\x1f\x7f]/.test(name)||name==='.'||name==='..')throw bad('文件名不能包含路径或控制字符');
+ const ext=path.extname(name).toLowerCase();if(!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext))throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
+ const encoded=b.contentBase64;if(encoded.length%4!==0||!/^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw bad('文件编码格式无效');
+ const bytes=Buffer.from(encoded,'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
+ if(bytes.toString('base64')!==encoded)throw bad('文件编码格式无效');
+ const hash=createHash('sha256').update(bytes).digest('hex');if(hash!==b.sha256)throw bad('文件校验失败，请重新读取原件');
+ const title=b.title||name,note=b.note||'';
+ const body=validate('file',{title,date:b.date,name,mime:allowedFiles[ext],size:bytes.length,storageName:randomUUID()+ext,note,fileCategory:'报告原件'});
+ // Compare the actual persisted bytes, so web edits cannot leave a stale trusted digest.
+ const existing=getAll(space).find(f=>f.kind==='file'&&f.name===name&&f.date===body.date&&f.title===body.title&&f.note===body.note&&f.size===bytes.length&&f.fileCategory==='报告原件'&&fs.existsSync(path.join(dataDir,'uploads',path.basename(f.storageName)))&&attachmentMeta(space,f).sha256===hash);
+ if(existing)return {uploaded:attachmentMeta(space,existing),reused:true};
+ const destination=path.join(dataDir,'uploads',body.storageName);let written=false;
+ db.exec('BEGIN IMMEDIATE');try{const fd=fs.openSync(destination,'wx',0o600);written=true;try{fs.writeFileSync(fd,bytes);}finally{fs.closeSync(fd);}const f=put(space,'file',body,undefined,'mcp');const uploaded=attachmentMeta(space,f);db.exec('COMMIT');return {uploaded,reused:false};}
+ catch(e){if(db.isTransaction)db.exec('ROLLBACK');if(written)fs.unlinkSync(destination);throw e;}
+}
+function attachReportFile(space,{reportId,fileId}){
+ const report=getAll(space).find(x=>x.id===reportId&&x.kind==='report'),file=getAll(space).find(x=>x.id===fileId&&x.kind==='file');
+ if(!report||!file)throw bad('没有找到报告或原件，请重新查询');
+ if(file.fileCategory==='餐食附件')throw bad('请选择报告原件，不能使用餐食附件');
+ if(report.fileId&&report.fileId!==fileId)throw bad('报告已有其他原件，请到网页核对后调整');
+ if(!report.visitId||!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(report.visitId,space))throw bad('报告所属就诊不存在，请先恢复或关联就诊');
+ if(file.visitId&&file.visitId!==report.visitId)throw bad('原件属于另一次就诊');
+ if(!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw bad('文件内容缺失');
+ if(report.fileId===fileId&&file.visitId===report.visitId)return report;
+ db.exec('BEGIN IMMEDIATE');try{put(space,'file',{...file,visitId:report.visitId},fileId,'mcp');const updated=put(space,'report',{...report,fileId},reportId,'mcp');db.exec('COMMIT');return updated;}
+ catch(e){if(db.isTransaction)db.exec('ROLLBACK');throw e;}
+}
+const mcp=createMcp({db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile});
 const mcpRate=new Map();const MCP_RATE=Number(process.env.MCP_RATE_PER_MINUTE||120);
 async function handleMcp(req,res){
  const unauthorized=(code,message)=>{res.writeHead(401,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','WWW-Authenticate':`Bearer realm="zhiheng", error="invalid_token"`});res.end(JSON.stringify({error:message,code}));};
@@ -260,8 +292,10 @@ async function handleMcp(req,res){
  if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求',code:'unsupported_media_type'});
  const key=digest(token),now=Date.now(),bucket=mcpRate.get(key);if(!bucket||now-bucket.start>=60000)mcpRate.set(key,{start:now,n:1});else if(++bucket.n>MCP_RATE){const wait=Math.max(1,Math.ceil((bucket.start+60000-now)/1000));res.setHeader('Retry-After',String(wait));return json(res,429,{jsonrpc:'2.0',id:null,error:{code:-32000,message:`请求过于频繁，请 ${wait} 秒后重试`,data:{code:'rate_limited',retryAfter:wait}}});}
  if(mcpRate.size>1000)for(const [k,v] of mcpRate)if(now-v.start>=60000)mcpRate.delete(k);
- let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>1024*1024)return json(res,413,{jsonrpc:'2.0',id:null,error:{code:-32600,message:'内容太长了，请分几条记录',data:{code:'payload_too_large'}}});chunks.push(c);}
+ let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>14*1024*1024)return json(res,413,{jsonrpc:'2.0',id:null,error:{code:-32600,message:'内容太长了，请分几条记录',data:{code:'payload_too_large'}}});chunks.push(c);}
  let msg;try{msg=JSON.parse(Buffer.concat(chunks).toString());}catch{return json(res,400,{jsonrpc:'2.0',id:null,error:{code:-32700,message:'JSON 解析失败'}});}
+ if(size>1024*1024&&!(msg?.method==='tools/call'&&msg?.params?.name==='upload_attachment'))return json(res,413,{jsonrpc:'2.0',id:msg?.id??null,error:{code:-32600,message:'内容太长了，请分几条记录',data:{code:'payload_too_large'}}});
+ const current=accounts.session({headers:{authorization:req.headers.authorization}});if(!current||current.id!==user.id||current.session_id!==user.session_id||current.role!==user.role)return unauthorized('token_invalid','访问令牌无效或已撤销');
  let out;try{out=mcp.handle(user,msg,version);}catch(e){console.error('[mcp-error]',e);return json(res,500,{jsonrpc:'2.0',id:msg?.id??null,error:{code:-32603,message:'服务器内部错误',data:{code:'internal_error'}}});}
  if(out.status===202){res.writeHead(202,{'Cache-Control':'no-store'});return res.end();}
  return json(res,out.status,out.body);

@@ -51,9 +51,10 @@ export function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuth
     });
     root.querySelector('input')?.focus();
   }
-  async function initialize() {
+  // `prefetched` is the `me` object from /api/bootstrap; without it, fall back to /api/auth/me.
+  async function initialize(prefetched) {
     try {
-      const data = await request('/me', {}, true);
+      const data = prefetched || await request('/me', {}, true);
       enabled = !!data.enabled; user = data.user || null;
       if (!enabled) return true;
       if (invite || !user) { gate(); return false; }

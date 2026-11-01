@@ -31,7 +31,7 @@ test('public build is deterministic, isolates module scope, keeps await and old 
     assert.deepEqual(await buildPublic(publicDir), first);
     assert.equal(await readFile(path.join(publicDir, 'index.html'), 'utf8'), html);
     assert.equal((html.match(/data-workbench-bundle=/g) || []).length, 2);
-    assert.equal((await readdir(path.join(publicDir, 'assets'))).length, 2);
+    assert.equal((await readdir(path.join(publicDir, 'assets'))).length, 6);
     const bundle = path.join(publicDir, first.javascript.slice(1));
     await import(pathToFileURL(bundle));
     assert.equal(globalThis.__workbenchBundleFixture, 23);

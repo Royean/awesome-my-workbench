@@ -39,3 +39,9 @@
 备份目前为同机、最近7份；尚无异地灾备。发布后服务器根盘约90%使用、可用5.4GB，来自台账已有其他服务及历史文件；本次未擅自删除其他服务或备份。后续大量上传前需清理确认可删除的历史文件或扩容。
 
 回滚及完整数据库/附件恢复步骤见 [ACCOUNTS_AND_TENCENT.md](ACCOUNTS_AND_TENCENT.md)。认证、数据和生产运行均在`main`分支；`cloud`为原Sites平台版本，不代表本次腾讯云产物。
+
+## Nginx HTTP/2 与压缩
+
+- 模板使用 `http2 on;`：先看 nginx -v，版本低于 1.25.1 就用 listen 443 ssl http2。
+- gzip 仅用于公共文本资源；`/api/` 关闭 gzip，`application/json` 不在 gzip_types 中（私有健康数据，规避 BREACH）。
+- 模板改动需仓库所有者批准后才能应用到生产环境。

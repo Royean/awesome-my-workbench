@@ -4,13 +4,14 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomUUID, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
-import { migrateAccounts, createAccounts } from './lib/accounts.mjs';
+import zlib from 'node:zlib';
+import { migrateAccounts, createAccounts, publicUser } from './lib/accounts.mjs';
 const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='production';
 const appOrigin=process.env.APP_ORIGIN;
-if(process.env.NODE_ENV==='production'&&(!appOrigin||!/^https:\/\/[^/]+$/.test(appOrigin)))throw bad('production requires APP_ORIGIN=https://your-domain');
-if(appOrigin&&new URL(appOrigin).origin!==appOrigin)throw bad('APP_ORIGIN must be an exact origin without trailing slash');
+if(process.env.NODE_ENV==='production'&&(!appOrigin||!/^https:\/\/[^/]+$/.test(appOrigin)))throw new Error('production requires APP_ORIGIN=https://your-domain');
+if(appOrigin&&new URL(appOrigin).origin!==appOrigin)throw new Error('APP_ORIGIN must be an exact origin without trailing slash');
 const host=process.env.HOST||'127.0.0.1';
-if(!authEnabled&&!['127.0.0.1','localhost','::1'].includes(host))throw bad('Remote listening requires AUTH_REQUIRED=1');
+if(!authEnabled&&!['127.0.0.1','localhost','::1'].includes(host))throw new Error('Remote listening requires AUTH_REQUIRED=1');
 const root=path.dirname(fileURLToPath(import.meta.url));
 const dataDir=process.env.HEALTH_DATA_DIR||path.join(root,'data');
 fs.mkdirSync(path.join(dataDir,'uploads'),{recursive:true,mode:0o700});
@@ -137,6 +138,19 @@ const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application
 async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
 const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
+// Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings
+// (verified against the source hash) or are compressed once and kept in memory; mutable files are compressed per request.
+const compressible=type=>/^(text\/|application\/(javascript|json|manifest\+json)|image\/svg\+xml)/.test(type);
+function negotiate(header=''){const q={};for(const part of String(header).split(',')){const [name,...params]=part.trim().toLowerCase().split(';');const qv=params.map(x=>x.trim()).find(x=>x.startsWith('q='));q[name]=qv?Number(qv.slice(2)):1;}const ok=n=>(q[n]??q['*']??0)>0;return ok('br')?'br':ok('gzip')?'gzip':null;}
+const compressCache=new Map();
+function compressed(file,bytes,type,accept,immutable){
+ const encoding=compressible(type)&&bytes.length>=256?negotiate(accept):null;if(!encoding)return {body:bytes,encoding:null};
+ const key=file+'\0'+encoding;if(immutable&&compressCache.has(key))return {body:compressCache.get(key),encoding};
+ let body=null;if(immutable){try{const pre=fs.readFileSync(file+(encoding==='br'?'.br':'.gz'));const raw=encoding==='br'?zlib.brotliDecompressSync(pre):zlib.gunzipSync(pre);if(raw.equals(bytes))body=pre;}catch{}}
+ body??=encoding==='br'?zlib.brotliCompressSync(bytes,{params:{[zlib.constants.BROTLI_PARAM_QUALITY]:immutable?11:5,[zlib.constants.BROTLI_PARAM_SIZE_HINT]:bytes.length}}):zlib.gzipSync(bytes,{level:immutable?9:6});
+ if(immutable){compressCache.set(key,body);if(compressCache.size>64)compressCache.delete(compressCache.keys().next().value);}
+ return {body,encoding};
+}
 const accounts=createAccounts({db,enabled:authEnabled,origin:appOrigin,json,readBody});
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
@@ -153,17 +167,24 @@ const server=http.createServer(async(req,res)=>{try{
  const user=authEnabled?accounts.session(req):null;
  if(user&&!['/api/auth/login','/api/auth/accept-invitation'].includes(url.pathname))req.authSnapshot=user;
  if(await accounts.handle(req,res,url,user))return;
+ // Single startup round trip ({me,state}): account state plus the requested workbench state. Unauthenticated sessions get only {me}, as /api/auth/me would.
+ const isBootstrap=url.pathname==='/api/bootstrap';
+ if(isBootstrap&&req.method!=='GET')return json(res,405,{error:'方法不支持'});
+ if(isBootstrap&&authEnabled&&!user)return json(res,200,{me:{enabled:true,user:null}});
  if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return json(res,401,{error:'请先登录'});
  const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
  const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
  // Static assets remain available before login; data scopes are resolved only by the authenticated user.
- const workbench=workbenches.find(x=>x.id===workbenchId);if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
+ const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
+ const readSettings=()=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
+ if(isBootstrap){const me={enabled:authEnabled,user:user?publicUser(user):null};if(!workbench||!space)return json(res,200,{me,state:null});return json(res,200,{me,state:{space:baseSpace,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()}})}
+ if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
  const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw bad('此工作台仅支持备忘与待办');};
  if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req));if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
  if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
- if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{workbenches,workbench,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'})),today:today()})}
+ if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{workbenches,workbench,items:getAll(space),settings:readSettings(),today:today()})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);const clean={name:String(b.name||'Captain').slice(0,40),focus:String(b.focus||'').slice(0,180)};db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return json(res,200,clean)}
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});
@@ -217,7 +238,9 @@ const server=http.createServer(async(req,res)=>{try{
  if(!fs.realpathSync(p).startsWith(publicRoot+path.sep))return json(res,404,{error:'页面不存在'});
  const bytes=fs.readFileSync(p);
  const immutable=!!assetMatch&&createHash('sha256').update(bytes).digest('hex')===assetMatch[1];
- res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':bytes.length});
- if(req.method==='HEAD')return res.end();res.end(bytes);
+ const type=mime[path.extname(p)]||'application/octet-stream';
+ const {body,encoding}=compressed(p,bytes,type,req.headers['accept-encoding'],immutable);
+ res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
+ if(req.method==='HEAD')return res.end();res.end(body);
  }catch(e){if(e?.expose){if(!res.headersSent)json(res,e.status||400,{error:e.message,...(e.field?{field:e.field}:{})});return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
 server.listen(Number(process.env.PORT??3100),host,()=>console.log(`Health workbench http://localhost:${server.address().port}`));

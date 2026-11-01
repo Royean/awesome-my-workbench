@@ -70,7 +70,7 @@ test('list_workbenches and get_today',async()=>{
  await ok(tokenA,'create_record',{kind:'water',volume:500});await ok(tokenA,'create_record',{kind:'water',volume:250,time:'09:00'});
  const t=await ok(tokenA,'get_today',{});assert.equal(t.date,today());assert.deepEqual(t.summary.water,{totalMl:750,goalMl:2000});assert.ok(t.records.every(r=>r.date===today()));
  const f=await ok(tokenA,'get_today',{workbench:'finance'});assert.equal(f.workbench.type,'finance');
- assert.match(await err(tokenA,'get_today',{workbench:'nope'}),/工作台不存在/);
+ assert.match(await err(tokenA,'get_today',{workbench:'nope'}),/没有找到这个工作台/);
 });
 test('create_record for every allowed kind, list_records filters/sorts, update_record',async()=>{
  const meal=(await ok(tokenA,'create_record',{kind:'meal',title:'燕麦粥',mealType:'早餐',date:'2026-10-01',time:'08:00',portion:'一碗'})).created;assert.equal(meal.kind,'meal');assert.ok(meal.id);
@@ -81,7 +81,7 @@ test('create_record for every allowed kind, list_records filters/sorts, update_r
  const range=await ok(tokenA,'list_records',{from:'2026-10-01',to:'2026-10-03'});assert.deepEqual(range.records.map(r=>r.date),['2026-10-03','2026-10-03','2026-10-02','2026-10-01']);
  assert.deepEqual((await ok(tokenA,'list_records',{kind:'meal'})).records.map(r=>r.title),['燕麦粥']);
  assert.equal((await ok(tokenA,'list_records',{limit:2})).records.length,2);
- assert.match(await err(tokenA,'list_records',{limit:500}),/超出范围/);assert.match(await err(tokenA,'list_records',{from:'2026-02-30'}),/有效日期/);
+ assert.match(await err(tokenA,'list_records',{limit:500}),/条数需在 1–200 之间/);assert.match(await err(tokenA,'list_records',{from:'2026-02-30'}),/起始日期格式不对/);
  const u=(await ok(tokenA,'update_record',{id:task.id,done:true})).updated;assert.equal(u.done,true);assert.equal(u.title,'预约复查');
  assert.equal((await ok(tokenA,'update_record',{id:meal.id,portion:'半碗'})).updated.portion,'半碗');
  // Same data is visible on the web API.
@@ -94,22 +94,60 @@ test('validation errors come back as isError tool results with the web validator
  assert.match(await err(tokenA,'create_record',{kind:'exercise',title:'跑'}),/运动时长/);
  assert.match(await err(tokenA,'create_record',{kind:'metric',title:'x',type:'pressure',value:120,secondary:130}),/舒张压/);
  assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',date:'2026-13-01'}),/格式无效|日期/);
- assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',volume:3}),/不支持字段 volume/);
- assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',attachmentIds:['a']}),/不支持的字段/);
- assert.match(await err(tokenA,'update_record',{id:'missing'}),/记录不存在/);
+ assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',volume:3}),/餐食记录不支持「饮水量」/);
+ assert.match(await err(tokenA,'create_record',{kind:'meal',title:'x',attachmentIds:['a']}),/不支持的参数/);
+ assert.match(await err(tokenA,'update_record',{id:'missing'}),/没有找到这条记录/);
 });
 test('disallowed kinds rejected; finance workbench refuses health records; medical items cannot be updated',async()=>{
- for(const kind of ['medication','dose','file','visit','report'])assert.match(await err(tokenA,'create_record',{kind,title:'x'}),/取值无效/);
- assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'water',volume:200}),/不支持饮水记录/);
- assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'meal',title:'午饭'}),/只能写入备忘与待办/);
+ for(const kind of ['medication','dose','file','visit','report'])assert.match(await err(tokenA,'create_record',{kind,title:'x'}),/记录类型只能是/);
+ assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'water',volume:200}),/^「金融」工作台只能记备忘和待办，饮水请记到「健康」工作台$/);
+ assert.match(await err(tokenA,'create_record',{workbench:'finance',kind:'meal',title:'午饭'}),/只能记备忘和待办/);
  const visit=await req('/api/items',{method:'POST',body:{kind:'visit',title:'体检',date:'2026-10-01',status:'已完成'},headers:web(cookieA)});assert.equal(visit.status,201);
- assert.match(await err(tokenA,'update_record',{id:visit.body.id,title:'x'}),/不支持通过 MCP 修改/);
+ assert.match(await err(tokenA,'update_record',{id:visit.body.id,title:'x'}),/不支持在助手里修改/);
  assert.equal((await ok(tokenA,'list_records',{})).records.some(r=>r.kind==='visit'),false);
 });
 test('cross-account isolation: account B cannot see or update A records',async()=>{
  const a=(await ok(tokenA,'create_record',{kind:'note',title:'A 的私密备忘',date:'2026-10-06'})).created;
  const b=await ok(tokenB,'list_records',{});assert.equal(b.records.some(r=>r.id===a.id||r.title.includes('A 的')),false);
  assert.equal((await ok(tokenB,'get_today',{})).records.length,0);
- assert.match(await err(tokenB,'update_record',{id:a.id,title:'hijack'}),/记录不存在/);
+ assert.match(await err(tokenB,'update_record',{id:a.id,title:'hijack'}),/没有找到这条记录/);
  const still=(await ok(tokenA,'list_records',{kind:'note'})).records.find(r=>r.id===a.id);assert.equal(still.title,'A 的私密备忘');
+});
+
+const errc=async(token,name,args)=>{const r=await call(token,name,args);assert.equal(r.isError,true);assert.equal(r.structuredContent.error.message,r.content[0].text);return r.structuredContent.error;};
+const leak=m=>{assert.doesNotMatch(m.replace('list_workbenches',''),/[A-Za-z_]{3,}|[<>≤≥]|=|（(finance|health)）/,m);};
+test('tool errors: stable codes and plain Chinese without internals',async()=>{
+ const cases=[
+  [{kind:'exercise',title:'跑',duration:2000},'validation_failed',/^运动时长需在 1–1440 分钟之间$/],
+  [{kind:'water',volume:0},'validation_failed',/^饮水量需在 1–5000ml 之间$/],
+  [{workbench:'finance',kind:'water',volume:200},'forbidden_kind',/金融」工作台只能记备忘和待办/],
+  [{kind:'meal'},'validation_failed',/名称/],
+  [{title:'x'},'validation_failed',/^缺少记录类型$/],
+  [{kind:'exercise',title:'力量',duration:30,exercises:[{name:'深蹲',sets:3}]},'validation_failed',/^第1个动作缺少次数$/],
+  [{kind:'meal',title:'x',time:'25:00'},'validation_failed',/^时间格式不对/],
+  [{kind:'exercise',title:'x',duration:10,feeling:'爽'},'validation_failed',/^身体感受只能是/],
+  [{workbench:'nope',kind:'note',title:'x'},'not_found',/没有找到这个工作台/],
+ ];
+ for(const [args,code,re] of cases){const e=await errc(tokenA,'create_record',args);assert.equal(e.code,code,e.message);assert.match(e.message,re);leak(e.message);}
+ const nf=await errc(tokenA,'update_record',{id:'missing',title:'x'});assert.equal(nf.code,'not_found');leak(nf.message);
+});
+test('create_record/update_record reject future dates (Asia/Shanghai) with future_date; web API too',async()=>{
+ const t=today(),d=new Date(t+'T12:00:00+08:00');d.setDate(d.getDate()+1);const tomorrow=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d);
+ const msg=`不能记录未来的日期，今天是 ${Number(t.slice(5,7))}月${Number(t.slice(8,10))}日`;
+ for(const args of [{kind:'water',volume:200,date:tomorrow},{kind:'meal',title:'x',date:tomorrow},{kind:'exercise',title:'跑',duration:10,date:tomorrow},{kind:'metric',title:'体重',type:'weight',value:60,date:tomorrow}]){const e=await errc(tokenA,'create_record',args);assert.equal(e.code,'future_date');assert.equal(e.message,msg);}
+ const created=await ok(tokenA,'create_record',{kind:'water',volume:200,date:t});const e=await errc(tokenA,'update_record',{id:created.created.id,date:tomorrow});assert.equal(e.code,'future_date');
+ assert.equal((await ok(tokenA,'create_record',{kind:'task',title:'明天体检',date:tomorrow})).created.date,tomorrow);
+ const web=await req('/api/items?space=personal&workbench=health',{method:'POST',body:{kind:'meal',title:'x',date:tomorrow},headers:{Cookie:cookieA,Origin:base}});assert.equal(web.status,400);assert.equal(web.body.code,'future_date');assert.equal(web.body.error,msg);
+});
+test('401 bodies carry token_missing / token_invalid; PAT on token management is token_forbidden',async()=>{
+ const none=await req('/mcp',{method:'POST',body:{jsonrpc:'2.0',id:1,method:'ping'}});assert.equal(none.body.code,'token_missing');leak(none.body.error);
+ const bad=await rpc('zh_pat_'+'A'.repeat(43),'ping');assert.equal(bad.body.code,'token_invalid');
+ const cookieOnly=await req('/mcp',{method:'POST',body:{jsonrpc:'2.0',id:1,method:'ping'},headers:web(cookieA)});assert.equal(cookieOnly.body.code,'token_forbidden');
+ const api=await req('/api/state',{headers:{Authorization:'Bearer zh_pat_'+'B'.repeat(43)}});assert.equal(api.status,401);assert.equal(api.body.code,'token_invalid');
+ assert.equal((await req('/api/state')).body.code,'token_missing');
+ const pm=await req('/api/auth/tokens',{headers:{Authorization:`Bearer ${tokenA}`}});assert.equal(pm.status,403);assert.equal(pm.body.code,'token_forbidden');
+});
+test('429 rate limit includes Retry-After seconds and rate_limited code',async()=>{
+ const t=await mint(cookieA);let r;for(let i=0;i<125;i++){r=await rpc(t,'ping');if(r.status===429)break;}
+ assert.equal(r.status,429);const ra=Number(r.headers.get('retry-after'));assert.ok(Number.isInteger(ra)&&ra>=1&&ra<=60,String(ra));assert.equal(r.body.error.data.code,'rate_limited');assert.equal(r.body.error.data.retryAfter,ra);
 });

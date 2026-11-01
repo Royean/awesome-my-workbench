@@ -28,13 +28,13 @@ test('bad dates return 400 with the Chinese message and field, never "Invalid ti
   ['/api/upload',{name:'x.txt',date:'2026-99-99',content:Buffer.from('x').toString('base64')},'date'],
   ['/api/capture-meal',{text:'虚构餐',date:'2026-02-31'},'date'],
  ];
- for(const [route,body,field] of cases){const r=await api(route,'POST',body);assert.equal(r.status,400,JSON.stringify(body));assert.deepEqual(r.body,{error:MESSAGE,field});assert.ok(!/Invalid time value/i.test(r.text));}
+ for(const [route,body,field] of cases){const r=await api(route,'POST',body);assert.equal(r.status,400,JSON.stringify(body));assert.deepEqual(r.body,{error:MESSAGE,code:'validation_failed',field});assert.ok(!/Invalid time value/i.test(r.text));}
  const visit=await api('/api/items','POST',{kind:'visit',title:'虚构就诊',date:'2026-10-01',status:'已完成'});assert.equal(visit.status,201);
  const med={kind:'medication',title:'虚构药',date:'2026-10-01',visitId:visit.body.id,dosage:'1',route:'口服',frequency:'每日',times:['08:00']};
- const bad=await api('/api/items','POST',{...med,endDate:'2026-02-30'});assert.equal(bad.status,400);assert.deepEqual(bad.body,{error:MESSAGE,field:'endDate'});
- const early=await api('/api/items','POST',{...med,endDate:'2026-09-01'});assert.equal(early.status,400);assert.deepEqual(early.body,{error:'结束日期不能早于开始日期',field:'endDate'});
+ const bad=await api('/api/items','POST',{...med,endDate:'2026-02-30'});assert.equal(bad.status,400);assert.deepEqual(bad.body,{error:MESSAGE,code:'validation_failed',field:'endDate'});
+ const early=await api('/api/items','POST',{...med,endDate:'2026-09-01'});assert.equal(early.status,400);assert.deepEqual(early.body,{error:'结束日期不能早于开始日期',code:'validation_failed',field:'endDate'});
  const note=await api('/api/items','POST',{kind:'note',title:'虚构',date:'2026-11-01'});assert.equal(note.status,201);
- const upd=await api('/api/items/'+note.body.id,'PUT',{date:'2026-11-31'});assert.deepEqual(upd.body,{error:MESSAGE,field:'date'});
+ const upd=await api('/api/items/'+note.body.id,'PUT',{date:'2026-11-31'});assert.deepEqual(upd.body,{error:MESSAGE,code:'validation_failed',field:'date'});
 });
 
 test('malformed structured input returns 400 business errors, never 500',async()=>{

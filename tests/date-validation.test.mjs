@@ -6,7 +6,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {startServer} from './helpers.mjs';
 import {isValidDate,DATE_ERROR} from '../lib/dates.mjs';
-import {migrateAccounts,createAccounts} from '../lib/accounts.mjs';
+import {migrateAccounts,createAccounts,digest} from '../lib/accounts.mjs';
 const MESSAGE='日期格式不对，请按 2026-11-01 这样填写';
 let dir,server;
 const api=async(route,method='GET',body)=>{const r=await fetch(server.base+route,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});const text=await r.text();return {status:r.status,body:JSON.parse(text),text};};
@@ -77,5 +77,23 @@ test('login rate limit uses an injectable clock: blocks after 5 failures and exp
  assert.equal(await attempt(),429);
  t+=15*60*1000-1;assert.equal(await attempt(),429);
  t+=2;assert.equal(await attempt(),401);
+ db.close();
+});
+
+test('sliding session renewal uses an injectable clock: at most once per 24h, expired rejected, logout invalidates',async()=>{
+ const db=new DatabaseSync(':memory:');migrateAccounts(db);let t=1_800_000_000_000;const day=86400000,life=30*day;
+ const json=(res,status,body)=>{res.status=status;res.body=body;};
+ const accounts=createAccounts({db,enabled:true,json,readBody:async req=>req.body,now:()=>t});
+ db.prepare("INSERT INTO users(id,email,name,role,password_hash,disabled,created_at) VALUES('u1','a@example.invalid','A','user',NULL,0,?)").run(t);
+ const token='fictional-session-token';db.prepare('INSERT INTO sessions VALUES(?,?,?,?,?,?)').run('s1','u1',digest(token),t,t,t+life);
+ const call=()=>{const headers={};const res={setHeader:(k,v)=>{headers[k]=v;}};const user=accounts.session({headers:{cookie:'workbench_session='+token}},res);return {user,cookie:headers['Set-Cookie']};};
+ const expiry=()=>db.prepare('SELECT expires_at FROM sessions WHERE id=?').get('s1')?.expires_at;
+ t+=day-1;let r=call();assert.ok(r.user);assert.equal(r.cookie,undefined);assert.equal(expiry(),1_800_000_000_000+life);
+ t+=1;r=call();assert.equal(r.user.expires_at,t+life);assert.equal(expiry(),t+life);assert.equal(r.cookie,`workbench_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${life/1000}`);
+ const renewedAt=t;t+=day-1;r=call();assert.equal(r.cookie,undefined);assert.equal(expiry(),renewedAt+life);
+ t=renewedAt+life;r=call();assert.equal(r.user,undefined);assert.equal(r.cookie,undefined);
+ db.prepare('UPDATE sessions SET expires_at=? WHERE id=?').run(t+life,'s1');t+=day;r=call();assert.ok(r.user);
+ const out={headers:{},setHeader(k,v){this.headers[k]=v;}};await accounts.handle({method:'POST',headers:{},socket:{remoteAddress:'127.0.0.1'},body:{}},out,new URL('http://x/api/auth/logout'),r.user);
+ assert.match(out.headers['Set-Cookie'],/Max-Age=0/);assert.equal(expiry(),undefined);assert.equal(call().user,undefined);
  db.close();
 });

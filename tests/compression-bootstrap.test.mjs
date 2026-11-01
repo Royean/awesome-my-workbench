@@ -90,7 +90,7 @@ test('login response carries the /api/bootstrap payload for the same user; failu
   assert.equal(wrong.status, 401); assert.equal(wrong.headers.get('set-cookie'), null);
   const wrongBody = await wrong.json(); assert.deepEqual(Object.keys(wrongBody), ['error']);
   const login = await post('/api/auth/login?space=personal&workbench=health', { email: 'admin@example.invalid', password });
-  assert.equal(login.status, 200); assert.equal(login.headers.get('cache-control'), 'no-store');
+  assert.equal(login.status, 200); assert.equal(login.headers.get('cache-control'), 'private, no-store');
   const Cookie = login.headers.get('set-cookie').split(';')[0];
   const { user, ...payload } = await login.json();
   assert.equal(user.email, 'admin@example.invalid'); assert.ok(!JSON.stringify(payload).includes('password_hash'));

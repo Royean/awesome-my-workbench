@@ -27,6 +27,24 @@ test('authentication, strict origin and session persistence',async()=>{
  const sessions=await api('/api/auth/sessions');assert.equal(sessions.body.sessions.length,1);assert.equal(sessions.body.sessions[0].current,true);
  const db=new DatabaseSync(path.join(dir,'health.sqlite'));const row=db.prepare('SELECT token_hash FROM sessions').get();assert.notEqual(row.token_hash,adminCookie.split('=')[1]);db.close();
 });
+test('sliding renewal only on /api/: static and index responses never carry Set-Cookie; renewal responses are private,no-store',async()=>{
+ const db=new DatabaseSync(path.join(dir,'health.sqlite'));const {digest}=await import('../lib/accounts.mjs');const hash=digest(adminCookie.split('=')[1]);const day=86400000,life=30*day;
+ // Simulate the last renewal being more than 24h ago.
+ const stale=Date.now()+life-day-60000;db.prepare('UPDATE sessions SET expires_at=? WHERE token_hash=?').run(stale,hash);const expiry=()=>db.prepare('SELECT expires_at FROM sessions WHERE token_hash=?').get(hash).expires_at;
+ const index=await fetch(base+'/',{headers:{Cookie:adminCookie}});const html=await index.text();assert.equal(index.status,200);assert.equal(index.headers.get('set-cookie'),null);
+ const asset=html.match(/\/assets\/[^"']+\.[0-9a-f]{64}\.(?:js|css)/)?.[0];assert.ok(asset,'hashed asset referenced');
+ const a=await fetch(base+asset,{headers:{Cookie:adminCookie}});await a.arrayBuffer();assert.equal(a.status,200);assert.match(a.headers.get('cache-control'),/immutable/);assert.equal(a.headers.get('set-cookie'),null);
+ assert.equal(expiry(),stale);
+ const before=Date.now();const r=await fetch(base+'/api/state',{headers:{Cookie:adminCookie}});await r.json();const after=Date.now();
+ assert.equal(r.status,200);assert.match(r.headers.get('set-cookie'),new RegExp(`^${adminCookie}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${life/1000}`));assert.equal(r.headers.get('cache-control'),'private, no-store');
+ const e=expiry();assert.ok(e>=before+life&&e<=after+life);
+ const again=await fetch(base+'/api/state',{headers:{Cookie:adminCookie}});await again.json();assert.equal(again.headers.get('set-cookie'),null);assert.equal(expiry(),e);
+ db.close();
+});
+test('login and logout responses that set the session cookie are private,no-store',async()=>{
+ const l=await fetch(base+'/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json',Origin:base},body:JSON.stringify({email:'admin@example.invalid',password})});await l.json();assert.equal(l.status,200);assert.equal(l.headers.get('cache-control'),'private, no-store');const c=l.headers.get('set-cookie').split(';')[0];
+ const o=await fetch(base+'/api/auth/logout',{method:'POST',headers:{'Content-Type':'application/json',Origin:base,Cookie:c},body:'{}'});await o.json();assert.equal(o.status,200);assert.match(o.headers.get('set-cookie'),/Max-Age=0/);assert.equal(o.headers.get('cache-control'),'private, no-store');
+});
 test('invitation expiry, one-time acceptance and isolated accounts/workbenches/files',async()=>{
  const expired=await api('/api/auth/invitations',{method:'POST',body:{email:'expired@example.invalid',name:'Expired'}});const db=new DatabaseSync(path.join(dir,'health.sqlite'));db.prepare('UPDATE invitations SET expires_at=0 WHERE user_id=(SELECT id FROM users WHERE email=?)').run('expired@example.invalid');db.close();assert.equal((await api('/api/auth/accept-invitation',{method:'POST',cookie:null,body:{token:expired.body.token,password}})).status,400);
  const inv=await api('/api/auth/invitations',{method:'POST',body:{email:'member@example.invalid',name:'Member'}});assert.equal(inv.status,201);const accepted=await api('/api/auth/accept-invitation',{method:'POST',cookie:null,body:{token:inv.body.token,password,name:'Member'}});assert.equal(accepted.status,200);userCookie=accepted.cookie;userId=accepted.body.user.id;assert.equal((await api('/api/auth/accept-invitation',{method:'POST',cookie:null,body:{token:inv.body.token,password}})).status,400);

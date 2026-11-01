@@ -125,29 +125,33 @@ test('visit/report/medication/dose: read, create, update via MCP with full text 
  const d=(await ok(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),time:'08:05',scheduledTime:'08:00'})).created;
  assert.equal(d.outcome,'已服用');assert.equal(d.title,'示例药 A');assert.equal(d.medicationId,m.id);
  const du=(await ok(tokenA,'update_record',{id:d.id,time:'08:20',note:'饭后'})).updated;assert.equal(du.time,'08:20');assert.equal(du.outcome,'已服用');
- assert.match(await err(tokenA,'update_record',{id:d.id,outcome:'跳过'}),/只能改服用时间和备注/);
- assert.match(await err(tokenA,'update_record',{id:d.id,date:shift(-1)}),/只能改服用时间和备注/);
+ assert.match(await err(tokenA,'update_record',{id:d.id,date:shift(-1)}),/只能改服用结果、时间和备注/);
+ assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'跳过',note:''})).message,'请填写跳过原因');
+ const ds=(await ok(tokenA,'update_record',{id:d.id,outcome:'跳过',note:'胃不舒服'})).updated;assert.equal(ds.outcome,'跳过');assert.equal(ds.time,'');
+ assert.equal((await errc(tokenA,'update_record',{id:d.id,outcome:'已服用'})).message,'请记录实际服用时间');
+ assert.equal((await ok(tokenA,'update_record',{id:d.id,outcome:'已服用',time:'09:00'})).updated.time,'09:00');
  const list=await ok(tokenA,'list_records',{kind:'all'});for(const id of [v.id,r.id,m.id,d.id])assert.ok(list.records.some(x=>x.id===id),id);
  const lm=(await ok(tokenA,'list_records',{kind:'medication'})).records.find(x=>x.id===m.id);for(const k of ['dosage','route','frequency','times','status','endDate','prescriber'])assert.ok(k in lm,k);
  const ld=(await ok(tokenA,'list_records',{kind:'dose'})).records.find(x=>x.id===d.id);for(const k of ['outcome','time','scheduledTime','medicationId'])assert.ok(k in ld,k);
  const lv=(await ok(tokenA,'list_records',{kind:'visit'})).records.find(x=>x.id===v.id);for(const k of ['doctor','reason','assessment','instructions'])assert.ok(k in lv,k);
 });
-test('dose: 跳过 rejected, future rejected, medication missing',async()=>{
+test('dose: 跳过 needs a reason, future rejected, medication missing',async()=>{
  const v=(await ok(tokenA,'create_record',{kind:'visit',title:'看诊',date:shift(-1)})).created;
  const m=(await ok(tokenA,'create_record',{kind:'medication',title:'示例药 B',date:shift(-1),visitId:v.id,dosage:'1 粒',route:'口服',frequency:'按需',scheduleMode:'asNeeded'})).created;
- const skip=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过',note:'忘了'});assert.equal(skip.message,'助手暂时只能记已服用，跳过请到网页记');leak(skip.message);
+ const noReason=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过'});assert.equal(noReason.message,'请填写跳过原因');leak(noReason.message);
+ const skip=(await ok(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:today(),outcome:'跳过',time:'08:00',note:'忘了带药'})).created;assert.equal(skip.outcome,'跳过');assert.equal(skip.time,'');assert.equal(skip.note,'忘了带药');
  const fut=await errc(tokenA,'create_record',{kind:'dose',medicationId:m.id,date:shift(1),time:'08:00'});assert.equal(fut.code,'future_date');leak(fut.message);
  const nm=await errc(tokenA,'create_record',{kind:'dose',medicationId:'nope',time:'08:00'});assert.equal(nm.code,'not_found');assert.match(nm.hint,/list_records kind=medication/);leak(nm.message);
  const none=await errc(tokenA,'create_record',{kind:'dose',time:'08:00'});assert.equal(none.code,'validation_failed');leak(none.message);
 });
-test('report/medication need an existing visit; future-date rules for visit',async()=>{
+test('report/medication need an existing visit; future visits allowed like web',async()=>{
  for(const kind of ['report','medication']){const extra=kind==='medication'?{dosage:'1',route:'口服',frequency:'每日',times:['08:00']}:{content:'x'};
   const miss=await errc(tokenA,'create_record',{kind,title:'x',...extra});assert.equal(miss.code,'validation_failed');assert.match(miss.hint,/list_records kind=visit/);leak(miss.message);
   const nf=await errc(tokenA,'create_record',{kind,title:'x',visitId:'nope',...extra});assert.equal(nf.code,'not_found');assert.match(nf.hint,/list_records kind=visit/);leak(nf.message);
  }
  const appt=(await ok(tokenA,'create_record',{kind:'visit',title:'预约复查',date:shift(7)})).created;assert.equal(appt.status,'待就诊');
- const e=await errc(tokenA,'create_record',{kind:'visit',title:'x',date:shift(7),status:'已完成'});assert.equal(e.code,'future_date');leak(e.message);
- assert.equal((await errc(tokenA,'update_record',{id:appt.id,status:'已完成'})).code,'future_date');
+ assert.equal((await ok(tokenA,'create_record',{kind:'visit',title:'x',date:shift(7),status:'已完成'})).created.status,'已完成');
+ assert.equal((await ok(tokenA,'update_record',{id:appt.id,status:'已完成'})).updated.status,'已完成');
  const rep=(await ok(tokenA,'create_record',{kind:'report',title:'待出报告',date:shift(7),visitId:appt.id,status:'待出报告'})).created;assert.equal(rep.date,shift(7));
  const med=(await ok(tokenA,'create_record',{kind:'medication',title:'下周开始的药',date:shift(3),endDate:shift(9),visitId:appt.id,dosage:'1 片',route:'口服',frequency:'每日一次',times:['09:00']})).created;assert.equal(med.date,shift(3));
  const wv=await req('/api/items',{method:'POST',body:{kind:'visit',title:'网页补记',date:shift(7),status:'已完成'},headers:web(cookieA)});assert.equal(wv.status,201);
@@ -175,7 +179,7 @@ test('provenance: MCP marks records; web body cannot set or wipe the markers',as
 });
 test('medication/dose tool descriptions require read-back and 「对」',async()=>{
  const tools=(await rpc(tokenA,'tools/list')).body.result.tools;
- for(const n of ['create_record','update_record'])assert.match(tools.find(t=>t.name===n).description,/药名、剂量、时间.*「对」/);
+ for(const n of ['create_record','update_record'])assert.match(tools.find(t=>t.name===n).description,/药名、剂量、时间.*「对」.*跳过.*原因.*「对」/);
 });
 test('cross-account isolation: account B cannot see or update A records',async()=>{
  const a=(await ok(tokenA,'create_record',{kind:'note',title:'A 的私密备忘',date:'2026-10-06'})).created;

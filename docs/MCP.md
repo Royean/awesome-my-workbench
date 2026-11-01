@@ -33,13 +33,14 @@
 
 | kind | 读 | 可写字段 | 规则 |
 |---|---|---|---|
-| `visit` 就医 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」。**通过 MCP，就医日期晚于今天时状态必须是「待就诊」**（预约），否则 `future_date`；网页不受此限制 |
+| `visit` 就医 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
 | `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就医（`visitId`）；日期可以是未来 |
 | `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就医；开始/结束日期可以是未来 |
-| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/note/title（title 默认取药名）；修改：**只能** time/note | 只能记 `outcome: 已服用`（「跳过」被拒，请到网页记）；不能记未来日期 |
+| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「请填写跳过原因」）；规则与网页相同；不能记未来日期 |
 
 - 缺少 `visitId` → `validation_failed`；`visitId` 在本空间不存在 → `not_found`；两者都带 `hint`（仅助手可见）：先 `list_records kind=visit`，没有就先新建就医。服药的 `medicationId` 同理（hint 指向 `list_records kind=medication`）。
-- 工具描述要求：写入用药或服药前，助手必须把**药名、剂量、时间**完整念一遍，用户明确回答「对」之后才写。
+- 工具描述要求：写入用药或服药前，助手必须把**药名、剂量、时间**完整念一遍，用户明确回答「对」之后才写；记「跳过」时先问用户原因，再念**药名、计划服用时间、跳过原因**，用户回答「对」才写。
+- 日期规则与网页完全一致：就医、报告、用药可以是未来日期；服药、餐食、运动、指标、饮水不能。
 
 ### 附件
 
@@ -52,7 +53,7 @@
 - 这些字段只能由服务端在 MCP 路径设置：网页 API 请求体里的同名字段会被 `validate()` 丢弃；网页编辑、删除后撤销都会**保留**已有标记（历史不被抹掉）。网页编辑本身不更新 `lastAiEditAt`。
 - 网页在记录列表/详情显示 12px 小标签「来自 AI 助手 · {最后一次 AI 修改时间}」。
 
-**不提供**：删除、附件内容与上传、收藏（favorite）、通过助手记「跳过」服药。
+**不提供**：删除、附件内容与上传、收藏（favorite）。
 
 ## 错误约定与错误码
 
@@ -66,8 +67,8 @@
 | `token_invalid` | 401 | 带了 `Bearer` 但令牌不对：格式错误（如 `Bearer abc`、前缀不对、`Bearer` 后为空）、无效或已撤销（撤销、改密码、停用账号后都是这个；令牌只存哈希，无法区分“已撤销”） | 不重试；让用户重新生成 |
 | `token_forbidden` | 401（MCP 带 Cookie）/ 403（令牌访问账号与安全接口） | 这种凭据不允许做这件事 | 不重试 |
 | `rate_limited` | 429 | 请求过于频繁；带 `Retry-After` 秒数（`error.data.retryAfter` 相同） | 等待 `Retry-After` 秒后重试 1 次 |
-| `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数）；报告/用药缺就医（带 `hint`）；服药记「跳过」；服药修改了时间/备注以外的内容；尝试设置附件 | 修正后重试（写入需重新向用户确认） |
-| `future_date` | 工具 / 网页 400 | meal/exercise/metric/water/dose 的日期晚于今天；MCP 下就医日期晚于今天但状态不是「待就诊」 | 向用户确认日期 |
+| `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数）；报告/用药缺就医（带 `hint`）；服药「跳过」缺原因、「已服用」缺时间；服药修改了结果/时间/备注以外的内容；尝试设置附件 | 修正后重试（写入需重新向用户确认） |
+| `future_date` | 工具 / 网页 400 | meal/exercise/metric/water/dose 的日期晚于今天（与网页相同） | 向用户确认日期 |
 | `not_found` | 工具 | 工作台/数据空间/记录不存在（或不属于当前账号）；报告/用药关联的就医、服药关联的用药方案不存在（带 `hint`） | 重新 `list_workbenches` / `list_records` |
 | `forbidden_kind` | 工具 | 该工作台不能写这类记录，或这类记录不能通过助手修改 | 换工作台，或请用户到网页操作 |
 | `mcp_disabled` | 404 | 服务未开启助手连接 | 不重试 |

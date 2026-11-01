@@ -86,10 +86,11 @@ test('sliding session renewal uses an injectable clock: at most once per 24h, ex
  const accounts=createAccounts({db,enabled:true,json,readBody:async req=>req.body,now:()=>t});
  db.prepare("INSERT INTO users(id,email,name,role,password_hash,disabled,created_at) VALUES('u1','a@example.invalid','A','user',NULL,0,?)").run(t);
  const token='fictional-session-token';db.prepare('INSERT INTO sessions VALUES(?,?,?,?,?,?)').run('s1','u1',digest(token),t,t,t+life);
- const call=()=>{const headers={};const res={setHeader:(k,v)=>{headers[k]=v;}};const user=accounts.session({headers:{cookie:'workbench_session='+token}},res);return {user,cookie:headers['Set-Cookie']};};
+ const call=()=>{const headers={};const res={setHeader:(k,v)=>{headers[k]=v;}};const user=accounts.session({headers:{cookie:'workbench_session='+token}},res,{renew:true});return {user,cookie:headers['Set-Cookie'],cc:headers['Cache-Control']};};
  const expiry=()=>db.prepare('SELECT expires_at FROM sessions WHERE id=?').get('s1')?.expires_at;
+ {const h={};assert.ok(accounts.session({headers:{cookie:'workbench_session='+token}},{setHeader:(k,v)=>{h[k]=v;}}));t+=day;assert.ok(accounts.session({headers:{cookie:'workbench_session='+token}},{setHeader:(k,v)=>{h[k]=v;}}));t-=day;assert.deepEqual(h,{},'renewal is opt-in');assert.equal(expiry(),t+life);}
  t+=day-1;let r=call();assert.ok(r.user);assert.equal(r.cookie,undefined);assert.equal(expiry(),1_800_000_000_000+life);
- t+=1;r=call();assert.equal(r.user.expires_at,t+life);assert.equal(expiry(),t+life);assert.equal(r.cookie,`workbench_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${life/1000}`);
+ t+=1;r=call();assert.equal(r.user.expires_at,t+life);assert.equal(expiry(),t+life);assert.equal(r.cc,'private, no-store');assert.equal(r.cookie,`workbench_session=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${life/1000}`);
  const renewedAt=t;t+=day-1;r=call();assert.equal(r.cookie,undefined);assert.equal(expiry(),renewedAt+life);
  t=renewedAt+life;r=call();assert.equal(r.user,undefined);assert.equal(r.cookie,undefined);
  db.prepare('UPDATE sessions SET expires_at=? WHERE id=?').run(t+life,'s1');t+=day;r=call();assert.ok(r.user);

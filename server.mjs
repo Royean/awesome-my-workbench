@@ -176,7 +176,7 @@ const server=http.createServer(async(req,res)=>{try{
   if((authEnabled&&origin!==expected)||(origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site')return json(res,403,{error:'只接受同源操作'});
   if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
  }
- const user=authEnabled?accounts.session(req,res):null;
+ const user=authEnabled?accounts.session(req,res,{renew:url.pathname.startsWith('/api/')}):null;
  if(user&&!['/api/auth/login','/api/auth/accept-invitation'].includes(url.pathname))req.authSnapshot=user;
  if(await accounts.handle(req,res,url,user))return;
  // Single startup round trip ({me,state}): account state plus the requested workbench state. Unauthenticated sessions get only {me}, as /api/auth/me would.

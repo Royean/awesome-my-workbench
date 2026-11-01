@@ -70,6 +70,31 @@ bearer_token_env_var = "ZHIHENG_TOKEN"
 
 Codex 每次从环境变量读令牌，以后换令牌只要改 `~/.zshrc`。
 
+### 其他 MCP 客户端（Cursor、Cline、Claude Desktop 等）
+
+知衡是远程 MCP 服务：Streamable HTTP，地址 `https://vivid-dream.online/mcp`，每个请求带 `Authorization: Bearer <令牌>`；只返回 JSON（不需要 SSE，`GET` 会得到 405），不用 OAuth。
+
+1. 打开客户端的 MCP 配置文件（JSON，常见顶层键是 `mcpServers`；具体文件位置看该客户端文档），在 `mcpServers` 里加一项。支持在配置里引用环境变量的客户端，用变量引用，不要写入令牌原文：
+
+```json
+{
+  "mcpServers": {
+    "zhiheng": {
+      "type": "http",
+      "url": "https://vivid-dream.online/mcp",
+      "headers": { "Authorization": "Bearer ${ZHIHENG_TOKEN}" }
+    }
+  }
+}
+```
+
+   - 有的客户端把 `type` 写成 `"streamable-http"` 或 `"transport": "http"`，按它的文档改字段名，`url` 和 `headers` 不变。
+   - 环境变量引用的写法因客户端而异（如 `${ZHIHENG_TOKEN}`、`${env:ZHIHENG_TOKEN}`）；客户端不支持引用时，**不要**替用户把令牌写进文件，请用户自己打开文件把占位处换成令牌，并提醒这个文件不能提交到代码库或分享。
+   - 只支持本地 stdio 服务的客户端：用桥接工具 [mcp-remote](https://www.npmjs.com/package/mcp-remote)，`command` 为 `npx`，`args` 为 `["-y", "mcp-remote", "https://vivid-dream.online/mcp", "--header", "Authorization:${ZHIHENG_AUTH}"]`，`env` 里设 `ZHIHENG_AUTH` 为 `Bearer ` 加令牌（同样用变量引用或请用户自己填）。
+2. 客户端支持 skills / 自定义说明时，把本文末尾「附：SKILL.md」放进去；不支持的，把它的内容加到该客户端的系统提示或项目规则里。
+
+本说明的最新版随时可从 https://vivid-dream.online/install.md 获取（公开、不含任何令牌）。
+
 ## 第 4 步：重启并验证
 
 1. 告诉用户：**新开一个会话**（或重启客户端），新的工具和说明才会生效。

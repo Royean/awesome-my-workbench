@@ -274,6 +274,12 @@ const server=http.createServer(async(req,res)=>{try{
  const url=new URL(req.url,'http://localhost');
  if(url.pathname==='/healthz'&&req.method==='GET')return json(res,200,{status:'ok'});
  if(url.pathname==='/mcp')return handleMcp(req,res);
+ // Public, token-free agent install guide, served straight from docs/AGENT-INSTALL.md so the two never drift.
+ const publicDocs={'/install.md':'docs/AGENT-INSTALL.md'};
+ if(publicDocs[url.pathname]&&(req.method==='GET'||req.method==='HEAD')){
+  let text;try{text=fs.readFileSync(path.join(root,publicDocs[url.pathname]));}catch{return json(res,404,{error:'页面不存在'});}
+  res.writeHead(200,{'Content-Type':'text/markdown; charset=utf-8','Cache-Control':'public, max-age=300','Content-Length':text.length});return req.method==='HEAD'?res.end():res.end(text);
+ }
  if(req.method!=='GET'&&req.method!=='HEAD'){
   const expected=appOrigin||`http://${requestHost}`;const origin=req.headers.origin;
   // Native app exemption (never for cookie auth): a request with a Bearer token and no session cookie authenticates only via that token, so a forged cross-site browser request cannot ride an ambient credential. App login issues the token in the body and sets no cookie; it is exempt only when no session cookie is sent and any Origin present is ours.

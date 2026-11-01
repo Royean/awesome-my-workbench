@@ -104,9 +104,14 @@ function validate(kind,b){
  if(kind==='file'){clean.size=Number(b.size)||0;clean.intakeStatus=clean.visitId?'已关联':String(b.intakeStatus||'待整理');clean.fileCategory=String(b.fileCategory||'一般资料').slice(0,80);}
  return clean;
 }
-function put(space,kind,body,id=randomUUID()){
+// Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
+// on every write, so a web edit keeps the history. Only the MCP path passes via='mcp': create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt.
+const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
+function put(space,kind,body,id=randomUUID(),via){
  const clean=validate(kind,body);
  const old=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);const original=old?JSON.parse(old.body):{};
+ for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
+ if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw bad('关联就诊不存在或不在当前空间');}
  if(kind==='file'&&clean.visitId){const conflict=getAll(space).find(x=>x.kind==='report'&&x.fileId===id&&x.visitId!==clean.visitId);if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联');}
  if(kind==='report'&&clean.fileId){const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.fileId,space);if(!f){if(original.fileId!==clean.fileId)throw bad('关联原件不存在或不在当前空间')}else{const file=JSON.parse(f.body);if(file.visitId&&file.visitId!==clean.visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料');}}
@@ -235,7 +240,7 @@ const server=http.createServer(async(req,res)=>{try{
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());
   if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过12秒'});
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
-  const clean=validate(deleted.kind,JSON.parse(deleted.body));if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);return json(res,200,restored);
+  const deletedBody=JSON.parse(deleted.body);const clean=validate(deleted.kind,deletedBody);for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
   const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw bad('保留附件无效');

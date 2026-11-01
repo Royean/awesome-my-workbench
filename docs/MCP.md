@@ -23,13 +23,36 @@
 |---|---|
 | `list_workbenches` | 列出工作台（health / finance / 自建）、数据空间（personal / demo）及每个工作台允许写入的类型 |
 | `get_today` | 今天（Asia/Shanghai）的记录与汇总：饮水合计/目标（`goalMl`：取服务端饮水目标设置，没有设置时为 2000ml；**目前没有这项设置，所以固定为 2000ml**）、运动分钟、餐食数、未完成待办 |
-| `list_records` | 按 `kind`（meal/exercise/metric/water/note/task/all）、`from`/`to`（YYYY-MM-DD，含）、`limit`（默认 50，最大 200）查询，最新在前 |
-| `create_record` | 新建 meal/exercise/metric/water/note/task |
-| `update_record` | 按 `id` 修改上述类型记录，只传要改的字段 |
+| `list_records` | 按 `kind`（meal/exercise/metric/water/visit/report/medication/dose/note/task/all）、`from`/`to`（YYYY-MM-DD，含）、`limit`（默认 50，最大 200）查询，最新在前 |
+| `create_record` | 新建 meal/exercise/metric/water/visit/report/medication/dose/note/task |
+| `update_record` | 按 `id` 修改上述类型记录，只传要改的字段（服药记录只能改 `time`/`note`） |
 
 所有工具都接受可选的 `workbench`（默认 `health`）与 `space`（默认 `personal`）。健康类（meal/exercise/metric/water）只能写入 `health` 类型工作台；note/task 可写入任何工作台。写入经由与网页相同的 `validate()/put()`，规则与网页一致；meal/exercise/metric/water 不能记未来日期（以 Asia/Shanghai 的今天为准，网页同样拦截），note/task 可以是未来日期。
 
-**v1 不提供**：删除、附件/照片/语音、就医/报告/用药/服药记录的读写。
+### 就医、报告、用药、服药
+
+| kind | 读 | 可写字段 | 规则 |
+|---|---|---|---|
+| `visit` 就医 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」。**通过 MCP，就医日期晚于今天时状态必须是「待就诊」**（预约），否则 `future_date`；网页不受此限制 |
+| `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就医（`visitId`）；日期可以是未来 |
+| `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就医；开始/结束日期可以是未来 |
+| `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/note/title（title 默认取药名）；修改：**只能** time/note | 只能记 `outcome: 已服用`（「跳过」被拒，请到网页记）；不能记未来日期 |
+
+- 缺少 `visitId` → `validation_failed`；`visitId` 在本空间不存在 → `not_found`；两者都带 `hint`（仅助手可见）：先 `list_records kind=visit`，没有就先新建就医。服药的 `medicationId` 同理（hint 指向 `list_records kind=medication`）。
+- 工具描述要求：写入用药或服药前，助手必须把**药名、剂量、时间**完整念一遍，用户明确回答「对」之后才写。
+
+### 附件
+
+- 附件（`file`）不出现在 `list_records`/`get_today` 中；报告只返回 `attachment: {name, type}`，餐食只返回 `attachments: [{name, type}]`。**永远不返回**文件内容、`storageName`、存储路径、`fileId`/`attachmentIds`。
+- MCP 不能新建/修改附件，也不能设置或更换报告的原件、餐食的附件：参数里带 `fileId`/`attachmentIds` 等会被拒绝（`validation_failed`，「助手不能添加或更换附件，请到网页操作」）。修改报告/餐食的其他字段时原有附件保持不变。
+
+### 来源标记（provenance）
+
+- 通过 MCP 新建的记录写入 `createdVia: "mcp"` 与 `aiCreatedAt`（ISO 时间）；每次通过 MCP 新建或修改都更新 `lastAiEditAt`。
+- 这些字段只能由服务端在 MCP 路径设置：网页 API 请求体里的同名字段会被 `validate()` 丢弃；网页编辑、删除后撤销都会**保留**已有标记（历史不被抹掉）。网页编辑本身不更新 `lastAiEditAt`。
+- 网页在记录列表/详情显示 12px 小标签「来自 AI 助手 · {最后一次 AI 修改时间}」。
+
+**不提供**：删除、附件内容与上传、收藏（favorite）、通过助手记「跳过」服药。
 
 ## 错误约定与错误码
 
@@ -43,9 +66,9 @@
 | `token_invalid` | 401 | 带了 `Bearer` 但令牌不对：格式错误（如 `Bearer abc`、前缀不对、`Bearer` 后为空）、无效或已撤销（撤销、改密码、停用账号后都是这个；令牌只存哈希，无法区分“已撤销”） | 不重试；让用户重新生成 |
 | `token_forbidden` | 401（MCP 带 Cookie）/ 403（令牌访问账号与安全接口） | 这种凭据不允许做这件事 | 不重试 |
 | `rate_limited` | 429 | 请求过于频繁；带 `Retry-After` 秒数（`error.data.retryAfter` 相同） | 等待 `Retry-After` 秒后重试 1 次 |
-| `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数） | 修正后重试（写入需重新向用户确认） |
-| `future_date` | 工具 / 网页 400 | meal/exercise/metric/water 的日期晚于今天 | 向用户确认日期 |
-| `not_found` | 工具 | 工作台/数据空间/记录不存在（或不属于当前账号） | 重新 `list_workbenches` / `list_records` |
+| `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数）；报告/用药缺就医（带 `hint`）；服药记「跳过」；服药修改了时间/备注以外的内容；尝试设置附件 | 修正后重试（写入需重新向用户确认） |
+| `future_date` | 工具 / 网页 400 | meal/exercise/metric/water/dose 的日期晚于今天；MCP 下就医日期晚于今天但状态不是「待就诊」 | 向用户确认日期 |
+| `not_found` | 工具 | 工作台/数据空间/记录不存在（或不属于当前账号）；报告/用药关联的就医、服药关联的用药方案不存在（带 `hint`） | 重新 `list_workbenches` / `list_records` |
 | `forbidden_kind` | 工具 | 该工作台不能写这类记录，或这类记录不能通过助手修改 | 换工作台，或请用户到网页操作 |
 | `mcp_disabled` | 404 | 服务未开启助手连接 | 不重试 |
 | `method_not_allowed` / `unsupported_media_type` / `unsupported_protocol_version` / `payload_too_large` / `unknown_tool` | 405 / 415 / 400 / 413 / JSON-RPC | 客户端调用问题 | 修正客户端 |

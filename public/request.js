@@ -40,3 +40,12 @@ export function showFieldError(form, error) {
   input.insertAdjacentElement('afterend', message); input.focus?.();
   return true;
 }
+
+// Small 「来自 AI 助手」 label for records created or last changed through the assistant (MCP). Values come from the server only.
+export function aiTag(item) {
+  const at = item && (item.lastAiEditAt || item.aiCreatedAt);
+  if (!at && item?.createdVia !== 'mcp') return '';
+  const d = at ? new Date(at) : null;
+  const when = d && !Number.isNaN(d.getTime()) ? new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).format(d) : '';
+  return `<span class="ai-tag" title="${when ? `AI 助手最后修改于 ${when}` : '来自 AI 助手'}">来自 AI 助手${when ? ` · ${when}` : ''}</span>`;
+}

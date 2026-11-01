@@ -219,7 +219,7 @@ if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
 }
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body))};
 async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
+const mime={'.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 // Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings
 // (verified against the source hash) or are compressed once and kept in memory; mutable files are compressed per request.
@@ -392,10 +392,10 @@ const server=http.createServer(async(req,res)=>{try{
  const publicRoot=fs.realpathSync(path.join(root,'public'));
  if(!fs.realpathSync(p).startsWith(publicRoot+path.sep))return json(res,404,{error:'页面不存在'});
  const bytes=fs.readFileSync(p);
- const immutable=!!assetMatch&&createHash('sha256').update(bytes).digest('hex')===assetMatch[1];
+ const immutable=(!!assetMatch&&createHash('sha256').update(bytes).digest('hex')===assetMatch[1])||url.pathname.startsWith('/vendor/pdfjs/6.4.299/');
  const type=mime[path.extname(p)]||'application/octet-stream';
  const {body,encoding}=compressed(p,bytes,type,req.headers['accept-encoding'],immutable);
- res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
+ res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
  if(req.method==='HEAD')return res.end();res.end(body);
  }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{}),...(e.parentKind?{parentKind:e.parentKind}:{}),...(e.parentKinds?{parentKinds:e.parentKinds}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
 server.listen(Number(process.env.PORT??3100),host,()=>console.log(`Health workbench http://localhost:${server.address().port}`));

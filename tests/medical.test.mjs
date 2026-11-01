@@ -7,7 +7,8 @@ import path from 'node:path';
 let cwd=path.resolve(import.meta.dirname,'..'),base=undefined;
 import {startServer,stopProcess} from './helpers.mjs';
 let dir,proc,date;
-async function start(){const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;date=(await (await fetch(base+'/api/state')).json()).today;}
+async function start(){// Pin "now" late in today's Asia/Shanghai day so fixed dose times (08:10, 11:00…) are never later than now.
+ const t=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date());const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir,NODE_ENV:'test',ZH_TEST_NOW:`${t}T23:30:00+08:00`}});proc=s.proc;base=s.base;date=(await (await fetch(base+'/api/state')).json()).today;}
 async function stop(){await stopProcess(proc);proc=undefined;}
 async function api(route,method='GET',body,space='personal'){const r=await fetch(base+route+(route.includes('?')?'&':'?')+'space='+space,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()}}
 const add=async(kind,extra={},space='personal')=>{const r=await api('/api/items','POST',{kind,title:'独立验收虚构记录',date,...extra},space);assert.equal(r.status,201,JSON.stringify(r.body));return r.body};

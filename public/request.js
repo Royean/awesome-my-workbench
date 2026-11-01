@@ -40,3 +40,28 @@ export function showFieldError(form, error) {
   input.insertAdjacentElement('afterend', message); input.focus?.();
   return true;
 }
+
+// 「来自 AI 助手」 tag for records created or changed through the assistant (MCP). Markers come from the server only:
+// createdVia/aiCreatedAt/lastAiEditAt, set only by MCP writes.
+const SH = { timeZone: 'Asia/Shanghai' };
+const ymd = d => new Intl.DateTimeFormat('en-CA', { ...SH, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+export function aiWhen(iso, now = new Date()) {
+  const d = new Date(iso); if (!iso || Number.isNaN(d.getTime())) return '';
+  const hm = new Intl.DateTimeFormat('en-GB', { ...SH, hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
+  const day = ymd(d), today = ymd(now), y = new Date(now.getTime() - 864e5);
+  if (day === today) return `今天 ${hm}`;
+  if (day === ymd(y)) return `昨天 ${hm}`;
+  const [Y, M, D] = day.split('-').map(Number);
+  return `${day.slice(0, 4) !== today.slice(0, 4) ? Y + '年' : ''}${M}月${D}日 ${hm}`;
+}
+// Pure: returns {text, label} or null. Simple rule: 「来自 AI 助手 · {time of last AI change}」.
+export function aiTagInfo(item, now = new Date()) {
+  if (!item || !(item.lastAiEditAt || item.aiCreatedAt || item.createdVia === 'mcp')) return null;
+  const when = aiWhen(item.lastAiEditAt || item.aiCreatedAt, now);
+  return { text: `来自 AI 助手${when ? ' · ' + when : ''}`, label: `由 AI 助手记录${when ? '，最后修改于 ' + when : ''}` };
+}
+const escAttr = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+export function aiTag(item) {
+  const info = aiTagInfo(item); if (!info) return '';
+  return `<span class="ai-tag" role="img" aria-label="${escAttr(info.label)}" title="${escAttr(info.label)}">${escAttr(info.text)}</span>`;
+}

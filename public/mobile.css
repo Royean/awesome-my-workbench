@@ -4,3 +4,14 @@
 @media(prefers-reduced-motion:reduce){.drawer,.sidebar{animation:none!important;transition:none!important}.workbench-option:active,.phone-record-grid>button:active{transform:none!important}}
 @media(max-width:900px){body.keyboard-visible .bottom-tabs{display:none}.mobile-workbench.keyboard-visible .drawer{top:var(--phone-visual-top,0px);height:var(--phone-visual-height,92dvh);max-height:var(--phone-visual-height,92dvh);bottom:auto;border-radius:14px 14px 0 0}.mobile-workbench .capture-text,.mobile-workbench .field textarea{scroll-margin-bottom:140px}}
 @media(max-width:900px){.mobile-workbench .drawer[aria-label="切换工作台"],.mobile-workbench .drawer[aria-label="选择数据空间"],.mobile-workbench .drawer[aria-label="添加到主屏幕"],.mobile-workbench .drawer[aria-label="记一笔"]{height:auto;max-height:88dvh}.mobile-workbench .drawer[aria-label="切换工作台"] .drawer-content{max-height:65dvh}.mobile-workbench.keyboard-visible .drawer{height:var(--phone-visual-height);max-height:var(--phone-visual-height)}}
+
+/* Scroll remains owned by visible UI; an absent drawer never locks the page. */
+.sidebar{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}.sidebar>*{flex-shrink:0}
+.drawer-head,.drawer-foot{flex-shrink:0}.drawer-content{min-height:0;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}.drawer-foot{flex-wrap:wrap}
+.medical-view-tabs{overflow-x:auto;scrollbar-width:thin;min-width:0}.medical-view-tabs>button{flex:0 0 auto;white-space:nowrap}
+.resource-tabs{display:flex;gap:8px;margin:-5px 0 18px;overflow-x:auto;padding:3px 0;scrollbar-width:thin}.resource-tabs button{flex:0 0 auto;min-height:40px;padding:8px 12px;border:1px solid #e3eae2;background:#fff;color:#58705e;border-radius:7px;display:flex;align-items:center;gap:8px}.resource-tabs button.active{background:#edf4ef;border-color:#acc5b4;color:#315c44}.resource-tabs span{font-size:11px;opacity:.8}
+.todo-head-actions{display:flex;gap:14px;align-items:center}.todo-head-actions button{min-height:40px}.filters>div:not(.searchbox){flex-wrap:wrap}.record-info,.medication-head>div{min-width:0}.record-info h3{overflow-wrap:anywhere}
+@media(min-width:801px){.minimal-visit-list,.medical-resource-list{max-height:max(220px,calc(100dvh - 330px));overflow-y:auto;overscroll-behavior-y:auto;scrollbar-gutter:stable;scrollbar-width:thin}}
+@media(max-width:800px){.minimal-visit-list{max-height:none;overflow:visible}.medical-resource-list{max-height:none}.drawer-foot{padding-bottom:calc(17px + env(safe-area-inset-bottom,0px))}}
+
+@media(min-width:801px){.workspace{height:100dvh;display:flex;flex-direction:column;overflow:hidden}.topbar{flex-shrink:0}.workspace>.main{flex:1;min-height:0;width:100%;overflow-y:auto;overscroll-behavior-y:auto;scrollbar-gutter:stable}}

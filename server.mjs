@@ -1,3 +1,4 @@
+import { createCgm } from './lib/cgm.mjs';
 import { validateReportObservations } from './lib/report-observations.mjs';
 import http from 'node:http';
 import fs from 'node:fs';
@@ -231,7 +232,7 @@ if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
  db.prepare('INSERT INTO app_meta VALUES(?,?)').run('medical-demo-v1','seeded');
 }
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body))};
-async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
+async function readBody(req,maxBytes=15*1024*1024){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>maxBytes){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
 const mime={'.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 // Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings
@@ -323,6 +324,7 @@ async function handleMcp(req,res){
  if(out.status===202){res.writeHead(202,{'Cache-Control':'no-store'});return res.end();}
  return json(res,out.status,out.body);
 }
+const cgm=createCgm({db,dataDir});
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
  if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
@@ -361,6 +363,27 @@ const server=http.createServer(async(req,res)=>{try{
  const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw bad('此工作台仅支持备忘与待办');};
  if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
  if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
+ // CGM credentials are managed only by an interactive session in the real health space.
+ if(url.pathname.startsWith('/api/cgm/')){
+  if(!authEnabled||!user)return json(res,401,{error:'请先登录后连接 CGM',code:'token_missing'});
+  if(user.auth_via==='pat')return json(res,403,{error:'CGM 连接只能通过应用中的登录会话管理',code:'token_forbidden'});
+  if(req.headers['x-workbench-owner']!==user.id)return json(res,409,{error:'登录账号已变化，请重新打开页面',code:'cgm_owner_changed'});
+  if(baseSpace!=='personal'||workbenchId!=='health')return json(res,403,{error:'CGM 仅可连接到个人健康空间',code:'forbidden_scope'});
+  const cgmJson=(status,body)=>json(res,status,{...body,owner:user.id});
+  const authorized=()=>{const current=accounts.session(req);return !!current&&current.id===user.id&&current.session_id===user.session_id&&current.role===user.role;};
+  if(url.pathname==='/api/cgm/providers'&&req.method==='GET')return cgmJson(200,{providers:cgm.providers()});
+  if(url.pathname==='/api/cgm/connections'&&req.method==='GET')return cgmJson(200,{connections:cgm.connections(space)});
+  if(url.pathname==='/api/cgm/readings'&&req.method==='GET')return cgmJson(200,cgm.readings(space,{date:url.searchParams.get('date')||today()}));
+  if(url.pathname==='/api/cgm/connections'&&req.method==='POST'){
+   const body=await readBody(req,4096);return cgmJson(201,{connection:await cgm.connect(space,body,{isAuthorized:authorized})});
+  }
+  const match=/^\/api\/cgm\/connections\/([A-Za-z0-9-]{1,100})(?:\/(sync|pause|resume))?$/.exec(url.pathname);
+  if(match){const [,id,action]=match;
+   if(req.method==='DELETE'&&!action){await readBody(req,4096);return cgmJson(200,cgm.disconnect(space,id));}
+   if(req.method==='POST'&&action){await readBody(req,4096);const connection=await cgm[action](space,id,{isAuthorized:authorized});return cgmJson(200,{connection});}
+  }
+  return json(res,405,{error:'CGM 操作或请求方法不支持'});
+ }
  if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space)})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
 
@@ -421,4 +444,5 @@ const server=http.createServer(async(req,res)=>{try{
  res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
  if(req.method==='HEAD')return res.end();res.end(body);
  }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{}),...(e.parentKind?{parentKind:e.parentKind}:{}),...(e.parentKinds?{parentKinds:e.parentKinds}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
-server.listen(Number(process.env.PORT??3100),host,()=>console.log(`Health workbench http://localhost:${server.address().port}`));
+server.on('close',()=>cgm.stop());
+server.listen(Number(process.env.PORT??3100),host,()=>{cgm.start();console.log(`Health workbench http://localhost:${server.address().port}`)});

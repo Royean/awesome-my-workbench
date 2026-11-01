@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import zlib from 'node:zlib';
 
-const styles = ['style.css', 'minimal.css', 'daily.css', 'mobile.css', 'account.css'];
+const styles = ['style.css', 'minimal.css', 'daily.css', 'mobile.css', 'account.css', 'cgm.css'];
 const sha256 = content => createHash('sha256').update(content).digest('hex');
 
 // Deliberately small: this app uses local named imports and named declarations.
@@ -70,8 +70,8 @@ export async function buildPublic(publicDir = path.resolve(import.meta.dirname, 
     html = html.replace(/<link\b[^>]*data-workbench-bundle="css"[^>]*>/, cssTag);
   } else {
     let count = 0;
-    html = html.replace(/<link rel="stylesheet" href="\/(style|minimal|daily|mobile|account)\.css">/g, () => count++ === 0 ? cssTag : '');
-    if (count !== styles.length) throw Error('Expected the five source stylesheet links in index.html');
+    html = html.replace(/<link rel="stylesheet" href="\/(style|minimal|daily|mobile|account|cgm)\.css">/g, () => count++ === 0 ? cssTag : '');
+    if (count !== styles.length) throw Error(`Expected ${styles.length} source stylesheet links in index.html`);
   }
   if (html.includes('data-workbench-bundle="js"')) {
     html = html.replace(/<script\b[^>]*data-workbench-bundle="js"[^>]*><\/script>/, jsTag);

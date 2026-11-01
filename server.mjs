@@ -175,6 +175,10 @@ const PARENT_NAMES={visit:'就医记录',medication:'用药方案'};
 // Restoring needs the parent back first (visit for report/medication, medication for dose); otherwise a plain error.
 function parentOf(kind,body){if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
 function listTrash(space){purgeTrash();return db.prepare('SELECT id,kind,body,deleted_at,deleted_via,expires_at FROM trash_items WHERE space=? ORDER BY deleted_at DESC').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body),deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString()}));}
+// Ancestors that are in the trash, nearest first (dose → medication → visit), stopping at the first one not in the trash.
+function trashedChain(space,parent){const out=[];while(parent){const r=db.prepare('SELECT body FROM trash_items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind);if(!r)break;out.push(parent);parent=parentOf(parent.kind,JSON.parse(r.body));}return out;}
+// 「所属就诊也已删除」/「所属用药方案也已删除」/「用药方案和所属就诊也已删除」
+const chainText=kinds=>kinds.length>1?`${kinds.slice(0,-1).map(k=>k==='visit'?'就诊':'用药方案').join('、')}和所属${kinds.at(-1)==='visit'?'就诊':'用药方案'}也已删除`:`所属${kinds[0]==='visit'?'就诊':'用药方案'}也已删除`;
 // opts.withParent: when the parent (visit / medication) is also in the trash, restore it first (recursively), then this record.
 function restoreFromTrash(space,id,opts={}){
  purgeTrash();
@@ -184,7 +188,8 @@ function restoreFromTrash(space,id,opts={}){
  if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
   const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
   if(inTrash&&opts.withParent)parentRestored=restoreFromTrash(space,parent.id,opts);
-  else throw Object.assign(bad(inTrash?`它所属的${PARENT_NAMES[parent.kind]}也在最近删除里，请先恢复那条${PARENT_NAMES[parent.kind]}`:`它所属的${PARENT_NAMES[parent.kind]}已经不在了，无法恢复`,undefined,inTrash?'parent_deleted':'parent_missing'),{parentId:inTrash?parent.id:undefined,parentKind:parent.kind});
+  else if(inTrash){const chain=trashedChain(space,parent);throw Object.assign(bad(`${chainText(chain.map(c=>c.kind))}，需要一起恢复`,undefined,'parent_deleted'),{parentId:parent.id,parentKind:parent.kind,parentKinds:chain.map(c=>c.kind),parentIds:chain.map(c=>c.id)});}
+  else throw Object.assign(bad(`它所属的${PARENT_NAMES[parent.kind]}已经不在了，无法恢复`,undefined,'parent_missing'),{parentKind:parent.kind});
  }
  if(t.kind==='dose'&&body.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===body.medicationId&&x.date===body.date&&x.scheduledTime===body.scheduledTime))throw bad('该时段已有服用结果，不能恢复为重复记录');
  db.exec('BEGIN');try{db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(t.id,space,t.kind,t.body);db.prepare('DELETE FROM trash_items WHERE id=?').run(t.id);db.prepare('DELETE FROM deleted_items WHERE id=?').run(t.id);db.exec('COMMIT');}catch(err){db.exec('ROLLBACK');throw err}
@@ -352,5 +357,5 @@ const server=http.createServer(async(req,res)=>{try{
  const {body,encoding}=compressed(p,bytes,type,req.headers['accept-encoding'],immutable);
  res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
  if(req.method==='HEAD')return res.end();res.end(body);
- }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{}),...(e.parentKind?{parentKind:e.parentKind}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
+ }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{}),...(e.parentKind?{parentKind:e.parentKind}:{}),...(e.parentKinds?{parentKinds:e.parentKinds}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
 server.listen(Number(process.env.PORT??3100),host,()=>console.log(`Health workbench http://localhost:${server.address().port}`));

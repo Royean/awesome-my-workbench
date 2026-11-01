@@ -57,12 +57,12 @@ test('cascade follows web: medication with doses blocked; deleting a visit keeps
  const blocked=await err('delete_record',{id:m.id});assert.equal(blocked.message,'该方案已有服用记录，请停用以保留历史，或先移除服用记录');
  const webBlocked=await req(`/api/items/${m.id}`,{method:'DELETE',body:{},headers:web()});assert.equal(webBlocked.status,400);assert.equal(webBlocked.body.error,blocked.message);
  await ok('delete_record',{id:dose.id});await ok('delete_record',{id:m.id});
- const pe=await err('restore_record',{id:dose.id});assert.equal(pe.code,'parent_deleted');assert.equal(pe.message,'所属用药方案也已删除，需要一起恢复');assert.match(pe.hint,/所属用药方案也已删除，一起恢复？/);assert.match(pe.hint,new RegExp(m.id));
+ const pe=await err('restore_record',{id:dose.id});assert.equal(pe.code,'parent_deleted');assert.equal(pe.message,'所属用药方案“示例药”也已删除，需要一起恢复');assert.match(pe.hint,/所属用药方案“示例药”也已删除，一起恢复？/);assert.match(pe.hint,new RegExp(m.id));
  await ok('restore_record',{id:m.id});await ok('restore_record',{id:dose.id});
  await ok('delete_record',{id:v.id});
  const recs=(await ok('list_records',{kind:'all'})).records;assert.ok(recs.some(x=>x.id===rep.id));assert.ok(recs.some(x=>x.id===m.id));
  await ok('delete_record',{id:rep.id});
- const re=await err('restore_record',{id:rep.id});assert.equal(re.code,'parent_deleted');assert.equal(re.message,'所属就诊也已删除，需要一起恢复');assert.equal((await req('/api/trash/restore',{method:'POST',body:{id:rep.id},headers:web()})).body.parentKinds[0],'visit');
+ const re=await err('restore_record',{id:rep.id});assert.equal(re.code,'parent_deleted');assert.equal(re.message,'所属就诊“复诊”也已删除，需要一起恢复');assert.equal((await req('/api/trash/restore',{method:'POST',body:{id:rep.id},headers:web()})).body.parentKinds[0],'visit');
  await ok('restore_record',{id:v.id});assert.equal((await ok('restore_record',{id:rep.id})).restored.visitId,v.id);
 });
 test('restore with parent gone for good is a plain error',async()=>{
@@ -70,7 +70,7 @@ test('restore with parent gone for good is a plain error',async()=>{
  const rep=(await ok('create_record',{kind:'report',title:'r',date:day(-1),visitId:v.id})).created;
  await ok('delete_record',{id:rep.id});await ok('delete_record',{id:v.id});
  const db=new DatabaseSync(path.join(dir,'health.sqlite'));db.prepare('DELETE FROM trash_items WHERE id=?').run(v.id);db.close();
- const e=await err('restore_record',{id:rep.id});assert.equal(e.code,'parent_missing');assert.equal(e.message,'它所属的就医记录已经不在了，无法恢复');
+ const e=await err('restore_record',{id:rep.id});assert.equal(e.code,'parent_missing');assert.equal(e.message,'它所属的就诊记录已经不在了，无法恢复');
 });
 test('expired trash is purged (30 days)',async()=>{
  const x=(await ok('create_record',{kind:'note',title:'过期'})).created;await ok('delete_record',{id:x.id});
@@ -100,9 +100,9 @@ test('workbenches: create (notes/tasks only), rename custom only, names 1–24',
  assert.match((await err('create_record',{workbench:c.id,kind:'water',volume:100})).message,/只能记备忘和待办/);
  assert.equal((await ok('rename_workbench',{workbench:c.id,name:'家务事'})).renamed.name,'家务事');
  assert.equal((await err('rename_workbench',{workbench:'health',name:'x'})).message,'「健康」是内置工作台，不能改名');
- assert.equal((await err('create_workbench',{name:'一'.repeat(25)})).code,'validation_failed');
- assert.equal((await err('create_workbench',{name:'   '})).message,'工作台名称需为1–24个字');
- assert.equal((await err('rename_workbench',{workbench:c.id,name:'  '})).message,'工作台名称需为1–24个字');
+ assert.equal((await err('create_workbench',{name:'一'.repeat(25)})).message,'工作台名称需为 1–24 个字');
+ assert.equal((await err('create_workbench',{name:'   '})).message,'工作台名称需为 1–24 个字');assert.equal((await err('create_workbench',{name:''})).message,'工作台名称需为 1–24 个字');assert.equal((await err('rename_workbench',{workbench:'health',name:''})).message,'工作台名称需为 1–24 个字');
+ assert.equal((await err('rename_workbench',{workbench:c.id,name:'  '})).message,'工作台名称需为 1–24 个字');
  assert.equal((await err('rename_workbench',{workbench:'nope',name:'x'})).code,'not_found');
  assert.equal((await ok('list_workbenches',{},tokenB)).workbenches.some(w=>w.id===c.id),false);
 });
@@ -135,9 +135,9 @@ test('restore withParent (MCP and web): parent restored first, then child; witho
  const m=(await ok('create_record',{kind:'medication',title:'眼药水',date:day(-4),visitId:v.id,dosage:'1 滴',route:'滴眼',frequency:'每日两次',times:['08:00','20:00']})).created;
  const d=(await ok('create_record',{kind:'dose',medicationId:m.id,date:day(-3),time:'08:01'})).created;
  await ok('delete_record',{id:d.id});await ok('delete_record',{id:m.id});await ok('delete_record',{id:v.id});
- const e=await err('restore_record',{id:d.id});assert.equal(e.code,'parent_deleted');assert.match(e.hint,/withParent/);assert.equal(e.message,'用药方案和所属就诊也已删除，需要一起恢复');assert.match(e.hint,new RegExp(`${m.id}、${v.id}`));assert.match(e.hint,/用药方案和所属就诊也已删除，一起恢复？/);
+ const e=await err('restore_record',{id:d.id});assert.equal(e.code,'parent_deleted');assert.match(e.hint,/withParent/);assert.equal(e.message,'用药方案“眼药水”和所属就诊“眼科”也已删除，需要一起恢复');assert.match(e.hint,new RegExp(`${m.id}、${v.id}`));assert.match(e.hint,/用药方案“眼药水”和所属就诊“眼科”也已删除，一起恢复？/);
  const web1=await req('/api/trash/restore',{method:'POST',body:{id:d.id},headers:web()});assert.equal(web1.status,400);assert.equal(web1.body.code,'parent_deleted');assert.equal(web1.body.parentKind,'medication');assert.deepEqual(web1.body.parentKinds,['medication','visit']);
- const r=(await ok('restore_record',{id:d.id,withParent:true})).restored;assert.equal(r.id,d.id);
+ const r=(await ok('restore_record',{id:d.id,withParent:true})).restored;assert.equal(r.id,d.id);assert.equal(r.restoredCount,3);
  const all=(await ok('list_records',{kind:'all'})).records;for(const id of [v.id,m.id,d.id])assert.ok(all.some(x=>x.id===id),id);
  const rep=(await ok('create_record',{kind:'report',title:'验光',date:day(-4),visitId:v.id})).created;await ok('delete_record',{id:rep.id});await ok('delete_record',{id:v.id});
  const w=await req('/api/trash/restore',{method:'POST',body:{id:rep.id,withParent:true},headers:web()});assert.equal(w.status,200);assert.equal(w.body.parentRestored.id,v.id);
@@ -165,4 +165,10 @@ test('designer copy: skip reason, plan dates, duplicate times (web and MCP)',asy
  assert.equal((await wb({kind:'medication',title:'x',date:day(-1),visitId:v.id,dosage:'1',route:'口服',frequency:'每日',times:['09:00','09:00']})).body.error,'09:00 填了两次，每个时间只填一次');
  assert.equal((await wb({kind:'dose',title:'x',medicationId:m.id,date:day(-3),outcome:'已服用',time:'08:00'})).body.error,`这个方案从 ${md(start)}开始，服药日期不能早于这天`);
  assert.equal((await wb({kind:'dose',title:'x',medicationId:m.id,date:end,outcome:'跳过'})).body.error,'跳过要写原因，比如“忘带药”');
+});
+
+test('delete_record description requires read-back and 「对」 for medication/dose; MCP text says 就诊 not 就医',async()=>{
+ const tools=(await req('/mcp',{method:'POST',body:{jsonrpc:'2.0',id:1,method:'tools/list'},headers:{Authorization:`Bearer ${token}`}})).body.result.tools;
+ assert.match(tools.find(t=>t.name==='delete_record').description,/药名、剂量、时间.*「对」/);
+ assert.doesNotMatch(JSON.stringify(tools),/就医/);
 });

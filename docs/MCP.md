@@ -29,20 +29,20 @@
 
 所有工具都接受可选的 `workbench`（默认 `health`）与 `space`（默认 `personal`）。健康类（meal/exercise/metric/water）只能写入 `health` 类型工作台；note/task 可写入任何工作台。写入经由与网页相同的 `validate()/put()`，规则与网页一致；meal/exercise/metric/water 不能记未来日期（以 Asia/Shanghai 的今天为准，网页同样拦截），note/task 可以是未来日期。
 
-### 就医、报告、用药、服药
+### 就诊、报告、用药、服药
 
 | kind | 读 | 可写字段 | 规则 |
 |---|---|---|---|
-| `visit` 就医 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
-| `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就医（`visitId`）；日期可以是未来 |
-| `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就医；开始/结束日期可以是未来 |
+| `visit` 就诊 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
+| `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就诊（`visitId`）；日期可以是未来 |
+| `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就诊；开始/结束日期可以是未来 |
 | `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「跳过要写原因，比如“忘带药”」）；规则与网页相同；不能记未来日期 |
 
-- 缺少 `visitId` → `validation_failed`；`visitId` 在本空间不存在 → `not_found`；两者都带 `hint`（仅助手可见）：先 `list_records kind=visit`，没有就先新建就医。服药的 `medicationId` 同理（hint 指向 `list_records kind=medication`）。
+- 缺少 `visitId` → `validation_failed`；`visitId` 在本空间不存在 → `not_found`；两者都带 `hint`（仅助手可见）：先 `list_records kind=visit`，没有就先新建就诊。服药的 `medicationId` 同理（hint 指向 `list_records kind=medication`）。
 - 工具描述要求：写入用药或服药前，助手必须把**药名、剂量、时间**完整念一遍，用户明确回答「对」之后才写；记「跳过」时先问用户原因，再念**药名、计划服用时间、跳过原因**，用户回答「对」才写。
 - 服药（网页与 MCP 共用校验）：日期为今天时，已服用的实际时间不能晚于现在（`future_date`，「服药时间不能晚于现在，现在是 14:40」）；MCP 另有更明确的错误：「这个方案从 10月31日开始，服药日期不能早于这天」「计划时间不在这个用药方案里」「请记录实际服用时间」。用药按时服用时：「08:00 填了两次，每个时间只填一次」等时间错误先于名称错误报出。
-- 旧报告没有关联就医时，修改（网页与 MCP）不强制补就医；新建仍必须关联。
-- 日期规则与网页完全一致（过去日期的「待就诊」也允许）：就医、报告、用药可以是未来日期；服药、餐食、运动、指标、饮水不能。
+- 旧报告没有关联就诊时，修改（网页与 MCP）不强制补就诊；新建仍必须关联。
+- 日期规则与网页完全一致（过去日期的「待就诊」也允许）：就诊、报告、用药可以是未来日期；服药、餐食、运动、指标、饮水不能。
 
 ### 附件
 
@@ -53,7 +53,7 @@
 
 - 通过 MCP 新建的记录写入 `createdVia: "mcp"` 与 `aiCreatedAt`（ISO 时间）；每次通过 MCP 新建或修改都更新 `lastAiEditAt`。
 - 这些字段只能由服务端在 MCP 路径设置：网页 API 请求体里的同名字段会被 `validate()` 丢弃；网页编辑、删除后撤销都会**保留**已有标记（历史不被抹掉）。网页编辑本身不更新 `lastAiEditAt`。
-- 网页在记录列表/详情（首页时间线、今日用药、记录列表、每日回顾含饮水明细、就医列表与详情标题、报告、用药方案与服药记录）显示 12px 小标签「来自 AI 助手 · {最后一次 AI 修改时间}」（今天/昨天/M月D日，跨年带年份）；读屏文字为「由 AI 助手记录，最后修改于 …」。
+- 网页在记录列表/详情（首页时间线、今日用药、记录列表、每日回顾含饮水明细、就诊列表与详情标题、报告、用药方案与服药记录）显示 12px 小标签「来自 AI 助手 · {最后一次 AI 修改时间}」（今天/昨天/M月D日，跨年带年份）；读屏文字为「由 AI 助手记录，最后修改于 …」。
 
 ### 删除与「最近删除」
 
@@ -64,9 +64,9 @@
 | `restore_record` | 按 `id` 恢复，ID 与内容（含来源标记）不变 |
 
 - 存储：新表 `trash_items`（`migrations/003-trash.sql`），与网页 12 秒撤销（`deleted_items`）分开；**网页删除也进入最近删除**，网页 12 秒撤销照常可用，撤销后同时移出最近删除。30 天到期，启动时和每次查看/恢复时清理。
-- 连带规则与网页完全相同：已有服药记录的用药方案不能删（「该方案已有服用记录，请停用以保留历史，或先移除服用记录」，`validation_failed`）；删除就医**不会**连带删除报告和用药。
-- 恢复时上级记录必须在：报告/用药需要所属就医，服药需要用药方案。上级也在最近删除里 → 默认报 `parent_deleted`（消息列出整条链上要一起恢复的记录，如「用药方案和所属就诊也已删除，需要一起恢复」；网页 400 带 `parentKinds`）（`hint` 提示问用户后带 `withParent: true`）；带 `withParent: true` 时先恢复上级（逐级，例如服药→用药方案→就医）再恢复本条，返回 `parentRestored`。上级已彻底不在 → `parent_missing`。
-- 就医被删、报告/用药还在时，读取正常：报告/用药返回 `visit: {deleted: true, inTrash: true|false}`；服药的用药方案被删时返回 `medication: {deleted: true, inTrash}`。网页「所属就诊」显示「就诊已删除 · 可在最近删除恢复」（在最近删除里）或「就诊已删除」（已过期）。
+- 连带规则与网页完全相同：已有服药记录的用药方案不能删（「该方案已有服用记录，请停用以保留历史，或先移除服用记录」，`validation_failed`）；删除就诊**不会**连带删除报告和用药。
+- 恢复时上级记录必须在：报告/用药需要所属就诊，服药需要用药方案。上级也在最近删除里 → 默认报 `parent_deleted`（消息列出整条链上要一起恢复的记录，如「用药方案和所属就诊也已删除，需要一起恢复」；网页 400 带 `parentKinds`）（`hint` 提示问用户后带 `withParent: true`）；带 `withParent: true` 时先恢复上级（逐级，例如服药→用药方案→就诊）再恢复本条，返回 `parentRestored`。上级已彻底不在 → `parent_missing`。
+- 就诊被删、报告/用药还在时，读取正常：报告/用药返回 `visit: {deleted: true, inTrash: true|false}`；服药的用药方案被删时返回 `medication: {deleted: true, inTrash}`。网页「所属就诊」显示「就诊已删除 · 可在最近删除恢复」（在最近删除里）或「就诊已删除」（已过期）。
 - 网页：「我的 → 最近删除」（所有工作台、当前数据空间；数量为 0 时不显示），按今天/昨天/日期分组，每条两行：「类型 · 标题」与「AI 助手删除/你删除 · 时间 · 还剩 N 天（· 非健康工作台名）」，右侧「恢复」。上级也被删时确认「所属就诊也已删除，一起恢复？」/「所属用药方案也已删除，一起恢复？」。恢复后提示「已恢复 · 查看」。没有批量操作和手动彻底删除。接口：`GET /api/trash`（当前数据空间所有工作台）、`POST /api/trash/restore {id, withParent?}`。
 
 ### 收藏
@@ -98,10 +98,10 @@
 | `token_invalid` | 401 | 带了 `Bearer` 但令牌不对：格式错误（如 `Bearer abc`、前缀不对、`Bearer` 后为空）、无效或已撤销（撤销、改密码、停用账号后都是这个；令牌只存哈希，无法区分“已撤销”） | 不重试；让用户重新生成 |
 | `token_forbidden` | 401（MCP 带 Cookie）/ 403（令牌访问账号与安全接口） | 这种凭据不允许做这件事 | 不重试 |
 | `rate_limited` | 429 | 请求过于频繁；带 `Retry-After` 秒数（`error.data.retryAfter` 相同） | 等待 `Retry-After` 秒后重试 1 次 |
-| `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数）；报告/用药缺就医（带 `hint`）；服药「跳过」缺原因、「已服用」缺时间；服药修改了结果/时间/备注以外的内容；尝试设置附件 | 修正后重试（写入需重新向用户确认） |
+| `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数）；报告/用药缺就诊（带 `hint`）；服药「跳过」缺原因、「已服用」缺时间；服药修改了结果/时间/备注以外的内容；尝试设置附件 | 修正后重试（写入需重新向用户确认） |
 | `future_date` | 工具 / 网页 400 | meal/exercise/metric/water/dose 的日期晚于今天（与网页相同） | 向用户确认日期 |
 | `parent_deleted` / `parent_missing` | 工具 / 网页 400 | 恢复时上级记录在最近删除里 / 已不在 | 先恢复上级 / 告诉用户无法恢复 |
-| `not_found` | 工具 | 工作台/数据空间/记录不存在（或不属于当前账号）；报告/用药关联的就医、服药关联的用药方案不存在（带 `hint`） | 重新 `list_workbenches` / `list_records` |
+| `not_found` | 工具 | 工作台/数据空间/记录不存在（或不属于当前账号）；报告/用药关联的就诊、服药关联的用药方案不存在（带 `hint`） | 重新 `list_workbenches` / `list_records` |
 | `forbidden_kind` | 工具 | 该工作台不能写这类记录，或这类记录不能通过助手修改 | 换工作台，或请用户到网页操作 |
 | `mcp_disabled` | 404 | 服务未开启助手连接 | 不重试 |
 | `method_not_allowed` / `unsupported_media_type` / `unsupported_protocol_version` / `payload_too_large` / `unknown_tool` | 405 / 415 / 400 / 413 / JSON-RPC | 客户端调用问题 | 修正客户端 |

@@ -52,7 +52,7 @@ function validate(kind,b,opts={}){
  const clean={title:b.title.trim(),date:b.date,note:String(b.note||'').slice(0,5000)};
  for(const key of ['hospital','department','status','type','mealType','category','time','visitId','unit','name','mime','storageName'])if(b[key]!==undefined)clean[key]=String(b[key]).slice(0,250);
  if(clean.time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(clean.time))throw bad('时间格式不对，例如 08:30');
- if(kind==='visit'&&!['待就诊','已完成','待复查'].includes(clean.status))throw bad('就医状态无效');
+ if(kind==='visit'&&!['待就诊','已完成','待复查'].includes(clean.status))throw bad('就诊状态无效');
  if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw bad('运动时长需大于0且不超过1440分钟');clean.duration=Number(b.duration);
   if(b.distance!==undefined&&b.distance!==''){if(!Number.isFinite(Number(b.distance))||Number(b.distance)<=0||Number(b.distance)>1000)throw bad('距离需大于0且不超过1000公里');clean.distance=Number(b.distance);}
   clean.feeling=String(b.feeling||'');if(!['','轻松','适中','吃力','不适'].includes(clean.feeling))throw bad('身体感受选项无效');
@@ -171,14 +171,15 @@ function writeSettings(space,b){
  if(b.waterGoalMl!==undefined&&b.waterGoalMl!==''){const v=Number(b.waterGoalMl);if(!Number.isInteger(v)||v<100||v>10000)throw bad('每日饮水目标需在 100–10000 毫升之间','waterGoalMl');clean.waterGoalMl=v;}
  db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return clean;
 }
-const PARENT_NAMES={visit:'就医记录',medication:'用药方案'};
+const PARENT_NAMES={visit:'就诊记录',medication:'用药方案'};
 // Restoring needs the parent back first (visit for report/medication, medication for dose); otherwise a plain error.
 function parentOf(kind,body){if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
 function listTrash(space){purgeTrash();return db.prepare('SELECT id,kind,body,deleted_at,deleted_via,expires_at FROM trash_items WHERE space=? ORDER BY deleted_at DESC').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body),deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString()}));}
 // Ancestors that are in the trash, nearest first (dose → medication → visit), stopping at the first one not in the trash.
-function trashedChain(space,parent){const out=[];while(parent){const r=db.prepare('SELECT body FROM trash_items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind);if(!r)break;out.push(parent);parent=parentOf(parent.kind,JSON.parse(r.body));}return out;}
+function trashedChain(space,parent){const out=[];while(parent){const r=db.prepare('SELECT body FROM trash_items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind);if(!r)break;const b=JSON.parse(r.body);out.push({...parent,title:b.title});parent=parentOf(parent.kind,b);}return out;}
 // 「所属就诊也已删除」/「所属用药方案也已删除」/「用药方案和所属就诊也已删除」
-const chainText=kinds=>kinds.length>1?`${kinds.slice(0,-1).map(k=>k==='visit'?'就诊':'用药方案').join('、')}和所属${kinds.at(-1)==='visit'?'就诊':'用药方案'}也已删除`:`所属${kinds[0]==='visit'?'就诊':'用药方案'}也已删除`;
+const KN=k=>k==='visit'?'就诊':'用药方案';
+const chainText=chain=>{const n=c=>`${KN(c.kind)}“${c.title}”`;return chain.length>1?`${chain.slice(0,-1).map(n).join('、')}和所属${n(chain.at(-1))}也已删除`:`所属${n(chain[0])}也已删除`;};
 // opts.withParent: when the parent (visit / medication) is also in the trash, restore it first (recursively), then this record.
 function restoreFromTrash(space,id,opts={}){
  purgeTrash();
@@ -188,12 +189,12 @@ function restoreFromTrash(space,id,opts={}){
  if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
   const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
   if(inTrash&&opts.withParent)parentRestored=restoreFromTrash(space,parent.id,opts);
-  else if(inTrash){const chain=trashedChain(space,parent);throw Object.assign(bad(`${chainText(chain.map(c=>c.kind))}，需要一起恢复`,undefined,'parent_deleted'),{parentId:parent.id,parentKind:parent.kind,parentKinds:chain.map(c=>c.kind),parentIds:chain.map(c=>c.id)});}
+  else if(inTrash){const chain=trashedChain(space,parent);throw Object.assign(bad(`${chainText(chain)}，需要一起恢复`,undefined,'parent_deleted'),{parentId:parent.id,parentKind:parent.kind,parentKinds:chain.map(c=>c.kind),parentIds:chain.map(c=>c.id)});}
   else throw Object.assign(bad(`它所属的${PARENT_NAMES[parent.kind]}已经不在了，无法恢复`,undefined,'parent_missing'),{parentKind:parent.kind});
  }
  if(t.kind==='dose'&&body.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===body.medicationId&&x.date===body.date&&x.scheduledTime===body.scheduledTime))throw bad('该时段已有服用结果，不能恢复为重复记录');
  db.exec('BEGIN');try{db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(t.id,space,t.kind,t.body);db.prepare('DELETE FROM trash_items WHERE id=?').run(t.id);db.prepare('DELETE FROM deleted_items WHERE id=?').run(t.id);db.exec('COMMIT');}catch(err){db.exec('ROLLBACK');throw err}
- return {id:t.id,kind:t.kind,...body,...(parentRestored?{parentRestored:{id:parentRestored.id,kind:parentRestored.kind,title:parentRestored.title}}:{})};
+ return {id:t.id,kind:t.kind,...body,restoredCount:1+(parentRestored?.restoredCount||0),...(parentRestored?{parentRestored:{id:parentRestored.id,kind:parentRestored.kind,title:parentRestored.title}}:{})};
 }
 // Ids of visits/medications in this space's trash (so the web can say 「就诊已删除 · 可在最近删除恢复」).
 const trashedIds=space=>db.prepare("SELECT id FROM trash_items WHERE space=? AND kind IN ('visit','medication') AND expires_at>?").all(space,Date.now()).map(r=>r.id);

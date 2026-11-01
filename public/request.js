@@ -31,6 +31,8 @@ export function showFieldError(form, error) {
   for(const input of form.querySelectorAll('[aria-invalid="true"]')) input.removeAttribute('aria-invalid');
   const input = error?.field && form.querySelector(`[name="${CSS.escape(error.field)}"]`);
   if(!input) return false;
+  // Reveal the field if it sits inside a collapsed <details> (e.g. 「时间与备注」).
+  for(let d = input.closest('details'); d; d = d.parentElement?.closest('details')) d.open = true;
   const message = document.createElement('div');
   message.className = 'field-error'; message.setAttribute('role','alert'); message.id = `${input.name}-field-error`;
   message.textContent = error.message;

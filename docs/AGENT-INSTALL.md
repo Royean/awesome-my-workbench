@@ -121,7 +121,7 @@ description: 通过 MCP 读写「知衡」个人健康工作台（餐食、运�
 
 - 默认 `workbench: "health"`、`space: "personal"`（真实数据）。`demo` 是示例数据，只在用户明确要求时使用。
 - 健康类（meal/exercise/metric/water/visit/report/medication/dose）只能写入 health 工作台；金融等其他工作台只能写 `note`（备忘）和 `task`（待办）。
-- **报告原件可上传但不能读取内容或替换**：以 tools/list 为准。先复述文件名、检查日期、目标工作台/空间和关联报告，获得确认后，用 upload_attachment 传原件标准Base64及SHA-256（PDF、PNG、JPG/JPEG、WEBP、TXT，最大10MiB）；用 list_attachments 核对编号/文件摘要，再用 attach_report_file 关联已有报告。批量导入可一次确认明确清单，授权持续有效。同名同日同标题/备注同内容的重试复用原件，先查询避免重复。普通 create_record/update_record 仍不能直接设置附件。餐食照片/语音上传及附件替换请到网页操作。
+- **报告原件和药品图片可上传，但不能读取内容或静默替换**：以 tools/list 为准。先复述文件名、检查日期、目标工作台/空间和关联报告，获得确认后，用 upload_attachment 传原件标准Base64及SHA-256（PDF、PNG、JPG/JPEG、WEBP、TXT，最大10MiB）；用 list_attachments 核对编号/文件摘要，再用 attach_report_file 关联已有报告；药品图片用 attach_medication_image 关联已有用药方案，先把药名、剂量、时间及图片名称复述给用户，用户回答「对」才关联。批量导入可一次确认明确清单，授权持续有效。同名同日同标题/备注同内容的重试复用原件，先查询避免重复。普通 create_record/update_record 仍不能直接设置附件。餐食照片/语音上传及附件替换请到网页操作。
 - 不支持：附件内容读取、账号/密码/令牌。
 
 ## 日期与时间
@@ -147,7 +147,7 @@ description: 通过 MCP 读写「知衡」个人健康工作台（餐食、运�
 - **note = 界面上的「备忘」**：`title`（必填）、`note`、`category`。
 - **task = 界面上的「待办」**：`title`（必填）、`date`、`time`、`category`、`done`（布尔）。
 
-- **visit 就诊**：`title`（必填）、`hospital`、`department`、`status`（待就诊/已完成/待复查；不填时未来为待就诊、否则已完成）、`doctor`、`reason`、`assessment`（医生结论）、`instructions`（医嘱）。
+- **visit 就诊**：`title`（必填）、`hospital`、`city`（实际就诊城市）、`hospitalId`（目录编号，自定义留空）、`department`、`status`（待就诊/已完成/待复查；不填时未来为待就诊、否则已完成）、`doctor`、`reason`、`assessment`（医生结论）、`instructions`（医嘱）。
 - **report 报告**：`visitId`（必填）、`title`、`type`（就诊记录/检验报告/影像报告/处方/出院记录/其他）、`status`（待出报告/待补充/待核对/已归档）、`source`、`content`（原文和检查数值，可读可改，按原文录入，不解读）。
 - **medication 用药**：`visitId`（必填）、`title`（药名）、`dosage`（单次用量）、`route`（途径）、`frequency`（频次）、`scheduleMode`（scheduled 按时/asNeeded 按需）、`times`（按时服用的时间列表）、`status`（进行中/已停用/已完成）、`date`（开始）、`endDate`、`prescriber`。
 - **dose 服药**：`medicationId`（必填，先 `list_records kind=medication`）、`date`、`outcome`（已服用（默认）/跳过）、`time`（已服用时必填：实际服用时间）、`scheduledTime`（计划时段，可选）、`note`（跳过时必填：跳过原因）。改服药记录只能改结果、时间和备注。已服用必须有实际服用时间（用户没说就问「几点吃的？」），今天的服用时间不能晚于现在。

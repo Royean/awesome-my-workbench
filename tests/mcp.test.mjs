@@ -70,7 +70,8 @@ test('list_workbenches and get_today',async()=>{
  await ok(tokenA,'create_record',{kind:'water',volume:500});await ok(tokenA,'create_record',{kind:'water',volume:250,time:'09:00'});
  const t=await ok(tokenA,'get_today',{});assert.equal(t.date,today());assert.deepEqual(t.summary.water,{totalMl:750,goalMl:2000});assert.ok(t.records.every(r=>r.date===today()));
  const f=await ok(tokenA,'get_today',{workbench:'finance'});assert.equal(f.workbench.type,'finance');
- assert.match(await err(tokenA,'get_today',{workbench:'nope'}),/没有找到这个工作台/);
+ assert.equal(await err(tokenA,'get_today',{workbench:'nope'}),'没有找到这个工作台，请从你的工作台里选一个');
+ {const e=await errc(tokenA,'get_today',{workbench:'nope'});assert.equal(e.code,'not_found');assert.equal(e.hint,'用 list_workbenches 获取可用工作台');assert.doesNotMatch(e.message,/list_workbenches/);}
 });
 test('create_record for every allowed kind, list_records filters/sorts, update_record',async()=>{
  const meal=(await ok(tokenA,'create_record',{kind:'meal',title:'燕麦粥',mealType:'早餐',date:'2026-10-01',time:'08:00',portion:'一碗'})).created;assert.equal(meal.kind,'meal');assert.ok(meal.id);

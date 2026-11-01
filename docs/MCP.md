@@ -33,7 +33,7 @@
 
 ## 错误约定与错误码
 
-- 工具错误（参数/业务校验失败）→ 正常的 `tools/call` 结果：`isError: true`，`content[0].text` 为给用户看的中文原因，`structuredContent.error = {code, message}`。
+- 工具错误（参数/业务校验失败）→ 正常的 `tools/call` 结果：`isError: true`，`content[0].text` 为给用户看的中文原因，`structuredContent.error = {code, message, hint?}`。`hint` 仅给助手看（如工作台不存在时为「用 list_workbenches 获取可用工作台」），不要转述给用户；给用户的文案是「没有找到这个工作台，请从你的工作台里选一个」。
 - HTTP 层错误（401/404/405/415）→ JSON 正文 `{error, code}`；JSON-RPC 层错误（400/413/429/500 等）→ `error.data.code`。
 - `message`/`error` 文案为纯中文，不含字段名、内部 id、环境变量或表达式（例：「运动时长需在 1–1440 分钟之间」「「金融」工作台只能记备忘和待办，饮水请记到「健康」工作台」「不能记录未来的日期，今天是 11月1日」）。客户端请按 `code` 判断，不要解析文案。
 

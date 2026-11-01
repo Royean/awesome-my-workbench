@@ -105,12 +105,14 @@ function validate(kind,b){
  return clean;
 }
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
-// on every write, so a web edit keeps the history. Only the MCP path passes via='mcp': create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt.
-const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
+// on every write, so a web edit keeps the history. The MCP path passes via='mcp' (create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt);
+// web edits of an existing record pass via='web' and set lastUserEditAt.
+const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt','lastUserEditAt'];
 function put(space,kind,body,id=randomUUID(),via){
  const clean=validate(kind,body);
  const old=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);const original=old?JSON.parse(old.body):{};
  for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
+ if(via==='web'&&old)clean.lastUserEditAt=new Date().toISOString();
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw bad('关联就诊不存在或不在当前空间');}
  if(kind==='file'&&clean.visitId){const conflict=getAll(space).find(x=>x.kind==='report'&&x.fileId===id&&x.visitId!==clean.visitId);if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联');}
@@ -233,7 +235,7 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);const clean={name:String(b.name||'Captain').slice(0,40),focus:String(b.focus||'').slice(0,180)};db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return json(res,200,clean)}
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});
-  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id,'web'))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id,'web'))}
   if(req.method==='DELETE'){if(old.kind==='medication'&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===id))throw bad('该方案已有服用记录，请停用以保留历史，或先移除服用记录');db.exec('BEGIN');try{db.prepare('INSERT OR REPLACE INTO deleted_items VALUES(?,?,?,?,?)').run(id,space,old.kind,old.body,Date.now()+12000);db.prepare('DELETE FROM items WHERE id=? AND space=?').run(id,space);db.exec('COMMIT')}catch(err){db.exec('ROLLBACK');throw err}return json(res,200,{deleted:{id,kind:old.kind,...JSON.parse(old.body)}})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
@@ -259,7 +261,7 @@ const server=http.createServer(async(req,res)=>{try{
   validate('meal',body);const written=[];
   db.exec('BEGIN');try{
    for(const file of staged){const p=path.join(dataDir,'uploads',file.storageName);fs.writeFileSync(p,file.bytes,{mode:0o600});written.push(p);put(space,'file',{title:file.name,date,time:b.time||'',name:file.name,mime:file.type,size:file.bytes.length,storageName:file.storageName,fileCategory:'餐食附件',intakeStatus:'待整理',note:file.type.startsWith('audio/')?'原始录音，尚未自动转写':'原始照片，尚未自动识别'},file.id);}
-   const meal=put(space,'meal',body,existing?.id||randomUUID());db.exec('COMMIT');return json(res,existing?200:201,meal);
+   const meal=put(space,'meal',body,existing?.id||randomUUID(),existing?'web':undefined);db.exec('COMMIT');return json(res,existing?200:201,meal);
   }catch(error){db.exec('ROLLBACK');for(const p of written)try{fs.unlinkSync(p)}catch{}throw error;}
  }
  if(url.pathname==='/api/upload'&&req.method==='POST'){

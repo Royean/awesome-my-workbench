@@ -41,11 +41,37 @@ export function showFieldError(form, error) {
   return true;
 }
 
-// Small 「来自 AI 助手」 label for records created or last changed through the assistant (MCP). Values come from the server only.
+// 「来自 AI 助手」 tag for records created or changed through the assistant (MCP). Markers come from the server only:
+// createdVia/aiCreatedAt/lastAiEditAt (MCP writes) and lastUserEditAt (web edits).
+const SH = { timeZone: 'Asia/Shanghai' };
+const ymd = d => new Intl.DateTimeFormat('en-CA', { ...SH, year: 'numeric', month: '2-digit', day: '2-digit' }).format(d);
+export function aiWhen(iso, now = new Date()) {
+  const d = new Date(iso); if (!iso || Number.isNaN(d.getTime())) return '';
+  const hm = new Intl.DateTimeFormat('en-GB', { ...SH, hour: '2-digit', minute: '2-digit', hour12: false }).format(d);
+  const day = ymd(d), today = ymd(now), y = new Date(now.getTime() - 864e5);
+  if (day === today) return `今天 ${hm}`;
+  if (day === ymd(y)) return `昨天 ${hm}`;
+  const [Y, M, D] = day.split('-').map(Number);
+  return `${day.slice(0, 4) !== today.slice(0, 4) ? Y + '年' : ''}${M}月${D}日 ${hm}`;
+}
+const ms = v => { const t = Date.parse(v || ''); return Number.isNaN(t) ? 0 : t; };
+// Pure: returns {text, label} or null.
+export function aiTagInfo(item, now = new Date()) {
+  if (!item || !(item.lastAiEditAt || item.aiCreatedAt || item.createdVia === 'mcp')) return null;
+  const byAi = item.createdVia === 'mcp', ai = item.lastAiEditAt || item.aiCreatedAt, userAfter = ms(item.lastUserEditAt) > ms(ai);
+  const text = userAfter ? `${byAi ? 'AI 助手创建' : 'AI 助手修改过'} · 你修改过` : `${byAi ? '来自 AI 助手' : 'AI 助手修改过'}${ai ? ' · ' + aiWhen(ai, now) : ''}`;
+  const events = [];
+  if (byAi) events.push({ t: ms(item.aiCreatedAt), s: `AI 助手 ${aiWhen(item.aiCreatedAt, now)} 创建`.replace(/ +/g, ' ') });
+  else events.push({ t: -1, s: '你创建' });
+  if (item.lastAiEditAt && (!byAi || ms(item.lastAiEditAt) > ms(item.aiCreatedAt))) events.push({ t: ms(item.lastAiEditAt), s: `AI 助手 ${aiWhen(item.lastAiEditAt, now)} 修改` });
+  if (item.lastUserEditAt) events.push({ t: ms(item.lastUserEditAt), user: true, s: `你 ${aiWhen(item.lastUserEditAt, now)} ` });
+  events.sort((a, b) => a.t - b.t);
+  // Chronological; the user's own later edit reads 「又修改」 when anything came before it.
+  const label = events.map((e, i) => e.user ? e.s + (i > 0 ? '又修改' : '修改') : e.s).join('，');
+  return { text, label };
+}
+const escAttr = v => String(v).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 export function aiTag(item) {
-  const at = item && (item.lastAiEditAt || item.aiCreatedAt);
-  if (!at && item?.createdVia !== 'mcp') return '';
-  const d = at ? new Date(at) : null;
-  const when = d && !Number.isNaN(d.getTime()) ? new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false }).format(d) : '';
-  return `<span class="ai-tag" title="${when ? `AI 助手最后修改于 ${when}` : '来自 AI 助手'}">来自 AI 助手${when ? ` · ${when}` : ''}</span>`;
+  const info = aiTagInfo(item); if (!info) return '';
+  return `<span class="ai-tag" role="img" aria-label="${escAttr(info.label)}" title="${escAttr(info.label)}">${escAttr(info.text)}</span>`;
 }

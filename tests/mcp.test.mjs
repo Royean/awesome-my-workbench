@@ -173,7 +173,10 @@ test('provenance: MCP marks records; web body cannot set or wipe the markers',as
  const we=await req(`/api/items/${c.id}`,{method:'PUT',body:{title:'网页改过',createdVia:'web',lastAiEditAt:'2020-01-01T00:00:00Z'},headers:web(cookieA)});assert.equal(we.status,200);
  assert.equal(we.body.title,'网页改过');assert.equal(we.body.createdVia,'mcp');assert.equal(we.body.lastAiEditAt,c.lastAiEditAt);assert.equal(we.body.aiCreatedAt,c.aiCreatedAt);
  const wu=await req(`/api/items/${w.body.id}`,{method:'PUT',body:{title:'网页再改'},headers:web(cookieA)});assert.equal(wu.body.lastAiEditAt,undefined);
- const ai=(await ok(tokenA,'update_record',{id:w.body.id,note:'助手补充'})).updated;assert.equal(ai.createdVia,undefined);assert.ok(ai.lastAiEditAt);
+ assert.equal(c.lastUserEditAt,undefined);assert.equal(w.body.lastUserEditAt,undefined);assert.ok(we.body.lastUserEditAt>=c.lastAiEditAt);assert.notEqual(we.body.lastUserEditAt,'2020-01-01T00:00:00Z');
+ const spoof=await req(`/api/items/${w.body.id}`,{method:'PUT',body:{title:'伪造',lastUserEditAt:'2099-01-01T00:00:00Z'},headers:web(cookieA)});assert.notEqual(spoof.body.lastUserEditAt,'2099-01-01T00:00:00Z');assert.ok(spoof.body.lastUserEditAt);
+ const pw=await req('/api/items',{method:'POST',body:{kind:'note',title:'新',date:today(),lastUserEditAt:'2099-01-01T00:00:00Z'},headers:web(cookieA)});assert.equal(pw.body.lastUserEditAt,undefined);
+ const ai=(await ok(tokenA,'update_record',{id:w.body.id,note:'助手补充'})).updated;assert.equal(ai.createdVia,undefined);assert.ok(ai.lastAiEditAt);assert.equal(ai.lastUserEditAt,spoof.body.lastUserEditAt);assert.ok(ai.lastAiEditAt>=ai.lastUserEditAt);
  const del=await req(`/api/items/${c.id}`,{method:'DELETE',body:{},headers:web(cookieA)});assert.equal(del.status,200);
  const back=await req('/api/restore',{method:'POST',body:{id:c.id},headers:web(cookieA)});assert.equal(back.body.createdVia,'mcp');
 });

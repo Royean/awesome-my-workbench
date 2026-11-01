@@ -7,8 +7,9 @@ import http from 'node:http';
 import {DatabaseSync} from 'node:sqlite';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
-const cwd=path.resolve(import.meta.dirname,'..');
-const request=(route,options={})=>new Promise((resolve,reject)=>{const req=http.request({hostname:'127.0.0.1',port:3198,path:route,method:options.method||'GET',headers:{Host:'example.invalid',...options.headers}},res=>{res.resume();res.on('end',()=>resolve({status:res.statusCode,ok:res.statusCode===200,cookie:res.headers['set-cookie']?.[0]}));});req.on('error',reject);if(options.body)req.write(options.body);req.end();});
+import {startServer} from './helpers.mjs';
+const cwd=path.resolve(import.meta.dirname,'..');let port;
+const request=(route,options={})=>new Promise((resolve,reject)=>{const req=http.request({hostname:'127.0.0.1',port,path:route,method:options.method||'GET',headers:{Host:'example.invalid',...options.headers}},res=>{res.resume();res.on('end',()=>resolve({status:res.statusCode,ok:res.statusCode===200,cookie:res.headers['set-cookie']?.[0]}));});req.on('error',reject);if(options.body)req.write(options.body);req.end();});
 test('production fails closed and password recovery CLI has no secret output',async()=>{
  const dir=await mkdtemp(path.join(os.tmpdir(),'auth-config-'));
  try{
@@ -16,11 +17,11 @@ test('production fails closed and password recovery CLI has no secret output',as
   const password='Fictional-config-password-91';
   const cli=(command,input=password)=>spawnSync(process.execPath,['scripts/account-admin.mjs',command,'--email','config@example.invalid'],{cwd,input:input+'\n',encoding:'utf8',env:{...process.env,HEALTH_DATA_DIR:dir}});
   assert.equal(cli('create-admin','short').status,1);const created=cli('create-admin');assert.equal(created.status,0,created.stderr);assert.ok(!created.stdout.includes(password));assert.equal(cli('create-admin').status,1);assert.equal(cli('reset-password').status,0);
-  const proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,NODE_ENV:'production',AUTH_REQUIRED:'0',APP_ORIGIN:'https://example.invalid',PORT:'3198',HEALTH_DATA_DIR:dir},stdio:'ignore'});
+  const server=await startServer({cwd,env:{NODE_ENV:'production',AUTH_REQUIRED:'0',APP_ORIGIN:'https://example.invalid',HEALTH_DATA_DIR:dir}});port=server.port;
   try{
-   for(let i=0;i<100;i++){try{if((await request('/healthz')).ok)break;}catch{}await new Promise(r=>setTimeout(r,30));}
+   assert.equal((await request('/healthz')).status,200);
    const login=await request('/api/auth/login',{method:'POST',headers:{Host:'example.invalid',Origin:'https://example.invalid','Content-Type':'application/json'},body:JSON.stringify({email:'config@example.invalid',password})});assert.equal(login.status,200);const cookie=login.cookie;for(const flag of ['Secure','HttpOnly','SameSite=Lax'])assert.ok(cookie.includes(flag));assert.equal((await request('/api/state')).status,401);
-  }finally{proc.kill();await new Promise(r=>proc.once('exit',r));}
+  }finally{await server.stop();}
  }finally{await rm(dir,{recursive:true,force:true});}
 });
 

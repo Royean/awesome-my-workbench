@@ -4,14 +4,15 @@ import {spawn} from 'node:child_process';
 import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-const remote=process.env.WORKBENCH_TEST_URL,port=3107,base=remote||`http://127.0.0.1:${port}`,cwd=path.resolve(import.meta.dirname,'..');
-if(!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base)||base.endsWith(':3100'))throw Error('Only isolated loopback preview allowed');
+let remote=process.env.WORKBENCH_TEST_URL,base=remote,cwd=path.resolve(import.meta.dirname,'..');
+import {startServer,stopProcess} from './helpers.mjs';
+if(remote&&(!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base)||base.endsWith(":3100")))throw Error('Only isolated loopback preview allowed');
 const user='fictional-workbench-'+crypto.randomUUID();let dir,proc,date,custom;
 async function api(route,{method='GET',body,workbench='health',space='personal',userId=user}={}){const r=await fetch(base+route+(route.includes('?')?'&':'?')+new URLSearchParams({workbench,space}),{method,headers:{'Content-Type':'application/json',...(remote?{'oai-authenticated-user-id':userId,'oai-authenticated-user-email':userId+'@example.invalid'}:{})},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()}}
 const add=(kind,workbench='health',extra={})=>api('/api/items',{method:'POST',workbench,body:{kind,title:'虚构工作台验收',date,...extra}});
-async function start(){proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,PORT:String(port),HEALTH_DATA_DIR:dir},stdio:'ignore'});for(let n=0;n<100;n++){if(proc.exitCode!==null)throw Error('isolated server exited');try{if((await api('/api/state')).status===200)return}catch{}await new Promise(r=>setTimeout(r,50))}throw Error('isolated start timeout')}
-async function stop(){if(proc?.exitCode===null){proc.kill();await new Promise(r=>proc.once('exit',r))}}
-before(async()=>{if(!remote){try{await fetch(base);throw Error('test port occupied')}catch(e){if(e.message==='test port occupied')throw e}dir=await mkdtemp(path.join(os.tmpdir(),'workbench-isolation-'));await start()}date=(await api('/api/state')).body.today});
+async function start(){const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;}
+async function stop(){await stopProcess(proc);proc=undefined;}
+before(async()=>{if(!remote){dir=await mkdtemp(path.join(os.tmpdir(),'workbench-isolation-'));await start()}date=(await api('/api/state')).body.today});
 after(async()=>{if(!remote){await stop();await rm(dir,{recursive:true,force:true})}});
 test('builtins, registration validation, space independence and persistence',async()=>{
  assert.deepEqual((await api('/api/workbenches')).body.workbenches.map(x=>x.id),['health','finance']);

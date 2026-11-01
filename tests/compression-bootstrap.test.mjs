@@ -7,19 +7,19 @@ import net from 'node:net';
 import os from 'node:os';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import { startServer, stopProcess, freePort } from './helpers.mjs';
 
 const cwd = path.resolve(import.meta.dirname, '..'), password = 'Fictional-only-passphrase-91';
 const procs = [], dirs = [];
-const freePort = () => new Promise(resolve => { const s = net.createServer(); s.listen(0, '127.0.0.1', () => { const { port } = s.address(); s.close(() => resolve(port)); }); });
+// Each server gets its own temp dir; non-auth servers listen on port 0, auth servers (APP_ORIGIN needs the port) reserve one and retry on EADDRINUSE.
 async function start(auth) {
   const dir = await mkdtemp(path.join(os.tmpdir(), 'workbench-perf-')); dirs.push(dir);
-  const port = await freePort(), base = `http://127.0.0.1:${port}`;
   if (auth) { const r = spawnSync(process.execPath, ['scripts/account-admin.mjs', 'create-admin', '--email', 'admin@example.invalid', '--name', 'Fictional admin'], { cwd, input: password + '\n', encoding: 'utf8', env: { ...process.env, HEALTH_DATA_DIR: dir } }); assert.equal(r.status, 0, r.stderr); }
-  const proc = spawn(process.execPath, ['server.mjs'], { cwd, env: { ...process.env, NODE_ENV: 'test', AUTH_REQUIRED: auth ? '1' : '0', APP_ORIGIN: auth ? base : '', HOST: '127.0.0.1', PORT: String(port), HEALTH_DATA_DIR: dir }, stdio: 'ignore' }); procs.push(proc);
-  for (let i = 0; i < 100; i++) { try { if ((await fetch(base + '/healthz')).ok) return base; } catch {} await new Promise(r => setTimeout(r, 50)); }
-  throw Error('server timeout');
+  const env = { NODE_ENV: 'test', AUTH_REQUIRED: auth ? '1' : '0', APP_ORIGIN: '', HOST: '127.0.0.1', HEALTH_DATA_DIR: dir };
+  if (!auth) { const s = await startServer({ cwd, env }); procs.push(s.proc); return s.base; }
+  let last; for (let i = 0; i < 5; i++) { const port = await freePort(); try { const s = await startServer({ cwd, env: { ...env, APP_ORIGIN: 'http://127.0.0.1:' + port, PORT: String(port) } }); procs.push(s.proc); return s.base; } catch (e) { last = e; if (!/EADDRINUSE/.test(e.message)) throw e; } } throw last;
 }
-after(async () => { for (const p of procs) if (p.exitCode === null) { p.kill(); await new Promise(r => p.once('exit', r)); } for (const d of dirs) await rm(d, { recursive: true, force: true }); });
+after(async () => { for (const p of procs) await stopProcess(p); for (const d of dirs) await rm(d, { recursive: true, force: true }); });
 // fetch() always sends its own Accept-Encoding and decodes; use raw http to control negotiation.
 const raw = (base, route, headers = {}, method = 'GET') => new Promise((resolve, reject) => { http.request(base + route, { method, headers }, res => { const chunks = []; res.on('data', c => chunks.push(c)); res.on('end', () => resolve({ status: res.statusCode, headers: res.headers, body: Buffer.concat(chunks) })); }).on('error', reject).end(); });
 

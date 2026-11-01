@@ -4,10 +4,11 @@ import {spawn} from 'node:child_process';
 import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-const cwd=path.resolve(import.meta.dirname,'..'),port=Number(process.env.MEDICAL_TEST_PORT||3102),base=`http://127.0.0.1:${port}`;
+let cwd=path.resolve(import.meta.dirname,'..'),base=undefined;
+import {startServer,stopProcess} from './helpers.mjs';
 let dir,proc,date;
-async function start(){proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,PORT:String(port),HEALTH_DATA_DIR:dir},stdio:'ignore'});for(let n=0;n<100;n++){try{const r=await fetch(base+'/api/state');if(r.ok){date=(await r.json()).today;return}}catch{}await new Promise(r=>setTimeout(r,50))}throw Error('isolated server did not start')}
-async function stop(){if(proc?.exitCode===null){proc.kill();await new Promise(r=>proc.once('exit',r))}}
+async function start(){const s=await startServer({cwd,env:{HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;date=(await (await fetch(base+'/api/state')).json()).today;}
+async function stop(){await stopProcess(proc);proc=undefined;}
 async function api(route,method='GET',body,space='personal'){const r=await fetch(base+route+(route.includes('?')?'&':'?')+'space='+space,{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});return {status:r.status,body:await r.json()}}
 const add=async(kind,extra={},space='personal')=>{const r=await api('/api/items','POST',{kind,title:'独立验收虚构记录',date,...extra},space);assert.equal(r.status,201,JSON.stringify(r.body));return r.body};
 const update=(x,b)=>api('/api/items/'+x.id,'PUT',b);

@@ -6,11 +6,13 @@ import {DatabaseSync} from 'node:sqlite';
 import os from 'node:os';
 import http from 'node:http';
 import path from 'node:path';
-const cwd=path.resolve(import.meta.dirname,'..'),port=3197,base=`http://127.0.0.1:${port}`,password='Fictional-only-passphrase-91';
+import {startServer,stopProcess,freePort,waitFor} from './helpers.mjs';
+import {createLimiter} from '../lib/accounts.mjs';
+let base;const cwd=path.resolve(import.meta.dirname,'..'),password='Fictional-only-passphrase-91';
 let dir,proc,adminCookie,userCookie,userId,adminId;
-const delay=ms=>new Promise(r=>setTimeout(r,ms));
-async function start(){proc=spawn(process.execPath,['server.mjs'],{cwd,env:{...process.env,NODE_ENV:'test',AUTH_REQUIRED:'1',APP_ORIGIN:base,PORT:String(port),HEALTH_DATA_DIR:dir},stdio:'pipe'});let err='';proc.stderr.on('data',x=>err+=x);for(let i=0;i<100;i++){if(proc.exitCode!==null)throw Error(err);try{if((await fetch(base+'/healthz')).ok)return;}catch{}await delay(50);}throw Error('server timeout');}
-async function stop(){if(proc?.exitCode===null){proc.kill();await new Promise(r=>proc.once('exit',r));}}
+// APP_ORIGIN must include the port, so reserve one per start; retry only if another process grabbed it.
+async function start(){let last;for(let attempt=0;attempt<5;attempt++){const port=await freePort();const origin=`http://127.0.0.1:${port}`;try{const s=await startServer({cwd,env:{NODE_ENV:'test',AUTH_REQUIRED:'1',APP_ORIGIN:origin,PORT:String(port),HEALTH_DATA_DIR:dir}});proc=s.proc;base=s.base;return;}catch(e){last=e;if(!/EADDRINUSE/.test(e.message))throw e;}}throw last;}
+async function stop(){await stopProcess(proc);proc=undefined;}
 async function api(route,{method='GET',body,cookie=adminCookie,origin=base,headers={}}={}){const response=await fetch(base+route,{method,headers:{'Content-Type':'application/json',Origin:origin,...(cookie?{Cookie:cookie}:{}),...headers},body:body===undefined?undefined:JSON.stringify(body)});const value=await response.json();return {status:response.status,body:value,cookie:response.headers.get('set-cookie')?.split(';')[0]};}
 const login=(email='admin@example.invalid')=>api('/api/auth/login',{method:'POST',body:{email,password},cookie:null});
 before(async()=>{dir=await mkdtemp(path.join(os.tmpdir(),'auth-workbench-'));const legacy=new DatabaseSync(path.join(dir,'health.sqlite'));legacy.exec("CREATE TABLE items(id TEXT PRIMARY KEY,space TEXT NOT NULL,kind TEXT NOT NULL,body TEXT NOT NULL); CREATE TABLE workbenches(id TEXT PRIMARY KEY,name TEXT NOT NULL,type TEXT NOT NULL); INSERT INTO items VALUES('legacy-private','personal','note','{\"title\":\"Legacy private\",\"date\":\"2026-10-30\"}'); INSERT INTO workbenches VALUES('legacy-custom','Legacy custom','other');");legacy.close();const setup=spawnSync(process.execPath,['scripts/account-admin.mjs','create-admin','--email','admin@example.invalid','--name','Fictional admin'],{cwd,input:password+'\n',encoding:'utf8',env:{...process.env,HEALTH_DATA_DIR:dir}});assert.equal(setup.status,0,setup.stderr);assert.ok(!setup.stdout.includes(password));await start();});
@@ -55,10 +57,11 @@ test('password/session revocation, user disable, reset invitation and last admin
 test('revoking an authenticated session or disabling a user during a streamed body prevents writes',async()=>{
  async function pending(cookie){
   const db=new DatabaseSync(path.join(dir,'health.sqlite'));const session=db.prepare('SELECT id,last_seen_at FROM sessions WHERE token_hash=?').get((await import('../lib/accounts.mjs')).digest(cookie.split('=')[1]));
-  await delay(5);
+  // last_seen_at must be observably newer once the server authenticates this request.
+  await waitFor(()=>Date.now()>session.last_seen_at);
   let resolveResponse,rejectResponse;const response=new Promise((resolve,reject)=>{resolveResponse=resolve;rejectResponse=reject;});
   const req=http.request(base+'/api/items',{method:'POST',headers:{Origin:base,'Content-Type':'application/json',Cookie:cookie}},res=>{let value='';res.on('data',x=>value+=x);res.on('end',()=>resolveResponse({status:res.statusCode,body:JSON.parse(value)}));});req.on('error',rejectResponse);req.write('{');
-  let started=false;for(let i=0;i<100;i++){if(db.prepare('SELECT last_seen_at FROM sessions WHERE id=?').get(session.id)?.last_seen_at>session.last_seen_at){started=true;break;}await delay(10);}db.close();assert.ok(started,'server must authenticate before revocation');
+  try{await waitFor(()=>db.prepare('SELECT last_seen_at FROM sessions WHERE id=?').get(session.id)?.last_seen_at>session.last_seen_at,{timeoutMs:10000,message:'server must authenticate before revocation'});}finally{db.close();}
   return {req,response,sessionId:session.id};
  }
  const body='"kind":"note","title":"Revoked in flight","date":"2026-10-30"}';
@@ -73,13 +76,25 @@ test('revoking an authenticated session or disabling a user during a streamed bo
  const users=(await api('/api/auth/users')).body.users;assert.equal(users.find(x=>x.id===adminId).activated,true);assert.equal(users.find(x=>x.email==='expired@example.invalid').activated,false);assert.ok(!JSON.stringify(users).includes('password_hash'));
 });
 test('hash concurrency is bounded and session deletion cannot cross accounts',async()=>{
- const results=await Promise.all([login(),login(),login()]);assert.equal(results.filter(x=>x.status===503).length,1);assert.equal(results.filter(x=>x.status===200).length,2);
+ // Exact 503 counts depend on scheduling; the limiter itself is verified deterministically below.
+ const results=await Promise.all([login(),login(),login()]);assert.ok(results.every(x=>[200,503].includes(x.status)));assert.ok(results.some(x=>x.status===200));
  const member=await login('member@example.invalid');const otherSession=(await api('/api/auth/sessions',{cookie:member.cookie})).body.sessions[0];
  assert.equal((await api('/api/auth/sessions/'+otherSession.id,{method:'DELETE',body:{}})).status,404);
  assert.equal((await api('/api/auth/sessions/'+otherSession.id,{method:'DELETE',cookie:member.cookie,body:{}})).status,200);
  assert.equal((await api('/api/state',{cookie:member.cookie})).status,401);
 });
+test('hash limiter rejects beyond capacity without timing assumptions',async()=>{
+ const gates=[];const limited=createLimiter(2,()=>new Promise(r=>gates.push(r)));
+ const a=limited(),b=limited();assert.equal(limited.active,2);
+ await assert.rejects(limited(),e=>e.status===503);
+ gates[0]('a');assert.equal(await a,'a');assert.equal(limited.active,1);
+ const c=limited();assert.equal(limited.active,2);gates[1]('b');gates[2]('c');assert.deepEqual([await b,await c],['b','c']);assert.equal(limited.active,0);
+});
 test('rate limit survives restart',async()=>{
- for(let i=0;i<5;i++)assert.equal((await api('/api/auth/login',{method:'POST',body:{email:'missing@example.invalid',password:'invalid'}})).status,401);
- await stop();await start();assert.equal((await api('/api/auth/login',{method:'POST',body:{email:'missing@example.invalid',password:'invalid'}})).status,429);
+ // Own data dir and server so earlier tests' failed attempts cannot affect counters.
+ const own=await mkdtemp(path.join(os.tmpdir(),'auth-ratelimit-'));const saved={dir,proc,base};await stop();dir=own;
+ try{await start();
+ for(let i=0;i<5;i++)assert.equal((await api('/api/auth/login',{method:'POST',cookie:null,body:{email:'missing@example.invalid',password:'invalid'}})).status,401);
+ await stop();await start();assert.equal((await api('/api/auth/login',{method:'POST',cookie:null,body:{email:'missing@example.invalid',password:'invalid'}})).status,429);
+ }finally{await stop();await rm(own,{recursive:true,force:true});dir=saved.dir;}
 });

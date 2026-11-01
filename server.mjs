@@ -73,6 +73,10 @@ function validate(kind,b,opts={}){
   clean.value=Number(b.value);clean.unit=units[clean.type];
   if(clean.type==='pressure'){if(!Number.isFinite(Number(b.secondary))||Number(b.secondary)<=0||Number(b.secondary)>=clean.value)throw bad('舒张压需大于 0 且低于收缩压');clean.secondary=Number(b.secondary);}
  }
+ if(kind==='visit'){
+  for(const key of ['city','hospitalId']){if(b[key]!==undefined&&b[key]!==null&&typeof b[key]!=='string')throw bad(key==='city'?'就诊城市格式无效':'医院编号格式无效',key);clean[key]=String(b[key]||'').trim();if(clean[key].length>100)throw bad(key==='city'?'就诊城市最多 100 个字':'医院编号最多 100 个字符',key);}
+  if(clean.hospitalId&&!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(clean.hospitalId))throw bad('医院编号格式无效','hospitalId');
+ }
  if(kind==='visit')for(const key of ['doctor','reason','assessment','instructions'])clean[key]=String(b[key]||'').slice(0,8000);
  if(kind==='report'){
   clean.type=String(b.type||'就诊记录');if(!['就诊记录','检验报告','影像报告','处方','出院记录','其他'].includes(clean.type))throw bad('报告分类无效');
@@ -82,6 +86,8 @@ function validate(kind,b,opts={}){
   if(clean.status==='已归档'&&!clean.content.trim()&&!clean.fileId)throw bad('归档报告需要原文或附件');
  }
  if(kind==='medication'){
+  if(b.imageFileId!==undefined&&b.imageFileId!==null&&typeof b.imageFileId!=='string')throw bad('药品图片编号格式无效','imageFileId');
+  clean.imageFileId=String(b.imageFileId||'').trim();if(clean.imageFileId.length>100)throw bad('药品图片编号过长','imageFileId');
   if(!clean.visitId)throw bad('请选择关联就诊');
   for(const key of ['dosage','route','frequency','prescriber'])clean[key]=String(b[key]||'').trim().slice(0,250);
   if(!clean.dosage||!clean.route||!clean.frequency)throw bad('请按处方填写单次用量、用药途径和频次');
@@ -126,6 +132,11 @@ function put(space,kind,body,id=randomUUID(),via){
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw bad('关联就诊不存在或不在当前空间');}
  if(kind==='file'&&clean.visitId){const conflict=getAll(space).find(x=>x.kind==='report'&&x.fileId===id&&x.visitId!==clean.visitId);if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联');}
  if(kind==='report'&&clean.fileId){const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.fileId,space);if(!f){if(original.fileId!==clean.fileId)throw bad('关联原件不存在或不在当前空间')}else{const file=JSON.parse(f.body);if(file.visitId&&file.visitId!==clean.visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料');}}
+ if(kind==='medication'&&clean.imageFileId){
+  const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.imageFileId,space);
+  if(!f){if(original.imageFileId!==clean.imageFileId)throw bad('药品图片不存在或不在当前空间','imageFileId');}
+  else if(!['image/png','image/jpeg','image/webp'].includes(JSON.parse(f.body).mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP','imageFileId');
+ }
  if(kind==='meal')for(const fileId of clean.attachmentIds){if(!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space)&&!(original.attachmentIds||[]).includes(fileId))throw bad('餐食附件不存在或不在当前空间');}
  if(kind==='dose'){
   const medRow=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='medication'").get(clean.medicationId,space);if(!medRow)throw bad('用药方案不存在或不在当前空间');const med=JSON.parse(medRow.body);
@@ -219,7 +230,7 @@ if(!db.prepare('SELECT key FROM app_meta WHERE key=?').get('medical-demo-v1')){
 }
 const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'});res.end(JSON.stringify(body))};
 async function readBody(req){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>15*1024*1024){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
-const mime={'.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
+const mime={'.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 // Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings
 // (verified against the source hash) or are compressed once and kept in memory; mutable files are compressed per request.
@@ -279,7 +290,17 @@ function attachReportFile(space,{reportId,fileId}){
  db.exec('BEGIN IMMEDIATE');try{put(space,'file',{...file,visitId:report.visitId},fileId,'mcp');const updated=put(space,'report',{...report,fileId},reportId,'mcp');db.exec('COMMIT');return updated;}
  catch(e){if(db.isTransaction)db.exec('ROLLBACK');throw e;}
 }
-const mcp=createMcp({db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile});
+function attachMedicationImage(space,{medicationId,fileId}){
+ const medication=getAll(space).find(x=>x.id===medicationId&&x.kind==='medication');
+ const file=getAll(space).find(x=>x.id===fileId&&x.kind==='file');
+ if(!medication||!file)throw bad('没有找到用药方案或图片，请重新查询');
+ if(!['image/png','image/jpeg','image/webp'].includes(file.mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP');
+ if(medication.imageFileId&&medication.imageFileId!==fileId)throw bad('用药已有其他图片，请到网页核对后调整');
+ if(!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw bad('文件内容缺失');
+ if(medication.imageFileId===fileId)return medication;
+ return put(space,'medication',{...medication,imageFileId:fileId},medicationId,'mcp');
+}
+const mcp=createMcp({db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
 const mcpRate=new Map();const MCP_RATE=Number(process.env.MCP_RATE_PER_MINUTE||120);
 async function handleMcp(req,res){
  const unauthorized=(code,message)=>{res.writeHead(401,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','WWW-Authenticate':`Bearer realm="zhiheng", error="invalid_token"`});res.end(JSON.stringify({error:message,code}));};

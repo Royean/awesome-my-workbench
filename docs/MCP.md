@@ -33,7 +33,7 @@
 
 | kind | 读 | 可写字段 | 规则 |
 |---|---|---|---|
-| `visit` 就诊 | 全部文字字段 | title/date/time/note/hospital/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
+| `visit` 就诊 | 全部文字字段 | title/date/time/note/hospital/hospitalId/city/department/status/doctor/reason/assessment/instructions | `status`：待就诊/已完成/待复查；新建时不填则未来日期为「待就诊」、否则「已完成」（网页要求必填状态，MCP 只是补默认值）。日期规则与网页一致：任何状态都可以是未来日期 |
 | `report` 报告 | 全部文字字段（含 `content` 原文、检查数值）；原件只给 `attachment: {name, type}` | title/date/time/note/visitId/type/status/source/content | 必须关联本空间已有的就诊（`visitId`）；日期可以是未来 |
 | `medication` 用药 | dosage/route/frequency/times/scheduleMode/status/endDate/prescriber 等 | title/date/note/visitId/dosage/route/frequency/prescriber/status/endDate/scheduleMode/times | 必须关联已有就诊；开始/结束日期可以是未来 |
 | `dose` 服药 | outcome/time/scheduledTime/medicationId 等 | 新建：medicationId/date/time/scheduledTime/outcome/note/title（title 默认取药名）；修改：**只能** outcome/time/note | `outcome` 为「已服用」（默认，需 `time`）或「跳过」（需在 `note` 写原因，`time` 会被清空，缺原因报「跳过要写原因，比如『忘带药』」）；规则与网页相同；不能记未来日期 |
@@ -149,7 +149,7 @@ bearer_token_env_var = "ZHIHENG_TOKEN"
 
 ## 报告原件上传
 
-新增 3 个工具（总计 15 个，以 tools/list 为准）：
+附件相关工具（总计 16 个，以 tools/list 为准）：
 
 - `upload_attachment`: `name`、标准 `contentBase64`、原件 `sha256` 必填；可填 `date`、`title`、`note` 和工作台/空间。仅健康工作台，PDF、PNG、JPG/JPEG、WEBP、TXT，0 < size ≤ 10MiB。文件名不得含路径/控制字符，解码后校验 SHA-256。服务器生成存储名，0600保存。响应只有安全元数据、编号、摘要和 reused，永不回传内容或磁盘路径。
 - `list_attachments`: 同账号同工作台同空间，默认50、最多200个原件，返回 total/returned/files，只为返回页读取摘要。遗失原件显示 missing=true、sha256=null，不令整个列表失败。
@@ -157,6 +157,15 @@ bearer_token_env_var = "ZHIHENG_TOKEN"
 
 所有写入前须复述文件名、检查日期、目标工作台及关联报告并获得用户确认。批量可一次列明范围确认，不能自行补充诊断、处方或完成状态。不会从用户提供的远程URL代为抓取文件，调用方先读取原件，校验来源后编码。
 
-上传重试：同空间、同文件名、同日期、同标题、同备注、同实际字节复用已有原件，返回相同编号。不会覆盖或恢复已删除原件；更改备注/标题视为新资料。传输失败先查询再重试；报告关联重复调用不会改变时间戳。普通记录仍禁止直接写 fileId/attachmentIds，需使用专用关联工具。上传不创建就诊或报告。
+上传重试：同空间、同文件名、同日期、同标题、同备注、同实际字节复用已有原件，返回相同编号。不会覆盖或恢复已删除原件；更改备注/标题视为新资料。传输失败先查询再重试；报告关联重复调用不会改变时间戳。普通记录仍禁止直接写 fileId/imageFileId/attachmentIds，需使用专用关联工具。上传不创建就诊或报告。
 
 文件落盘/登记失败会回滚事务并清理本次新建文件；上传错误不记录原件内容或访问令牌。无新增数据库迁移；网页原件下载的账号隔离与安全响应头保持生效。
+
+
+## 就诊机构、实际城市与药品图片
+
+就诊的 `hospital` 保持自由文字；`hospitalId` 是可空目录编号（去除首尾空格，最多 100 字符，仅英数字及 `._-`，首字符英数字），不要求绑定当前目录，以便将来扩充。`city` 是可空的实际就诊城市（去除首尾空格，最多 100 字），不从连锁机构总部推断。两字段只用于 visit，网页与 MCP 均可读写，不自动迁移或补全历史记录。
+
+网页 medication 可写 `imageFileId`，传 null 或空字符串清除。图片必须是同一账号、工作台和数据空间内现存 file，MIME 限 PNG/JPEG/WebP；PDF、音频及跨空间编号均拒绝。上传复用 `/api/upload`，分类可为「药品图片」。删除图片后，未更换原关联的用药编辑可保留历史编号；新关联不能使用已删除编号。
+
+`attach_medication_image` 接受 `medicationId`、`fileId` 和通用作用域参数。可复用 `upload_attachment` 上传图片后关联已有用药，无需新建用药。只添加图片，同一图片重试不改时间戳，已有不同图片时拒绝并提示到网页核对；不会修改处方剂量、频次、服用时间。写入前复述药名、剂量、时间及图片名称、目标空间，用户明确回答「对」后调用。MCP 用药响应仅给 `image: {name, type}`，不返回 imageFileId 或存储路径；关联图片已删除时 image 为 null。

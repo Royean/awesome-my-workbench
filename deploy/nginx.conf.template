@@ -9,11 +9,20 @@ server {
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
+    http2 on;
     server_name WORKBENCH_DOMAIN;
     ssl_certificate /etc/letsencrypt/live/WORKBENCH_DOMAIN/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/WORKBENCH_DOMAIN/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
     client_max_body_size 16m;
+    # Compression: Node already serves br/gzip for text assets (Vary: Accept-Encoding);
+    # gzip_proxied any lets nginx compress proxied text responses Node left uncompressed.
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_min_length 256;
+    gzip_types application/javascript text/javascript text/css application/json application/manifest+json image/svg+xml;
     add_header X-Content-Type-Options nosniff always;
     add_header Referrer-Policy no-referrer always;
     add_header Strict-Transport-Security "max-age=31536000" always;

@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import zlib from 'node:zlib';
 
 const styles = ['style.css', 'minimal.css', 'daily.css', 'mobile.css', 'account.css'];
 const sha256 = content => createHash('sha256').update(content).digest('hex');
@@ -82,6 +83,12 @@ export async function buildPublic(publicDir = path.resolve(import.meta.dirname, 
   // Retain old hashes: an open tab or a deployment in progress may still need them.
   await fs.writeFile(path.join(publicDir, jsPath.slice(1)), javascript);
   await fs.writeFile(path.join(publicDir, cssPath.slice(1)), css);
+  // Pre-compressed siblings for server.mjs and nginx gzip_static; deterministic for identical input.
+  for (const [asset, content] of [[jsPath, javascript], [cssPath, css]]) {
+    const file = path.join(publicDir, asset.slice(1)), bytes = Buffer.from(content);
+    await fs.writeFile(file + '.br', zlib.brotliCompressSync(bytes, { params: { [zlib.constants.BROTLI_PARAM_QUALITY]: 11, [zlib.constants.BROTLI_PARAM_SIZE_HINT]: bytes.length } }));
+    await fs.writeFile(file + '.gz', zlib.gzipSync(bytes, { level: 9 }));
+  }
   const temporaryIndex = path.join(publicDir, 'index.html.build');
   await fs.writeFile(temporaryIndex, html);
   await fs.rename(temporaryIndex, path.join(publicDir, 'index.html'));

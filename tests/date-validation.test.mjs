@@ -32,9 +32,32 @@ test('bad dates return 400 with the Chinese message and field, never "Invalid ti
  const visit=await api('/api/items','POST',{kind:'visit',title:'虚构就诊',date:'2026-10-01',status:'已完成'});assert.equal(visit.status,201);
  const med={kind:'medication',title:'虚构药',date:'2026-10-01',visitId:visit.body.id,dosage:'1',route:'口服',frequency:'每日',times:['08:00']};
  const bad=await api('/api/items','POST',{...med,endDate:'2026-02-30'});assert.equal(bad.status,400);assert.deepEqual(bad.body,{error:MESSAGE,field:'endDate'});
- const early=await api('/api/items','POST',{...med,endDate:'2026-09-01'});assert.equal(early.status,400);assert.equal(early.body.error,'结束日期不能早于开始日期');
+ const early=await api('/api/items','POST',{...med,endDate:'2026-09-01'});assert.equal(early.status,400);assert.deepEqual(early.body,{error:'结束日期不能早于开始日期',field:'endDate'});
  const note=await api('/api/items','POST',{kind:'note',title:'虚构',date:'2026-11-01'});assert.equal(note.status,201);
  const upd=await api('/api/items/'+note.body.id,'PUT',{date:'2026-11-31'});assert.deepEqual(upd.body,{error:MESSAGE,field:'date'});
+});
+
+test('malformed structured input returns 400 business errors, never 500',async()=>{
+ const base={title:'虚构',date:'2026-11-01'};
+ const ex={kind:'exercise',...base,duration:30};
+ const cases=[
+  ['/api/items',{...ex,exercises:[null]},'exercises'],
+  ['/api/items',{...ex,exercises:['深蹲']},'exercises'],
+  ['/api/items',{...ex,exercises:[[1,2]]},'exercises'],
+  ['/api/items',{...ex,exercises:[42]},'exercises'],
+  ['/api/items',{...ex,exercises:{name:'x'}},'exercises'],
+  ['/api/items',{kind:'favorite',...base,targetKind:'meal',template:null},'template'],
+  ['/api/items',{kind:'favorite',...base,targetKind:'exercise',template:[1]},'template'],
+  ['/api/items',{kind:'favorite',...base,targetKind:'exercise',template:{duration:30,exercises:[null]}},'exercises'],
+  ['/api/capture-meal',{text:'虚构',attachments:[null]},'attachments'],
+  ['/api/capture-meal',{text:'虚构',attachments:['x.png']},'attachments'],
+  ['/api/capture-meal',{text:'虚构',attachments:{name:'x.png'}},'attachments'],
+  ['/api/capture-meal',{text:'虚构',keepAttachmentIds:[null]},undefined],
+  ['/api/items',{kind:'meal',...base,attachmentIds:[null]},undefined],
+ ];
+ for(const [route,body,field] of cases){const r=await api(route,'POST',body);assert.equal(r.status,400,JSON.stringify(body)+' -> '+r.text);assert.match(r.body.error,/[\u4e00-\u9fff]/);if(field)assert.equal(r.body.field,field,JSON.stringify(body));}
+ const visit=await api('/api/items','POST',{kind:'visit',...base,status:'已完成'});
+ for(const times of [[null],[{}],'08:00',[8]]){const r=await api('/api/items','POST',{kind:'medication',...base,visitId:visit.body.id,dosage:'1',route:'口服',frequency:'每日',times});assert.equal(r.status,400);assert.equal(r.body.field,'times');}
 });
 
 test('unexpected errors return a generic Chinese 500 without internal details',async()=>{

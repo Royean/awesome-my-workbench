@@ -31,6 +31,7 @@ const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?')
 const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note'];
 import { isValidDate as validDate, DATE_ERROR } from './lib/dates.mjs';
 const bad=(message,field)=>Object.assign(new Error(message),{status:400,expose:true,...(field?{field}:{})});
+const isPlainObject=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const dateError=field=>bad(DATE_ERROR,field);
 const validTime=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分'};
@@ -45,12 +46,12 @@ function validate(kind,b){
  if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw bad('运动时长需大于0且不超过1440分钟');clean.duration=Number(b.duration);
   if(b.distance!==undefined&&b.distance!==''){if(!Number.isFinite(Number(b.distance))||Number(b.distance)<=0||Number(b.distance)>1000)throw bad('距离需大于0且不超过1000公里');clean.distance=Number(b.distance);}
   clean.feeling=String(b.feeling||'');if(!['','轻松','适中','吃力','不适'].includes(clean.feeling))throw bad('身体感受选项无效');
-  if(b.exercises!==undefined&&(!Array.isArray(b.exercises)||b.exercises.length>30))throw bad('最多记录30个训练动作');
-  clean.exercises=(b.exercises||[]).map(m=>{const name=String(m.name||'').trim();const sets=Number(m.sets),reps=Number(m.reps),weight=Number(m.weight||0);if(!name||name.length>100||!Number.isInteger(sets)||sets<1||sets>100||!Number.isInteger(reps)||reps<1||reps>500||!Number.isFinite(weight)||weight<0||weight>1000)throw bad('请完整填写动作、组数、次数和有效重量（可为0）');return {name,sets,reps,weight}});
+  if(b.exercises!==undefined&&(!Array.isArray(b.exercises)||b.exercises.length>30))throw bad('最多记录30个训练动作','exercises');
+  if((b.exercises||[]).some(m=>!isPlainObject(m)))throw bad('训练动作格式无效，每个动作需包含名称、组数和次数','exercises');clean.exercises=(b.exercises||[]).map(m=>{const name=String(m.name||'').trim();const sets=Number(m.sets),reps=Number(m.reps),weight=Number(m.weight||0);if(!name||name.length>100||!Number.isInteger(sets)||sets<1||sets>100||!Number.isInteger(reps)||reps<1||reps>500||!Number.isFinite(weight)||weight<0||weight>1000)throw bad('请完整填写动作、组数、次数和有效重量（可为0）');return {name,sets,reps,weight}});
  }
  if(kind==='water'){if(!Number.isFinite(Number(b.volume))||Number(b.volume)<=0||Number(b.volume)>5000)throw bad('饮水量需大于0且不超过5000毫升');clean.volume=Number(b.volume);}
  if(kind==='favorite'){
-  if(!['meal','exercise'].includes(b.targetKind))throw bad('收藏类型无效');clean.targetKind=b.targetKind;clean.sourceId=String(b.sourceId||'').slice(0,100);
+  if(b.template!==undefined&&!isPlainObject(b.template))throw bad('收藏模板格式无效','template');if(!['meal','exercise'].includes(b.targetKind))throw bad('收藏类型无效');clean.targetKind=b.targetKind;clean.sourceId=String(b.sourceId||'').slice(0,100);
   const t=validate(b.targetKind,{...b.template,title:b.template?.title||clean.title,date:clean.date});delete t.date;delete t.time;delete t.attachmentIds;delete t.rawText;delete t.visitId;clean.template=t;
  }
 
@@ -73,10 +74,10 @@ function validate(kind,b){
   for(const key of ['dosage','route','frequency','prescriber'])clean[key]=String(b[key]||'').trim().slice(0,250);
   if(!clean.dosage||!clean.route||!clean.frequency)throw bad('请按处方填写单次用量、用药途径和频次');
   clean.status=String(b.status||'进行中');if(!['进行中','已停用','已完成'].includes(clean.status))throw bad('用药状态无效');
-  clean.endDate=String(b.endDate||'');if(clean.endDate&&!validDate(clean.endDate))throw dateError('endDate');if(clean.endDate&&clean.endDate<clean.date)throw bad('结束日期不能早于开始日期');
+  clean.endDate=String(b.endDate||'');if(clean.endDate&&!validDate(clean.endDate))throw dateError('endDate');if(clean.endDate&&clean.endDate<clean.date)throw bad('结束日期不能早于开始日期','endDate');
   clean.scheduleMode=b.scheduleMode==='asNeeded'?'asNeeded':'scheduled';
   if(clean.scheduleMode==='scheduled'){
-   if(!Array.isArray(b.times)||b.times.length<1||b.times.length>12||b.times.some(t=>!validTime(t))||new Set(b.times).size!==b.times.length)throw bad('请填写1–12个不重复的有效服用时间');
+   if(!Array.isArray(b.times)||b.times.length<1||b.times.length>12||b.times.some(t=>!validTime(t))||new Set(b.times).size!==b.times.length)throw bad('请填写1–12个不重复的有效服用时间','times');
    clean.times=[...b.times].sort();
   }else clean.times=[];
  }
@@ -199,7 +200,7 @@ const server=http.createServer(async(req,res)=>{try{
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
   const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw bad('保留附件无效');
-  if(!Array.isArray(attachments)||attachments.length+keep.length>4)throw bad('最多保存4个附件');
+  if(!Array.isArray(attachments)||attachments.length+keep.length>4)throw bad('最多保存4个附件','attachments');if(attachments.some(a=>!isPlainObject(a)))throw bad('附件格式无效','attachments');
   const rawText=String(b.text??existing?.rawText??'');const text=rawText.trim();if(!text&&!attachments.length&&!keep.length)throw bad('写一句话、添加照片或录一段语音即可保存');
   if(rawText.length>5000)throw bad('文字最多5000个字符');
   const staged=[];let total=keep.reduce((sum,id)=>sum+(getAll(space).find(f=>f.id===id&&f.kind==='file')?.size||0),0);if(total>10*1024*1024)throw bad('附件合计不能超过10MB');

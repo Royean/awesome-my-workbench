@@ -70,7 +70,8 @@ test('list_workbenches and get_today',async()=>{
  await ok(tokenA,'create_record',{kind:'water',volume:500});await ok(tokenA,'create_record',{kind:'water',volume:250,time:'09:00'});
  const t=await ok(tokenA,'get_today',{});assert.equal(t.date,today());assert.deepEqual(t.summary.water,{totalMl:750,goalMl:2000});assert.ok(t.records.every(r=>r.date===today()));
  const f=await ok(tokenA,'get_today',{workbench:'finance'});assert.equal(f.workbench.type,'finance');
- assert.match(await err(tokenA,'get_today',{workbench:'nope'}),/没有找到这个工作台/);
+ assert.equal(await err(tokenA,'get_today',{workbench:'nope'}),'没有找到这个工作台，请从你的工作台里选一个');
+ {const e=await errc(tokenA,'get_today',{workbench:'nope'});assert.equal(e.code,'not_found');assert.equal(e.hint,'用 list_workbenches 获取可用工作台');assert.doesNotMatch(e.message,/list_workbenches/);}
 });
 test('create_record for every allowed kind, list_records filters/sorts, update_record',async()=>{
  const meal=(await ok(tokenA,'create_record',{kind:'meal',title:'燕麦粥',mealType:'早餐',date:'2026-10-01',time:'08:00',portion:'一碗'})).created;assert.equal(meal.kind,'meal');assert.ok(meal.id);
@@ -146,6 +147,19 @@ test('401 bodies carry token_missing / token_invalid; PAT on token management is
  const api=await req('/api/state',{headers:{Authorization:'Bearer zh_pat_'+'B'.repeat(43)}});assert.equal(api.status,401);assert.equal(api.body.code,'token_invalid');
  assert.equal((await req('/api/state')).body.code,'token_missing');
  const pm=await req('/api/auth/tokens',{headers:{Authorization:`Bearer ${tokenA}`}});assert.equal(pm.status,403);assert.equal(pm.body.code,'token_forbidden');
+});
+test('malformed Bearer values are token_invalid; no Bearer scheme at all is token_missing; token list keeps last4',async()=>{
+ const send=(authorization,path='/mcp')=>req(path,path==='/mcp'?{method:'POST',body:{jsonrpc:'2.0',id:1,method:'ping'},headers:{Authorization:authorization}}:{headers:{Authorization:authorization}});
+ for(const h of ['Bearer abc','Bearer wrong_'+'C'.repeat(43),'Bearer ','Bearer','bearer abc','Bearer a b']){for(const path of ['/mcp','/api/state']){const r=await send(h,path);assert.equal(r.status,401,h+path);assert.equal(r.body.code,'token_invalid',h+path);leak(r.body.error);}}
+ for(const h of ['Basic dXNlcjpwYXNz','Token zh_pat_'+'D'.repeat(43)]){for(const path of ['/mcp','/api/state']){const r=await send(h,path);assert.equal(r.status,401);assert.equal(r.body.code,'token_missing',h+path);}}
+ const t=await mint(cookieA);const list=await req('/api/auth/tokens',{headers:web(cookieA)});assert.equal(list.status,200);assert.ok(list.body.tokens.some(x=>x.last4===t.slice(-4)));
+ for(const [m,path] of [['GET','/api/auth/tokens'],['POST','/api/auth/tokens'],['DELETE','/api/auth/tokens/x']]){const r=await req(path,{method:m,body:m==='POST'?{name:'x'}:m==='DELETE'?{}:undefined,headers:{Authorization:`Bearer ${t}`}});assert.equal(r.status,403,m);assert.equal(r.body.code,'token_forbidden',m);}
+});
+test('web API validation messages are plain Chinese without field names or format codes',async()=>{
+ const wb=async b=>(await req('/api/workbenches',{method:'POST',body:b,headers:web(cookieA)})).body.error;
+ assert.equal(await wb({type:'health',name:'体检'}),'新建的工作台只能记备忘和待办');
+ assert.equal(await wb({type:'other',name:''}),'工作台名称需为1–24个字');
+ const t=await req('/api/items?space=personal&workbench=health',{method:'POST',body:{kind:'meal',title:'早餐',date:today(),time:'25:00'},headers:web(cookieA)});assert.equal(t.status,400);assert.equal(t.body.error,'时间格式不对，例如 08:30');
 });
 test('429 rate limit includes Retry-After seconds and rate_limited code',async()=>{
  const t=await mint(cookieA);let r;for(let i=0;i<125;i++){r=await rpc(t,'ping');if(r.status===429)break;}

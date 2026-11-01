@@ -33,14 +33,14 @@
 
 ## 错误约定与错误码
 
-- 工具错误（参数/业务校验失败）→ 正常的 `tools/call` 结果：`isError: true`，`content[0].text` 为给用户看的中文原因，`structuredContent.error = {code, message}`。
+- 工具错误（参数/业务校验失败）→ 正常的 `tools/call` 结果：`isError: true`，`content[0].text` 为给用户看的中文原因，`structuredContent.error = {code, message, hint?}`。`hint` 仅给助手看（如工作台不存在时为「用 list_workbenches 获取可用工作台」），不要转述给用户；给用户的文案是「没有找到这个工作台，请从你的工作台里选一个」。
 - HTTP 层错误（401/404/405/415）→ JSON 正文 `{error, code}`；JSON-RPC 层错误（400/413/429/500 等）→ `error.data.code`。
 - `message`/`error` 文案为纯中文，不含字段名、内部 id、环境变量或表达式（例：「运动时长需在 1–1440 分钟之间」「「金融」工作台只能记备忘和待办，饮水请记到「健康」工作台」「不能记录未来的日期，今天是 11月1日」）。客户端请按 `code` 判断，不要解析文案。
 
 | code | 位置 | 含义 | 建议处理 |
 |---|---|---|---|
-| `token_missing` | 401 | 没带访问令牌 | 不重试；让用户在网页生成令牌 |
-| `token_invalid` | 401 | 令牌无效或已撤销（撤销、改密码、停用账号后都是这个；令牌只存哈希，无法区分“已撤销”） | 不重试；让用户重新生成 |
+| `token_missing` | 401 | 没有 `Authorization` 头，或不是 Bearer 方式（如 `Basic …`） | 不重试；让用户在网页生成令牌 |
+| `token_invalid` | 401 | 带了 `Bearer` 但令牌不对：格式错误（如 `Bearer abc`、前缀不对、`Bearer` 后为空）、无效或已撤销（撤销、改密码、停用账号后都是这个；令牌只存哈希，无法区分“已撤销”） | 不重试；让用户重新生成 |
 | `token_forbidden` | 401（MCP 带 Cookie）/ 403（令牌访问账号与安全接口） | 这种凭据不允许做这件事 | 不重试 |
 | `rate_limited` | 429 | 请求过于频繁；带 `Retry-After` 秒数（`error.data.retryAfter` 相同） | 等待 `Retry-After` 秒后重试 1 次 |
 | `validation_failed` | 工具 | 参数不合法（格式、范围、缺项、不支持的参数） | 修正后重试（写入需重新向用户确认） |
@@ -51,7 +51,7 @@
 | `method_not_allowed` / `unsupported_media_type` / `unsupported_protocol_version` / `payload_too_large` / `unknown_tool` | 405 / 415 / 400 / 413 / JSON-RPC | 客户端调用问题 | 修正客户端 |
 | `internal_error` | 500 | 服务端异常 | 写入类先用 `list_records` 查是否已写入，再决定是否重试 |
 
-网页 API 的 401 正文同样带 `code`（`token_missing` / `token_invalid`）。
+网页 API 的 401 正文同样带 `code`（`token_missing` / `token_invalid`，判定规则同上）。网页 API 的 400 文案同样是纯中文、不含字段名或格式代号（例：「时间格式不对，例如 08:30」「新建的工作台只能记备忘和待办」「启用状态不对」）。
 
 ## curl 示例
 
@@ -77,7 +77,3 @@ claude mcp add --transport http zhiheng https://vivid-dream.online/mcp --header 
 ## 测试
 
 `node --test tests/mcp.test.mjs`（真实服务进程、临时数据库、虚构本地账号）。
-
-## AI 使用说明
-
-给 AI 助手的使用指南（工具选择、字段与单位、日期约定、写入前确认）见 [`skills/zhiheng/SKILL.md`](../skills/zhiheng/SKILL.md)。

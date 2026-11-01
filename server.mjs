@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID, createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
 import zlib from 'node:zlib';
-import { migrateAccounts, createAccounts, publicUser, bearerToken, hasSessionCookie, digest } from './lib/accounts.mjs';
+import { migrateAccounts, createAccounts, publicUser, bearerToken, hasBearerScheme, hasSessionCookie, digest } from './lib/accounts.mjs';
 import { createMcp, MCP_PROTOCOL_VERSIONS } from './lib/mcp.mjs';
 const authEnabled=process.env.AUTH_REQUIRED==='1'||process.env.NODE_ENV==='production';
 const appOrigin=process.env.APP_ORIGIN;
@@ -25,7 +25,7 @@ db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEX
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 const builtinWorkbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'金融',type:'finance'}];
 const getWorkbenches=()=>[...builtinWorkbenches,...db.prepare('SELECT id,name,type FROM workbenches ORDER BY rowid').all()];
-const validateWorkbench=b=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad('工作台名称需为1–24个字符，类型需为other');return {id:randomUUID(),name:b.name.trim(),type:'other'}};
+const validateWorkbench=b=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台只能记备忘和待办':'工作台名称需为1–24个字');return {id:randomUUID(),name:b.name.trim(),type:'other'}};
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
 const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
@@ -46,7 +46,7 @@ function validate(kind,b){
  if(FUTURE_CHECKED.includes(kind)&&b.date>today())throw futureDateError(today());
  const clean={title:b.title.trim(),date:b.date,note:String(b.note||'').slice(0,5000)};
  for(const key of ['hospital','department','status','type','mealType','category','time','visitId','unit','name','mime','storageName'])if(b[key]!==undefined)clean[key]=String(b[key]).slice(0,250);
- if(clean.time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(clean.time))throw bad('时间格式需为 HH:MM');
+ if(clean.time&&!/^([01]\d|2[0-3]):[0-5]\d$/.test(clean.time))throw bad('时间格式不对，例如 08:30');
  if(kind==='visit'&&!['待就诊','已完成','待复查'].includes(clean.status))throw bad('就医状态无效');
  if(kind==='exercise'){if(!Number.isFinite(Number(b.duration))||Number(b.duration)<=0||Number(b.duration)>1440)throw bad('运动时长需大于0且不超过1440分钟');clean.duration=Number(b.duration);
   if(b.distance!==undefined&&b.distance!==''){if(!Number.isFinite(Number(b.distance))||Number(b.distance)<=0||Number(b.distance)>1000)throw bad('距离需大于0且不超过1000公里');clean.distance=Number(b.distance);}
@@ -177,7 +177,7 @@ async function handleMcp(req,res){
  if(req.method!=='POST'){res.setHeader('Allow','POST');return json(res,405,{error:'MCP 仅支持 POST 请求',code:'method_not_allowed'});}
  if(!authEnabled)return json(res,404,{error:'助手连接暂未开放',code:'mcp_disabled'});
  if(hasSessionCookie(req))return unauthorized('token_forbidden','助手连接不接受网页登录状态，请使用访问令牌');
- const token=bearerToken(req);if(!token)return unauthorized('token_missing','缺少访问令牌');
+ if(!hasBearerScheme(req))return unauthorized('token_missing','缺少访问令牌');const token=bearerToken(req);if(!token)return unauthorized('token_invalid','访问令牌无效或已撤销');
  const user=accounts.session({headers:{authorization:req.headers.authorization}});if(!user)return unauthorized('token_invalid','访问令牌无效或已撤销');
  const version=req.headers['mcp-protocol-version'];if(version&&!MCP_PROTOCOL_VERSIONS.includes(version))return json(res,400,{jsonrpc:'2.0',id:null,error:{code:-32600,message:`不支持的协议版本：${version}`,data:{code:'unsupported_protocol_version'}}});
  if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求',code:'unsupported_media_type'});
@@ -211,7 +211,7 @@ const server=http.createServer(async(req,res)=>{try{
  const isBootstrap=url.pathname==='/api/bootstrap';
  if(isBootstrap&&req.method!=='GET')return json(res,405,{error:'方法不支持'});
  if(isBootstrap&&authEnabled&&!user)return json(res,200,{me:{enabled:true,user:null}});
- if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return bearerToken(req)&&!hasSessionCookie(req)?json(res,401,{error:'访问令牌无效或已撤销',code:'token_invalid'}):json(res,401,{error:'请先登录',code:'token_missing'});
+ if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return hasBearerScheme(req)&&!hasSessionCookie(req)?json(res,401,{error:'访问令牌无效或已撤销',code:'token_invalid'}):json(res,401,{error:'请先登录',code:'token_missing'});
  const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
  const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
  // Static assets remain available before login; data scopes are resolved only by the authenticated user.

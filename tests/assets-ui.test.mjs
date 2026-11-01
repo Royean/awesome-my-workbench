@@ -1,0 +1,13 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {calculateAssetTotals,assetValue,assetProfit} from '../public/assets.js';
+import {workbenchTheme} from '../public/shell.js';
+test('asset totals avoid account duplication, keep currencies separate and exclude closed/pending holdings',()=>{
+ const items=[{kind:'asset_account',currency:'CNY',balance:10000,includeInTotal:false},{kind:'asset_holding',currency:'CNY',category:'fund',value:900,status:'active'},{kind:'asset_holding',currency:'CNY',category:'equipment',status:'active'},{kind:'asset_holding',currency:'USD',value:30,status:'active'},{kind:'asset_holding',currency:'CNY',value:888,status:'closed'},{kind:'asset_holding',currency:'CNY',value:777,status:'pending'},{kind:'asset_liability',currency:'CNY',balance:100,status:'active'}];
+ const cny=calculateAssetTotals(items).find(x=>x.currency==='CNY'),usd=calculateAssetTotals(items).find(x=>x.currency==='USD');assert.equal(cny.assets,900);assert.equal(cny.liabilities,100);assert.equal(cny.net,800);assert.equal(cny.unknown,1);assert.equal(cny.pendingCount,1);assert.equal(cny.pendingValue,777);assert.equal(usd.assets,30);
+ assert.equal(calculateAssetTotals([{kind:'asset_account',balance:70,currency:'HKD',includeInTotal:true}])[0].assets,70);
+});
+test('unverified liabilities never become zero debt or a claimed net asset',()=>{const g=calculateAssetTotals([{kind:'asset_holding',currency:'CNY',value:900},{kind:'asset_liability',currency:'CNY',balance:null,status:'pending'}])[0];assert.equal(g.unknownLiabilities,1);assert.equal(g.net,null);assert.equal(g.assets,900);});
+test('unknown valuation and cost stay unknown; explicit zero and known quantity-price are retained',()=>{assert.equal(assetValue({}),null);assert.equal(assetValue({quantity:3}),null);assert.equal(assetValue({quantity:3,unitPrice:2.2}),6.6000000000000005);assert.equal(assetValue({value:0}),0);assert.equal(assetProfit({value:30}),null);assert.equal(assetProfit({value:30,cost:35}),-5);});
+const luminance=hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).reduce((a,v,i)=>a+[.2126,.7152,.0722][i]*(v<=.04045?v/12.92:((v+.055)/1.055)**2.4),0);
+test('workbench theme rejects CSS input and keeps light/dark primary buttons readable',()=>{assert.equal(workbenchTheme('url(javascript:evil)','finance')['--theme-accent'],'#A65343');assert.equal(workbenchTheme(undefined,'health')['--theme-accent'],'#2C6B51');for(const c of ['#FFFFFF','#000000','#A65343','#2C6B51','#EEEE99','#777777','#679F18']){const t=workbenchTheme(c),a=luminance(c),b=luminance(t['--theme-on-accent']);assert.ok((Math.max(a,b)+.05)/(Math.min(a,b)+.05)>=4.5,c);}});

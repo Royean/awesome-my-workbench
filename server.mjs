@@ -1,3 +1,4 @@
+import { ASSET_KINDS, validateAsset, defaultTheme, themeColor } from './lib/assets.mjs';
 import { createCgm } from './lib/cgm.mjs';
 import { validateReportObservations } from './lib/report-observations.mjs';
 import http from 'node:http';
@@ -25,18 +26,19 @@ migrateAccounts(db);
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
-const builtinWorkbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'金融',type:'finance'}];
-const getWorkbenches=()=>[...builtinWorkbenches,...db.prepare('SELECT id,name,type FROM workbenches ORDER BY rowid').all()];
+if(!db.prepare('PRAGMA table_info(workbenches)').all().some(c=>c.name==='themeColor'))db.exec('ALTER TABLE workbenches ADD COLUMN themeColor TEXT');
+const builtinWorkbenches=[{id:'health',name:'健康',type:'health',themeColor:'#2C6B51'},{id:'finance',name:'资产',type:'finance',themeColor:'#A65343'}];
+const getWorkbenches=()=>{const stored=db.prepare('SELECT id,name,type,themeColor FROM workbenches ORDER BY rowid').all();return [...builtinWorkbenches.map(w=>stored.find(s=>s.id===w.id)||w),...stored.filter(w=>!builtinWorkbenches.some(b=>b.id===w.id))].map(w=>({...w,themeColor:w.themeColor||defaultTheme(w.type)}));};
 // Names are unique within one account's workbenches (compared after trim); renaming to its own name is fine.
 const assertUniqueWorkbenchName=(list,name,selfId)=>{const n=String(name).trim();const self=list.find(w=>w.id===selfId);if(self&&String(self.name).trim()===n)return;if(list.some(w=>w.id!==selfId&&String(w.name).trim()===n))throw bad(`已经有叫「${n}」的工作台了`,'name');};
-const validateWorkbench=(b,existing=[])=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台只能记备忘和待办':'工作台名称需为 1–24 个字');assertUniqueWorkbenchName(existing,b.name);return {id:randomUUID(),name:b.name.trim(),type:'other'}};
+const validateWorkbench=(b,existing=[])=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台只能记备忘和待办':'工作台名称需为 1–24 个字');assertUniqueWorkbenchName(existing,b.name);return {id:randomUUID(),name:b.name.trim(),type:'other',themeColor:themeColor(b.themeColor)}};
 // Clock: ZH_TEST_NOW (ISO) is honoured only under NODE_ENV=test so tests can pin "now".
 const now=()=>process.env.NODE_ENV==='test'&&process.env.ZH_TEST_NOW?new Date(process.env.ZH_TEST_NOW):new Date();
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(now());
 const nowHM=()=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hour12:false}).format(now());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
 const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
-const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note'];
+const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note',...ASSET_KINDS];
 import { isValidDate as validDate, DATE_ERROR } from './lib/dates.mjs';
 const bad=(message,field,code='validation_failed')=>Object.assign(new Error(message),{status:400,expose:true,code,...(field?{field}:{})});
 // 「不能记录未来的日期，今天是 11月1日」 (Asia/Shanghai). Applies to the web API and MCP alike.
@@ -50,6 +52,7 @@ const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'
 // opts.original: the stored record when updating (lets legacy records keep missing optional links).
 function validate(kind,b,opts={}){
  if(!kinds.includes(kind))throw bad('记录类型无效');
+ if(ASSET_KINDS.includes(kind))return validateAsset(kind,b,{validDate,bad,today});
  if(typeof b.title!=='string'||!b.title.trim()||b.title.length>120)throw bad('名称需为 1–120 个字符');
  if(!validDate(b.date))throw dateError('date');
  if(FUTURE_CHECKED.includes(kind)&&b.date>today())throw futureDateError(today());
@@ -129,6 +132,10 @@ const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
 function put(space,kind,body,id=randomUUID(),via){
  const old0=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);
  const clean=validate(kind,body,{original:old0?JSON.parse(old0.body):undefined});
+ if(ASSET_KINDS.includes(kind)){
+  if(clean.externalId&&(db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND id<>? AND json_extract(body,'$.externalId')=?").get(space,kind,id,clean.externalId)||db.prepare("SELECT id FROM trash_items WHERE space=? AND kind=? AND id<>? AND json_extract(body,'$.externalId')=? AND expires_at>?").get(space,kind,id,clean.externalId,Date.now())))throw Object.assign(bad('该来源记录已导入，请编辑已有记录','externalId','duplicate_external_id'),{status:409});
+  for(const [key,target] of [['accountId','asset_account'],['assetId','asset_holding']])if(clean[key]&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(clean[key],space,target)&&!(old0&&JSON.parse(old0.body)[key]===clean[key]))throw bad('关联资产或账户不存在或不在当前空间',key);
+ }
  const old=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);const original=old?JSON.parse(old.body):{};
  for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
@@ -205,6 +212,7 @@ function restoreFromTrash(space,id,opts={}){
  const t=db.prepare('SELECT * FROM trash_items WHERE id=? AND space=?').get(String(id||''),space);if(!t)throw bad('最近删除里没有这条记录，可能已超过 30 天或已恢复','id','not_found');
  if(db.prepare('SELECT id FROM items WHERE id=?').get(t.id))throw bad('这条记录已经恢复过了');
  const body=JSON.parse(t.body);const parent=parentOf(t.kind,body);let parentRestored=null;
+ if(ASSET_KINDS.includes(t.kind)&&body.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,t.kind,body.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});
  if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
   const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
   if(inTrash&&opts.withParent)parentRestored=restoreFromTrash(space,parent.id,opts);
@@ -253,7 +261,7 @@ const accounts=createAccounts({db,enabled:authEnabled,origin:appOrigin,json,read
 function bootstrapPayload(user,url){
  const me={enabled:authEnabled,user:user?publicUser(user):null};
  const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
- const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
+ const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type,themeColor FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
  const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  if(!workbench||!space)return {me,state:null};
@@ -341,6 +349,7 @@ const server=http.createServer(async(req,res)=>{try{
   if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
  }
  const user=authEnabled?accounts.session(req,res,{renew:url.pathname.startsWith('/api/')}):null;
+ const requireExpectedOwner=()=>{if(authEnabled&&user&&req.headers['x-workbench-owner']!==user.id)throw Object.assign(bad('登录账号已变化，请重新打开页面',undefined,'workbench_owner_changed'),{status:409});};
  if(user&&!['/api/auth/login','/api/auth/accept-invitation'].includes(url.pathname))req.authSnapshot=user;
  if(await accounts.handle(req,res,url,user))return;
  // Single startup round trip ({me,state}): account state plus the requested workbench state. Unauthenticated sessions get only {me}, as /api/auth/me would.
@@ -349,7 +358,7 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap&&authEnabled&&!user)return json(res,200,{me:{enabled:true,user:null}});
  if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return hasBearerScheme(req)&&!hasSessionCookie(req)?json(res,401,{error:'访问令牌无效或已撤销',code:'token_invalid'}):json(res,401,{error:'请先登录',code:'token_missing'});
  const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
- const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
+ const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type,themeColor FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
  // Static assets remain available before login; data scopes are resolved only by the authenticated user.
  const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
@@ -357,12 +366,22 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
  // 「最近删除」 covers every workbench of the current base space (personal or demo).
  if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
- if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
+ if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||(w.id==='finance'&&db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file'))requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
- const checkKind=kind=>{if(workbenchId!=='health'&&!['note','task'].includes(kind))throw bad('此工作台仅支持备忘与待办');};
- if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches VALUES(?,?,?,?)').run(user.id,item.id,item.name,item.type);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type) VALUES(?,?,?)').run(item.id,item.name,item.type);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
- if(workbenchId!=='health'&&['/api/upload','/api/capture-meal'].includes(url.pathname))return json(res,400,{error:'此工作台仅支持备忘与待办，不支持上传或餐食记录'});
+ const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>!ASSET_KINDS.includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:['note','task'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
+ if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches(user_id,id,name,type,themeColor) VALUES(?,?,?,?,?)').run(user.id,item.id,item.name,item.type,item.themeColor);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type,themeColor) VALUES(?,?,?,?)').run(item.id,item.name,item.type,item.themeColor);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
+ if((url.pathname==='/api/upload'&&!['health','finance'].includes(workbench.type))||(url.pathname==='/api/capture-meal'&&workbench.type!=='health'))return json(res,400,{error:'此工作台不支持该上传操作'});
+ if(url.pathname.startsWith('/api/workbenches/')&&req.method==='PATCH'){
+  requireExpectedOwner();
+  const id=url.pathname.split('/').pop(),target=workbenches.find(w=>w.id===id);if(!target)return json(res,404,{error:'工作台不存在'});
+  const b=await readBody(req,4096);if(Object.keys(b).some(k=>!['name','themeColor'].includes(k))||!Object.keys(b).length)throw bad('只可修改工作台名称与主题色');
+  const name=b.name===undefined?target.name:typeof b.name==='string'?b.name.trim():'';if(!name||name.length>24)throw bad('工作台名称需为 1–24 个字','name');assertUniqueWorkbenchName(workbenches,name,id);
+  const color=themeColor(b.themeColor??target.themeColor,target.type);
+  if(authEnabled)db.prepare('UPDATE user_workbenches SET name=?,themeColor=? WHERE user_id=? AND id=?').run(name,color,user.id,id);
+  else db.prepare('INSERT INTO workbenches(id,name,type,themeColor) VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,themeColor=excluded.themeColor').run(id,name,target.type,color);
+  return json(res,200,{id,name,type:target.type,themeColor:color});
+ }
  // CGM credentials are managed only by an interactive session in the real health space.
  if(url.pathname.startsWith('/api/cgm/')){
   if(!authEnabled||!user)return json(res,401,{error:'请先登录后连接 CGM',code:'token_missing'});
@@ -387,8 +406,8 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space)})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
 
- if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
- if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});
+ if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
+ if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||(old.kind==='file'&&workbench.type==='finance')))requireExpectedOwner();
   if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
   if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
@@ -396,7 +415,8 @@ const server=http.createServer(async(req,res)=>{try{
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());
   if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过 12 秒'});
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
-  const deletedBody=JSON.parse(deleted.body);const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
+  if(ASSET_KINDS.includes(deleted.kind)||(deleted.kind==='file'&&workbench.type==='finance'))requireExpectedOwner();
+  const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
   const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw bad('保留附件无效');
@@ -419,7 +439,9 @@ const server=http.createServer(async(req,res)=>{try{
   }catch(error){db.exec('ROLLBACK');for(const p of written)try{fs.unlinkSync(p)}catch{}throw error;}
  }
  if(url.pathname==='/api/upload'&&req.method==='POST'){
+  if(workbench.type==='finance')requireExpectedOwner();
   const b=await readBody(req);const name=path.basename(String(b.name||''));const ext=path.extname(name).toLowerCase();if(!allowedFiles[ext])throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
+  if(workbench.type==='finance'&&(!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext)||b.visitId))throw bad('资产资料仅支持PDF、图片、TXT，不关联健康就诊');
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
   if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');

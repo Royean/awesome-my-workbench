@@ -127,7 +127,7 @@ test('settings: water goal used by get_today and the web; web PUT keeps it; rang
 test('web 最近删除 covers all workbenches of the current space; workbench name; restore via web in another workbench',async()=>{
  const f=(await ok('create_record',{workbench:'finance',kind:'note',title:'金融备忘'})).created;await ok('delete_record',{workbench:'finance',id:f.id});
  const h=(await ok('create_record',{kind:'water',volume:120})).created;await ok('delete_record',{id:h.id});
- const list=(await req('/api/trash',{headers:web()})).body.items;const fi=list.find(x=>x.id===f.id);assert.equal(fi.workbench,'finance');assert.equal(fi.workbenchName,'金融');assert.ok(list.some(x=>x.id===h.id&&x.workbench==='health'));
+ const list=(await req('/api/trash',{headers:web()})).body.items;const fi=list.find(x=>x.id===f.id);assert.equal(fi.workbench,'finance');assert.equal(fi.workbenchName,'资产');assert.ok(list.some(x=>x.id===h.id&&x.workbench==='health'));
  for(let i=1;i<list.length;i++)assert.ok(list[i-1].deletedAt>=list[i].deletedAt);
  assert.equal((await req('/api/trash?space=demo',{headers:web()})).body.items.some(x=>x.id===f.id),false);
  const r=await req('/api/trash/restore',{method:'POST',body:{id:f.id},headers:web()});assert.equal(r.status,200);assert.equal(r.body.workbench,'finance');

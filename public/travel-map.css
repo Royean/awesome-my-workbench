@@ -1,0 +1,8 @@
+/* Leaflet occupies one bounded panel; its layers never cover the app's drawers. */
+[data-travel-map]{position:relative;isolation:isolate;min-width:0;z-index:0}
+.travel-map-surface{width:100%;height:360px;min-width:0;border:1px solid var(--theme-border,#dbe4ec);border-radius:12px;background:#edf1f4;z-index:0}
+.travel-map-status{font-size:12px;line-height:1.6;color:var(--muted,#66756e);margin:8px 0;overflow-wrap:anywhere}
+.travel-map-marker{display:flex;align-items:center;justify-content:center;background:var(--theme-accent,#356A98);color:var(--theme-on-accent,#fff);border:2px solid white;border-radius:50% 50% 50% 2px;font-weight:700;font-size:12px;box-shadow:0 2px 7px #0003}
+.travel-map-surface .leaflet-control-attribution{font-size:10px;max-width:100%;white-space:normal}
+.travel-map-surface .leaflet-popup-content{max-width:220px;overflow-wrap:anywhere}
+@media(max-width:600px){.travel-map-surface{height:290px}.travel-map-status{font-size:11px}}

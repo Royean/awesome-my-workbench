@@ -1,3 +1,4 @@
+import { TRAVEL_KINDS, validateTravel, assertTravelChildDates } from './lib/travel.mjs';
 import { ASSET_KINDS, validateAsset, defaultTheme, themeColor } from './lib/assets.mjs';
 import { createCgm } from './lib/cgm.mjs';
 import { validateReportObservations } from './lib/report-observations.mjs';
@@ -27,7 +28,7 @@ db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMA
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 if(!db.prepare('PRAGMA table_info(workbenches)').all().some(c=>c.name==='themeColor'))db.exec('ALTER TABLE workbenches ADD COLUMN themeColor TEXT');
-const builtinWorkbenches=[{id:'health',name:'健康',type:'health',themeColor:'#2C6B51'},{id:'finance',name:'资产',type:'finance',themeColor:'#A65343'}];
+const builtinWorkbenches=[{id:'health',name:'健康',type:'health',themeColor:'#2C6B51'},{id:'finance',name:'资产',type:'finance',themeColor:'#A65343'},{id:'travel',name:'旅行',type:'travel',themeColor:'#356A98'}];
 const getWorkbenches=()=>{const stored=db.prepare('SELECT id,name,type,themeColor FROM workbenches ORDER BY rowid').all();return [...builtinWorkbenches.map(w=>stored.find(s=>s.id===w.id)||w),...stored.filter(w=>!builtinWorkbenches.some(b=>b.id===w.id))].map(w=>({...w,themeColor:w.themeColor||defaultTheme(w.type)}));};
 // Names are unique within one account's workbenches (compared after trim); renaming to its own name is fine.
 const assertUniqueWorkbenchName=(list,name,selfId)=>{const n=String(name).trim();const self=list.find(w=>w.id===selfId);if(self&&String(self.name).trim()===n)return;if(list.some(w=>w.id!==selfId&&String(w.name).trim()===n))throw bad(`已经有叫「${n}」的工作台了`,'name');};
@@ -38,7 +39,7 @@ const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'
 const nowHM=()=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hour12:false}).format(now());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
 const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
-const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note',...ASSET_KINDS];
+const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note',...ASSET_KINDS,...TRAVEL_KINDS];
 import { isValidDate as validDate, DATE_ERROR } from './lib/dates.mjs';
 const bad=(message,field,code='validation_failed')=>Object.assign(new Error(message),{status:400,expose:true,code,...(field?{field}:{})});
 // 「不能记录未来的日期，今天是 11月1日」 (Asia/Shanghai). Applies to the web API and MCP alike.
@@ -52,6 +53,7 @@ const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'
 // opts.original: the stored record when updating (lets legacy records keep missing optional links).
 function validate(kind,b,opts={}){
  if(!kinds.includes(kind))throw bad('记录类型无效');
+ if(TRAVEL_KINDS.includes(kind))return validateTravel(kind,b,{validDate,bad});
  if(ASSET_KINDS.includes(kind))return validateAsset(kind,b,{validDate,bad,today});
  if(typeof b.title!=='string'||!b.title.trim()||b.title.length>120)throw bad('名称需为 1–120 个字符');
  if(!validDate(b.date))throw dateError('date');
@@ -123,8 +125,25 @@ function validate(kind,b,opts={}){
   clean.attachmentIds=[...new Set(b.attachmentIds||[])];
  }
  if(kind==='task')clean.done=Boolean(b.done);
- if(kind==='file'){clean.size=Number(b.size)||0;clean.intakeStatus=clean.visitId?'已关联':String(b.intakeStatus||'待整理');clean.fileCategory=String(b.fileCategory||'一般资料').slice(0,80);}
+ if(kind==='file'){if(b.tripId!==undefined){if(typeof b.tripId!=='string'||b.tripId.length>100)throw bad('所属旅行编号无效','tripId');clean.tripId=b.tripId.trim();}clean.size=Number(b.size)||0;clean.intakeStatus=clean.visitId?'已关联':String(b.intakeStatus||'待整理');clean.fileCategory=String(b.fileCategory||'一般资料').slice(0,80);}
  return clean;
+}
+function scopeType(space){
+ const account=db.prepare('SELECT w.type FROM data_scopes d JOIN user_workbenches w ON w.user_id=d.user_id AND w.id=d.workbench_id WHERE d.space=?').get(space);
+ if(account)return account.type;
+ if(space==='personal'||space==='demo')return 'health';
+ const id=space.split('::')[1];return getWorkbenches().find(w=>w.id===id)?.type;
+}
+function validateTravelReferences(space,kind,body,id){
+ if(TRAVEL_KINDS.includes(kind)&&scopeType(space)!=='travel')throw bad('旅行记录只能保存到旅行工作台');
+ if(kind==='travel_trip'){
+  for(const child of getAll(space).filter(x=>x.tripId===id))assertTravelChildDates(child.kind,child,body,bad);
+ }else if(body.tripId){
+  if(scopeType(space)!=='travel'||kind==='file'&&body.visitId)throw bad('旅行资料不能关联其他工作台','tripId');
+  const row=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='travel_trip'").get(body.tripId,space);
+  if(!row)throw bad('所属旅行不存在或不在当前空间','tripId');
+  assertTravelChildDates(kind,body,JSON.parse(row.body),bad);
+ }
 }
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
 // on every write, so a web edit keeps the history. The MCP path passes via='mcp' (create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt).
@@ -132,10 +151,11 @@ const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
 function put(space,kind,body,id=randomUUID(),via){
  const old0=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);
  const clean=validate(kind,body,{original:old0?JSON.parse(old0.body):undefined});
- if(ASSET_KINDS.includes(kind)){
+ if([...ASSET_KINDS,...TRAVEL_KINDS].includes(kind)){
   if(clean.externalId&&(db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND id<>? AND json_extract(body,'$.externalId')=?").get(space,kind,id,clean.externalId)||db.prepare("SELECT id FROM trash_items WHERE space=? AND kind=? AND id<>? AND json_extract(body,'$.externalId')=? AND expires_at>?").get(space,kind,id,clean.externalId,Date.now())))throw Object.assign(bad('该来源记录已导入，请编辑已有记录','externalId','duplicate_external_id'),{status:409});
   for(const [key,target] of [['accountId','asset_account'],['assetId','asset_holding']])if(clean[key]&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(clean[key],space,target)&&!(old0&&JSON.parse(old0.body)[key]===clean[key]))throw bad('关联资产或账户不存在或不在当前空间',key);
  }
+ validateTravelReferences(space,kind,clean,id);
  const old=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);const original=old?JSON.parse(old.body):{};
  for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
@@ -171,6 +191,7 @@ if(!getAll('demo').length){
 db.exec('CREATE TABLE IF NOT EXISTS app_meta(key TEXT PRIMARY KEY, value TEXT NOT NULL)');
 // 「最近删除」 trash (30 days). Web and MCP deletes both land here; the web's 12-second undo (deleted_items) keeps working alongside.
 db.exec(fs.readFileSync(path.join(root,'migrations','003-trash.sql'),'utf8'));
+db.exec('CREATE TABLE IF NOT EXISTS travel_delete_batches(space TEXT NOT NULL,parent_id TEXT NOT NULL,child_id TEXT NOT NULL,deleted_at INTEGER NOT NULL,PRIMARY KEY(space,parent_id,child_id))');
 const TRASH_MS=30*24*3600*1000;
 const purgeTrash=()=>db.prepare('DELETE FROM trash_items WHERE expires_at<=?').run(Date.now());
 purgeTrash();
@@ -179,6 +200,20 @@ function softDelete(space,id,via){
  const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return null;
  if(old.kind==='medication'&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===id))throw bad('该方案已有服用记录，请停用以保留历史，或先移除服用记录');
  const now=Date.now();
+ if(old.kind==='travel_trip'){
+  const children=db.prepare("SELECT * FROM items WHERE space=? AND json_extract(body,'$.tripId')=?").all(space,id);
+  db.exec('BEGIN IMMEDIATE');try{
+   db.prepare('DELETE FROM travel_delete_batches WHERE space=? AND parent_id=?').run(space,id);
+   for(const row of [old,...children]){
+    if(via==='web')db.prepare('INSERT OR REPLACE INTO deleted_items VALUES(?,?,?,?,?)').run(row.id,space,row.kind,row.body,now+12000);
+    db.prepare('INSERT OR REPLACE INTO trash_items VALUES(?,?,?,?,?,?,?)').run(row.id,space,row.kind,row.body,now,via,now+TRASH_MS);
+    db.prepare('DELETE FROM items WHERE id=? AND space=?').run(row.id,space);
+    if(row.id!==id)db.prepare('INSERT INTO travel_delete_batches VALUES(?,?,?,?)').run(space,id,row.id,now);
+   }
+   db.exec('COMMIT');
+  }catch(error){db.exec('ROLLBACK');throw error;}
+  return {id,kind:old.kind,...JSON.parse(old.body),deletedCount:1+children.length};
+ }
  db.exec('BEGIN');try{
   if(via==='web')db.prepare('INSERT OR REPLACE INTO deleted_items VALUES(?,?,?,?,?)').run(id,space,old.kind,old.body,now+12000);
   db.prepare('INSERT OR REPLACE INTO trash_items VALUES(?,?,?,?,?,?,?)').run(id,space,old.kind,old.body,now,via,now+TRASH_MS);
@@ -194,31 +229,52 @@ function writeSettings(space,b){
  if(b.waterGoalMl!==undefined&&b.waterGoalMl!==''){const v=Number(b.waterGoalMl);if(!Number.isInteger(v)||v<100||v>10000)throw bad('每日饮水目标需在 100–10000 毫升之间','waterGoalMl');clean.waterGoalMl=v;}
  db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return clean;
 }
-const PARENT_NAMES={visit:'就诊记录',medication:'用药方案'};
+const PARENT_NAMES={visit:'就诊记录',medication:'用药方案',travel_trip:'旅行'};
 // Restoring needs the parent back first (visit for report/medication, medication for dose); otherwise a plain error.
-function parentOf(kind,body){if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
+function parentOf(kind,body){if((TRAVEL_KINDS.includes(kind)||kind==='file')&&body.tripId)return {kind:'travel_trip',id:body.tripId};if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
 // restorable:false + reason when the parent (visit / medication) is gone for good (neither live nor in the trash).
 function listTrash(space){purgeTrash();return db.prepare('SELECT id,kind,body,deleted_at,deleted_via,expires_at FROM trash_items WHERE space=? ORDER BY deleted_at DESC').all(space).map(r=>{const b=JSON.parse(r.body),p=parentOf(r.kind,b);
  const gone=p&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(p.id,space,p.kind)&&!db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(p.id,space);
- return {id:r.id,kind:r.kind,...b,deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString(),restorable:!gone,...(gone?{reason:`所属${p.kind==='visit'?'就诊':'用药方案'}已清除，无法恢复`}:{})};});}
+ return {id:r.id,kind:r.kind,...b,deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString(),restorable:!gone,...(gone?{reason:`所属${p.kind==='visit'?'就诊':p.kind==='travel_trip'?'旅行':'用药方案'}已清除，无法恢复`}:{})};});}
 // Ancestors that are in the trash, nearest first (dose → medication → visit), stopping at the first one not in the trash.
 function trashedChain(space,parent){const out=[];while(parent){const r=db.prepare('SELECT body FROM trash_items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind);if(!r)break;const b=JSON.parse(r.body);out.push({...parent,title:b.title});parent=parentOf(parent.kind,b);}return out;}
 // 「所属就诊也已删除」/「所属用药方案也已删除」/「用药方案和所属就诊也已删除」
-const KN=k=>k==='visit'?'就诊':'用药方案';
+const KN=k=>k==='visit'?'就诊':k==='travel_trip'?'旅行':'用药方案';
 const chainText=chain=>{const n=c=>`${KN(c.kind)}「${c.title}」`;return chain.length>1?`${chain.slice(0,-1).map(n).join('、')}和所属${n(chain.at(-1))}也已删除`:`所属${n(chain[0])}也已删除`;};
 // opts.withParent: when the parent (visit / medication) is also in the trash, restore it first (recursively), then this record.
+function restoreTravelTrip(space,t){
+ const body=validate('travel_trip',JSON.parse(t.body));
+ const children=db.prepare('SELECT t.* FROM travel_delete_batches b JOIN trash_items t ON t.id=b.child_id AND t.space=b.space AND t.deleted_at=b.deleted_at WHERE b.space=? AND b.parent_id=? AND t.expires_at>?').all(space,t.id,Date.now());
+ const rows=[t,...children];
+ for(const row of rows){
+  if(db.prepare('SELECT id FROM items WHERE id=?').get(row.id))throw bad('旅行中的一条记录已经恢复，请刷新后重试');
+  const data=JSON.parse(row.body);
+  if(TRAVEL_KINDS.includes(row.kind)){
+   validate(row.kind,data);
+   if(data.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,row.kind,data.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});
+  }
+  if(row.id!==t.id){if(data.tripId!==t.id)throw bad('旅行关联数据已变化，请刷新重试');assertTravelChildDates(row.kind,data,body,bad);}
+ }
+ db.exec('BEGIN IMMEDIATE');try{
+  for(const row of rows){db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(row.id,space,row.kind,row.body);db.prepare('DELETE FROM trash_items WHERE id=? AND space=?').run(row.id,space);db.prepare('DELETE FROM deleted_items WHERE id=? AND space=?').run(row.id,space);}
+  db.prepare('DELETE FROM travel_delete_batches WHERE space=? AND parent_id=?').run(space,t.id);db.exec('COMMIT');
+ }catch(error){db.exec('ROLLBACK');throw error;}
+ return {id:t.id,kind:t.kind,...JSON.parse(t.body),restoredCount:rows.length};
+}
 function restoreFromTrash(space,id,opts={}){
  purgeTrash();
  const t=db.prepare('SELECT * FROM trash_items WHERE id=? AND space=?').get(String(id||''),space);if(!t)throw bad('最近删除里没有这条记录，可能已超过 30 天或已恢复','id','not_found');
  if(db.prepare('SELECT id FROM items WHERE id=?').get(t.id))throw bad('这条记录已经恢复过了');
+ if(t.kind==='travel_trip')return restoreTravelTrip(space,t);
  const body=JSON.parse(t.body);const parent=parentOf(t.kind,body);let parentRestored=null;
- if(ASSET_KINDS.includes(t.kind)&&body.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,t.kind,body.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});
+ if([...ASSET_KINDS,...TRAVEL_KINDS].includes(t.kind)&&body.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,t.kind,body.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});
  if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
   const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
-  if(inTrash&&opts.withParent)parentRestored=restoreFromTrash(space,parent.id,opts);
+  if(inTrash&&opts.withParent){parentRestored=restoreFromTrash(space,parent.id,opts);const restored=db.prepare('SELECT kind,body FROM items WHERE id=? AND space=?').get(t.id,space);if(restored)return {id:t.id,kind:restored.kind,...JSON.parse(restored.body),restoredCount:parentRestored.restoredCount,parentRestored:{id:parentRestored.id,kind:parentRestored.kind,title:parentRestored.title}};}
   else if(inTrash){const chain=trashedChain(space,parent);throw Object.assign(bad(`${chainText(chain)}，需要一起恢复`,undefined,'parent_deleted'),{parentId:parent.id,parentKind:parent.kind,parentKinds:chain.map(c=>c.kind),parentIds:chain.map(c=>c.id)});}
   else throw Object.assign(bad(`它所属的${PARENT_NAMES[parent.kind]}已经不在了，无法恢复`,undefined,'parent_missing'),{parentKind:parent.kind});
  }
+ if(TRAVEL_KINDS.includes(t.kind)||t.kind==='file'&&body.tripId)validateTravelReferences(space,t.kind,body,t.id);
  if(t.kind==='dose'&&body.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===body.medicationId&&x.date===body.date&&x.scheduledTime===body.scheduledTime))throw bad('该时段已有服用结果，不能恢复为重复记录');
  db.exec('BEGIN');try{db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(t.id,space,t.kind,t.body);db.prepare('DELETE FROM trash_items WHERE id=?').run(t.id);db.prepare('DELETE FROM deleted_items WHERE id=?').run(t.id);db.exec('COMMIT');}catch(err){db.exec('ROLLBACK');throw err}
  return {id:t.id,kind:t.kind,...body,restoredCount:1+(parentRestored?.restoredCount||0),...(parentRestored?{parentRestored:{id:parentRestored.id,kind:parentRestored.kind,title:parentRestored.title}}:{})};
@@ -271,7 +327,7 @@ function bootstrapPayload(user,url){
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
 // MCP originals use the same private file rows and download authorization as the web.
 const fileDigest=f=>{const p=path.join(dataDir,'uploads',path.basename(f.storageName));return fs.existsSync(p)?{sha256:createHash('sha256').update(fs.readFileSync(p)).digest('hex')}:{sha256:null,missing:true};};
-const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,type:f.mime,size:f.size,visitId:f.visitId||'',...fileDigest(f)});
+const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,type:f.mime,size:f.size,visitId:f.visitId||'',...(f.tripId?{tripId:f.tripId}:{}),...fileDigest(f)});
 const listAttachments=(space,limit)=>{const files=getAll(space).filter(f=>f.kind==='file'&&f.fileCategory!=='餐食附件').sort((a,b)=>b.date.localeCompare(a.date));return {total:files.length,returned:Math.min(limit,files.length),files:files.slice(0,limit).map(f=>attachmentMeta(space,f))};};
 function uploadAttachment(space,b){
  const name=b.name;if(/[\\/\x00-\x1f\x7f]/.test(name)||name==='.'||name==='..')throw bad('文件名不能包含路径或控制字符');
@@ -281,10 +337,11 @@ function uploadAttachment(space,b){
  if(bytes.toString('base64')!==encoded)throw bad('文件编码格式无效');
  const hash=createHash('sha256').update(bytes).digest('hex');if(hash!==b.sha256)throw bad('文件校验失败，请重新读取原件');
  const title=b.title||name,note=b.note||'';
- const body=validate('file',{title,date:b.date,name,mime:allowedFiles[ext],size:bytes.length,storageName:randomUUID()+ext,note,fileCategory:'报告原件'});
+ const body=validate('file',{title,date:b.date,name,mime:allowedFiles[ext],size:bytes.length,storageName:randomUUID()+ext,note,...(b.tripId?{tripId:b.tripId}:{}),fileCategory:'报告原件'});
  // Compare the actual persisted bytes, so web edits cannot leave a stale trusted digest.
- const existing=getAll(space).find(f=>f.kind==='file'&&f.name===name&&f.date===body.date&&f.title===body.title&&f.note===body.note&&f.size===bytes.length&&f.fileCategory==='报告原件'&&fs.existsSync(path.join(dataDir,'uploads',path.basename(f.storageName)))&&attachmentMeta(space,f).sha256===hash);
+ const existing=getAll(space).find(f=>f.kind==='file'&&f.name===name&&f.date===body.date&&f.title===body.title&&f.note===body.note&&(f.tripId||'')===(body.tripId||'')&&f.size===bytes.length&&f.fileCategory==='报告原件'&&fs.existsSync(path.join(dataDir,'uploads',path.basename(f.storageName)))&&attachmentMeta(space,f).sha256===hash);
  if(existing)return {uploaded:attachmentMeta(space,existing),reused:true};
+ validateTravelReferences(space,'file',body);
  const destination=path.join(dataDir,'uploads',body.storageName);let written=false;
  db.exec('BEGIN IMMEDIATE');try{const fd=fs.openSync(destination,'wx',0o600);written=true;try{fs.writeFileSync(fd,bytes);}finally{fs.closeSync(fd);}const f=put(space,'file',body,undefined,'mcp');const uploaded=attachmentMeta(space,f);db.exec('COMMIT');return {uploaded,reused:false};}
  catch(e){if(db.isTransaction)db.exec('ROLLBACK');if(written)fs.unlinkSync(destination);throw e;}
@@ -366,12 +423,12 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
  // 「最近删除」 covers every workbench of the current base space (personal or demo).
  if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
- if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||(w.id==='finance'&&db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file'))requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
+ if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||w.id==='travel'||(w.id==='finance'&&db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file'))requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
- const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>!ASSET_KINDS.includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:['note','task'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
+ const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>![...ASSET_KINDS,...TRAVEL_KINDS].includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:workbench.type==='travel'?['note','task','file',...TRAVEL_KINDS]:['note','task'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
  if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches(user_id,id,name,type,themeColor) VALUES(?,?,?,?,?)').run(user.id,item.id,item.name,item.type,item.themeColor);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type,themeColor) VALUES(?,?,?,?)').run(item.id,item.name,item.type,item.themeColor);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
- if((url.pathname==='/api/upload'&&!['health','finance'].includes(workbench.type))||(url.pathname==='/api/capture-meal'&&workbench.type!=='health'))return json(res,400,{error:'此工作台不支持该上传操作'});
+ if((url.pathname==='/api/upload'&&!['health','finance','travel'].includes(workbench.type))||(url.pathname==='/api/capture-meal'&&workbench.type!=='health'))return json(res,400,{error:'此工作台不支持该上传操作'});
  if(url.pathname.startsWith('/api/workbenches/')&&req.method==='PATCH'){
   requireExpectedOwner();
   const id=url.pathname.split('/').pop(),target=workbenches.find(w=>w.id===id);if(!target)return json(res,404,{error:'工作台不存在'});
@@ -404,18 +461,19 @@ const server=http.createServer(async(req,res)=>{try{
   return json(res,405,{error:'CGM 操作或请求方法不支持'});
  }
  if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space)})}
- if(url.pathname==='/api/settings'&&req.method==='PUT'){const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
+ if(url.pathname==='/api/settings'&&req.method==='PUT'){if(workbench.type==='travel')requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
 
- if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
- if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||(old.kind==='file'&&workbench.type==='finance')))requireExpectedOwner();
-  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+ if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||workbench.type==='travel')requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
+ if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||workbench.type==='travel'||(old.kind==='file'&&workbench.type==='finance')))requireExpectedOwner();
+  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
   if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());
   if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过 12 秒'});
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
-  if(ASSET_KINDS.includes(deleted.kind)||(deleted.kind==='file'&&workbench.type==='finance'))requireExpectedOwner();
+  if(ASSET_KINDS.includes(deleted.kind)||workbench.type==='travel'||(deleted.kind==='file'&&workbench.type==='finance'))requireExpectedOwner();
+  if(workbench.type==='travel')return json(res,200,restoreFromTrash(space,id));
   const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
@@ -439,11 +497,12 @@ const server=http.createServer(async(req,res)=>{try{
   }catch(error){db.exec('ROLLBACK');for(const p of written)try{fs.unlinkSync(p)}catch{}throw error;}
  }
  if(url.pathname==='/api/upload'&&req.method==='POST'){
-  if(workbench.type==='finance')requireExpectedOwner();
+  if(['finance','travel'].includes(workbench.type))requireExpectedOwner();
   const b=await readBody(req);const name=path.basename(String(b.name||''));const ext=path.extname(name).toLowerCase();if(!allowedFiles[ext])throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
-  if(workbench.type==='finance'&&(!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext)||b.visitId))throw bad('资产资料仅支持PDF、图片、TXT，不关联健康就诊');
+  if(['finance','travel'].includes(workbench.type)&&(!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext)||b.visitId))throw bad('资产和旅行资料仅支持PDF、图片、TXT，不关联健康就诊');
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
+  validateTravelReferences(space,'file',body);
   if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
   fs.writeFileSync(path.join(dataDir,'uploads',storageName),bytes,{mode:0o600});return json(res,201,put(space,'file',body));
  }
@@ -463,7 +522,7 @@ const server=http.createServer(async(req,res)=>{try{
  const immutable=(!!assetMatch&&createHash('sha256').update(bytes).digest('hex')===assetMatch[1])||url.pathname.startsWith('/vendor/pdfjs/6.4.299/');
  const type=mime[path.extname(p)]||'application/octet-stream';
  const {body,encoding}=compressed(p,bytes,type,req.headers['accept-encoding'],immutable);
- res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
+ res.writeHead(200,{'Content-Type':type,...(encoding?{'Content-Encoding':encoding}:{}),...(compressible(type)?{'Vary':'Accept-Encoding'}:{}),'X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; font-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://tile.openstreetmap.org; media-src 'self' blob:; connect-src 'self'; object-src 'none'; frame-ancestors 'none'",'Cache-Control':immutable?'public, max-age=31536000, immutable':'no-store','Content-Length':body.length});
  if(req.method==='HEAD')return res.end();res.end(body);
  }catch(e){if(e?.expose){if(!res.headersSent){if(e.retryAfter)res.setHeader('Retry-After',String(e.retryAfter));json(res,e.status||400,{error:e.message,...(e.code?{code:e.code}:{}),...(e.field?{field:e.field}:{}),...(e.parentKind?{parentKind:e.parentKind}:{}),...(e.parentKinds?{parentKinds:e.parentKinds}:{})});}return;}console.error('[request-error]',req.method,req.url,e);if(!res.headersSent)json(res,500,{error:'服务器内部错误，请稍后重试'});else res.destroy();}});
 server.on('close',()=>cgm.stop());

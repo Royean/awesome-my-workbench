@@ -96,11 +96,11 @@ test('favorite: list/create/update/delete via MCP with web validation',async()=>
  assert.match((await err('create_record',{kind:'favorite',title:'x',targetKind:'exercise',template:{title:'跑'}})).message,/运动时长/);
  await ok('delete_record',{id:fav.id});assert.ok((await ok('list_deleted',{})).records.some(x=>x.id===fav.id));
 });
-test('workbenches: create (notes/tasks only), rename custom only, names 1–24',async()=>{
+test('workbenches: create (notes/tasks with dedicated originals tools), rename custom only, names 1–24',async()=>{
  const c=(await ok('create_workbench',{name:' 家务 '})).created;assert.equal(c.name,'家务');assert.deepEqual(c.writableKinds,['note','task']);
  assert.ok((await ok('list_workbenches',{})).workbenches.some(w=>w.id===c.id&&w.name==='家务'));
  assert.ok((await ok('create_record',{workbench:c.id,kind:'task',title:'倒垃圾'})).created);
- assert.match((await err('create_record',{workbench:c.id,kind:'water',volume:100})).message,/只能记备忘和待办/);
+ assert.match((await err('create_record',{workbench:c.id,kind:'water',volume:100})).message,/支持备忘、待办和资料/);
  assert.equal((await ok('rename_workbench',{workbench:c.id,name:'家务事'})).renamed.name,'家务事');
  assert.equal((await err('rename_workbench',{workbench:'health',name:'x'})).message,'「健康」是内置工作台，不能改名');
  assert.equal((await err('create_workbench',{name:'一'.repeat(25)})).message,'工作台名称需为 1–24 个字');

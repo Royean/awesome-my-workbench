@@ -32,7 +32,7 @@ const builtinWorkbenches=[{id:'health',name:'健康',type:'health',themeColor:'#
 const getWorkbenches=()=>{const stored=db.prepare('SELECT id,name,type,themeColor FROM workbenches ORDER BY rowid').all();return [...builtinWorkbenches.map(w=>stored.find(s=>s.id===w.id)||w),...stored.filter(w=>!builtinWorkbenches.some(b=>b.id===w.id))].map(w=>({...w,themeColor:w.themeColor||defaultTheme(w.type)}));};
 // Names are unique within one account's workbenches (compared after trim); renaming to its own name is fine.
 const assertUniqueWorkbenchName=(list,name,selfId)=>{const n=String(name).trim();const self=list.find(w=>w.id===selfId);if(self&&String(self.name).trim()===n)return;if(list.some(w=>w.id!==selfId&&String(w.name).trim()===n))throw bad(`已经有叫「${n}」的工作台了`,'name');};
-const validateWorkbench=(b,existing=[])=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台只能记备忘和待办':'工作台名称需为 1–24 个字');assertUniqueWorkbenchName(existing,b.name);return {id:randomUUID(),name:b.name.trim(),type:'other',themeColor:themeColor(b.themeColor)}};
+const validateWorkbench=(b,existing=[])=>{if(b.type!=='other'||typeof b.name!=='string'||!b.name.trim()||b.name.trim().length>24)throw bad(b.type!=='other'?'新建的工作台支持备忘、待办和资料':'工作台名称需为 1–24 个字');assertUniqueWorkbenchName(existing,b.name);return {id:randomUUID(),name:b.name.trim(),type:'other',themeColor:themeColor(b.themeColor)}};
 // Clock: ZH_TEST_NOW (ISO) is honoured only under NODE_ENV=test so tests can pin "now".
 const now=()=>process.env.NODE_ENV==='test'&&process.env.ZH_TEST_NOW?new Date(process.env.ZH_TEST_NOW):new Date();
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(now());
@@ -134,6 +134,12 @@ function scopeType(space){
  if(space==='personal'||space==='demo')return 'health';
  const id=space.split('::')[1];return getWorkbenches().find(w=>w.id===id)?.type;
 }
+function validateFileScope(space,body){
+ const type=scopeType(space);
+ const present=value=>value!==undefined&&value!==null&&value!==''&&(!Array.isArray(value)||value.length>0);
+ if(type!=='health')for(const key of ['visitId','medicationId','imageFileId','fileId','attachmentIds','accountId','assetId'])if(present(body[key]))throw bad('此工作台的资料不能关联健康记录',key);
+ if(type!=='travel'&&present(body.tripId))throw bad('仅旅行工作台的资料可关联旅行','tripId');
+}
 function validateTravelReferences(space,kind,body,id){
  if(TRAVEL_KINDS.includes(kind)&&scopeType(space)!=='travel')throw bad('旅行记录只能保存到旅行工作台');
  if(kind==='travel_trip'){
@@ -150,6 +156,7 @@ function validateTravelReferences(space,kind,body,id){
 const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
 function put(space,kind,body,id=randomUUID(),via){
  const old0=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);
+ if(kind==='file')validateFileScope(space,body);
  const clean=validate(kind,body,{original:old0?JSON.parse(old0.body):undefined});
  if([...ASSET_KINDS,...TRAVEL_KINDS].includes(kind)){
   if(clean.externalId&&(db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND id<>? AND json_extract(body,'$.externalId')=?").get(space,kind,id,clean.externalId)||db.prepare("SELECT id FROM trash_items WHERE space=? AND kind=? AND id<>? AND json_extract(body,'$.externalId')=? AND expires_at>?").get(space,kind,id,clean.externalId,Date.now())))throw Object.assign(bad('该来源记录已导入，请编辑已有记录','externalId','duplicate_external_id'),{status:409});
@@ -327,9 +334,33 @@ function bootstrapPayload(user,url){
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
 // MCP originals use the same private file rows and download authorization as the web.
 const fileDigest=f=>{const p=path.join(dataDir,'uploads',path.basename(f.storageName));return fs.existsSync(p)?{sha256:createHash('sha256').update(fs.readFileSync(p)).digest('hex')}:{sha256:null,missing:true};};
-const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,type:f.mime,size:f.size,visitId:f.visitId||'',...(f.tripId?{tripId:f.tripId}:{}),...fileDigest(f)});
-const listAttachments=(space,limit)=>{const files=getAll(space).filter(f=>f.kind==='file'&&f.fileCategory!=='餐食附件').sort((a,b)=>b.date.localeCompare(a.date));return {total:files.length,returned:Math.min(limit,files.length),files:files.slice(0,limit).map(f=>attachmentMeta(space,f))};};
+const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,time:f.time||'',note:f.note||'',type:f.mime,mime:f.mime,size:f.size,fileCategory:f.fileCategory||'',visitId:f.visitId||'',...(f.tripId?{tripId:f.tripId}:{}),...fileDigest(f)});
+const attachmentOptions=input=>{
+ const b=typeof input==='number'?{limit:input}:input??{},out={};
+ if(!b||typeof b!=='object'||Array.isArray(b))throw bad('原件查询参数无效');
+ for(const key of Object.keys(b))if(!['query','fileType','from','to','offset','limit','tripId'].includes(key))throw bad('原件查询参数无效',key);
+ if(b.query!==undefined&&(typeof b.query!=='string'||b.query.length>200))throw bad('搜索文字最多200字','query');out.query=(b.query||'').trim().toLowerCase();
+ out.fileType=b.fileType??'all';if(!['all','pdf','image','text','audio'].includes(out.fileType))throw bad('请选择有效文件类型','fileType');
+ for(const key of ['from','to'])if(b[key]!==undefined&&b[key]!==''){if(typeof b[key]!=='string'||!validDate(b[key]))throw bad('请选择有效日期',key);out[key]=b[key];}
+ if(out.from&&out.to&&out.to<out.from)throw bad('结束日期不能早于开始日期','to');
+ for(const [key,value,min,max] of [['offset',b.offset??0,0,100000],['limit',b.limit??50,1,200]]){if(typeof value!=='number'||!Number.isInteger(value)||value<min||value>max)throw bad('分页参数无效',key);out[key]=value;}
+ if(b.tripId!==undefined){if(typeof b.tripId!=='string'||!b.tripId||b.tripId.length>100)throw bad('旅行筛选无效','tripId');out.tripId=b.tripId;}
+ return out;
+};
+const listAttachments=(space,input)=>{
+ const options=attachmentOptions(input);
+ if(options.tripId){if(scopeType(space)!=='travel')throw bad('仅旅行资料可按旅行筛选','tripId');if(options.tripId!=='unassigned'&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='travel_trip'").get(options.tripId,space))throw bad('没有找到此空间中的旅行','tripId');}
+ const files=getAll(space).filter(f=>f.kind==='file').filter(f=>
+  (!options.query||[f.name,f.title,f.note].some(v=>typeof v==='string'&&v.toLowerCase().includes(options.query)))&&
+  (options.fileType==='all'||options.fileType==='pdf'&&f.mime==='application/pdf'||options.fileType==='image'&&f.mime?.startsWith('image/')||options.fileType==='text'&&f.mime==='text/plain'||options.fileType==='audio'&&f.mime?.startsWith('audio/'))&&
+  (!options.from||f.date>=options.from)&&(!options.to||f.date<=options.to)&&
+  (!options.tripId||(options.tripId==='unassigned'?!f.tripId:f.tripId===options.tripId))
+ ).sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||''))||b.id.localeCompare(a.id));
+ const page=files.slice(options.offset,options.offset+options.limit),hasMore=options.offset+page.length<files.length;
+ return {total:files.length,returned:page.length,offset:options.offset,hasMore,nextOffset:hasMore?options.offset+page.length:null,files:page.map(f=>attachmentMeta(space,f))};
+};
 function uploadAttachment(space,b){
+ validateFileScope(space,b);
  const name=b.name;if(/[\\/\x00-\x1f\x7f]/.test(name)||name==='.'||name==='..')throw bad('文件名不能包含路径或控制字符');
  const ext=path.extname(name).toLowerCase();if(!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext))throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
  const encoded=b.contentBase64;if(encoded.length%4!==0||!/^[A-Za-z0-9+/]*={0,2}$/.test(encoded))throw bad('文件编码格式无效');
@@ -423,12 +454,12 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
  // 「最近删除」 covers every workbench of the current base space (personal or demo).
  if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
- if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||w.id==='travel'||(w.id==='finance'&&db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file'))requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
+ if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||w.id==='travel'||db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file')requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
- const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>![...ASSET_KINDS,...TRAVEL_KINDS].includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:workbench.type==='travel'?['note','task','file',...TRAVEL_KINDS]:['note','task'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
+ const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>![...ASSET_KINDS,...TRAVEL_KINDS].includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:workbench.type==='travel'?['note','task','file',...TRAVEL_KINDS]:['note','task','file'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
  if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches(user_id,id,name,type,themeColor) VALUES(?,?,?,?,?)').run(user.id,item.id,item.name,item.type,item.themeColor);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type,themeColor) VALUES(?,?,?,?)').run(item.id,item.name,item.type,item.themeColor);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
- if((url.pathname==='/api/upload'&&!['health','finance','travel'].includes(workbench.type))||(url.pathname==='/api/capture-meal'&&workbench.type!=='health'))return json(res,400,{error:'此工作台不支持该上传操作'});
+ if(url.pathname==='/api/capture-meal'&&workbench.type!=='health')return json(res,400,{error:'此工作台不支持该上传操作'});
  if(url.pathname.startsWith('/api/workbenches/')&&req.method==='PATCH'){
   requireExpectedOwner();
   const id=url.pathname.split('/').pop(),target=workbenches.find(w=>w.id===id);if(!target)return json(res,404,{error:'工作台不存在'});
@@ -464,15 +495,15 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/settings'&&req.method==='PUT'){if(workbench.type==='travel')requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
 
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||workbench.type==='travel')requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
- if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||workbench.type==='travel'||(old.kind==='file'&&workbench.type==='finance')))requireExpectedOwner();
-  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+ if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||workbench.type==='travel'||old.kind==='file'))requireExpectedOwner();
+  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
   if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());
   if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过 12 秒'});
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
-  if(ASSET_KINDS.includes(deleted.kind)||workbench.type==='travel'||(deleted.kind==='file'&&workbench.type==='finance'))requireExpectedOwner();
+  if(ASSET_KINDS.includes(deleted.kind)||workbench.type==='travel'||deleted.kind==='file')requireExpectedOwner();
   if(workbench.type==='travel')return json(res,200,restoreFromTrash(space,id));
   const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
@@ -496,10 +527,14 @@ const server=http.createServer(async(req,res)=>{try{
    const meal=put(space,'meal',body,existing?.id||randomUUID());db.exec('COMMIT');return json(res,existing?200:201,meal);
   }catch(error){db.exec('ROLLBACK');for(const p of written)try{fs.unlinkSync(p)}catch{}throw error;}
  }
+ if(url.pathname==='/api/attachments'&&req.method==='GET'){
+  const filters=Object.create(null);for(const [key,value] of url.searchParams){if(['workbench','space'].includes(key))continue;filters[key]=['offset','limit'].includes(key)&&/^\d+$/.test(value)?Number(value):value;}
+  return json(res,200,listAttachments(space,filters));
+ }
  if(url.pathname==='/api/upload'&&req.method==='POST'){
-  if(['finance','travel'].includes(workbench.type))requireExpectedOwner();
-  const b=await readBody(req);const name=path.basename(String(b.name||''));const ext=path.extname(name).toLowerCase();if(!allowedFiles[ext])throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
-  if(['finance','travel'].includes(workbench.type)&&(!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext)||b.visitId))throw bad('资产和旅行资料仅支持PDF、图片、TXT，不关联健康就诊');
+  requireExpectedOwner();
+  const b=await readBody(req);validateFileScope(space,b);const name=path.basename(String(b.name||''));const ext=path.extname(name).toLowerCase();if(!allowedFiles[ext])throw bad('支持 PDF、PNG、JPG、WEBP 和 TXT');
+  if(workbench.type!=='health'&&!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext))throw bad('一般资料上传仅支持PDF、图片和TXT');
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
   validateTravelReferences(space,'file',body);

@@ -1,3 +1,4 @@
+import { READING_KINDS, validateReading, assertReadingPage } from './lib/reading.mjs';
 import { enrichAssetHolding } from './public/asset-lifecycle.js';
 import { TRAVEL_KINDS, validateTravel, assertTravelChildDates } from './lib/travel.mjs';
 import { ASSET_KINDS, validateAsset, defaultTheme, themeColor } from './lib/assets.mjs';
@@ -29,7 +30,7 @@ db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMA
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 if(!db.prepare('PRAGMA table_info(workbenches)').all().some(c=>c.name==='themeColor'))db.exec('ALTER TABLE workbenches ADD COLUMN themeColor TEXT');
-const builtinWorkbenches=[{id:'health',name:'健康',type:'health',themeColor:'#2C6B51'},{id:'finance',name:'资产',type:'finance',themeColor:'#A65343'},{id:'travel',name:'旅行',type:'travel',themeColor:'#356A98'}];
+const builtinWorkbenches=[{id:'health',name:'健康',type:'health',themeColor:'#2C6B51'},{id:'finance',name:'资产',type:'finance',themeColor:'#A65343'},{id:'travel',name:'旅行',type:'travel',themeColor:'#356A98'},{id:'reading',name:'阅读',type:'reading',themeColor:'#74634F'}];
 const getWorkbenches=()=>{const stored=db.prepare('SELECT id,name,type,themeColor FROM workbenches ORDER BY rowid').all();return [...builtinWorkbenches.map(w=>stored.find(s=>s.id===w.id)||w),...stored.filter(w=>!builtinWorkbenches.some(b=>b.id===w.id))].map(w=>({...w,themeColor:w.themeColor||defaultTheme(w.type)}));};
 // Names are unique within one account's workbenches (compared after trim); renaming to its own name is fine.
 const assertUniqueWorkbenchName=(list,name,selfId)=>{const n=String(name).trim();const self=list.find(w=>w.id===selfId);if(self&&String(self.name).trim()===n)return;if(list.some(w=>w.id!==selfId&&String(w.name).trim()===n))throw bad(`已经有叫「${n}」的工作台了`,'name');};
@@ -40,7 +41,7 @@ const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'
 const nowHM=()=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hour12:false}).format(now());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
 const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>enrichAssetHolding({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
-const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note',...ASSET_KINDS,...TRAVEL_KINDS];
+const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note',...ASSET_KINDS,...TRAVEL_KINDS,...READING_KINDS];
 import { isValidDate as validDate, DATE_ERROR } from './lib/dates.mjs';
 const bad=(message,field,code='validation_failed')=>Object.assign(new Error(message),{status:400,expose:true,code,...(field?{field}:{})});
 // 「不能记录未来的日期，今天是 11月1日」 (Asia/Shanghai). Applies to the web API and MCP alike.
@@ -54,6 +55,7 @@ const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'
 // opts.original: the stored record when updating (lets legacy records keep missing optional links).
 function validate(kind,b,opts={}){
  if(!kinds.includes(kind))throw bad('记录类型无效');
+ if(READING_KINDS.includes(kind))return validateReading(kind,b,{validDate,bad,today});
  if(TRAVEL_KINDS.includes(kind))return validateTravel(kind,b,{validDate,bad});
  if(ASSET_KINDS.includes(kind))return validateAsset(kind,b,{validDate,bad,today});
  if(typeof b.title!=='string'||!b.title.trim()||b.title.length>120)throw bad('名称需为 1–120 个字符');
@@ -126,7 +128,7 @@ function validate(kind,b,opts={}){
   clean.attachmentIds=[...new Set(b.attachmentIds||[])];
  }
  if(kind==='task')clean.done=Boolean(b.done);
- if(kind==='file'){if(b.tripId!==undefined){if(typeof b.tripId!=='string'||b.tripId.length>100)throw bad('所属旅行编号无效','tripId');clean.tripId=b.tripId.trim();}clean.size=Number(b.size)||0;clean.intakeStatus=clean.visitId?'已关联':String(b.intakeStatus||'待整理');clean.fileCategory=String(b.fileCategory||'一般资料').slice(0,80);}
+ if(kind==='file'){if(b.bookId!==undefined){if(typeof b.bookId!=='string'||b.bookId.length>100)throw bad('所属书籍编号无效','bookId');clean.bookId=b.bookId.trim();}if(b.tripId!==undefined){if(typeof b.tripId!=='string'||b.tripId.length>100)throw bad('所属旅行编号无效','tripId');clean.tripId=b.tripId.trim();}clean.size=Number(b.size)||0;clean.intakeStatus=clean.visitId?'已关联':String(b.intakeStatus||'待整理');clean.fileCategory=String(b.fileCategory||'一般资料').slice(0,80);}
  return clean;
 }
 function scopeType(space){
@@ -139,6 +141,7 @@ function validateFileScope(space,body){
  const type=scopeType(space);
  const present=value=>value!==undefined&&value!==null&&value!==''&&(!Array.isArray(value)||value.length>0);
  if(type!=='health')for(const key of ['visitId','medicationId','imageFileId','fileId','attachmentIds','accountId','assetId'])if(present(body[key]))throw bad('此工作台的资料不能关联健康记录',key);
+ if(type!=='reading'&&present(body.bookId))throw bad('仅阅读工作台的资料可关联书籍','bookId');
  if(type!=='travel'&&present(body.tripId))throw bad('仅旅行工作台的资料可关联旅行','tripId');
 }
 function validateTravelReferences(space,kind,body,id){
@@ -150,6 +153,17 @@ function validateTravelReferences(space,kind,body,id){
   const row=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='travel_trip'").get(body.tripId,space);
   if(!row)throw bad('所属旅行不存在或不在当前空间','tripId');
   assertTravelChildDates(kind,body,JSON.parse(row.body),bad);
+ }
+}
+function validateReadingReferences(space,kind,body,id){
+ if(READING_KINDS.includes(kind)&&scopeType(space)!=='reading')throw bad('阅读记录只能保存到阅读工作台');
+ if(kind==='reading_book'){
+  for(const child of getAll(space).filter(x=>x.kind==='reading_entry'&&x.bookId===id))assertReadingPage(child,body,bad);
+ }else if(body.bookId){
+  if(scopeType(space)!=='reading')throw bad('仅阅读工作台可关联书籍','bookId');
+  const row=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='reading_book'").get(body.bookId,space);
+  if(!row)throw bad('所属书籍不存在或不在当前空间','bookId');
+  if(kind==='reading_entry')assertReadingPage(body,JSON.parse(row.body),bad);
  }
 }
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
@@ -164,6 +178,7 @@ function put(space,kind,body,id=randomUUID(),via){
   for(const [key,target] of [['accountId','asset_account'],['assetId','asset_holding']])if(clean[key]&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(clean[key],space,target)&&!(old0&&JSON.parse(old0.body)[key]===clean[key]))throw bad('关联资产或账户不存在或不在当前空间',key);
  }
  validateTravelReferences(space,kind,clean,id);
+ validateReadingReferences(space,kind,clean,id);
  const old=db.prepare('SELECT body FROM items WHERE id=? AND space=?').get(id,space);const original=old?JSON.parse(old.body):{};
  for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
@@ -207,6 +222,7 @@ purgeTrash();
 function softDelete(space,id,via){
  const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return null;
  if(old.kind==='medication'&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===id))throw bad('该方案已有服用记录，请停用以保留历史，或先移除服用记录');
+ if(old.kind==='reading_book'&&getAll(space).some(x=>x.bookId===id))throw bad('书籍仍有关联的阅读记录或原件，请先删除阅读记录并解除原件关联后再删除书籍');
  const now=Date.now();
  if(old.kind==='travel_trip'){
   const children=db.prepare("SELECT * FROM items WHERE space=? AND json_extract(body,'$.tripId')=?").all(space,id);
@@ -237,17 +253,17 @@ function writeSettings(space,b){
  if(b.waterGoalMl!==undefined&&b.waterGoalMl!==''){const v=Number(b.waterGoalMl);if(!Number.isInteger(v)||v<100||v>10000)throw bad('每日饮水目标需在 100–10000 毫升之间','waterGoalMl');clean.waterGoalMl=v;}
  db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return clean;
 }
-const PARENT_NAMES={visit:'就诊记录',medication:'用药方案',travel_trip:'旅行'};
+const PARENT_NAMES={visit:'就诊记录',medication:'用药方案',travel_trip:'旅行',reading_book:'书籍'};
 // Restoring needs the parent back first (visit for report/medication, medication for dose); otherwise a plain error.
-function parentOf(kind,body){if((TRAVEL_KINDS.includes(kind)||kind==='file')&&body.tripId)return {kind:'travel_trip',id:body.tripId};if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
+function parentOf(kind,body){if((kind==='reading_entry'||kind==='file')&&body.bookId)return {kind:'reading_book',id:body.bookId};if((TRAVEL_KINDS.includes(kind)||kind==='file')&&body.tripId)return {kind:'travel_trip',id:body.tripId};if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
 // restorable:false + reason when the parent (visit / medication) is gone for good (neither live nor in the trash).
 function listTrash(space){purgeTrash();return db.prepare('SELECT id,kind,body,deleted_at,deleted_via,expires_at FROM trash_items WHERE space=? ORDER BY deleted_at DESC').all(space).map(r=>{const b=JSON.parse(r.body),p=parentOf(r.kind,b);
  const gone=p&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(p.id,space,p.kind)&&!db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(p.id,space);
- return {id:r.id,kind:r.kind,...b,deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString(),restorable:!gone,...(gone?{reason:`所属${p.kind==='visit'?'就诊':p.kind==='travel_trip'?'旅行':'用药方案'}已清除，无法恢复`}:{})};});}
+ return {id:r.id,kind:r.kind,...b,deletedAt:new Date(r.deleted_at).toISOString(),deletedVia:r.deleted_via,expiresAt:new Date(r.expires_at).toISOString(),restorable:!gone,...(gone?{reason:`所属${p.kind==='visit'?'就诊':p.kind==='travel_trip'?'旅行':p.kind==='reading_book'?'书籍':'用药方案'}已清除，无法恢复`}:{})};});}
 // Ancestors that are in the trash, nearest first (dose → medication → visit), stopping at the first one not in the trash.
 function trashedChain(space,parent){const out=[];while(parent){const r=db.prepare('SELECT body FROM trash_items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind);if(!r)break;const b=JSON.parse(r.body);out.push({...parent,title:b.title});parent=parentOf(parent.kind,b);}return out;}
 // 「所属就诊也已删除」/「所属用药方案也已删除」/「用药方案和所属就诊也已删除」
-const KN=k=>k==='visit'?'就诊':k==='travel_trip'?'旅行':'用药方案';
+const KN=k=>k==='visit'?'就诊':k==='travel_trip'?'旅行':k==='reading_book'?'书籍':'用药方案';
 const chainText=chain=>{const n=c=>`${KN(c.kind)}「${c.title}」`;return chain.length>1?`${chain.slice(0,-1).map(n).join('、')}和所属${n(chain.at(-1))}也已删除`:`所属${n(chain[0])}也已删除`;};
 // opts.withParent: when the parent (visit / medication) is also in the trash, restore it first (recursively), then this record.
 function restoreTravelTrip(space,t){
@@ -283,6 +299,7 @@ function restoreFromTrash(space,id,opts={}){
   else throw Object.assign(bad(`它所属的${PARENT_NAMES[parent.kind]}已经不在了，无法恢复`,undefined,'parent_missing'),{parentKind:parent.kind});
  }
  if(TRAVEL_KINDS.includes(t.kind)||t.kind==='file'&&body.tripId)validateTravelReferences(space,t.kind,body,t.id);
+ if(READING_KINDS.includes(t.kind)||t.kind==='file'&&body.bookId){validate(t.kind,body);validateReadingReferences(space,t.kind,body,t.id);}
  if(t.kind==='dose'&&body.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===body.medicationId&&x.date===body.date&&x.scheduledTime===body.scheduledTime))throw bad('该时段已有服用结果，不能恢复为重复记录');
  db.exec('BEGIN');try{db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(t.id,space,t.kind,t.body);db.prepare('DELETE FROM trash_items WHERE id=?').run(t.id);db.prepare('DELETE FROM deleted_items WHERE id=?').run(t.id);db.exec('COMMIT');}catch(err){db.exec('ROLLBACK');throw err}
  return {id:t.id,kind:t.kind,...body,restoredCount:1+(parentRestored?.restoredCount||0),...(parentRestored?{parentRestored:{id:parentRestored.id,kind:parentRestored.kind,title:parentRestored.title}}:{})};
@@ -335,27 +352,30 @@ function bootstrapPayload(user,url){
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
 // MCP originals use the same private file rows and download authorization as the web.
 const fileDigest=f=>{const p=path.join(dataDir,'uploads',path.basename(f.storageName));return fs.existsSync(p)?{sha256:createHash('sha256').update(fs.readFileSync(p)).digest('hex')}:{sha256:null,missing:true};};
-const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,time:f.time||'',note:f.note||'',type:f.mime,mime:f.mime,size:f.size,fileCategory:f.fileCategory||'',visitId:f.visitId||'',...(f.tripId?{tripId:f.tripId}:{}),...fileDigest(f)});
+const attachmentMeta=(space,f)=>({id:f.id,name:f.name||f.title,title:f.title,date:f.date,time:f.time||'',note:f.note||'',type:f.mime,mime:f.mime,size:f.size,fileCategory:f.fileCategory||'',visitId:f.visitId||'',...(f.tripId?{tripId:f.tripId}:{}),...(f.bookId?{bookId:f.bookId}:{}),...fileDigest(f)});
 const attachmentOptions=input=>{
  const b=typeof input==='number'?{limit:input}:input??{},out={};
  if(!b||typeof b!=='object'||Array.isArray(b))throw bad('原件查询参数无效');
- for(const key of Object.keys(b))if(!['query','fileType','from','to','offset','limit','tripId'].includes(key))throw bad('原件查询参数无效',key);
+ for(const key of Object.keys(b))if(!['query','fileType','from','to','offset','limit','tripId','bookId'].includes(key))throw bad('原件查询参数无效',key);
  if(b.query!==undefined&&(typeof b.query!=='string'||b.query.length>200))throw bad('搜索文字最多200字','query');out.query=(b.query||'').trim().toLowerCase();
  out.fileType=b.fileType??'all';if(!['all','pdf','image','text','audio'].includes(out.fileType))throw bad('请选择有效文件类型','fileType');
  for(const key of ['from','to'])if(b[key]!==undefined&&b[key]!==''){if(typeof b[key]!=='string'||!validDate(b[key]))throw bad('请选择有效日期',key);out[key]=b[key];}
  if(out.from&&out.to&&out.to<out.from)throw bad('结束日期不能早于开始日期','to');
  for(const [key,value,min,max] of [['offset',b.offset??0,0,100000],['limit',b.limit??50,1,200]]){if(typeof value!=='number'||!Number.isInteger(value)||value<min||value>max)throw bad('分页参数无效',key);out[key]=value;}
  if(b.tripId!==undefined){if(typeof b.tripId!=='string'||!b.tripId||b.tripId.length>100)throw bad('旅行筛选无效','tripId');out.tripId=b.tripId;}
+ if(b.bookId!==undefined){if(typeof b.bookId!=='string'||!b.bookId||b.bookId.length>100)throw bad('书籍筛选无效','bookId');out.bookId=b.bookId;}
  return out;
 };
 const listAttachments=(space,input)=>{
  const options=attachmentOptions(input);
  if(options.tripId){if(scopeType(space)!=='travel')throw bad('仅旅行资料可按旅行筛选','tripId');if(options.tripId!=='unassigned'&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='travel_trip'").get(options.tripId,space))throw bad('没有找到此空间中的旅行','tripId');}
+ if(options.bookId){if(scopeType(space)!=='reading')throw bad('仅阅读资料可按书籍筛选','bookId');if(options.bookId!=='unassigned'&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='reading_book'").get(options.bookId,space))throw bad('没有找到此空间中的书籍','bookId');}
  const files=getAll(space).filter(f=>f.kind==='file').filter(f=>
   (!options.query||[f.name,f.title,f.note].some(v=>typeof v==='string'&&v.toLowerCase().includes(options.query)))&&
   (options.fileType==='all'||options.fileType==='pdf'&&f.mime==='application/pdf'||options.fileType==='image'&&f.mime?.startsWith('image/')||options.fileType==='text'&&f.mime==='text/plain'||options.fileType==='audio'&&f.mime?.startsWith('audio/'))&&
   (!options.from||f.date>=options.from)&&(!options.to||f.date<=options.to)&&
-  (!options.tripId||(options.tripId==='unassigned'?!f.tripId:f.tripId===options.tripId))
+  (!options.tripId||(options.tripId==='unassigned'?!f.tripId:f.tripId===options.tripId))&&
+  (!options.bookId||(options.bookId==='unassigned'?!f.bookId:f.bookId===options.bookId))
  ).sort((a,b)=>(b.date+(b.time||'')).localeCompare(a.date+(a.time||''))||b.id.localeCompare(a.id));
  const page=files.slice(options.offset,options.offset+options.limit),hasMore=options.offset+page.length<files.length;
  return {total:files.length,returned:page.length,offset:options.offset,hasMore,nextOffset:hasMore?options.offset+page.length:null,files:page.map(f=>attachmentMeta(space,f))};
@@ -369,11 +389,12 @@ function uploadAttachment(space,b){
  if(bytes.toString('base64')!==encoded)throw bad('文件编码格式无效');
  const hash=createHash('sha256').update(bytes).digest('hex');if(hash!==b.sha256)throw bad('文件校验失败，请重新读取原件');
  const title=b.title||name,note=b.note||'';
- const body=validate('file',{title,date:b.date,name,mime:allowedFiles[ext],size:bytes.length,storageName:randomUUID()+ext,note,...(b.tripId?{tripId:b.tripId}:{}),fileCategory:'报告原件'});
+ const body=validate('file',{title,date:b.date,name,mime:allowedFiles[ext],size:bytes.length,storageName:randomUUID()+ext,note,...(b.tripId?{tripId:b.tripId}:{}),...(b.bookId?{bookId:b.bookId}:{}),fileCategory:'报告原件'});
  // Compare the actual persisted bytes, so web edits cannot leave a stale trusted digest.
- const existing=getAll(space).find(f=>f.kind==='file'&&f.name===name&&f.date===body.date&&f.title===body.title&&f.note===body.note&&(f.tripId||'')===(body.tripId||'')&&f.size===bytes.length&&f.fileCategory==='报告原件'&&fs.existsSync(path.join(dataDir,'uploads',path.basename(f.storageName)))&&attachmentMeta(space,f).sha256===hash);
+ const existing=getAll(space).find(f=>f.kind==='file'&&f.name===name&&f.date===body.date&&f.title===body.title&&f.note===body.note&&(f.tripId||'')===(body.tripId||'')&&(f.bookId||'')===(body.bookId||'')&&f.size===bytes.length&&f.fileCategory==='报告原件'&&fs.existsSync(path.join(dataDir,'uploads',path.basename(f.storageName)))&&attachmentMeta(space,f).sha256===hash);
  if(existing)return {uploaded:attachmentMeta(space,existing),reused:true};
  validateTravelReferences(space,'file',body);
+ validateReadingReferences(space,'file',body);
  const destination=path.join(dataDir,'uploads',body.storageName);let written=false;
  db.exec('BEGIN IMMEDIATE');try{const fd=fs.openSync(destination,'wx',0o600);written=true;try{fs.writeFileSync(fd,bytes);}finally{fs.closeSync(fd);}const f=put(space,'file',body,undefined,'mcp');const uploaded=attachmentMeta(space,f);db.exec('COMMIT');return {uploaded,reused:false};}
  catch(e){if(db.isTransaction)db.exec('ROLLBACK');if(written)fs.unlinkSync(destination);throw e;}
@@ -455,10 +476,10 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
  // 「最近删除」 covers every workbench of the current base space (personal or demo).
  if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
- if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||w.id==='travel'||db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file')requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
+ if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||['travel','reading'].includes(w.id)||db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file')requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
- const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>![...ASSET_KINDS,...TRAVEL_KINDS].includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:workbench.type==='travel'?['note','task','file',...TRAVEL_KINDS]:['note','task','file'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
+ const checkKind=kind=>{const allowed=workbench.type==='health'?kinds.filter(k=>![...ASSET_KINDS,...TRAVEL_KINDS,...READING_KINDS].includes(k)):workbench.type==='finance'?['note','task','file',...ASSET_KINDS]:workbench.type==='travel'?['note','task','file',...TRAVEL_KINDS]:workbench.type==='reading'?['note','task','file',...READING_KINDS]:['note','task','file'];if(!allowed.includes(kind))throw bad('此工作台不支持这类记录');};
  if(url.pathname==='/api/workbenches'){if(req.method==='GET')return json(res,200,{workbenches});if(req.method==='POST'){const item=validateWorkbench(await readBody(req),workbenches);if(authEnabled){db.exec('BEGIN IMMEDIATE');try{db.prepare('INSERT INTO user_workbenches(user_id,id,name,type,themeColor) VALUES(?,?,?,?,?)').run(user.id,item.id,item.name,item.type,item.themeColor);for(const base of ['personal','demo'])db.prepare('INSERT INTO data_scopes VALUES(?,?,?,?)').run(user.id,item.id,base,`account:${user.id}:${item.id}:${base}`);db.exec('COMMIT');}catch(e){db.exec('ROLLBACK');throw e;}}else db.prepare('INSERT INTO workbenches(id,name,type,themeColor) VALUES(?,?,?,?)').run(item.id,item.name,item.type,item.themeColor);return json(res,201,item)}return json(res,405,{error:'方法不支持'})}
  if(url.pathname==='/api/capture-meal'&&workbench.type!=='health')return json(res,400,{error:'此工作台不支持该上传操作'});
  if(url.pathname.startsWith('/api/workbenches/')&&req.method==='PATCH'){
@@ -493,19 +514,19 @@ const server=http.createServer(async(req,res)=>{try{
   return json(res,405,{error:'CGM 操作或请求方法不支持'});
  }
  if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space)})}
- if(url.pathname==='/api/settings'&&req.method==='PUT'){if(workbench.type==='travel')requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
+ if(url.pathname==='/api/settings'&&req.method==='PUT'){if(['travel','reading'].includes(workbench.type))requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
 
- if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||workbench.type==='travel')requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
- if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||workbench.type==='travel'||old.kind==='file'))requireExpectedOwner();
-  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+ if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||['travel','reading'].includes(workbench.type))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
+ if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||['travel','reading'].includes(workbench.type)||old.kind==='file'))requireExpectedOwner();
+  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId','bookId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
   if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());
   if(!deleted)return json(res,404,{error:'没有可撤销的删除，或已超过 12 秒'});
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
-  if(ASSET_KINDS.includes(deleted.kind)||workbench.type==='travel'||deleted.kind==='file')requireExpectedOwner();
-  if(workbench.type==='travel')return json(res,200,restoreFromTrash(space,id));
+  if(ASSET_KINDS.includes(deleted.kind)||['travel','reading'].includes(workbench.type)||deleted.kind==='file')requireExpectedOwner();
+  if(['travel','reading'].includes(workbench.type))return json(res,200,restoreFromTrash(space,id));
   const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
@@ -539,6 +560,7 @@ const server=http.createServer(async(req,res)=>{try{
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
   validateTravelReferences(space,'file',body);
+ validateReadingReferences(space,'file',body);
   if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
   fs.writeFileSync(path.join(dataDir,'uploads',storageName),bytes,{mode:0o600});return json(res,201,put(space,'file',body));
  }

@@ -47,6 +47,20 @@ test('travel records validate calendar, coordinates, status, amounts, links and 
  assert.equal((await req(travel('/api/items/'+p.id),{method:'PUT',body:{startDate:'2027-02-03'}})).status,400);
  for(const bench of ['health','finance'])assert.equal((await req('/api/items?workbench='+bench,{method:'POST',body:{kind:'travel_trip',title:'错台',startDate:'2027-02-01',endDate:'2027-02-03'}})).status,400);
 });
+test('pre-departure preparation and post-return tasks retain valid dates without blocking trip rescheduling',async()=>{
+ const p=await trip();
+ const visa=await create('travel_check',{tripId:p.id,title:'出发前办理签证',date:'2027-01-15',category:'todo'});
+ const reimbursement=await create('travel_check',{tripId:p.id,title:'返程后报销',date:'2027-02-15',category:'todo'});
+ assert.equal(visa.date,'2027-01-15');assert.equal(reimbursement.date,'2027-02-15');
+ const moved=await req(travel('/api/items/'+p.id),{method:'PUT',body:{startDate:'2027-03-01',endDate:'2027-03-03'}});
+ assert.equal(moved.status,200,JSON.stringify(moved.body));
+ const items=(await req(travel('/api/state'))).body.items;
+ assert.equal(items.find(x=>x.id===visa.id).date,'2027-01-15');assert.equal(items.find(x=>x.id===reimbursement.id).date,'2027-02-15');
+ const invalid=await req(travel('/api/items'),{method:'POST',body:{kind:'travel_check',tripId:p.id,title:'虚构无效日期',date:'2027-02-30'}});
+ assert.equal(invalid.status,400);
+ const stop=await req(travel('/api/items'),{method:'POST',body:{kind:'travel_stop',tripId:p.id,title:'仍约束旅行地点',date:'2027-02-15'}});
+ assert.equal(stop.status,400);
+});
 test('travel web owner checks cover records, uploads and restores before writes',async()=>{
  const p=await trip(),badOwner=owners.get(otherCookie);
  for(const [route,method,body] of [[travel('/api/items'),'POST',{kind:'travel_check',tripId:p.id,title:'虚构',date:'2027-02-02'}],[travel('/api/items/'+p.id),'PUT',{title:'不应改动'}],[travel('/api/items/'+p.id),'DELETE',{}],[travel('/api/upload'),'POST',{...fileData,tripId:p.id}]])assert.equal((await req(route,{method,body,owner:badOwner})).status,409);

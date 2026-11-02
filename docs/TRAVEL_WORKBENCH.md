@@ -11,7 +11,7 @@
 - `travel_trip`: destination(string<=250), startDate/endDate(YYYY-MM-DD, end>=start, <=366日), status(planned/active/completed/cancelled)。`date`由startDate统一。自由备注用于同行人等补充。
 - `travel_stop`: tripId(required), category(attraction/food/stay/transport/other), address(string<=500), lat/lng(optional paired finite WGS84,-90..90/-180..180), position(integer0..10000), done(boolean)。base date必须在所属旅行范围内，time是目的地当地墙上时间；无坐标也能记地点。
 - `travel_booking`: tripId(required), bookingType(flight/train/hotel/ticket/car/other), status(planned/confirmed/cancelled), confirmationCode(string<=120), location(string<=250), endDate(optional >=date), price(optional finite>=0<=1e12),currency(uppercase3),referenceUrl(optional http/https only)。base date在旅行范围内，endDate<=旅行结束日+1日（住宿退房）；仅保存预订档案，不付款/出票。
-- `travel_check`: tripId(required), category(packing/todo), done(boolean)。base date在旅行范围内。
+- `travel_check`: tripId(required), category(packing/todo), done(boolean)。base date为有效事项日期，不限制在旅行起止内，以支持出发前签证/保险及回程报销；修改旅行日期不自动改清单日期。
 - 原件沿用file，新增tripId(optional仅旅行文件且同scope有效父旅行)，PDF/PNG/JPG/JPEG/WEBP/TXT <=10MiB，现有缩略图/原件预览，文件不得关联健康visit。
 - tripId关联必须同scope且travel_trip。删除旅行将相关stop/booking/check/file按现有父子软删除原子处理；恢复时保证父先可见。更新旅行日期若已有子项越界则拒绝并解释，不悄悄移动/隐藏数据。禁止带子项跨旅行改tripId（或校验日期和原关系）。
 - Web所有旅行写入、上传、恢复要求现有X-Workbench-Owner匹配。MCP复用鉴权scope。travel类型仅note/task/file+TRAVEL_KINDS；健康和资产不接受旅行类型；other不接受file/travel。

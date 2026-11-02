@@ -158,6 +158,7 @@ function validateTravelReferences(space,kind,body,id){
 function validateReadingReferences(space,kind,body,id){
  if(READING_KINDS.includes(kind)&&scopeType(space)!=='reading')throw bad('阅读记录只能保存到阅读工作台');
  if(kind==='reading_book'){
+  if(body.readerFileId){const file=getAll(space).find(x=>x.kind==='file'&&x.id===body.readerFileId&&x.bookId===id);const previous=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='reading_book'").get(id,space);if(!file&&(!previous||JSON.parse(previous.body).readerFileId!==body.readerFileId))throw bad('阅读原件不存在或未关联此材料','readerFileId');}
   for(const child of getAll(space).filter(x=>x.kind==='reading_entry'&&x.bookId===id))assertReadingPage(child,body,bad);
  }else if(body.bookId){
   if(scopeType(space)!=='reading')throw bad('仅阅读工作台可关联书籍','bookId');
@@ -562,7 +563,11 @@ const server=http.createServer(async(req,res)=>{try{
   validateTravelReferences(space,'file',body);
  validateReadingReferences(space,'file',body);
   if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
-  fs.writeFileSync(path.join(dataDir,'uploads',storageName),bytes,{mode:0o600});return json(res,201,put(space,'file',body));
+  const destination=path.join(dataDir,'uploads',storageName);
+  db.exec('BEGIN');try{
+   if(workbench.type==='reading'&&b.importReading===true&&!body.bookId){const book=put(space,'reading_book',{title:body.title,date:body.date,materialType:b.materialType||'book',status:'wish'});body.bookId=book.id;}
+   fs.writeFileSync(destination,bytes,{mode:0o600});const result=put(space,'file',body);db.exec('COMMIT');return json(res,201,result);
+  }catch(error){db.exec('ROLLBACK');fs.rmSync(destination,{force:true});throw error;}
  }
  if(url.pathname.startsWith('/api/files/')&&req.method==='GET'){
   const file=getAll(space).find(x=>x.kind==='file'&&x.id===url.pathname.split('/').pop());if(!file)return json(res,404,{error:'文件不存在'});

@@ -1,3 +1,4 @@
+import { enrichAssetHolding } from './public/asset-lifecycle.js';
 import { TRAVEL_KINDS, validateTravel, assertTravelChildDates } from './lib/travel.mjs';
 import { ASSET_KINDS, validateAsset, defaultTheme, themeColor } from './lib/assets.mjs';
 import { createCgm } from './lib/cgm.mjs';
@@ -38,7 +39,7 @@ const now=()=>process.env.NODE_ENV==='test'&&process.env.ZH_TEST_NOW?new Date(pr
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(now());
 const nowHM=()=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit',hour12:false}).format(now());
 const day=(offset=0)=>{const d=new Date(today()+'T12:00:00+08:00');d.setDate(d.getDate()+offset);return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(d)};
-const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
+const getAll=(space)=>db.prepare('SELECT id,kind,body FROM items WHERE space=?').all(space).map(r=>enrichAssetHolding({id:r.id,kind:r.kind,...JSON.parse(r.body)}));
 const kinds=['visit','exercise','meal','metric','task','file','report','medication','dose','favorite','water','note',...ASSET_KINDS,...TRAVEL_KINDS];
 import { isValidDate as validDate, DATE_ERROR } from './lib/dates.mjs';
 const bad=(message,field,code='validation_failed')=>Object.assign(new Error(message),{status:400,expose:true,code,...(field?{field}:{})});
@@ -183,7 +184,7 @@ function put(space,kind,body,id=randomUUID(),via){
   if(clean.scheduledTime&&!med.times.includes(clean.scheduledTime)&&!(original.scheduledTime===clean.scheduledTime&&original.medicationId===clean.medicationId))throw bad('计划时段不属于该用药方案，补记可不选择计划时段');
   if(clean.scheduledTime){const duplicate=getAll(space).find(x=>x.kind==='dose'&&x.id!==id&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime);if(duplicate)throw bad('该时段已有记录，请编辑原记录');}
  }
- db.prepare('INSERT INTO items VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body').run(id,space,kind,JSON.stringify(clean));return {id,kind,...clean};
+ db.prepare('INSERT INTO items VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET body=excluded.body').run(id,space,kind,JSON.stringify(clean));return enrichAssetHolding({id,kind,...clean});
 }
 if(!getAll('demo').length){
  for(let i=0;i<14;i++){const date=day(i-13);put('demo','metric',{title:'晨起体重',type:'weight',value:Math.round((68.7-i*.045+Math.sin(i)*.15)*10)/10,date,time:'07:30',note:'示例记录'});put('demo','metric',{title:'睡眠记录',type:'sleep',value:Math.round((7.1+Math.sin(i)*.6)*10)/10,date,note:'示例记录'});}

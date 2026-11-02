@@ -9,8 +9,9 @@ import {startServer,freePort} from './helpers.mjs';
 const cwd=path.resolve(import.meta.dirname,'..'),password='Fictional-only-passphrase-93',email='mcp-admin@example.invalid';
 let dir,server,base,cookieA,tokenA,tokenB,appToken;
 async function req(route,{method='GET',body,headers={},raw}={}){const r=await fetch(base+route,{method,headers:{...(body!==undefined||raw!==undefined?{'Content-Type':'application/json'}:{}),...headers},body:raw??(body===undefined?undefined:JSON.stringify(body))});const text=await r.text();return {status:r.status,headers:r.headers,text,body:text?JSON.parse(text):undefined};}
-const web=c=>({Cookie:c,Origin:base});
-const login=async(e,p)=>{const r=await req('/api/auth/login',{method:'POST',body:{email:e,password:p},headers:{Origin:base}});assert.equal(r.status,200);return r.headers.get('set-cookie').split(';')[0];};
+const owners=new Map();
+const web=c=>({Cookie:c,Origin:base,...(owners.has(c)?{'X-Workbench-Owner':owners.get(c)}:{})});
+const login=async(e,p)=>{const r=await req('/api/auth/login',{method:'POST',body:{email:e,password:p},headers:{Origin:base}});assert.equal(r.status,200);const cookie=r.headers.get('set-cookie').split(';')[0];owners.set(cookie,r.body.user.id);return cookie;};
 const mint=async c=>{const r=await req('/api/auth/tokens',{method:'POST',body:{name:'mcp'},headers:web(c)});assert.equal(r.status,201);return r.body.token;};
 let nextId=1;
 const rpc=(token,method,params,extra={})=>req('/mcp',{method:'POST',body:{jsonrpc:'2.0',id:nextId++,method,...(params!==undefined?{params}:{})},headers:{Authorization:`Bearer ${token}`,Accept:'application/json, text/event-stream','MCP-Protocol-Version':'2025-06-18',...extra}});
@@ -227,7 +228,7 @@ test('malformed Bearer values are token_invalid; no Bearer scheme at all is toke
 });
 test('web API validation messages are plain Chinese without field names or format codes',async()=>{
  const wb=async b=>(await req('/api/workbenches',{method:'POST',body:b,headers:web(cookieA)})).body.error;
- assert.equal(await wb({type:'health',name:'体检'}),'新建的工作台只能记备忘和待办');
+ assert.equal(await wb({type:'health',name:'体检'}),'新建的工作台支持备忘、待办和资料');
  assert.equal(await wb({type:'other',name:''}),'工作台名称需为 1–24 个字');
  const t=await req('/api/items?space=personal&workbench=health',{method:'POST',body:{kind:'meal',title:'早餐',date:today(),time:'25:00'},headers:web(cookieA)});assert.equal(t.status,400);assert.equal(t.body.error,'时间格式不对，例如 08:30');
 });

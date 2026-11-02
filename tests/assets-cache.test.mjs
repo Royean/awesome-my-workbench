@@ -102,6 +102,7 @@ test('only matching public content hashes cache; HEAD, APIs and user files remai
     await cp(path.join(repository, 'server.mjs'), path.join(root, 'server.mjs'));
     await cp(path.join(repository, 'lib'), path.join(root, 'lib'), { recursive: true });
     await cp(path.join(repository, 'migrations'), path.join(root, 'migrations'), { recursive: true });
+    await cp(path.join(repository, 'public/asset-lifecycle.js'), path.join(publicDir, 'asset-lifecycle.js'));
     await writeFile(path.join(publicDir, 'manifest.webmanifest'), '{}');
     await writeFile(path.join(publicDir, 'service-worker.js'), '// no cache');
     const mismatch = `/assets/app.${'0'.repeat(64)}.js`;

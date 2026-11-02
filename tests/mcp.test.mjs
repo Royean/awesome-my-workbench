@@ -62,11 +62,11 @@ test('tools/list publishes exactly the tools with strict schemas',async()=>{
  const {tools}=(await rpc(tokenA,'tools/list')).body.result;
  assert.deepEqual(tools.map(t=>t.name).sort(),['attach_medication_image','attach_report_file','create_record','create_workbench','delete_record','get_settings','get_today','list_attachments','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings','upload_attachment']);
  for(const t of tools){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.match(t.description,/[\u4e00-\u9fa5]/);}
- const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','favorite','note','task','asset_account','asset_holding','asset_liability','asset_transaction','asset_snapshot']);assert.deepEqual(create.inputSchema.required,['kind']);
+ const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','favorite','note','task','asset_account','asset_holding','asset_liability','asset_transaction','asset_snapshot','travel_trip','travel_stop','travel_booking','travel_check']);assert.deepEqual(create.inputSchema.required,['kind']);
  assert.equal(create.inputSchema.properties.attachmentIds,undefined);
 });
 test('list_workbenches and get_today',async()=>{
- const w=await ok(tokenA,'list_workbenches');assert.deepEqual(w.workbenches.map(x=>x.id),['health','finance']);assert.deepEqual(w.workbenches[1].writableKinds,['asset_account','asset_holding','asset_liability','asset_transaction','asset_snapshot','note','task']);assert.equal(w.today,today());
+ const w=await ok(tokenA,'list_workbenches');assert.deepEqual(w.workbenches.map(x=>x.id),['health','finance','travel']);assert.deepEqual(w.workbenches[1].writableKinds,['asset_account','asset_holding','asset_liability','asset_transaction','asset_snapshot','note','task']);assert.equal(w.today,today());
  await ok(tokenA,'create_record',{kind:'water',volume:500});await ok(tokenA,'create_record',{kind:'water',volume:250,time:'09:00'});
  const t=await ok(tokenA,'get_today',{});assert.equal(t.date,today());assert.deepEqual(t.summary.water,{totalMl:750,goalMl:2000});assert.ok(t.records.every(r=>r.date===today()));
  const f=await ok(tokenA,'get_today',{workbench:'finance'});assert.equal(f.workbench.type,'finance');

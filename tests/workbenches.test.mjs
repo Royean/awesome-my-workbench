@@ -15,7 +15,7 @@ async function stop(){await stopProcess(proc);proc=undefined;}
 before(async()=>{if(!remote){dir=await mkdtemp(path.join(os.tmpdir(),'workbench-isolation-'));await start()}date=(await api('/api/state')).body.today});
 after(async()=>{if(!remote){await stop();await rm(dir,{recursive:true,force:true})}});
 test('builtins, registration validation, space independence and persistence',async()=>{
- assert.deepEqual((await api('/api/workbenches')).body.workbenches.map(x=>x.id),['health','finance']);
+ assert.deepEqual((await api('/api/workbenches')).body.workbenches.map(x=>x.id),['health','finance','travel']);
  for(const body of [{name:'',type:'other'},{name:'a'.repeat(25),type:'other'},{name:'伪造',type:'finance'}])assert.equal((await api('/api/workbenches',{method:'POST',body})).status,400);
  const created=await api('/api/workbenches',{method:'POST',body:{name:'  虚构事务  ',type:'other',id:'health',userId:'injected'}});assert.equal(created.status,201);custom=created.body;assert.match(custom.id,/^[a-f0-9-]{36}$/);assert.equal(custom.name,'虚构事务');
  if(!remote){await stop();await start()}assert.ok((await api('/api/workbenches',{space:'demo'})).body.workbenches.some(x=>x.id===custom.id));

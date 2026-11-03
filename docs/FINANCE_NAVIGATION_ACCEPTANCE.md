@@ -56,3 +56,15 @@
 结论：本次集成复核通过，未发现阻断合并的问题；可在作者完整回归及仓库必要检查通过后合并。本节不表示已合并或已部署生产。
 
 作者集成回归补充：已只读核对 `/tmp/aw-finance-navigation-tests.log`，Node 24 完整回归结果 248/248 通过（实现作者执行）；此结果与独立验收5项分别记录。最终工作树保留旧 tracked bundles，避免本次构建清理历史缓存资源。
+
+## PR #51 合并最新 main 后复核（2026-11-03）
+
+独立执行者仍为 `/root/finance_nav_qa`。PR 创建期间 `main` 合入 #50，集成基准更新为 `75e5869a48e2a7bf88547ddd957abd13840ed31e`。已核对最终工作树相对 `origin/main`：业务源码差异仅为金融 `public/assets.js`、`public/assets.css` 和 `public/shell.js`；阅读 `public/originals.js`、`public/reading.js`、`public/reading.css` 与阅读测试均与该 main 完全一致。其余差异为金融文档、专用测试、入口构建引用以及保留的新旧构建资源。未发现混入工作区的阅读、健康或爬虫未提交功能。
+
+三份金融源码 SHA-256 与上次最终验收仍相同。合并后的入口 SHA-256 更新为 `c6d21a9aa0c508a6b793b68c9284fe9994133e73a6a78b93aaa2e88065f0d646`。最新 JS `app.0d234b097abd8ef0d8c6541b643aa54d9bc6000e4e493d026ee6712b8d0684dc.js`、CSS `app.f67000478117c401de7113c20146559d30b5b556078b32d5853470fd2df70257.css` 的实际 SHA-256 与文件名一致。
+
+使用 Node 24 再跑导航测试5/5通过，`git diff --check origin/main` 通过。由于构建含上游阅读更新，本次在独立 worktree 上启动隔离真实后端，完整重跑 Chrome 9组验收，全部通过：六主入口、金融固定分别维护、六个旧路由与父级选中、到期/还款/待办及完成重开持久化、原件备忘入口、360px五页面无横向溢出、表单分区默认值、示例空间隔离、无浏览器未捕获异常。再次目视桌面金融截图确认布局无回归。
+
+本轮脚本 `/tmp/finance-nav-browser-integrated-qa.mjs`，证据 `/var/folders/wb/j54mykvj0k71fcm7rs8my5r80000gn/T/finance-nav-qa-evidence-34d4Cv`，含截图与源码 hash 结果。未读取或修改真实资料。
+
+结论：最新 main 集成后的独立验收通过，无阻断合并的问题；作者当前完整回归与必要 CI 结果另行记录，最终合并仍以相应检查通过为条件。本记录不表示已经部署生产。

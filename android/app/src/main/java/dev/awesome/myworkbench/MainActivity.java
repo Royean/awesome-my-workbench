@@ -106,7 +106,7 @@ public final class MainActivity extends Activity {
         WebSettings settings=web.getSettings(); settings.setJavaScriptEnabled(true); settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false); settings.setAllowContentAccess(false); settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setSafeBrowsingEnabled(true); settings.setJavaScriptCanOpenWindowsAutomatically(false); settings.setSupportMultipleWindows(false);
-        settings.setMediaPlaybackRequiresUserGesture(true); settings.setUserAgentString(settings.getUserAgentString()+" AwesomeMyWorkbench/0.7.0");
+        settings.setMediaPlaybackRequiresUserGesture(true); settings.setUserAgentString(settings.getUserAgentString()+" AwesomeMyWorkbench/0.7.2");
         CookieManager.getInstance().setAcceptCookie(true); CookieManager.getInstance().setAcceptThirdPartyCookies(web,false);
         web.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
@@ -177,7 +177,7 @@ public final class MainActivity extends Activity {
     }
     private void menu(View anchor) {
         PopupMenu menu=new PopupMenu(this,anchor);menu.getMenu().add(0,1,0,"重新加载");menu.getMenu().add(0,2,1,"打开网页版");menu.getMenu().add(0,3,2,"关于工作台");
-        menu.setOnMenuItemClickListener(item->{if(item.getItemId()==1){if(web==null)makeWebView();load(HOME);}else if(item.getItemId()==2){try{Intent browser=Intent.createChooser(new Intent(Intent.ACTION_VIEW,Uri.parse(HOME)),"选择浏览器");browser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS,new android.content.ComponentName[]{getComponentName()});startActivity(browser);}catch(ActivityNotFoundException e){message("请在浏览器中打开 vivid-dream.online");}}else new AlertDialog.Builder(this).setTitle("我的工作台 0.7.0").setMessage("健康、金融与其他日常安排\n\n连接你的腾讯云账号，读取和保存记录需要联网。\n附件由你选择后才会上传；麦克风仅在录音时请求权限。").setPositiveButton("知道了",null).show();return true;});menu.show();
+        menu.setOnMenuItemClickListener(item->{if(item.getItemId()==1){if(web==null)makeWebView();load(HOME);}else if(item.getItemId()==2){try{Intent browser=Intent.createChooser(new Intent(Intent.ACTION_VIEW,Uri.parse(HOME)),"选择浏览器");browser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS,new android.content.ComponentName[]{getComponentName()});startActivity(browser);}catch(ActivityNotFoundException e){message("请在浏览器中打开 vivid-dream.online");}}else new AlertDialog.Builder(this).setTitle("我的工作台 0.7.2").setMessage("健康、金融与其他日常安排\n\n连接你的腾讯云账号，读取和保存记录需要联网。\n附件由你选择后才会上传；麦克风仅在录音时请求权限。").setPositiveButton("知道了",null).show();return true;});menu.show();
     }
     private void back() {
         if(web==null||failed){moveTaskToBack(true);return;}

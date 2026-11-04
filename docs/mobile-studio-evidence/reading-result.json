@@ -1,0 +1,66 @@
+{
+  "executor": "/root/mobile_acceptance",
+  "checks": [
+    {
+      "ok": true,
+      "name": "responsive reading import hint 390",
+      "detail": "通过「导入材料」选择文件，确认后加入书架 · 最大 10MB"
+    },
+    {
+      "ok": true,
+      "name": "neutral import region label 390"
+    },
+    {
+      "ok": true,
+      "name": "PDF drop handlers retained 390"
+    },
+    {
+      "ok": true,
+      "name": "reading width 390",
+      "detail": {
+        "doc": 390,
+        "w": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "import button opens real form 390"
+    },
+    {
+      "ok": true,
+      "name": "responsive reading import hint 1440",
+      "detail": "拖入一份 PDF 论文到这里，确认后加入书架 · 最大 10MB"
+    },
+    {
+      "ok": true,
+      "name": "neutral import region label 1440"
+    },
+    {
+      "ok": true,
+      "name": "PDF drop handlers retained 1440"
+    },
+    {
+      "ok": true,
+      "name": "reading width 1440",
+      "detail": {
+        "doc": 1440,
+        "w": 1440
+      }
+    },
+    {
+      "ok": true,
+      "name": "import button opens real form 1440"
+    },
+    {
+      "ok": true,
+      "name": "desktop PDF drop opens import confirmation"
+    }
+  ],
+  "failures": [],
+  "hashes": {
+    "public/shell.js": "0d6a30a1b6a47137729f6f5e91aff8b445f0b50d8e32b927de234b08163ac3e3",
+    "public/studio-mobile.css": "fa246d0f4a1b53fd47d08b3642156b2b7a5a994c38d43cb347e638c8c6e5d5b3",
+    "public/reading.js": "689bbe36e882b369c3a1d96ca681da1edf0709a44d163bcba581d5166e9fa4d5",
+    "public/index.html": "d073959737a27decbb8f2d59a802cc13ef661f81c6cd1a8bd7a7bba46ceae866"
+  }
+}

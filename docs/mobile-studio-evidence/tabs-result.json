@@ -1,0 +1,201 @@
+{
+  "executor": "/root/mobile_acceptance",
+  "checks": [
+    {
+      "name": "health nav:dashboard",
+      "ok": true,
+      "detail": {
+        "selected": "nav:dashboard",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "health nav:library",
+      "ok": true,
+      "detail": {
+        "selected": "nav:library",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "health nav:day",
+      "ok": true,
+      "detail": {
+        "selected": "nav:day",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "health nav:mine",
+      "ok": true,
+      "detail": {
+        "selected": "nav:mine",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "finance nav:dashboard",
+      "ok": true,
+      "detail": {
+        "selected": "nav:dashboard",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "finance nav:financial",
+      "ok": true,
+      "detail": {
+        "selected": "nav:financial",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "finance nav:fixed",
+      "ok": true,
+      "detail": {
+        "selected": "nav:fixed",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "finance nav:renewals",
+      "ok": true,
+      "detail": {
+        "selected": "nav:renewals",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "finance nav:mine",
+      "ok": true,
+      "detail": {
+        "selected": "nav:mine",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "travel nav:dashboard",
+      "ok": true,
+      "detail": {
+        "selected": "nav:dashboard",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "travel nav:trip",
+      "ok": true,
+      "detail": {
+        "selected": "nav:trip",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "travel nav:checklist",
+      "ok": true,
+      "detail": {
+        "selected": "nav:checklist",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "travel nav:mine",
+      "ok": true,
+      "detail": {
+        "selected": "nav:mine",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "reading nav:books",
+      "ok": true,
+      "detail": {
+        "selected": "nav:books",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "reading nav:entries",
+      "ok": true,
+      "detail": {
+        "selected": "nav:entries",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "other nav:dashboard",
+      "ok": true,
+      "detail": {
+        "selected": "nav:dashboard",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "other nav:notes",
+      "ok": true,
+      "detail": {
+        "selected": "nav:notes",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "other nav:tasks",
+      "ok": true,
+      "detail": {
+        "selected": "nav:tasks",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    },
+    {
+      "name": "other nav:mine",
+      "ok": true,
+      "detail": {
+        "selected": "nav:mine",
+        "count": 1,
+        "doc": 390,
+        "width": 390
+      }
+    }
+  ],
+  "failures": [],
+  "hashes": {
+    "public/shell.js": "0d6a30a1b6a47137729f6f5e91aff8b445f0b50d8e32b927de234b08163ac3e3",
+    "public/studio-mobile.css": "ed22865db9f18038c636f4065aadbacbc3e0b9aa6c8a22f53193454bb89d90eb",
+    "public/index.html": "5ac563222d6c66f2050938d42e618b9a49d3433d1fd0a4a7bb3cd7c32a5e229a"
+  }
+}

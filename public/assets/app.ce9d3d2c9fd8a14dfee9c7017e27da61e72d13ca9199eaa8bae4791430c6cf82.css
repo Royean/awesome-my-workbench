@@ -153,6 +153,15 @@ body[data-workbench="reading"] .bottom-tabs{grid-template-columns:repeat(2,minma
 
 .reading-dropzone{border:2px dashed transparent;border-radius:18px;padding:12px;transition:background .15s,border-color .15s}.reading-dropzone.dragover{border-color:var(--theme-accent);background:var(--theme-soft)}.reading-drop-hint{display:flex;align-items:center;gap:8px;color:#6f7369;font-size:13px;line-height:1.6;margin:0 0 16px}.reading-drop-hint svg{flex-shrink:0}@media(prefers-reduced-motion:reduce){.reading-dropzone{transition:none}}
 .reader-page-text{white-space:pre-wrap;line-height:2;user-select:text;font-family:serif;font-size:18px;padding:24px;background:var(--surface,#fff);overflow-wrap:anywhere}.reader-toc{display:flex;gap:12px;margin:16px 0;flex-wrap:wrap}.reader-toc input,.reader-toc select{flex:1;min-width:180px;min-height:42px}.reader-poem-heading{font-family:serif;font-size:25px;margin:24px 0 8px}.reader-highlight{background:#ffe58a;color:inherit;border-radius:2px}.reader-annotation-target{outline:2px solid var(--theme-accent);outline-offset:3px}.reader-note-composer{padding:16px;margin:12px 0;border:1px solid var(--theme-border);border-radius:12px;background:var(--theme-soft)}.reader-note-composer blockquote{margin:0 0 12px;white-space:pre-wrap;max-height:120px;overflow:auto}.reader-note-composer textarea{width:100%;box-sizing:border-box;margin-bottom:10px}.reader-note-composer button+button{margin-left:8px}
+/* Reading uses the same accessible dialog, expanded into a quiet page. */
+body.immersive-reading #overlay .drawer.immersive-reader{inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;max-height:none!important;border-radius:0!important;box-shadow:none;animation:none;--reader-bg:#f5efdf;--reader-ink:#302b25;--reader-line:#ded6c5;background:var(--reader-bg);color:var(--reader-ink)}
+body.immersive-reading #overlay .drawer.immersive-reader:before{display:none}body.immersive-reading .drawer-scrim{display:none}.immersive-reader[data-reader-theme=white]{--reader-bg:#fff!important;--reader-ink:#252525!important;--reader-line:#e8e8e8!important}.immersive-reader[data-reader-theme=night]{--reader-bg:#202124!important;--reader-ink:#ddd8cf!important;--reader-line:#414141!important}
+.immersive-reader>.drawer-head,.immersive-reader>.drawer-foot{display:none!important}.immersive-reader .preview-meta{display:none}.immersive-reader .drawer-content{padding:0!important;scroll-padding-top:32px;scroll-padding-bottom:100px;color:inherit}.reader-topbar{display:flex;align-items:center;gap:24px;padding:calc(12px + env(safe-area-inset-top,0px)) 28px 12px;border-bottom:1px solid var(--reader-line);background:var(--reader-bg);color:inherit;flex-shrink:0}.reader-title{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}.reader-appearance{display:flex;gap:8px;align-items:center}.reader-control{border:0;background:transparent;color:inherit;padding:8px 10px;min-height:40px;border-radius:7px;font:inherit;font-size:14px;cursor:pointer}.reader-control:hover{background:#8882}.reader-control:focus-visible{outline:2px solid currentColor;outline-offset:2px}.reader-control option{background:var(--reader-bg);color:var(--reader-ink)}
+.immersive-reader #original-viewer{max-width:880px;margin:0 auto;min-height:100%;box-sizing:border-box;display:flex;flex-direction:column;padding:0 36px;background:transparent;color:inherit}.immersive-reader .reader-page-text{font-family:'Songti SC','Noto Serif CJK SC',serif;font-size:var(--reader-font-size,21px);line-height:2.2;letter-spacing:.025em;white-space:pre-wrap;background:transparent;color:inherit;border:0;border-radius:0;box-shadow:none;padding:56px 12px 80px;margin:0;max-width:100%;overflow-wrap:anywhere;overflow:visible;order:2}.immersive-reader .reader-toc{order:0;padding:14px 0;margin:0;border-bottom:1px solid var(--reader-line)}.immersive-reader .reader-toc input,.immersive-reader .reader-toc select,.immersive-reader .original-toolbar input{background:var(--reader-bg);color:inherit;border:1px solid var(--reader-line);border-radius:6px;padding:8px}.immersive-reader .original-toolbar{order:5;position:sticky;bottom:0;background:var(--reader-bg);border-top:1px solid var(--reader-line);border-bottom:0;padding:12px 0 calc(12px + env(safe-area-inset-bottom,0px));margin-top:auto;justify-content:center;flex-wrap:wrap;z-index:3}.immersive-reader .original-toolbar .btn{background:transparent;color:inherit;border-color:var(--reader-line);font-size:13px}.immersive-reader .original-stage{order:1;background:transparent}.immersive-reader .preview-status,.immersive-reader .reading-muted{order:1;color:inherit;opacity:.65}.immersive-reader .reader-note-composer{order:4;background:var(--reader-bg);border-color:var(--reader-line);color:inherit}.immersive-reader .reader-note-composer textarea{background:var(--reader-bg);color:inherit;border:1px solid var(--reader-line)}.immersive-reader .reader-highlight{color:#302b25}.immersive-reader .reader-poem-heading{display:none}.reader-floating-controls{position:fixed;right:20px;top:calc(12px + env(safe-area-inset-top,0px));z-index:8;border:1px solid var(--reader-line);border-radius:12px;background:var(--reader-bg);color:var(--reader-ink);box-shadow:0 3px 15px #0001;opacity:.85}.reader-floating-controls[hidden]{display:none}.reader-chrome-hidden>.reader-topbar,.reader-chrome-hidden .reader-toc,.reader-chrome-hidden .original-toolbar{display:none!important}.reader-chrome-hidden .reader-page-text{padding-top:70px}
+@media(max-width:680px){.reader-topbar{padding-inline:12px;gap:8px;flex-wrap:wrap}.reader-title{min-width:100px}.reader-appearance{width:100%;justify-content:center;gap:4px}.reader-control{font-size:13px;padding:6px 8px}.immersive-reader #original-viewer{padding-inline:20px}.immersive-reader .reader-page-text{padding:30px 0 60px;line-height:2}.immersive-reader .reader-toc{gap:8px}.immersive-reader .reader-toc input,.immersive-reader .reader-toc select{min-width:120px;width:100%}.reader-floating-controls{right:10px}.immersive-reader .original-toolbar{gap:7px}}
+.immersive-reader .reader-toc[hidden]{display:none!important}
+/* Typography changes leave the source's line breaks and annotation offsets intact. */
+.immersive-reader .reader-poetry-text{padding-top:56px;line-height:2.3}.reader-poem-title{font-family:system-ui,'PingFang SC',sans-serif;font-size:1.6em;font-weight:600;line-height:1.8;letter-spacing:.04em}.reader-poem-author{font-family:system-ui,sans-serif;font-size:max(14px,.76em);opacity:.62;line-height:3.5;letter-spacing:.12em}.reader-poem-body{font-weight:400;line-height:2.25}@media(max-width:680px){.immersive-reader .reader-poetry-text{padding-top:32px}.reader-poem-title{font-size:1.4em}}
 
 /* studio.css */
 /* Shared visual system: quiet neutral surfaces, workbench-owned accents. */
@@ -311,6 +320,9 @@ body[data-workbench] .bottom-tab.active{color:var(--theme-ink);font-weight:600}
  body[data-workbench] .today-medication-row strong{font-size:13px}
 }
 
+.studio-brand-icon{display:block;width:42px;height:42px;border-radius:12px;flex-shrink:0}
+@media(min-width:901px){.studio-brand-icon{width:38px;height:38px}}
+
 /* studio-library.css */
 /* Reading and personal workspace compositions, sharing the studio color system. */
 .studio-card-empty{font-size:13px;line-height:1.8;color:var(--muted);padding:10px 24px 26px;margin:0}
@@ -353,6 +365,25 @@ body[data-workbench=reading] .reading-grid .reading-book{background:#f6f7f4;padd
 @media(min-width:901px) and (max-width:1200px){.studio-reading-overview{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.studio-reading-side{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}.studio-other-grid{grid-template-columns:1fr 1fr}.studio-other-progress{grid-column:2;grid-row:2}.studio-other-files{grid-column:1;grid-row:2}.studio-other-calendar{grid-column:2;grid-row:3}body[data-workbench=reading] .reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.studio-reading-overview,.studio-other-grid{grid-template-columns:minmax(0,1fr);gap:16px}.studio-reading-side,.studio-other-files{grid-column:auto}.studio-reading-feature{padding:0 20px 24px;gap:18px}.studio-reading-feature>.reading-cover{width:90px;height:135px}.studio-reading-feature h3{font-size:19px}.studio-reading-feature .reading-progress>div{font-size:11px}.studio-reading-side{gap:16px}body[data-workbench=reading] .reading-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}body[data-workbench=reading] .reading-grid .reading-book{padding:13px}.reading-grid .reading-cover{height:140px;padding:16px}.reading-grid .reading-cover span{font-size:19px}body[data-workbench=reading] .reading-dropzone{padding:16px}.reading-grid .reading-book-actions .btn{font-size:11px;padding:8px}.studio-other-toolbar{align-items:flex-start;flex-direction:column}.studio-other-grid .generic-record{padding:16px 18px}.studio-reading-week .studio-reading-bars{height:150px}.studio-other-calendar{max-width:100%}.studio-other-toolbar>div{flex-wrap:wrap}}
 
+/* A fixed track preserves reading-minute ratios; zero minutes draws no column. */
+.studio-reading-bars .studio-reading-bar-track{position:relative;display:block;flex:0 0 88px;height:88px;width:100%;border-bottom:1px solid #dfe4d9}
+.studio-reading-bars .studio-reading-bar-track i{position:absolute;bottom:0;left:0;width:100%;height:var(--bar-height);max-height:none;min-height:0}
+/* Let the bookshelf follow the main cards while notes occupy the side column. */
+@media(min-width:1201px){
+ body[data-workbench=reading] .reading-content:has(.studio-reading-overview){display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.9fr) minmax(260px,1fr);grid-template-areas:"notice notice notice" "continue week side" "shelf shelf side";gap:18px;align-items:start}
+ body[data-workbench=reading] .reading-content:has(.studio-reading-overview):not(:has(.reading-demo)){grid-template-areas:"continue week side" "shelf shelf side"}
+ .reading-content>.reading-demo{grid-area:notice;margin:0}
+ .studio-reading-overview{display:contents}
+ .studio-reading-continue{grid-area:continue}.studio-reading-week{grid-area:week}.studio-reading-side{grid-area:side}
+ body[data-workbench=reading] .reading-content>#reading-dropzone{grid-area:shelf}
+ body[data-workbench=reading] .reading-content .reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+.studio-reading-feature>.reading-cover span{font-size:18px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+/* Override the shared compact cover only in the shelf and featured book. */
+.reading-content .reading-grid .reading-cover{width:100%;height:170px}
+.reading-content .studio-reading-feature>.reading-cover{width:108px;height:154px}
+@media(max-width:900px){.reading-content .reading-grid .reading-cover{height:140px}.reading-content .studio-reading-feature>.reading-cover{width:90px;height:135px}}
+
 /* studio-health.css */
 /* Health home composition; all colours follow the selected workbench theme. */
 body[data-workbench=health] .main:has(.health-overview)>.heading{display:none}
@@ -392,6 +423,15 @@ body[data-workbench=health] .health-trend .chart svg text{font-size:10px;fill:va
 .health-metric-copy b{font-size:25px;font-weight:600;line-height:1.2;letter-spacing:-.5px;overflow-wrap:anywhere}
 .health-metric-copy b small{font-size:11px;letter-spacing:0;font-weight:400;margin-left:4px;color:var(--muted)}
 .health-metric-copy time{font-size:10px;color:var(--muted)}
+.health-metric-copy time{overflow-wrap:anywhere;line-height:1.6}
+.health-record-status{display:block;font-size:10px;line-height:1.6;color:var(--muted);font-weight:400}
+.health-latest-exercise{display:flex;align-items:center;gap:10px;margin:0 17px 17px;padding:14px 12px;background:#fff;border-radius:16px;min-width:0}
+.health-latest-exercise>div{flex:1;min-width:0}.health-latest-exercise h3{font-size:13px;font-weight:500;margin:0 0 5px}
+.health-latest-exercise time{font-size:11px;color:var(--muted)}.health-latest-exercise p{font-size:12px;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}
+.health-latest-exercise>.icon-btn{flex-shrink:0}
+.health-trend-fallback{padding:20px 23px;display:grid;gap:8px;flex:1;align-content:center;min-height:130px;color:var(--muted);font-size:12px}
+.health-trend-fallback p{margin:0}.health-trend-fallback strong{color:var(--ink);font-size:16px;font-weight:500;overflow-wrap:anywhere}
+.health-meal-row h3 time{display:block;margin:5px 0 0;line-height:1.6}
 .health-body-metric>svg{flex-shrink:0;color:#8e958a;width:13px}
 .health-lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-width:0}
 .health-exercise-total{display:flex;align-items:baseline;gap:7px;padding:0 23px;flex-wrap:wrap}
@@ -481,7 +521,7 @@ body[data-workbench=health] .health-tasks .task-list{padding:0 17px;display:grid
 @media(max-width:900px){
  .health-bento{display:flex;flex-direction:column;align-items:stretch}
  .health-primary,.health-secondary{display:contents}
- .health-monitoring{order:1}.health-water{order:2}.health-tasks{order:3}.health-lower-grid{order:4}.health-visits{order:5}
+ .health-monitoring{order:1}.health-water{order:2}.health-tasks{order:3}.health-lower-grid{order:4}.health-visits{order:5}.health-reports{order:6}
 }
 
 /* studio-domains.css */
@@ -698,4 +738,201 @@ body[data-workbench] .studio-domain-dashboard .asset-allocation-row i{background
  .studio-domain-dashboard .domain-board{order:0}
  .studio-domain-dashboard .domain-aside{order:1}
  .studio-domain-dashboard .domain-transactions,.studio-domain-dashboard .domain-trip-archive{order:2}
+}
+
+/* Valuation dates, unknown amounts and source notes must remain readable. */
+.studio-domain-dashboard :is(.domain-accounting-note,.asset-accounting-note,.domain-kicker,.domain-empty p,.domain-countdown small,.domain-hero-copy p,.domain-trip-card small,.domain-travel-trip small,.domain-resource-note){color:#687063}
+.studio-domain-dashboard small:not(.asset-deadline):not(.travel-status):not(.pill),.studio-domain-dashboard time,.studio-domain-dashboard dt{color:#687063;font-size:11px}
+.studio-domain-dashboard .domain-accounting-note{font-size:12px}
+
+/* studio-mobile.css */
+/* Mobile Studio: one responsive layer after the domain styles. */
+.phone-context{display:none}
+@media(max-width:900px){
+ body[data-workbench]{background:#f2f3ef}
+ body[data-workbench] .app{background:#f2f3ef}
+ body[data-workbench] .workspace{height:auto;min-height:100dvh;overflow:visible;display:block}
+ body[data-workbench] .workspace>.main{overflow:visible;scrollbar-gutter:auto}
+ body[data-workbench] .phone-topbar{height:calc(80px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 18px 0;background:#f2f3eff2;border:0;gap:10px}
+ body[data-workbench] .phone-workbench-picker{gap:10px;max-width:calc(100% - 124px);min-width:0;flex:1}
+ body[data-workbench] .phone-workbench-picker>.workbench-symbol{width:42px;height:42px;border-radius:15px;background:#fff;color:var(--theme-ink);border:1px solid #e4e8df;flex-shrink:0}
+ body[data-workbench] .phone-workbench-picker>.phone-workbench-name{display:flex;flex-direction:column;gap:4px;min-width:0;white-space:normal;line-height:1.2}
+ .phone-workbench-name strong{font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650}
+ body[data-workbench] .phone-workbench-name small{font-size:11px;color:var(--muted);margin:0;font-weight:400}
+ .picker-chevron{flex-shrink:0}
+ body[data-workbench] .phone-top-actions{gap:8px;flex-shrink:0}
+ body[data-workbench] .space-chip{background:#fff;border-color:#e1e5dc;min-height:44px;font-size:11px;padding:8px 10px;color:#535e4d}
+ .phone-profile{display:grid;place-items:center;width:42px;height:44px;border:1px solid var(--theme-border);border-radius:50%;background:var(--theme-soft);color:var(--theme-ink);font-weight:600;font-size:17px}
+ body[data-workbench] .main{padding:10px 16px calc(116px + env(safe-area-inset-bottom,0px));max-width:720px}
+ .phone-context{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 14px;color:#626b5d;font-size:11px;min-height:38px}
+ .phone-context button{display:flex;align-items:center;gap:6px;min-height:44px;border:0;background:transparent;color:var(--theme-ink);font-size:11px;padding:0 4px}
+ body[data-workbench] .heading{margin-bottom:18px;gap:10px}
+ body[data-workbench] .heading h1,.health-overview-heading h1{font-size:28px;line-height:1.3;letter-spacing:-1px;font-weight:650}
+ body[data-workbench] .heading p{font-size:13px;line-height:1.8}
+ body[data-workbench] .card{border:1px solid #e6e9e1;background:#fafbf8;border-radius:24px}
+ body[data-workbench] .card-head{padding:18px 18px 10px;align-items:center}
+ body[data-workbench] .card-title{font-size:17px;line-height:1.5}
+ body[data-workbench] .btn{min-height:44px;font-size:13px;padding:10px 15px}
+ body[data-workbench] .icon-btn{min-width:44px;min-height:44px}
+ body[data-workbench] .text-btn{min-height:44px;font-size:12px}
+ body[data-workbench] .bottom-tabs{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));grid-template-columns:repeat(var(--tab-count,5),minmax(0,1fr));gap:3px;padding:7px;border:1px solid #e0e5d9;border-radius:27px;background:#fffffff5;box-shadow:0 8px 35px #26352014}
+ body[data-workbench] .bottom-tab{min-width:0;min-height:57px;padding:5px 2px;gap:5px;border-radius:20px;color:#687062}
+ body[data-workbench] .bottom-tab small{font-size:11px;line-height:1.3}
+ body[data-workbench] .bottom-tab.active{background:var(--theme-soft);color:var(--theme-ink)}
+ body[data-workbench] .capture-tab{margin-top:0;gap:4px}
+ body[data-workbench] .capture-tab>span{width:34px;height:29px;border-radius:11px;background:var(--theme-accent);color:var(--theme-on-accent);box-shadow:none}
+ body[data-workbench] .capture-tab small{margin:0}
+ body[data-workbench] .footer{font-size:10px;line-height:1.8;margin-top:24px;gap:12px}
+
+ /* Health: a prominent trend, compact capture rail, and readable small cards. */
+ .health-overview-heading{margin-bottom:14px}
+ .health-overview-heading h1{margin-bottom:18px}
+ .health-quick-actions{gap:4px;padding:8px;background:#e8ece3;border-radius:23px}
+ body[data-workbench=health] .health-quick-actions .btn{border:0;border-radius:17px;min-height:71px;background:transparent;gap:8px;font-size:12px;padding:10px 3px}
+ body[data-workbench=health] .health-quick-actions .btn>svg{width:25px;height:25px;padding:4px;box-sizing:content-box;border-radius:12px;background:#fff;color:var(--theme-ink)}
+ .health-bento,.health-monitoring,.health-primary,.health-secondary,.health-lower-grid{gap:14px}
+ body[data-workbench=health] .health-overview .card{background:#fafbf8;border:1px solid #e5e9de;border-radius:24px}
+ body[data-workbench=health] .health-overview .health-trend{background:linear-gradient(140deg,var(--theme-soft),#fafbf8 85%);min-height:290px}
+ body[data-workbench=health] .health-overview .card-head{padding:16px 18px 8px}
+ body[data-workbench=health] .health-overview .card-title{font-size:17px}
+ .health-trend-reading{padding:0 18px 8px}
+ .health-trend-reading>span{font-size:38px;letter-spacing:-1.5px}
+ .health-trend-reading p{font-size:12px;line-height:1.6}
+ body[data-workbench=health] .health-trend .tabs{padding-inline:18px;gap:16px}
+ .health-trend .tabs .tab{min-height:44px;font-size:12px}
+ .health-trend .chart-note{padding:0 18px 14px;font-size:11px}
+ .health-body-metrics{gap:8px}
+ .health-body-metric{padding:14px 10px;border:1px solid #e5e9de;border-radius:21px;background:#fafbf8}
+ .health-metric-copy{font-size:12px;gap:6px}
+ .health-metric-copy b{font-size:25px;letter-spacing:-.7px}
+ .health-metric-copy time,.health-metric-copy .health-record-status{font-size:11px;line-height:1.5}
+ .health-body-metric>svg{display:none}
+ .health-metric-copy b small{font-size:10px}
+ .health-water-content{padding:0 18px 20px;gap:20px;align-items:center}
+ .health-water-ring{width:120px;height:120px;flex:0 0 120px;padding:11px}
+ .health-water-ring b{font-size:28px}
+ .health-water-ring>div{background:#fafbf8}
+ .health-water-actions{min-width:0;flex:1}
+ .health-water-actions>small{font-size:12px;line-height:1.7}
+ .health-water-actions>.btn{padding-inline:11px;font-size:12px}
+ .health-meal-row,.health-visit-row,.health-tasks .task-row{background:#fff}
+
+ /* Remove nested dashboard frames on a small screen. */
+ .studio-domain-dashboard,.studio-domain-dashboard .domain-main{display:contents}
+ .studio-domain-dashboard .domain-board{display:contents}
+ .studio-domain-dashboard .domain-board-head{margin:0 0 16px;gap:12px;flex-wrap:wrap}
+ .studio-domain-dashboard .domain-board-head h2{font-size:28px}
+ .studio-domain-dashboard .domain-kicker{font-size:10px;letter-spacing:1.5px;margin-bottom:6px}
+ .studio-domain-dashboard .domain-head-actions{gap:8px;margin-left:0}
+ .studio-domain-dashboard .domain-head-actions .btn{font-size:12px;min-height:44px;padding:10px 14px}
+ body[data-workbench=finance] .main[data-page=dashboard]>.asset-mobile-sections,
+ body[data-workbench=finance] .main[data-page=dashboard]>.asset-subnav,
+ body[data-workbench=travel] .main[data-page=dashboard]>.travel-module-nav{display:none}
+ body[data-workbench=finance] .main[data-page=dashboard]>.heading p,
+ body[data-workbench=finance] .main[data-page=dashboard]>.heading .asset-heading-actions,
+ body[data-workbench=travel] .main[data-page=dashboard]>.heading p{display:none}
+ .main[data-page=dashboard] .studio-domain-dashboard .domain-board-head>div:first-child{display:none}
+ .main[data-page=dashboard] .studio-domain-dashboard .domain-board-head .domain-head-actions{width:100%;justify-content:flex-start}
+ .main[data-page=dashboard] .studio-domain-dashboard .domain-board-head .domain-head-actions .btn{flex:1;justify-content:center}
+ .studio-domain-dashboard .domain-section-nav{padding:0;border:0;margin:0 0 16px;gap:8px}
+ .studio-domain-dashboard .domain-section-nav>button{font-size:12px;min-height:52px;border-radius:17px;padding:11px 10px;background:#e8ece3;line-height:1.5}
+ .studio-domain-dashboard .domain-section-nav>button span{font-size:11px}
+ .studio-domain-dashboard .domain-asset-bento{grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:14px}
+ .studio-domain-dashboard .domain-total{padding:22px;background:linear-gradient(125deg,var(--theme-soft),#fafbf8);border-color:var(--theme-border);border-radius:25px}
+ .studio-domain-dashboard .domain-total>strong{font-size:36px;margin:20px 0;line-height:1.2;letter-spacing:-1px}
+ .studio-domain-dashboard .domain-total dl{gap:12px}
+ .studio-domain-dashboard .domain-total dl>div{background:#ffffff9c;padding:13px 10px;border-radius:16px}
+ .studio-domain-dashboard .domain-total dt{font-size:12px}
+ .studio-domain-dashboard .domain-total dd{font-size:16px;margin-top:7px}
+ .studio-domain-dashboard .domain-total small{font-size:12px;line-height:1.8}
+ .studio-domain-dashboard .domain-total p{font-size:13px}
+ .studio-domain-dashboard .domain-aside{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:14px}
+ .studio-domain-dashboard :is(.domain-financial,.domain-transactions){margin-bottom:14px}
+ .studio-domain-dashboard :is(.card,.domain-board){border-radius:24px;background:#fafbf8}
+ .studio-domain-dashboard .card-head{padding:16px 18px 8px}
+ .studio-domain-dashboard .card-head .btn,.studio-domain-dashboard .domain-empty .btn{min-height:44px;font-size:12px}
+ .studio-domain-dashboard .domain-empty p{font-size:13px}
+ .studio-domain-dashboard .domain-accounting-note{font-size:12px;margin:0 4px 16px}
+ .studio-domain-dashboard .asset-record-main,.studio-domain-dashboard .domain-aside .asset-record-main{padding:15px 16px;gap:10px}
+ .studio-domain-dashboard .asset-record-copy strong{font-size:14px}
+ .studio-domain-dashboard .asset-record-copy small,.studio-domain-dashboard .domain-aside .asset-record-copy small{font-size:12px}
+ .studio-domain-dashboard .asset-record-amount,.studio-domain-dashboard .domain-aside .asset-record-amount{font-size:15px;max-width:42%;overflow-wrap:anywhere}
+ .studio-domain-dashboard .asset-allocation-row,.studio-domain-dashboard .asset-allocation-row strong{font-size:13px}
+ .studio-domain-dashboard .domain-task-row{min-height:60px}
+ .studio-domain-dashboard .domain-task-row strong{font-size:14px}
+ .studio-domain-dashboard .domain-resource-links>button{font-size:12px;min-height:60px;padding:12px 4px}
+ .studio-domain-dashboard .domain-travel-bento{grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:14px}
+ .studio-domain-dashboard .domain-trip-hero{background:linear-gradient(125deg,var(--theme-soft),#fafbf8);border-color:var(--theme-border);border-radius:25px}
+ .studio-domain-dashboard .domain-trip-hero-copy{padding:24px 20px}
+ .studio-domain-dashboard .domain-trip-hero h3{font-size:27px}
+ .studio-domain-dashboard .domain-trip-hero small,.studio-domain-dashboard .domain-trip-hero p{font-size:12px;line-height:1.8}
+ .studio-domain-dashboard .domain-trip-overview{padding:20px 10px;width:25%;min-width:0}
+ .studio-domain-dashboard .domain-trip-overview small{font-size:11px}
+ .studio-domain-dashboard .domain-travel-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .studio-domain-dashboard .domain-travel-metrics>.card{padding:18px 14px;min-height:180px}
+ .studio-domain-dashboard .domain-current-selector{font-size:12px;gap:8px;flex-wrap:wrap;margin-block:16px}
+ .studio-domain-dashboard .domain-current-selector select{font-size:16px;min-height:44px;max-width:100%;flex:1;min-width:0}
+ .studio-domain-dashboard .domain-progress-ring{width:95px;height:95px}
+ .studio-domain-dashboard .travel-map,.studio-domain-dashboard .travel-map-placeholder{min-height:240px;height:240px}
+
+ /* Reading surfaces lead into the shelf before secondary notes. */
+ body[data-workbench=reading] .reading-content{display:flex;flex-direction:column;gap:14px}
+ .studio-reading-overview{display:contents}
+ .reading-content>.reading-demo{order:0;margin:0}
+ .studio-reading-continue{order:1;background:linear-gradient(130deg,var(--theme-soft),#fafbf8)!important;border-color:var(--theme-border)!important}
+ .reading-content>#reading-dropzone{order:2;margin:0}
+ .studio-reading-week{order:3}
+ .studio-reading-side{order:4;gap:14px}
+ .studio-reading-feature{padding:0 18px 20px;gap:18px;min-height:200px}
+ .studio-reading-feature h3{font-size:20px}
+ .studio-reading-feature .reading-progress{margin-block:15px}
+ .studio-reading-feature .btn{min-height:44px}
+ body[data-workbench=reading] .reading-toolbar{gap:10px;flex-wrap:wrap;margin-bottom:14px}
+ body[data-workbench=reading] .reading-toolbar select{font-size:16px;min-height:44px;min-width:0;max-width:100%}
+ body[data-workbench=reading] .reading-dropzone{border-radius:24px;background:#fafbf8;padding:16px}
+ body[data-workbench=reading] .reading-grid .reading-book{background:#fff;border-radius:19px;padding:12px}
+ .reading-grid .reading-book-actions .btn{min-height:44px;font-size:12px}
+ .reading-grid .reading-book-copy strong{font-size:14px;line-height:1.7}
+ .reading-grid .reading-book-copy>small{font-size:12px}
+ .reading-grid .reading-progress>div{font-size:12px}
+ .studio-reading-notes p,.studio-reading-plans strong{font-size:14px}
+
+ .studio-other-toolbar{gap:12px;margin:0 0 16px}
+ .studio-other-toolbar p{margin:0;font-size:13px}
+ .studio-other-toolbar>div{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:10px}
+ .studio-other-toolbar .btn{justify-content:center}
+ .studio-other-grid{gap:14px}
+ .studio-other-tasks{background:linear-gradient(135deg,var(--theme-soft),#fafbf8)!important;border-color:var(--theme-border)!important}
+ .studio-other-grid .generic-record{padding:15px 18px}
+ .studio-other-grid .generic-record-content strong{font-size:14px}
+ .studio-other-grid .generic-record-content small{font-size:12px}
+ .studio-completion-ring{width:126px;height:126px}
+ body[data-workbench] .module-directory{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:none;border:0;overflow:visible}
+ body[data-workbench] .directory-item{flex-direction:column;align-items:flex-start;gap:12px;min-height:158px;border:1px solid #e3e8dc;border-radius:22px;background:#fafbf8;padding:18px}
+ .directory-item>svg:last-child{display:none}
+ body[data-workbench] .shell-profile{background:linear-gradient(135deg,var(--theme-soft),#fafbf8);border:1px solid var(--theme-border);border-radius:25px;margin:12px 0 16px;padding:25px 18px}
+ body[data-workbench] .shell-menu{border-radius:24px}
+ body[data-workbench] .shell-menu>button{min-height:76px;padding:16px 18px}
+ body[data-workbench] .shell-menu small{font-size:12px}
+ /* Scoped to the sheet so immersive reader colors and controls stay independent. */
+ body[data-workbench] .drawer{border-radius:27px 27px 0 0}
+ body[data-workbench] .drawer-head{padding:26px 20px 16px}
+ body[data-workbench] .drawer-head h2{font-size:23px;color:var(--ink)}
+ body[data-workbench] .drawer-content{padding:20px}
+ body[data-workbench] .drawer .field input,body[data-workbench] .drawer .field textarea,body[data-workbench] .drawer .field select{font-size:16px;min-height:48px;border-radius:14px}
+ body[data-workbench] .drawer .capture-number-wrap input{min-height:48px}
+ body[data-workbench] .drawer-foot{padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px))}
+ body[data-workbench] .drawer-foot>.btn{min-height:48px}
+}
+@media(max-width:370px){
+ body[data-workbench] .phone-topbar{padding-inline:14px}
+ body[data-workbench] .main{padding-inline:12px}
+ body[data-workbench] .phone-workbench-picker{gap:7px}
+ .phone-workbench-name strong{font-size:16px}
+ body[data-workbench] .phone-top-actions{gap:5px}
+ .health-metric-copy b{font-size:23px}
+ .health-metric-copy time{font-size:11px}
+ .health-water-content{gap:14px;padding-inline:15px}
+ .health-water-ring{width:108px;height:108px;flex-basis:108px}
+ .studio-domain-dashboard .domain-total>strong{font-size:32px}
 }

@@ -423,6 +423,15 @@ body[data-workbench=health] .health-trend .chart svg text{font-size:10px;fill:va
 .health-metric-copy b{font-size:25px;font-weight:600;line-height:1.2;letter-spacing:-.5px;overflow-wrap:anywhere}
 .health-metric-copy b small{font-size:11px;letter-spacing:0;font-weight:400;margin-left:4px;color:var(--muted)}
 .health-metric-copy time{font-size:10px;color:var(--muted)}
+.health-metric-copy time{overflow-wrap:anywhere;line-height:1.6}
+.health-record-status{display:block;font-size:10px;line-height:1.6;color:var(--muted);font-weight:400}
+.health-latest-exercise{display:flex;align-items:center;gap:10px;margin:0 17px 17px;padding:14px 12px;background:#fff;border-radius:16px;min-width:0}
+.health-latest-exercise>div{flex:1;min-width:0}.health-latest-exercise h3{font-size:13px;font-weight:500;margin:0 0 5px}
+.health-latest-exercise time{font-size:11px;color:var(--muted)}.health-latest-exercise p{font-size:12px;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}
+.health-latest-exercise>.icon-btn{flex-shrink:0}
+.health-trend-fallback{padding:20px 23px;display:grid;gap:8px;flex:1;align-content:center;min-height:130px;color:var(--muted);font-size:12px}
+.health-trend-fallback p{margin:0}.health-trend-fallback strong{color:var(--ink);font-size:16px;font-weight:500;overflow-wrap:anywhere}
+.health-meal-row h3 time{display:block;margin:5px 0 0;line-height:1.6}
 .health-body-metric>svg{flex-shrink:0;color:#8e958a;width:13px}
 .health-lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-width:0}
 .health-exercise-total{display:flex;align-items:baseline;gap:7px;padding:0 23px;flex-wrap:wrap}
@@ -512,7 +521,7 @@ body[data-workbench=health] .health-tasks .task-list{padding:0 17px;display:grid
 @media(max-width:900px){
  .health-bento{display:flex;flex-direction:column;align-items:stretch}
  .health-primary,.health-secondary{display:contents}
- .health-monitoring{order:1}.health-water{order:2}.health-tasks{order:3}.health-lower-grid{order:4}.health-visits{order:5}
+ .health-monitoring{order:1}.health-water{order:2}.health-tasks{order:3}.health-lower-grid{order:4}.health-visits{order:5}.health-reports{order:6}
 }
 
 /* studio-domains.css */
@@ -735,3 +744,308 @@ body[data-workbench] .studio-domain-dashboard .asset-allocation-row i{background
 .studio-domain-dashboard :is(.domain-accounting-note,.asset-accounting-note,.domain-kicker,.domain-empty p,.domain-countdown small,.domain-hero-copy p,.domain-trip-card small,.domain-travel-trip small,.domain-resource-note){color:#687063}
 .studio-domain-dashboard small:not(.asset-deadline):not(.travel-status):not(.pill),.studio-domain-dashboard time,.studio-domain-dashboard dt{color:#687063;font-size:11px}
 .studio-domain-dashboard .domain-accounting-note{font-size:12px}
+
+/* studio-mobile.css */
+/* Mobile Studio: one responsive layer after the domain styles. */
+.phone-context,.reading-drop-mobile{display:none}
+@media(max-width:900px){
+ body[data-workbench]{background:#f2f3ef}
+ body[data-workbench] .app{background:#f2f3ef}
+ body[data-workbench] .workspace{height:auto;min-height:100dvh;overflow:visible;display:block}
+ body[data-workbench] .workspace>.main{overflow:visible;scrollbar-gutter:auto}
+ body[data-workbench] .phone-topbar{height:calc(80px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 18px 0;background:#f2f3eff2;border:0;gap:10px}
+ body[data-workbench] .phone-workbench-picker{gap:10px;max-width:calc(100% - 124px);min-width:0;flex:1}
+ body[data-workbench] .phone-workbench-picker>.workbench-symbol{width:42px;height:42px;border-radius:15px;background:#fff;color:var(--theme-ink);border:1px solid #e4e8df;flex-shrink:0}
+ body[data-workbench] .phone-workbench-picker>.phone-workbench-name{display:flex;flex-direction:column;gap:4px;min-width:0;white-space:normal;line-height:1.2}
+ .phone-workbench-name strong{font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650}
+ body[data-workbench] .phone-workbench-name small{font-size:11px;color:var(--muted);margin:0;font-weight:400}
+ .picker-chevron{flex-shrink:0}
+ body[data-workbench] .phone-top-actions{gap:8px;flex-shrink:0}
+ body[data-workbench] .space-chip{background:#fff;border-color:#e1e5dc;min-height:44px;font-size:11px;padding:8px 10px;color:#535e4d}
+ .phone-profile{display:grid;place-items:center;width:42px;height:44px;border:1px solid var(--theme-border);border-radius:50%;background:var(--theme-soft);color:var(--theme-ink);font-weight:600;font-size:17px}
+ body[data-workbench] .main{padding:10px 16px calc(116px + env(safe-area-inset-bottom,0px));max-width:720px}
+ .phone-context{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 14px;color:#626b5d;font-size:11px;min-height:38px}
+ .phone-context button{display:flex;align-items:center;gap:6px;min-height:44px;border:0;background:transparent;color:var(--theme-ink);font-size:11px;padding:0 4px}
+ body[data-workbench] .heading{margin-bottom:18px;gap:10px}
+ body[data-workbench] .heading h1,.health-overview-heading h1{font-size:28px;line-height:1.3;letter-spacing:-1px;font-weight:650}
+ body[data-workbench] .heading p{font-size:13px;line-height:1.8}
+ body[data-workbench] .card{border:1px solid #e6e9e1;background:#fafbf8;border-radius:24px}
+ body[data-workbench] .card-head{padding:18px 18px 10px;align-items:center}
+ body[data-workbench] .card-title{font-size:17px;line-height:1.5}
+ body[data-workbench] .btn{min-height:44px;font-size:13px;padding:10px 15px}
+ body[data-workbench] .icon-btn{min-width:44px;min-height:44px}
+ body[data-workbench] .text-btn{min-height:44px;font-size:12px}
+ body[data-workbench] .bottom-tabs{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));grid-template-columns:repeat(var(--tab-count,5),minmax(0,1fr));gap:3px;padding:7px;border:1px solid #e0e5d9;border-radius:27px;background:#fffffff5;box-shadow:0 8px 35px #26352014}
+ body[data-workbench] .bottom-tab{min-width:0;min-height:57px;padding:5px 2px;gap:5px;border-radius:20px;color:#687062}
+ body[data-workbench] .bottom-tab small{font-size:11px;line-height:1.3}
+ body[data-workbench] .bottom-tab.active{background:var(--theme-soft);color:var(--theme-ink)}
+ body[data-workbench] .capture-tab{margin-top:0;gap:4px}
+ body[data-workbench] .capture-tab>span{width:34px;height:29px;border-radius:11px;background:var(--theme-accent);color:var(--theme-on-accent);box-shadow:none}
+ body[data-workbench] .capture-tab small{margin:0}
+ body[data-workbench] .footer{font-size:10px;line-height:1.8;margin-top:24px;gap:12px}
+
+ /* Health: a prominent trend, compact capture rail, and readable small cards. */
+ .health-overview-heading{margin-bottom:14px}
+ .health-overview-heading h1{margin-bottom:18px}
+ .health-quick-actions{gap:4px;padding:8px;background:#e8ece3;border-radius:23px}
+ body[data-workbench=health] .health-quick-actions .btn{border:0;border-radius:17px;min-height:71px;background:transparent;gap:8px;font-size:12px;padding:10px 3px}
+ body[data-workbench=health] .health-quick-actions .btn>svg{width:25px;height:25px;padding:4px;box-sizing:content-box;border-radius:12px;background:#fff;color:var(--theme-ink)}
+ .health-bento,.health-monitoring,.health-primary,.health-secondary,.health-lower-grid{gap:14px}
+ body[data-workbench=health] .health-overview .card{background:#fafbf8;border:1px solid #e5e9de;border-radius:24px}
+ body[data-workbench=health] .health-overview .health-trend{background:linear-gradient(140deg,var(--theme-soft),#fafbf8 85%);min-height:290px}
+ body[data-workbench=health] .health-overview .card-head{padding:16px 18px 8px}
+ body[data-workbench=health] .health-overview .card-title{font-size:17px}
+ .health-trend-reading{padding:0 18px 8px}
+ .health-trend-reading>span{font-size:38px;letter-spacing:-1.5px}
+ .health-trend-reading p{font-size:12px;line-height:1.6}
+ body[data-workbench=health] .health-trend .tabs{padding-inline:18px;gap:16px}
+ .health-trend .tabs .tab{min-height:44px;font-size:12px}
+ .health-trend .chart-note{padding:0 18px 14px;font-size:11px}
+ .health-body-metrics{gap:8px}
+ .health-body-metric{padding:14px 10px;border:1px solid #e5e9de;border-radius:21px;background:#fafbf8}
+ .health-metric-copy{font-size:12px;gap:6px}
+ .health-metric-copy b{font-size:25px;letter-spacing:-.7px}
+ .health-metric-copy time,.health-metric-copy .health-record-status{font-size:11px;line-height:1.5}
+ .health-body-metric>svg{display:none}
+ .health-metric-copy b small{font-size:10px}
+ .health-water-content{padding:0 18px 20px;gap:20px;align-items:center}
+ .health-water-ring{width:120px;height:120px;flex:0 0 120px;padding:11px}
+ .health-water-ring b{font-size:28px}
+ .health-water-ring>div{background:#fafbf8}
+ .health-water-actions{min-width:0;flex:1}
+ .health-water-actions>small{font-size:12px;line-height:1.7}
+ .health-water-actions>.btn{padding-inline:11px;font-size:12px}
+ .health-meal-row,.health-visit-row,.health-tasks .task-row{background:#fff}
+
+ /* Remove nested dashboard frames on a small screen. */
+ .studio-domain-dashboard,.studio-domain-dashboard .domain-main{display:contents}
+ .studio-domain-dashboard .domain-board{display:contents}
+ .studio-domain-dashboard .domain-board-head{margin:0 0 16px;gap:12px;flex-wrap:wrap}
+ .studio-domain-dashboard .domain-board-head h2{font-size:28px}
+ .studio-domain-dashboard .domain-kicker{font-size:10px;letter-spacing:1.5px;margin-bottom:6px}
+ .studio-domain-dashboard .domain-head-actions{gap:8px;margin-left:0}
+ .studio-domain-dashboard .domain-head-actions .btn{font-size:12px;min-height:44px;padding:10px 14px}
+ body[data-workbench=finance] .main[data-page=dashboard]>.asset-mobile-sections,
+ body[data-workbench=finance] .main[data-page=dashboard]>.asset-subnav,
+ body[data-workbench=travel] .main[data-page=dashboard]>.travel-module-nav{display:none}
+ body[data-workbench=finance] .main[data-page=dashboard]>.heading p,
+ body[data-workbench=finance] .main[data-page=dashboard]>.heading .asset-heading-actions,
+ body[data-workbench=travel] .main[data-page=dashboard]>.heading p{display:none}
+ .main[data-page=dashboard] .studio-domain-dashboard .domain-board-head>div:first-child{display:none}
+ .main[data-page=dashboard] .studio-domain-dashboard .domain-board-head .domain-head-actions{width:100%;justify-content:flex-start}
+ .main[data-page=dashboard] .studio-domain-dashboard .domain-board-head .domain-head-actions .btn{flex:1;justify-content:center}
+ .studio-domain-dashboard .domain-section-nav{padding:0;border:0;margin:0 0 16px;gap:8px}
+ .studio-domain-dashboard .domain-section-nav>button{font-size:12px;min-height:52px;border-radius:17px;padding:11px 10px;background:#e8ece3;line-height:1.5}
+ .studio-domain-dashboard .domain-section-nav>button span{font-size:11px}
+ .studio-domain-dashboard .domain-asset-bento{grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:14px}
+ .studio-domain-dashboard .domain-total{padding:22px;background:linear-gradient(125deg,var(--theme-soft),#fafbf8);border-color:var(--theme-border);border-radius:25px}
+ .studio-domain-dashboard .domain-total>strong{font-size:36px;margin:20px 0;line-height:1.2;letter-spacing:-1px}
+ .studio-domain-dashboard .domain-total dl{gap:12px}
+ .studio-domain-dashboard .domain-total dl>div{background:#ffffff9c;padding:13px 10px;border-radius:16px}
+ .studio-domain-dashboard .domain-total dt{font-size:12px}
+ .studio-domain-dashboard .domain-total dd{font-size:16px;margin-top:7px}
+ .studio-domain-dashboard .domain-total small{font-size:12px;line-height:1.8}
+ .studio-domain-dashboard .domain-total p{font-size:13px}
+ .studio-domain-dashboard .domain-aside{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;margin-top:14px}
+ .studio-domain-dashboard :is(.domain-financial,.domain-transactions){margin-bottom:14px}
+ .studio-domain-dashboard :is(.card,.domain-board){border-radius:24px;background:#fafbf8}
+ .studio-domain-dashboard .card-head{padding:16px 18px 8px}
+ .studio-domain-dashboard .card-head .btn,.studio-domain-dashboard .domain-empty .btn{min-height:44px;font-size:12px}
+ .studio-domain-dashboard .domain-empty p{font-size:13px}
+ .studio-domain-dashboard .domain-accounting-note{font-size:12px;margin:0 4px 16px}
+ .studio-domain-dashboard .asset-record-main,.studio-domain-dashboard .domain-aside .asset-record-main{padding:15px 16px;gap:10px}
+ .studio-domain-dashboard .asset-record-copy strong{font-size:14px}
+ .studio-domain-dashboard .asset-record-copy small,.studio-domain-dashboard .domain-aside .asset-record-copy small{font-size:12px}
+ .studio-domain-dashboard .asset-record-amount,.studio-domain-dashboard .domain-aside .asset-record-amount{font-size:15px;max-width:42%;overflow-wrap:anywhere}
+ .studio-domain-dashboard .asset-allocation-row,.studio-domain-dashboard .asset-allocation-row strong{font-size:13px}
+ .studio-domain-dashboard .domain-task-row{min-height:60px}
+ .studio-domain-dashboard .domain-task-row strong{font-size:14px}
+ .studio-domain-dashboard .domain-resource-links>button{font-size:12px;min-height:60px;padding:12px 4px}
+ .studio-domain-dashboard .domain-travel-bento{grid-template-columns:minmax(0,1fr);gap:14px;margin-bottom:14px}
+ .studio-domain-dashboard .domain-trip-hero{background:linear-gradient(125deg,var(--theme-soft),#fafbf8);border-color:var(--theme-border);border-radius:25px}
+ .studio-domain-dashboard .domain-trip-hero-copy{padding:24px 20px}
+ .studio-domain-dashboard .domain-trip-hero h3{font-size:27px}
+ .studio-domain-dashboard .domain-trip-hero small,.studio-domain-dashboard .domain-trip-hero p{font-size:12px;line-height:1.8}
+ .studio-domain-dashboard .domain-trip-overview{padding:20px 10px;width:25%;min-width:0}
+ .studio-domain-dashboard .domain-trip-overview small{font-size:11px}
+ .studio-domain-dashboard .domain-travel-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .studio-domain-dashboard .domain-travel-metrics>.card{padding:18px 14px;min-height:180px}
+ .studio-domain-dashboard .domain-current-selector{font-size:12px;gap:8px;flex-wrap:wrap;margin-block:16px}
+ .studio-domain-dashboard .domain-current-selector select{font-size:16px;min-height:44px;max-width:100%;flex:1;min-width:0}
+ .studio-domain-dashboard .domain-progress-ring{width:95px;height:95px}
+ .studio-domain-dashboard .travel-map,.studio-domain-dashboard .travel-map-placeholder{min-height:240px;height:240px}
+
+ /* Reading surfaces lead into the shelf before secondary notes. */
+ .reading-drop-desktop{display:none}
+ .reading-drop-mobile{display:inline}
+ body[data-workbench=reading] .reading-content{display:flex;flex-direction:column;gap:14px}
+ .studio-reading-overview{display:contents}
+ .reading-content>.reading-demo{order:0;margin:0}
+ .studio-reading-continue{order:1;background:linear-gradient(130deg,var(--theme-soft),#fafbf8)!important;border-color:var(--theme-border)!important}
+ .reading-content>#reading-dropzone{order:2;margin:0}
+ .studio-reading-week{order:3}
+ .studio-reading-side{order:4;gap:14px}
+ .studio-reading-feature{padding:0 18px 20px;gap:18px;min-height:200px}
+ .studio-reading-feature h3{font-size:20px}
+ .studio-reading-feature .reading-progress{margin-block:15px}
+ .studio-reading-feature .btn{min-height:44px}
+ body[data-workbench=reading] .reading-toolbar{gap:10px;flex-wrap:wrap;margin-bottom:14px}
+ body[data-workbench=reading] .reading-toolbar select{font-size:16px;min-height:44px;min-width:0;max-width:100%}
+ body[data-workbench=reading] .reading-dropzone{border-radius:24px;background:#fafbf8;padding:16px}
+ body[data-workbench=reading] .reading-grid .reading-book{background:#fff;border-radius:19px;padding:12px}
+ .reading-grid .reading-book-actions .btn{min-height:44px;font-size:12px}
+ .reading-grid .reading-book-copy strong{font-size:14px;line-height:1.7}
+ .reading-grid .reading-book-copy>small{font-size:12px}
+ .reading-grid .reading-progress>div{font-size:12px}
+ .studio-reading-notes p,.studio-reading-plans strong{font-size:14px}
+
+ .studio-other-toolbar{gap:12px;margin:0 0 16px}
+ .studio-other-toolbar p{margin:0;font-size:13px}
+ .studio-other-toolbar>div{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:10px}
+ .studio-other-toolbar .btn{justify-content:center}
+ .studio-other-grid{gap:14px}
+ .studio-other-tasks{background:linear-gradient(135deg,var(--theme-soft),#fafbf8)!important;border-color:var(--theme-border)!important}
+ .studio-other-grid .generic-record{padding:15px 18px}
+ .studio-other-grid .generic-record-content strong{font-size:14px}
+ .studio-other-grid .generic-record-content small{font-size:12px}
+ .studio-completion-ring{width:126px;height:126px}
+ body[data-workbench] .module-directory{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:none;border:0;overflow:visible}
+ body[data-workbench] .directory-item{flex-direction:column;align-items:flex-start;gap:12px;min-height:158px;border:1px solid #e3e8dc;border-radius:22px;background:#fafbf8;padding:18px}
+ .directory-item>svg:last-child{display:none}
+ body[data-workbench] .shell-profile{background:linear-gradient(135deg,var(--theme-soft),#fafbf8);border:1px solid var(--theme-border);border-radius:25px;margin:12px 0 16px;padding:25px 18px}
+ body[data-workbench] .shell-menu{border-radius:24px}
+ body[data-workbench] .shell-menu>button{min-height:76px;padding:16px 18px}
+ body[data-workbench] .shell-menu small{font-size:12px}
+ /* Scoped to the sheet so immersive reader colors and controls stay independent. */
+ body[data-workbench] .drawer{border-radius:27px 27px 0 0}
+ body[data-workbench] .drawer-head{padding:26px 20px 16px}
+ body[data-workbench] .drawer-head h2{font-size:23px;color:var(--ink)}
+ body[data-workbench] .drawer-content{padding:20px}
+ body[data-workbench] .drawer .field input,body[data-workbench] .drawer .field textarea,body[data-workbench] .drawer .field select{font-size:16px;min-height:48px;border-radius:14px}
+ body[data-workbench] .drawer .capture-number-wrap input{min-height:48px}
+ body[data-workbench] .drawer-foot{padding:14px 20px calc(14px + env(safe-area-inset-bottom,0px))}
+ body[data-workbench] .drawer-foot>.btn{min-height:48px}
+}
+@media(max-width:370px){
+ body[data-workbench] .phone-topbar{padding-inline:14px}
+ body[data-workbench] .main{padding-inline:12px}
+ body[data-workbench] .phone-workbench-picker{gap:7px}
+ .phone-workbench-name strong{font-size:16px}
+ body[data-workbench] .phone-top-actions{gap:5px}
+ .health-metric-copy b{font-size:23px}
+ .health-metric-copy time{font-size:11px}
+ .health-water-content{gap:14px;padding-inline:15px}
+ .health-water-ring{width:108px;height:108px;flex-basis:108px}
+ .studio-domain-dashboard .domain-total>strong{font-size:32px}
+}
+
+/* layout.css */
+/* Configurable cards retain the Studio component styles and business controls. */
+.layout-overview-title{display:flex;align-items:center;gap:18px;min-width:0}
+.layout-edit-entry{white-space:nowrap;font-size:12px!important;gap:7px!important;flex-shrink:0}
+.layout-canvas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:18px;align-items:start}
+.layout-canvas>.layout-widget{min-width:0;grid-column:span 6;order:initial;margin:0}
+.layout-canvas>.layout-widget[data-layout-size=small]{grid-column:span 4}
+.layout-canvas>.layout-widget[data-layout-size=large]{grid-column:span 12}
+.layout-canvas>.health-body-metrics{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr;padding:14px;gap:10px;align-self:stretch}
+.layout-canvas>.health-body-metrics[data-layout-size=small]{grid-template-columns:1fr;grid-template-rows:repeat(3,1fr)}
+.layout-canvas .health-metric-copy b{overflow-wrap:anywhere}
+.layout-canvas>.health-trend[data-layout-size=large]{min-height:370px}
+.layout-canvas>.health-trend[data-layout-size=large] .chart svg{max-height:280px}
+.layout-canvas>.health-medication-summary{margin:0}
+.layout-canvas>.health-water[data-layout-size=small] .health-water-content{flex-direction:column;align-items:center;gap:16px}
+.layout-canvas>.health-water[data-layout-size=small] .health-water-actions{align-items:center;text-align:center}
+.layout-canvas>.health-tasks[data-layout-size=small] .task-row{flex-wrap:wrap}
+.layout-canvas>.health-tasks[data-layout-size=small] .task-row>time{margin-left:35px}
+.layout-empty{grid-column:1/-1;padding:36px 24px;text-align:center;background:var(--theme-soft);border:1px dashed var(--theme-border);border-radius:24px}
+.layout-empty h2{font-size:20px}.layout-empty p{font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:20px}
+.layout-preview-banner{position:sticky;top:0;z-index:8;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px;background:#fff;border:1px solid var(--theme-border);border-radius:20px;box-shadow:0 5px 20px #25371c0c;margin-bottom:18px}
+.layout-preview-banner strong{font-size:15px;color:var(--theme-ink)}
+.layout-preview-banner p{font-size:12px;color:var(--muted);line-height:1.7;margin:5px 0 0}
+.layout-preview-actions{display:flex;gap:8px;flex-wrap:wrap;flex-shrink:0}
+.layout-preview-actions .btn{font-size:12px!important;min-height:44px!important}
+.layout-device-frame{position:relative;width:100%;max-width:1440px;overflow:hidden;border-radius:22px;margin:0 auto 24px;background:#e6e9e0;box-shadow:0 8px 35px #25371c10}
+.layout-device-frame iframe{display:block;max-width:none;border:0;transform-origin:top left;background:#f2f3ef}
+.layout-device-frame:has(iframe[width="390"]){max-width:390px}
+.layout-preview-frame-page .layout-edit-entry{display:none}
+.layout-preview-frame-page .layout-empty button{display:none}
+.layout-preview-frame-page .phone-context button{visibility:hidden}
+.layout-preview-frame-page .layout-overview-title{margin-bottom:0}
+.layout-device-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:5px;background:#eff2e9;border-radius:18px}
+.layout-device-tabs button{border:0;background:transparent;display:flex;align-items:center;justify-content:center;gap:9px;min-height:46px;border-radius:14px;font-size:14px;color:#646e5c}
+.layout-device-tabs button[aria-pressed=true]{background:white;color:var(--theme-ink);box-shadow:0 2px 5px #25371c08;font-weight:600}
+.layout-editor-intro{font-size:12px;line-height:1.9;color:var(--muted);margin:15px 1px}
+.layout-editor-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.layout-editor-toolbar>span{font-size:12px;color:#626c59}
+.layout-editor-toolbar .btn{padding:8px 10px!important;font-size:12px!important}
+.layout-widget-list{display:grid;gap:10px}
+.layout-widget-row{border:1px solid #e3e8dc;border-radius:18px;background:#f8faf6;padding:12px 14px}
+.layout-widget-row.is-hidden{background:#f0f2ed}
+.layout-widget-row.is-hidden .layout-widget-settings{opacity:.65}
+.layout-widget-row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.layout-widget-row-head>label{display:flex;align-items:center;gap:9px;min-height:44px;cursor:pointer;min-width:0}
+.layout-widget-row-head strong{font-size:14px;line-height:1.5;font-weight:550;overflow-wrap:anywhere}
+.layout-widget-row-head input[type=checkbox]{width:19px;height:19px;flex-shrink:0;margin:0}
+.layout-order-buttons{display:flex;gap:4px;flex-shrink:0}
+.layout-order-buttons .icon-btn{border:1px solid #e2e7da;background:white;min-height:40px!important;min-width:40px!important;font-size:18px}
+.layout-widget-settings{display:flex;align-items:end;flex-wrap:wrap;gap:8px}
+.layout-widget-settings label{display:flex;flex-direction:column;gap:6px;font-size:11px;color:var(--muted);flex:1;min-width:75px}
+.layout-widget-settings select,.layout-history select{width:100%;background:#fff;border:1px solid #dfe6d6;border-radius:11px;min-height:42px;font-size:14px;color:var(--ink);padding:8px}
+.layout-theme-field{margin:20px 0;padding:18px;background:var(--theme-soft);border:1px solid var(--theme-border);border-radius:18px}
+.layout-theme-field>label{font-size:14px;display:block;margin-bottom:12px}
+.layout-theme-field>div{display:flex;align-items:center;gap:12px}
+.layout-theme-field input{width:68px;height:44px;border:1px solid #dfe6d6;border-radius:10px;background:#fff;padding:3px}
+.layout-theme-field span{font-size:13px;font-variant-numeric:tabular-nums}
+.layout-theme-field small{display:block;font-size:12px;color:var(--muted);line-height:1.8;margin-top:10px}
+.layout-history,.layout-ai-help{border-top:1px solid var(--line);padding:16px 1px}
+.layout-history summary,.layout-ai-help summary{font-size:13px;cursor:pointer;min-height:30px;color:var(--theme-ink)}
+.layout-history p,.layout-ai-help p{font-size:12px;line-height:1.9;color:var(--muted)}
+.layout-history-actions{display:flex;align-items:center;gap:8px}
+.layout-history-actions select{flex:1;min-width:0}
+.layout-history-actions>.btn{white-space:nowrap;font-size:12px!important;padding-inline:11px!important}
+#layout-editor-error:empty{display:none}
+#layout-editor-form select:focus-visible{outline:2px solid var(--theme-ink);outline-offset:2px}
+@media(max-width:1100px) and (min-width:901px){.layout-overview-title{gap:10px;flex-wrap:wrap}.layout-edit-entry{padding:9px 12px!important}}
+@media(max-width:900px){
+ .layout-overview-title{justify-content:space-between;width:100%;margin-bottom:18px;gap:12px}
+ .layout-overview-title h1{margin:0;font-size:27px}
+ .layout-edit-entry{padding:9px 12px!important;min-height:44px!important;background:#fff!important}
+ .layout-canvas{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .layout-canvas>.layout-widget{grid-column:span 2}
+ .layout-canvas>.layout-widget[data-layout-size=small]{grid-column:span 1}
+ .layout-canvas>.layout-widget[data-layout-size=large]{grid-column:span 2}
+ .layout-canvas>.health-body-metrics{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr;padding:0;background:none}
+ .layout-canvas>.health-trend[data-layout-size=large]{min-height:355px}
+ .layout-canvas>.health-water[data-layout-size=large] .health-water-content{padding-block:10px 25px}
+ .layout-canvas>.health-water[data-layout-size=large] .health-water-ring{width:138px;height:138px;flex-basis:138px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .card-head{padding:14px 12px 8px;gap:5px;flex-wrap:wrap}
+ .layout-canvas>.layout-widget[data-layout-size=small] .card-title{font-size:15px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .card-head .text-btn{font-size:11px;min-height:36px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-compact-list{padding-inline:10px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-meal-row{padding:12px;flex-wrap:wrap}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-meal-symbol{display:none}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-meal-row>div{min-width:0;width:100%}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-visit-row{padding:12px 10px;gap:8px;flex-wrap:wrap}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-visit-row>.health-metric-symbol{display:none}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-visit-row>span{min-width:0;flex:1}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-visit-row>svg{display:none}
+ .layout-canvas>.layout-widget[data-layout-size=small] .task-list{padding:0 10px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .task-row{gap:7px;flex-wrap:wrap;padding:10px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .task-copy{min-width:0;max-width:100%}
+ .layout-canvas>.layout-widget[data-layout-size=small] .task-copy strong{overflow-wrap:anywhere}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-empty{padding:15px 12px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-empty .btn{font-size:12px;padding-inline:10px}
+ .layout-canvas>.layout-widget[data-layout-size=small] .health-all-tasks{font-size:12px;padding:13px 10px}
+ .layout-preview-banner{top:calc(80px + env(safe-area-inset-top,0px));flex-direction:column;align-items:stretch;padding:14px;border-radius:19px;gap:10px}
+ .layout-preview-actions{gap:7px}
+ .layout-preview-actions .btn{flex:1;padding:9px 8px!important;font-size:12px!important;justify-content:center}
+ .layout-device-frame{border-radius:18px}
+ .layout-widget-row{padding:11px 12px}
+ .layout-widget-settings{gap:7px}
+ .layout-widget-settings select,.layout-history select{font-size:16px;min-height:46px}
+ .layout-order-buttons .icon-btn{min-width:44px!important;min-height:44px!important}
+ .layout-editor-toolbar{align-items:flex-start;gap:7px}
+ .layout-editor-toolbar>span{padding-top:12px}
+ .layout-history-actions{align-items:stretch;flex-direction:column}
+ .layout-history-actions>.btn{justify-content:center}
+}

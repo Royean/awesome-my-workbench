@@ -1,0 +1,115 @@
+{
+  "executor": "/root/layout_acceptance",
+  "checks": [
+    {
+      "ok": true,
+      "name": "desktop default manual trend selected"
+    },
+    {
+      "ok": true,
+      "name": "external layout refresh preserves desktop default filter"
+    },
+    {
+      "ok": true,
+      "name": "mobile custom trend selected"
+    },
+    {
+      "ok": true,
+      "name": "return desktop restores its own default trend"
+    },
+    {
+      "ok": true,
+      "name": "mine layout preview enters actual dashboard"
+    },
+    {
+      "ok": true,
+      "name": "mine preview route and state agree"
+    },
+    {
+      "ok": true,
+      "name": "saving layout blocks premature Escape close"
+    },
+    {
+      "ok": true,
+      "name": "saving layout blocks shortcut replacement"
+    },
+    {
+      "ok": true,
+      "name": "delayed real save completes once without replacing another form"
+    },
+    {
+      "ok": true,
+      "name": "late canceled preview preserves later record draft"
+    },
+    {
+      "ok": true,
+      "name": "late canceled preview does not reopen preview"
+    },
+    {
+      "ok": true,
+      "name": "shortcut respects unsaved layout guard"
+    },
+    {
+      "ok": true,
+      "name": "old preview completion cannot clear newer save busy guard"
+    },
+    {
+      "ok": true,
+      "name": "canceled preview A stays dismissed after save B"
+    },
+    {
+      "ok": true,
+      "name": "conflict reload retains phone draft delta"
+    },
+    {
+      "ok": true,
+      "name": "conflict reload includes new desktop change"
+    },
+    {
+      "ok": true,
+      "name": "conflict reload includes new shared theme"
+    },
+    {
+      "ok": true,
+      "name": "rebased apply preserves both devices and current theme"
+    },
+    {
+      "ok": true,
+      "name": "normal app keeps no-frame CSP"
+    },
+    {
+      "ok": true,
+      "name": "valid own preview has same-origin frame policy"
+    },
+    {
+      "ok": true,
+      "name": "invalid preview keeps no-frame CSP"
+    },
+    {
+      "ok": true,
+      "name": "all cards hidden retains editing recovery"
+    },
+    {
+      "ok": true,
+      "name": "all cards hidden retains navigation"
+    },
+    {
+      "ok": true,
+      "name": "fix verification no page errors",
+      "detail": []
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/layout-editor.js": "8b03387291de0299325fb1d531901ab01650c4802d4f3481bb97418caf815fae",
+    "public/layout.css": "3246faee8b0df5a0e23ce08eb1704c4adc290b07c59134d83f67992d058e221b",
+    "public/app.js": "d743e32f1b282f0c99e78e3a9c1ec99bca722cf4e86ffb983a0ceb8538935185",
+    "public/index.html": "81925b8a3c082e7e3eca1b1f4e14746f345671cdfe81a88a12a30f78acf35b2d",
+    "server.mjs": "3fa2c591620456b2e544d1c49d140b9e05dd757425dddf4d576f9903ca958648"
+  },
+  "bundles": {
+    "js": "/assets/app.012acd7ac81bbf5cc121a9a0ad63829448e907b4541019e9085957903aad4ae4.js",
+    "css": "/assets/app.4a055eba6ebe41392b22881d395c32425c40da04f19e57b6e3e4ee6bfb1ff021.css"
+  }
+}

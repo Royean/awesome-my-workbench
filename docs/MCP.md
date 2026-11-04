@@ -1,5 +1,7 @@
 # 知衡 MCP 服务
 
+健康首页现支持AI编辑布局：`list_layout_widgets`、`get_layout`、`preview_layout`、`update_layout`、`restore_layout`。布局按账号保存，个人/示例共用，电脑和手机可分别调整。接口、版本冲突、预览和撤销说明见 [AI 布局后端](AI_LAYOUT_BACKEND.md)。客户端需重新获取工具列表才能发现新增工具。
+
 知衡在 `server.mjs` 内置一个远程 MCP 服务端点：`https://vivid-dream.online/mcp`（本地开发为 `http://localhost:3100/mcp`，需 `AUTH_REQUIRED=1`）。
 
 - 传输：MCP Streamable HTTP，JSON-RPC 2.0 over `POST`，只返回 `application/json`（不提供 SSE；`GET /mcp` → 405）。无状态，不使用 `Mcp-Session-Id`。
@@ -169,3 +171,7 @@ bearer_token_env_var = "ZHIHENG_TOKEN"
 网页 medication 可写 `imageFileId`，传 null 或空字符串清除。图片必须是同一账号、工作台和数据空间内现存 file，MIME 限 PNG/JPEG/WebP；PDF、音频及跨空间编号均拒绝。上传复用 `/api/upload`，分类可为「药品图片」。删除图片后，未更换原关联的用药编辑可保留历史编号；新关联不能使用已删除编号。
 
 `attach_medication_image` 接受 `medicationId`、`fileId` 和通用作用域参数。可复用 `upload_attachment` 上传图片后关联已有用药，无需新建用药。只添加图片，同一图片重试不改时间戳，已有不同图片时拒绝并提示到网页核对；不会修改处方剂量、频次、服用时间。写入前复述药名、剂量、时间及图片名称、目标空间，用户明确回答「对」后调用。MCP 用药响应仅给 `image: {name, type}`，不返回 imageFileId 或存储路径；关联图片已删除时 image 为 null。
+
+## AI 组件库（1.2.0）
+
+组件库工具覆盖查询类型/模板、草稿创建编辑、复制归档、私有预览及保存、显式发布、历史恢复和跨工作台放置。14个新增工具为 `list_component_types`、`list_components`、`get_component`、`create_component`、`update_component`、`duplicate_component`、`archive_component`、`preview_component`、`save_component_preview`、`publish_component`、`restore_component`、`get_component_placements`、`update_component_placements`、`restore_component_placements`。定义只组合受控stat/chart/list/progress区块，源工作台与personal/demo由服务核验；编辑/历史恢复只产生草稿，发布才同步所有引用。用户明确要求的展示操作可执行且可恢复，不更改业务记录；原医疗记录确认规则不变。API、数据语义、版本及上限见[组件库后端合同](AI_COMPONENTS_BACKEND.md)。连接端重新获取工具列表后使用。

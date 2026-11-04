@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import zlib from 'node:zlib';
 
-const styles = ['style.css', 'minimal.css', 'daily.css', 'mobile.css', 'account.css', 'cgm.css', 'assets.css', 'travel-map.css', 'travel.css', 'originals.css', 'reading.css', 'studio.css', 'studio-library.css', 'studio-health.css', 'studio-domains.css'];
+const styles = ['style.css', 'minimal.css', 'daily.css', 'mobile.css', 'account.css', 'cgm.css', 'assets.css', 'travel-map.css', 'travel.css', 'originals.css', 'reading.css', 'studio.css', 'studio-library.css', 'studio-health.css', 'studio-domains.css', 'studio-mobile.css', 'layout.css', 'component-card.css', 'components.css'];
 const sha256 = content => createHash('sha256').update(content).digest('hex');
 
 // Deliberately small: this app uses local named imports and named declarations.
@@ -70,7 +70,7 @@ export async function buildPublic(publicDir = path.resolve(import.meta.dirname, 
     html = html.replace(/<link\b[^>]*data-workbench-bundle="css"[^>]*>/, cssTag);
   } else {
     let count = 0;
-    html = html.replace(/<link rel="stylesheet" href="\/(style|minimal|daily|mobile|account|cgm|assets|travel-map|travel|originals|reading|studio|studio-library|studio-health|studio-domains)\.css">/g, () => count++ === 0 ? cssTag : '');
+    html = html.replace(/<link rel="stylesheet" href="\/(style|minimal|daily|mobile|account|cgm|assets|travel-map|travel|originals|reading|studio|studio-library|studio-health|studio-domains|studio-mobile|layout|component-card|components)\.css">/g, () => count++ === 0 ? cssTag : '');
     if (count !== styles.length) throw Error(`Expected ${styles.length} source stylesheet links in index.html`);
   }
   if (html.includes('data-workbench-bundle="js"')) {

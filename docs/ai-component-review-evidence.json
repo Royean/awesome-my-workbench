@@ -1,0 +1,201 @@
+{
+  "executor": "/root/component_review",
+  "baseline": "6b30f54",
+  "environment": "isolated loopback servers with temporary SQLite, fictional data, real Chrome/Playwright",
+  "initialFindings": [
+    {
+      "id": "R1",
+      "priority": 2,
+      "issue": "Active placement tab discarded unsaved changes without confirmation",
+      "before": false,
+      "after": true,
+      "confirm": 0,
+      "status": "fixed and independently verified"
+    },
+    {
+      "id": "R2",
+      "priority": 2,
+      "issue": "Newly published component missing in cached placement selector/name",
+      "options": "请先创建并发布组件",
+      "rowLabel": "组件",
+      "status": "fixed and independently verified"
+    }
+  ],
+  "browser": {
+    "result": {
+      "executor": "/root/component_review",
+      "checks": [
+        {
+          "name": "placement checkbox preserves focus after rebuilding",
+          "pass": true
+        },
+        {
+          "name": "placement size preserves focus after rebuilding",
+          "pass": true
+        },
+        {
+          "name": "active placement tab preserves unsaved changes or asks",
+          "pass": true,
+          "before": false,
+          "after": false,
+          "confirm": 0
+        },
+        {
+          "name": "preview displays unsaved definition",
+          "pass": true
+        },
+        {
+          "name": "preview leaves saved revision and published definition unchanged",
+          "pass": true
+        },
+        {
+          "name": "preview leaves records unchanged",
+          "pass": true
+        },
+        {
+          "name": "continue preview restores unsaved draft",
+          "pass": true
+        },
+        {
+          "name": "cancelled late preview does not replace new record draft",
+          "pass": true
+        }
+      ],
+      "findings": [],
+      "errors": []
+    },
+    "async": {
+      "executor": "/root/component_review",
+      "checks": [
+        {
+          "name": "preview keeps close button enabled",
+          "pass": true
+        },
+        {
+          "name": "unchanged component preview closes without false dirty confirmation",
+          "pass": true
+        },
+        {
+          "name": "old preview finally does not unlock newer save",
+          "pass": true
+        },
+        {
+          "name": "shortcut cannot replace component while saving",
+          "pass": true
+        },
+        {
+          "name": "new save completes after cancelled old preview",
+          "pass": true
+        },
+        {
+          "name": "dirty component shortcut asks before discarding",
+          "pass": true
+        },
+        {
+          "name": "keep editing retains typed component title",
+          "pass": true
+        }
+      ],
+      "errors": []
+    },
+    "security": {
+      "executor": "/root/component_review",
+      "checks": [
+        {
+          "name": "component definition and record labels remain literal text",
+          "pass": true
+        },
+        {
+          "name": "half-width generated card preserves viewport",
+          "pass": true
+        },
+        {
+          "name": "layout preview refuses component placement editing",
+          "pass": true
+        },
+        {
+          "name": "layout preview shortcut stays read-only",
+          "pass": true
+        },
+        {
+          "name": "component preview refuses workbench navigation",
+          "pass": true
+        },
+        {
+          "name": "component preview shortcut stays read-only",
+          "pass": true
+        },
+        {
+          "name": "preview interactions do not modify placements",
+          "pass": true
+        },
+        {
+          "name": "no injected event handlers executed",
+          "pass": true
+        }
+      ],
+      "errors": [],
+      "dialogs": 0,
+      "bundle": "/assets/app.60673d23764dea8501abc7173717b035633297671df90a42617b4de92ebfda88.js"
+    },
+    "partial-values": {
+      "executor": "/root/component_review",
+      "checks": [
+        {
+          "name": "partial stat sum retains actual recorded value",
+          "pass": true
+        },
+        {
+          "name": "partial daily sum retains actual recorded value",
+          "pass": true
+        },
+        {
+          "name": "all affected numeric blocks disclose incomplete data",
+          "pass": true
+        },
+        {
+          "name": "stat/chart/progress all visibly disclose partial sum",
+          "pass": true
+        }
+      ],
+      "errors": []
+    },
+    "publication-metadata": {
+      "executor": "/root/component_review",
+      "errors": [],
+      "options": "独立复核新组件 · 健康",
+      "rowLabel": "独立复核新组件",
+      "newPublishedListed": true,
+      "instanceIdentified": true
+    }
+  },
+  "node": {
+    "command": "node --test tests/component-card.test.mjs tests/component-draft.test.mjs tests/components.test.mjs",
+    "passed": 22,
+    "failed": 0,
+    "previousPassed": 21,
+    "finalIncrement": "Independently reran all three files after tiny-positive aggregate precision fix: 22 passed, including preservation of tiny positive values and removal of floating point noise. Browser suite unchanged; JS/CSS unchanged."
+  },
+  "sourceHashes": {
+    "public/component-schema.js": "14821dc7f9148db7bcb3c211a1f0657775d7f39bd1248d267a504c64fc5a72e5",
+    "public/components.js": "dbb6a60489567f2ea12edd205cbc0081c30786c816a930f9d9e0c633aeee7d23",
+    "public/component-draft.js": "2534d4b71a3530218ef1fb713236c3aacee269a18c5e3b6cc52161ecdae65fb3",
+    "public/components.css": "b2a5d1088cb4ce990489135bdecb1f3b84e7567ba7b44296317a1a465d4a2b4e",
+    "public/component-card.js": "484191b178decdc6bf34f035e285429aa922a3617ba55b246647a50f2319e960",
+    "public/component-card.css": "82fd974f3a90188897b4b36d8533c2de14d07b8717b02b60b730717c962effb4",
+    "public/app.js": "572b1ac57a55915b579ef23e4475b0b39ed6e444c1cbbfc8098575f1ef3088d8",
+    "public/shell.js": "eae349225ddacfe8f073ccff1ba3a8f4f3897919506cac6164206d5717900f8e",
+    "lib/components.mjs": "999f4b9f9dfc9608e23bb674b4e2986578f5bd10923a951e79342a8bda4c5b51",
+    "lib/mcp.mjs": "65acb5a14121ed732be4685ab2d982f68b8faeab6836f0ef106ae4310ef2655b",
+    "server.mjs": "9c7ffefddfbe8c210677adbf439a7df38508f131f23cc03c1a96374f2edbd2be",
+    "migrations/007-component-library.sql": "4e98dfeb087a927ac38ab6ae89f979186c10cf6ea6957375dbfb519a7843a6f3",
+    "public/index.html": "58b8eda6ec5a832e07fe6c70503a0a2d8f8608dcbe7c96958fd3498aa8947554",
+    "tests/components.test.mjs": "9db2331ede641280773fd62154d34e9453ad184ef53ceae5cba1720221889e61",
+    "tests/component-card.test.mjs": "d18ede8872b8fd7c932457c8e8c485c8183127299c491d6057c36a9b459d2dc8",
+    "tests/component-draft.test.mjs": "1a0aa9cae1bb8669a1103afc808074c18edd233e18d9013a365fcd303bb6d196"
+  },
+  "bundles": [
+    "/assets/app.8f96f4fc8bdf95d3334d46812e79a70ab713c9c6416999ed0fe866e0fa852f8a.css",
+    "/assets/app.60673d23764dea8501abc7173717b035633297671df90a42617b4de92ebfda88.js"
+  ]
+}

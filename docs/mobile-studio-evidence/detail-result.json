@@ -1,0 +1,117 @@
+{
+  "executor": "/root/mobile_acceptance",
+  "checks": [
+    {
+      "ok": true,
+      "name": "finance detail module nav visible"
+    },
+    {
+      "ok": true,
+      "name": "no overflow finance history",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "finance documents nav visible"
+    },
+    {
+      "ok": true,
+      "name": "no overflow finance documents",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "finance financial nav visible"
+    },
+    {
+      "ok": true,
+      "name": "no overflow finance financial",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "travel detail module nav visible"
+    },
+    {
+      "ok": true,
+      "name": "no overflow travel trip",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "no overflow empty personal health",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "no overflow empty personal finance",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "no overflow empty personal travel",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "no overflow empty personal reading",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    },
+    {
+      "ok": true,
+      "name": "no overflow empty personal other",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      }
+    }
+  ],
+  "failures": [],
+  "hashes": {
+    "public/shell.js": "0d6a30a1b6a47137729f6f5e91aff8b445f0b50d8e32b927de234b08163ac3e3",
+    "public/studio-mobile.css": "ed22865db9f18038c636f4065aadbacbc3e0b9aa6c8a22f53193454bb89d90eb",
+    "public/index.html": "5ac563222d6c66f2050938d42e618b9a49d3433d1fd0a4a7bb3cd7c32a5e229a"
+  }
+}

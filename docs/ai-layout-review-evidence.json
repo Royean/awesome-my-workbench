@@ -1,0 +1,197 @@
+{
+  "executor": "/root/layout_review",
+  "base": "7680b5f",
+  "reviewedBundles": [
+    "/assets/app.c8bfb62159f1248aecacd9579a2f00335c6c7059d4131e5ad4f3cffff8028dc5.css",
+    "/assets/app.ea231ceac12f4a377ebc2e2b89415f62bc1b64f87900103baac75dbc1ea1fc21.js"
+  ],
+  "mainBrowserChecks": [
+    {
+      "name": "R2 mobile pressure30",
+      "ok": true,
+      "detail": {
+        "metric": "血压",
+        "range": "30"
+      }
+    },
+    {
+      "name": "R2 desktop default unaffected",
+      "ok": true,
+      "detail": {
+        "metric": "体重",
+        "range": "14"
+      }
+    },
+    {
+      "name": "R2 explicit desktop session preference retained",
+      "ok": true,
+      "detail": {
+        "metric": "血糖",
+        "range": "7"
+      }
+    },
+    {
+      "name": "R4 reorder preserves five default tasks",
+      "ok": true,
+      "detail": {
+        "before": 5,
+        "after": 5
+      }
+    },
+    {
+      "name": "R3 Mine preview enters dashboard",
+      "ok": true
+    },
+    {
+      "name": "R5 preview URL keeps mobile target",
+      "ok": true
+    },
+    {
+      "name": "R5 reloaded target remains phone iframe",
+      "ok": true
+    },
+    {
+      "name": "readonly iframe hides editing entry",
+      "ok": true
+    },
+    {
+      "name": "readonly iframe ignores layout actions",
+      "ok": true
+    },
+    {
+      "name": "R1 canceled late preview preserves later record form",
+      "ok": true
+    },
+    {
+      "name": "R1 canceled late preview never reopens",
+      "ok": true
+    },
+    {
+      "name": "R1 saving prevents normal close",
+      "ok": true
+    },
+    {
+      "name": "R1 saving keyboard does not replace editor",
+      "ok": true
+    },
+    {
+      "name": "R1 late save after navigation preserves later form",
+      "ok": true
+    },
+    {
+      "name": "R1 old operation cannot clear new saving guard",
+      "ok": true,
+      "detail": {
+        "discard": 0
+      }
+    },
+    {
+      "name": "focus retained after checkbox redraw",
+      "ok": true
+    },
+    {
+      "name": "conflict reload retains local checkbox",
+      "ok": true
+    },
+    {
+      "name": "conflict merge preserves other device and remote theme",
+      "ok": true
+    },
+    {
+      "name": "small card mobile layout no document overflow",
+      "ok": true
+    },
+    {
+      "name": "no browser pageerror",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "mainBrowserBundle": "012acd7a JS / 4a055eba CSS",
+  "incrementalBrowserChecks": [
+    {
+      "name": "MCP-equivalent preview identifies affected mobile device",
+      "ok": true
+    },
+    {
+      "name": "guest preview login preserves target and opens actual iframe",
+      "ok": true
+    },
+    {
+      "name": "frame editing entry remains hidden",
+      "ok": true
+    },
+    {
+      "name": "A explicit session preference selected",
+      "ok": true
+    },
+    {
+      "name": "B login uses B default trend",
+      "ok": true
+    },
+    {
+      "name": "other owner preview reveals no draft iframe",
+      "ok": true
+    },
+    {
+      "name": "other owner preview exit restores live view",
+      "ok": true
+    },
+    {
+      "name": "B layout and theme remain unchanged",
+      "ok": true
+    },
+    {
+      "name": "no browser pageerror",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "incrementalBrowserBundle": "ea231cea JS / 4a055eba CSS",
+  "backendTests": {
+    "command": "node --test tests/layouts.test.mjs",
+    "passed": 9,
+    "failed": 0
+  },
+  "finalSourceSha256": {
+    "public/layout-config.js": "b14d53b4cd63b0e5890d1a1e939ca9711873ae9d4c1264588a6b47f518878b7a",
+    "public/layout-editor.js": "fafe651534c5bbc7ddc086f6957765ce82c668e3e5465753a636a0e0d9006333",
+    "public/layout.css": "6167e910fefbc6c41c3e156d9824c515775902b5a3da28a238b8c99f9c0ad59f",
+    "public/app.js": "d743e32f1b282f0c99e78e3a9c1ec99bca722cf4e86ffb983a0ceb8538935185",
+    "lib/layouts.mjs": "83d4509086542f73221a997f927022008f7441fe150d3f3f6925c42eab46e8bf",
+    "lib/mcp.mjs": "97a009403c33ea40788a5d3a4146a601d45ae5bb85f0cbad1630adfa06c12006",
+    "server.mjs": "3fa2c591620456b2e544d1c49d140b9e05dd757425dddf4d576f9903ca958648",
+    "migrations/006-dashboard-layouts.sql": "8307a9e5506b27b6140389fc7f1275caf9f63f3d547e08cb6052f11b07ac5043",
+    "public/index.html": "b3f857f48106832c60d28404f05adbbf0c8cf26cf4e2e02dd8ea44eb170c7788"
+  },
+  "frameCssIncrementalChecks": [
+    {
+      "name": "desktop phone frame wrapper390 centered",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "x": 525,
+        "mainX": 21,
+        "mainW": 1398,
+        "delta": 0
+      }
+    },
+    {
+      "name": "desktop phone iframe CSS viewport390",
+      "ok": true,
+      "detail": {
+        "inner": 390
+      }
+    },
+    {
+      "name": "phone desktop frame remains1440 scaled without overflow",
+      "ok": true,
+      "detail": {
+        "inner": 1440,
+        "doc": 390,
+        "w": 390,
+        "frame": 358
+      }
+    }
+  ]
+}

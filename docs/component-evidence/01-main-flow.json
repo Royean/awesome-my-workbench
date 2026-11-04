@@ -1,0 +1,214 @@
+{
+  "executor": "/root/component_acceptance",
+  "checks": [
+    {
+      "name": "real MCP publishes typed templates",
+      "ok": true
+    },
+    {
+      "name": "AI create saves draft only",
+      "ok": true
+    },
+    {
+      "name": "real aggregation values 60 minutes 2 sessions",
+      "ok": true
+    },
+    {
+      "name": "MCP preview does not save",
+      "ok": true
+    },
+    {
+      "name": "B cannot read A component",
+      "ok": true
+    },
+    {
+      "name": "B cannot read A preview",
+      "ok": true
+    },
+    {
+      "name": "reject executable/foreign/mixed-money binding",
+      "ok": true
+    },
+    {
+      "name": "reject executable/foreign/mixed-money binding",
+      "ok": true
+    },
+    {
+      "name": "reject executable/foreign/mixed-money binding",
+      "ok": true
+    },
+    {
+      "name": "AI explicit publish",
+      "ok": true
+    },
+    {
+      "name": "cross-workbench reuse with explicit health source health",
+      "ok": true
+    },
+    {
+      "name": "cross-workbench reuse with explicit health source finance",
+      "ok": true
+    },
+    {
+      "name": "cross-workbench reuse with explicit health source travel",
+      "ok": true
+    },
+    {
+      "name": "cross-workbench reuse with explicit health source reading",
+      "ok": true
+    },
+    {
+      "name": "cross-workbench reuse with explicit health source 783d5bac-6473-4bf5-a800-3a812793ca95",
+      "ok": true
+    },
+    {
+      "name": "demo/personal source data separate",
+      "ok": true
+    },
+    {
+      "name": "AI component appears in real mobile page",
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow initial mobile",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      },
+      "ok": true
+    },
+    {
+      "name": "unsaved preview does not create library entry",
+      "ok": true
+    },
+    {
+      "name": "real list includes future pending record",
+      "ok": true
+    },
+    {
+      "name": "record titles stay escaped in real DOM",
+      "ok": true
+    },
+    {
+      "name": "continue editing retains unsaved title",
+      "ok": true
+    },
+    {
+      "name": "reordered block participates in dirty guard",
+      "ok": true
+    },
+    {
+      "name": "preview save creates draft",
+      "ok": true
+    },
+    {
+      "name": "human publish activates saved definition",
+      "ok": true
+    },
+    {
+      "name": "published component places through UI",
+      "ok": true
+    },
+    {
+      "name": "editing draft leaves published card unchanged",
+      "ok": true
+    },
+    {
+      "name": "publish updates existing instances",
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow 360 generated cards",
+      "detail": {
+        "width": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360
+      },
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow 390 generated cards",
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390
+      },
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow 430 generated cards",
+      "detail": {
+        "width": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430
+      },
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow 820 generated cards",
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720
+      },
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow 1440 generated cards",
+      "detail": {
+        "width": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398
+      },
+      "ok": true
+    },
+    {
+      "name": "copy is an independent draft",
+      "ok": true
+    },
+    {
+      "name": "archive preserves disabled placement placeholder",
+      "ok": true
+    },
+    {
+      "name": "unarchive restores last published model",
+      "ok": true
+    },
+    {
+      "name": "history restores to draft without republishing",
+      "ok": true
+    },
+    {
+      "name": "all component actions leave original business records unchanged",
+      "ok": true
+    },
+    {
+      "name": "no browser uncaught errors",
+      "detail": [],
+      "ok": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/components.js": "1e2b55619bf082fecdb93a6b377bee5602024302a01ec1cb78fad665d4508240",
+    "public/components.css": "b2a5d1088cb4ce990489135bdecb1f3b84e7567ba7b44296317a1a465d4a2b4e",
+    "public/component-card.js": "f31f9596e02d68cad8da6bf9dac48482d7e09501a9eeb61562cd0e4795bd052a",
+    "public/component-schema.js": "14821dc7f9148db7bcb3c211a1f0657775d7f39bd1248d267a504c64fc5a72e5",
+    "public/app.js": "572b1ac57a55915b579ef23e4475b0b39ed6e444c1cbbfc8098575f1ef3088d8",
+    "server.mjs": "9c7ffefddfbe8c210677adbf439a7df38508f131f23cc03c1a96374f2edbd2be",
+    "lib/components.mjs": "d1eeca05f11a3841386327ace3f0baa1f0034df9fbcf6a2aa8c6513d4a09166e",
+    "lib/mcp.mjs": "65acb5a14121ed732be4685ab2d982f68b8faeab6836f0ef106ae4310ef2655b",
+    "public/index.html": "fa1ddb6dddf971aa567a3177fe0518949a9dc8ba53f10d551892959972420a10"
+  },
+  "phase": "01-main-flow",
+  "observedBundles": [],
+  "redaction": "Only fictional isolated test data. Runtime account identifiers, credentials, cookies, bearer tokens, private-preview IDs and URLs, local ports and data directories omitted."
+}

@@ -12,3 +12,7 @@ export function highlightSegments(text,annotations=[],page=1){
  const merged=[];for(const r of ranges){const last=merged.at(-1);if(last&&r.start<=last.end)last.end=Math.max(last.end,r.end);else merged.push({...r});}
  const segments=[];let offset=0;for(const range of merged){if(range.start>offset)segments.push({text:text.slice(offset,range.start),highlight:false});segments.push({text:text.slice(range.start,range.end),highlight:true});offset=range.end;}if(offset<text.length)segments.push({text:text.slice(offset),highlight:false});return segments;
 }
+// Convert only length-stable code points so DOM UTF-16 offsets still address the
+// immutable imported source. A rare expanding mapping keeps its original glyph.
+export function poetryDisplayText(text,convert){return Array.from(text,char=>{const simplified=convert(char);return typeof simplified==='string'&&simplified.length===char.length?simplified:char;}).join('');}
+export function poetryTextSections(text){const first=text.indexOf('\n'),second=text.indexOf('\n',first+1);if(first<0||second<0)return [{role:'body',start:0,end:text.length}];return [{role:'title',start:0,end:first},{role:'separator',start:first,end:first+1},{role:'author',start:first+1,end:second},{role:'separator',start:second,end:second+1},{role:'body',start:second+1,end:text.length}];}

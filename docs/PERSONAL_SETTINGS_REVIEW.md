@@ -51,3 +51,25 @@
 | public/account.js | `7633c0bca5e674419cd547859cdf0fdbd817a91beedc329ccec1e68e7ba37d81` |
 | public/shell.js | `9aa5f9e0b1662da05c75b9eb430e7ab0fb72893b851da46a59d7d7668ea4d114` |
 | server.mjs | `bddc9ed971add38274be28625805b0a2fbc0bfabbb74e5147e5078a44858fad9` |
+
+
+## 组件库上线后的最终复核（0f12f7f）
+
+最终评审版本更新为 `0f12f7f25fed9f2e62de1d2da0ccf0661d65501d`，对比 `origin/main=a14e3b6fc552fd30eef7d5a5752ec0ec24bf2b56`；本段替代前文旧基准的最终交付结论。实际执行者仍为 `/root/settings_review`。未改实现、未部署。
+
+- 逐项阅读最终 app/shell/account/server/personal-settings/MCP 差异；组件库、布局、阅读模块、手机 studio 样式、deploy 与 backup 源文件没有回退。bootstrap/state 仍包含 layout/componentView，applyState 仍应用二者，组件与布局 action 和预览保护仍保留。
+- 独立源码断言通过：自建工作台 otherOverview 与 a14e3b6 原文一致；全局 mine 只包含个人设置、账号与安全和安装入口；当前工作台设置已移至 shell-workbench-settings 面板；健康 settingsPage 保留设备/连接与数据，不再重复个人设置表单。桌面模块栏、手机首页/书架均存在工作台设置入口，手机头像进入共用 mine。
+- 共享存储与迁移逻辑 SHA256 不变，继续使用 users.name 权威昵称及健康个人 focus/waterGoalMl；保留旧表原文。仅新增个人设置表，没有修改服务用户、端口、数据目录、环境文件、运行时或备份流程。回退旧代码会忽略新增表，新的关注/饮水偏好不会反向写旧 scope；昵称仍保存在 users.name。代码回退与整库恢复需要区分。
+- 重新执行 Node24 实际测试：`/opt/homebrew/opt/node@24/bin/node --test --test-concurrency=1 tests/personal-settings.test.mjs tests/layouts.test.mjs tests/components.test.mjs`，22/22通过（含真实 SQLite 升级/事务/持久化、组件布局 API/MCP 与账号隔离）。默认 node 因本机 Homebrew simdjson 动态库缺失启动失败，改用既有 Node24 后通过；未修改系统安装。
+- `git diff --check origin/main` 通过。未重复全量测试；新界面实际点击与上线结果由验收/部署执行者记录。
+
+结论：当前评审范围无遗留阻断项。文档 PERSONAL_SETTINGS.md 的旧基准与测试/交付状态已提醒协调者在交付时更新。
+
+此轮复核源文件 SHA-256：
+
+- lib/personal-settings.mjs: `cd5bbe2c832e57f4b39f48f16b68d888bf4dea00f7f1969ebf83a20076391f7c`
+- lib/mcp.mjs: `224e12e66f6360365f706a89a98382386d78c9f84dc326670cb681049996061f`
+- public/app.js: `5140804983bb98b466ffecc80610a867c34c79366ae79d2d635fc4aa64c74cef`
+- public/account.js: `7633c0bca5e674419cd547859cdf0fdbd817a91beedc329ccec1e68e7ba37d81`
+- public/shell.js: `3576c763021a3b20aff1eb1350f3b593684d858b80651dafa92160b7b841e07f`
+- server.mjs: `a579c4b8bbe522718f0796fb6b7f1db98429c9d1eb4e127e2cb57a5c55cd9f65`

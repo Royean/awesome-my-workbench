@@ -21,7 +21,7 @@
 
 基于 origin/main a14e3b6（含AI布局、组件库及手机studio）的独立工作树集成，保留远端最新首页与阅读功能，原工作区其他未提交修改未纳入。
 
-全量 npm test：271/271通过；自建工作台首页恢复后追加针对待办与设置6/6通过。独立验收13/13通过，详见 PERSONAL_SETTINGS_ACCEPTANCE.md；独立代码评审见 PERSONAL_SETTINGS_REVIEW.md。构建使用Node24。当前为源码交付，尚未部署线上。
+最终集成全量 npm test：303/303通过；独立代码评审针对性检查22/22通过。独立验收16/16通过，详见 PERSONAL_SETTINGS_ACCEPTANCE.md；独立代码评审见 PERSONAL_SETTINGS_REVIEW.md。构建使用Node24。当前为源码交付，尚未部署线上。
 
 ## 入口分工（用户补充）
 

@@ -164,7 +164,7 @@ function validateReadingReferences(space,kind,body,id){
   if(scopeType(space)!=='reading')throw bad('仅阅读工作台可关联书籍','bookId');
   const row=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='reading_book'").get(body.bookId,space);
   if(!row)throw bad('所属书籍不存在或不在当前空间','bookId');
-  if(kind==='reading_entry')assertReadingPage(body,JSON.parse(row.body),bad);
+  if(kind==='reading_entry'){assertReadingPage(body,JSON.parse(row.body),bad);if(body.fileId&&!getAll(space).some(x=>x.kind==='file'&&x.id===body.fileId&&x.bookId===body.bookId))throw bad('笔记原件不存在或未关联此材料','fileId');}
  }
 }
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record

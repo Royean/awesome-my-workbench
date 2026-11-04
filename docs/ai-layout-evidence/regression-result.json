@@ -1,0 +1,172 @@
+{
+  "executor": "/root/layout_acceptance",
+  "checks": [
+    {
+      "name": "other workbench no overflow 390 finance",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "health layout controls absent 390 finance",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 390 finance",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 390 travel",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "health layout controls absent 390 travel",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 390 travel",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 390 reading",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "health layout controls absent 390 reading",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 390 reading",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 390 other",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "health layout controls absent 390 other",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 390 other",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 1440 finance",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "health layout controls absent 1440 finance",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 1440 finance",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 1440 travel",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "health layout controls absent 1440 travel",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 1440 travel",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 1440 reading",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "health layout controls absent 1440 reading",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 1440 reading",
+      "ok": true
+    },
+    {
+      "name": "other workbench no overflow 1440 other",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "health layout controls absent 1440 other",
+      "ok": true
+    },
+    {
+      "name": "workbench independent theme 1440 other",
+      "ok": true
+    },
+    {
+      "name": "immersive reader retains full viewport",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "h": 844,
+        "r": "0px",
+        "top": 0
+      }
+    },
+    {
+      "name": "reader night theme retained",
+      "ok": true
+    },
+    {
+      "name": "reader focus mode retained",
+      "ok": true
+    },
+    {
+      "name": "reader poem next retained",
+      "ok": true
+    },
+    {
+      "name": "reader return retained",
+      "ok": true
+    },
+    {
+      "name": "regression no page errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/layout-editor.js": "da88fd7d3d7e547175edeb900728138a3a770a781744e67466aeb50abff89e2d",
+    "public/layout.css": "3246faee8b0df5a0e23ce08eb1704c4adc290b07c59134d83f67992d058e221b",
+    "public/app.js": "d743e32f1b282f0c99e78e3a9c1ec99bca722cf4e86ffb983a0ceb8538935185",
+    "public/index.html": "c08f74642c7ebd31a598abdc6941349a657d0b0975432d9a89d0909ec8f77d54"
+  }
+}

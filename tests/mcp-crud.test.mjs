@@ -8,9 +8,9 @@ import os from 'node:os';
 import path from 'node:path';
 import {startServer,freePort} from './helpers.mjs';
 const cwd=path.resolve(import.meta.dirname,'..'),password='Fictional-only-passphrase-96',email='crud-admin@example.invalid';
-let dir,server,base,cookie,token,tokenB,n=1;
+let dir,server,base,cookie,token,tokenB,n=1,owner;
 async function req(route,{method='GET',body,headers={}}={}){const r=await fetch(base+route,{method,headers:{...(body!==undefined?{'Content-Type':'application/json'}:{}),...headers},body:body===undefined?undefined:JSON.stringify(body)});const text=await r.text();return {status:r.status,headers:r.headers,body:text?JSON.parse(text):undefined};}
-const web=c=>({Cookie:c||cookie,Origin:base});
+const web=c=>({Cookie:c||cookie,Origin:base,...(!c||c===cookie?{'X-Workbench-Owner':owner||''}:{})});
 const call=async(t,name,args)=>{const r=await req('/mcp',{method:'POST',body:{jsonrpc:'2.0',id:n++,method:'tools/call',params:{name,arguments:args}},headers:{Authorization:`Bearer ${t}`}});assert.ok(r.body?.result,JSON.stringify(r.body));return r.body.result;};
 const ok=async(name,args,t=token)=>{const r=await call(t,name,args);assert.equal(r.isError,false,r.content[0].text);return r.structuredContent;};
 const err=async(name,args,t=token)=>{const r=await call(t,name,args);assert.equal(r.isError,true,JSON.stringify(r.structuredContent));assert.doesNotMatch(r.structuredContent.error.message,/[A-Za-z_]{3,}/);return r.structuredContent.error;};
@@ -20,7 +20,7 @@ before(async()=>{
  dir=await mkdtemp(path.join(os.tmpdir(),'workbench-crud-'));
  const setup=spawnSync(process.execPath,['scripts/account-admin.mjs','create-admin','--email',email,'--name','Fictional CRUD admin'],{cwd,input:password+'\n',encoding:'utf8',env:{...process.env,HEALTH_DATA_DIR:dir}});assert.equal(setup.status,0,setup.stderr);
  const port=await freePort();server=await startServer({cwd,env:{NODE_ENV:'test',AUTH_REQUIRED:'1',APP_ORIGIN:`http://127.0.0.1:${port}`,PORT:String(port),HEALTH_DATA_DIR:dir}});base=server.base;
- cookie=await login(email,password);token=(await req('/api/auth/tokens',{method:'POST',body:{name:'crud'},headers:web()})).body.token;
+ cookie=await login(email,password);owner=(await req('/api/auth/me',{headers:web()})).body.user.id;token=(await req('/api/auth/tokens',{method:'POST',body:{name:'crud'},headers:web()})).body.token;
  const inv=await req('/api/auth/invitations',{method:'POST',body:{email:'crud-b@example.invalid',name:'B'},headers:web()});await req('/api/auth/accept-invitation',{method:'POST',body:{token:inv.body.token,password:'Fictional-only-passphrase-97'},headers:{Origin:base}});
  const cb=await login('crud-b@example.invalid','Fictional-only-passphrase-97');tokenB=(await req('/api/auth/tokens',{method:'POST',body:{name:'b'},headers:web(cb)})).body.token;
 });

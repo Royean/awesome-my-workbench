@@ -1,3 +1,4 @@
+import {createPersonalSettings} from './lib/personal-settings.mjs';
 import {createLayouts} from './lib/layouts.mjs';
 import {createComponents} from './lib/components.mjs';
 import { READING_KINDS, validateReading, assertReadingPage } from './lib/reading.mjs';
@@ -248,14 +249,8 @@ function softDelete(space,id,via){
  }catch(err){db.exec('ROLLBACK');throw err}
  return {id,kind:old.kind,...JSON.parse(old.body)};
 }
-// Settings per data scope: name/focus (web) and waterGoalMl (daily water goal, default 2000ml; used by get_today and the web).
-function writeSettings(space,b){
- const cur=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}');const clean={name:String(cur.name||'Captain').slice(0,40),focus:String(cur.focus||'').slice(0,180),...(cur.waterGoalMl?{waterGoalMl:cur.waterGoalMl}:{})};
- if(b.name!==undefined)clean.name=String(b.name||'Captain').slice(0,40);
- if(b.focus!==undefined)clean.focus=String(b.focus||'').slice(0,180);
- if(b.waterGoalMl!==undefined&&b.waterGoalMl!==''){const v=Number(b.waterGoalMl);if(!Number.isInteger(v)||v<100||v>10000)throw bad('每日饮水目标需在 100–10000 毫升之间','waterGoalMl');clean.waterGoalMl=v;}
- db.prepare('INSERT OR REPLACE INTO settings VALUES(?,?)').run(space,JSON.stringify(clean));return clean;
-}
+const personalSettings=createPersonalSettings(db,bad);
+const writeSettings=(space,b)=>personalSettings.write(space,b);
 const PARENT_NAMES={visit:'就诊记录',medication:'用药方案',travel_trip:'旅行',reading_book:'书籍'};
 // Restoring needs the parent back first (visit for report/medication, medication for dose); otherwise a plain error.
 function parentOf(kind,body){if((kind==='reading_entry'||kind==='file')&&body.bookId)return {kind:'reading_book',id:body.bookId};if((TRAVEL_KINDS.includes(kind)||kind==='file')&&body.tripId)return {kind:'travel_trip',id:body.tripId};if(['report','medication'].includes(kind)&&body.visitId)return {kind:'visit',id:body.visitId};if(kind==='dose'&&body.medicationId)return {kind:'medication',id:body.medicationId};return null;}
@@ -351,7 +346,7 @@ function bootstrapPayload(user,url){
  const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  if(!workbench||!space)return {me,state:null};
- const settings=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
+ const settings=personalSettings.read(space);
  return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today(),trashedIds:trashedIds(space),...(workbench.type==='health'?{layout:layouts.get({user,workbench})}:{}),componentView:components.view({user,workbench,space:baseSpace})}};
 }
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
@@ -426,7 +421,7 @@ function attachMedicationImage(space,{medicationId,fileId}){
  if(medication.imageFileId===fileId)return medication;
  return put(space,'medication',{...medication,imageFileId:fileId},medicationId,'mcp');
 }
-const mcp=createMcp({components,layouts,db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
+const mcp=createMcp({components,layouts,db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>personalSettings.read(space),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
 const mcpRate=new Map();const MCP_RATE=Number(process.env.MCP_RATE_PER_MINUTE||120);
 async function handleMcp(req,res){
  const unauthorized=(code,message)=>{res.writeHead(401,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','WWW-Authenticate':`Bearer realm="zhiheng", error="invalid_token"`});res.end(JSON.stringify({error:message,code}));};
@@ -477,7 +472,7 @@ const server=http.createServer(async(req,res)=>{try{
  // Static assets remain available before login; data scopes are resolved only by the authenticated user.
  const workbench=workbenches.find(x=>x.id===workbenchId);
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
- const readSettings=()=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
+ const readSettings=()=>personalSettings.read(space);
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
  // 「最近删除」 covers every workbench of the current base space (personal or demo).
  if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
@@ -556,7 +551,7 @@ const server=http.createServer(async(req,res)=>{try{
   return json(res,405,{error:'CGM 操作或请求方法不支持'});
  }
  if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space),...(workbench.type==='health'?{layout:layouts.get({user,workbench})}:{}),componentView:components.view({user,workbench,space:baseSpace})})}
- if(url.pathname==='/api/settings'&&req.method==='PUT'){if(['travel','reading'].includes(workbench.type))requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
+ if(url.pathname==='/api/settings'&&req.method==='PUT'){requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b))}
 
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||['travel','reading'].includes(workbench.type))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||['travel','reading'].includes(workbench.type)||old.kind==='file'))requireExpectedOwner();
@@ -614,7 +609,7 @@ const server=http.createServer(async(req,res)=>{try{
   const file=getAll(space).find(x=>x.kind==='file'&&x.id===url.pathname.split('/').pop());if(!file)return json(res,404,{error:'文件不存在'});
   const p=path.join(dataDir,'uploads',path.basename(file.storageName));if(!fs.existsSync(p))return json(res,404,{error:'文件内容缺失'});const safeMime=allowedFiles[path.extname(file.storageName).toLowerCase()]||'application/octet-stream';res.writeHead(200,{'Content-Type':safeMime,'Cache-Control':'no-store','X-Content-Type-Options':'nosniff','Content-Security-Policy':"default-src 'none'; sandbox; frame-ancestors 'self'",'Content-Disposition':`${url.searchParams.get('inline')==='1'?'inline':'attachment'}; filename*=UTF-8''${encodeURIComponent(file.name)}`});fs.createReadStream(p).pipe(res);return;
  }
- if(url.pathname==='/api/export'&&req.method==='GET'){return json(res,200,{exportedAt:new Date().toISOString(),space:baseSpace,workbench,items:getAll(space),settings:JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}')})}
+ if(url.pathname==='/api/export'&&req.method==='GET'){return json(res,200,{exportedAt:new Date().toISOString(),space:baseSpace,workbench,items:getAll(space),settings:readSettings()})}
  if(url.pathname.startsWith('/api/'))return json(res,404,{error:'接口不存在'});
  if(!['GET','HEAD'].includes(req.method))return json(res,405,{error:'方法不支持'});
  const relative=url.pathname==='/'?'index.html':decodeURIComponent(url.pathname).slice(1);const p=path.resolve(root,'public',relative);if(!p.startsWith(path.join(root,'public')+path.sep)||!fs.existsSync(p)||!fs.statSync(p).isFile())return json(res,404,{error:'页面不存在'});

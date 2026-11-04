@@ -81,7 +81,7 @@
 |---|---|
 | `create_workbench` | 新建工作台（只能记备忘和待办），名称 1–24 字 |
 | `rename_workbench` | 自建工作台改名；健康、金融不能改名 |
-| `get_settings` / `update_settings` | 每日饮水目标 `waterGoalMl`（100–10000 毫升，默认 2000）与关注目标 `focus`；按工作台+数据空间保存 |
+| `get_settings` / `update_settings` | 每日饮水目标 `waterGoalMl`（100–10000 毫升，默认 2000）与关注目标 `focus`；同一账号所有工作台及数据空间共用 |
 
 - 饮水目标同时用于 `get_today` 的 `goalMl` 和网页（设置页可改，每日回顾显示「目标」）。网页保存设置时不会抹掉饮水目标。
 - 账号、密码、令牌、成员管理永远不通过 MCP 提供。

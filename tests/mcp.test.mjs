@@ -61,7 +61,7 @@ test('GET /mcp is 405; auth: missing/invalid token 401 with WWW-Authenticate; co
 });
 test('tools/list publishes exactly the tools with strict schemas',async()=>{
  const {tools}=(await rpc(tokenA,'tools/list')).body.result;
- assert.deepEqual(tools.map(t=>t.name).sort(),['attach_medication_image','attach_report_file','create_record','create_workbench','delete_record','get_settings','get_today','list_attachments','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings','upload_attachment']);
+ assert.deepEqual(tools.map(t=>t.name).sort(),['attach_medication_image','attach_report_file','create_record','create_workbench','delete_record','get_settings','get_today','list_attachments','list_deleted','list_records','list_workbenches','rename_workbench','restore_record','update_record','update_settings','upload_attachment','list_layout_widgets','get_layout','preview_layout','update_layout','restore_layout'].sort());
  for(const t of tools){assert.equal(t.inputSchema.type,'object');assert.equal(t.inputSchema.additionalProperties,false);assert.match(t.description,/[\u4e00-\u9fa5]/);}
  const create=tools.find(t=>t.name==='create_record');assert.deepEqual(create.inputSchema.properties.kind.enum,['meal','exercise','metric','water','visit','report','medication','dose','favorite','note','task','asset_account','asset_holding','asset_liability','asset_transaction','asset_snapshot','travel_trip','travel_stop','travel_booking','travel_check','reading_book','reading_entry']);assert.deepEqual(create.inputSchema.required,['kind']);
  assert.equal(create.inputSchema.properties.attachmentIds,undefined);

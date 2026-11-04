@@ -30,7 +30,7 @@ test('date labels handle Shanghai-provided day across year and leap-day boundari
 
 const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
 function dashboard(items){
- const ctx=vm.createContext({items,today:'2026-01-01',settings:{},metricType:'weight',
+ const ctx=vm.createContext({items,today:'2026-01-01',settings:{},layoutUI:{options:()=>({})},metricType:'weight',
   metricNames:{weight:'体重',sleep:'睡眠',heart:'心率'},units:{weight:'kg'},latestHealthRecord,healthRecordDate,healthRecordStatus,
   sorted:a=>[...a].sort((a,b)=>b.date.localeCompare(a.date)),byKind:k=>items.filter(x=>x.kind===k),
   esc:v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),

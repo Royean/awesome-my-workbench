@@ -14,7 +14,7 @@ async function fixture() {
   const root = await mkdtemp(path.join(os.tmpdir(), 'workbench-assets-'));
   const publicDir = path.join(root, 'public');
   await mkdir(publicDir);
-  const styles = ['style', 'minimal', 'daily', 'mobile', 'account', 'cgm', 'assets', 'travel-map', 'travel', 'originals', 'reading', 'studio', 'studio-library', 'studio-health', 'studio-domains', 'studio-mobile'];
+  const styles = ['style', 'minimal', 'daily', 'mobile', 'account', 'cgm', 'assets', 'travel-map', 'travel', 'originals', 'reading', 'studio', 'studio-library', 'studio-health', 'studio-domains', 'studio-mobile', 'layout'];
   await Promise.all(styles.map(name => writeFile(path.join(publicDir, name + '.css'), `.${name}{color:green}`)));
   await writeFile(path.join(publicDir, 'index.html'), `<title>fixture</title>${styles.map(name => `<link rel="stylesheet" href="/${name}.css">`).join('')}<script type="module" src="/app.js"></script>`);
   await writeFile(path.join(publicDir, 'app.js'), "import { createA } from './a.js';\nimport { createB as renamed } from './b.js';\nawait Promise.resolve();\nglobalThis.__workbenchBundleFixture = createA() + renamed();\n");
@@ -103,6 +103,7 @@ test('only matching public content hashes cache; HEAD, APIs and user files remai
     await cp(path.join(repository, 'lib'), path.join(root, 'lib'), { recursive: true });
     await cp(path.join(repository, 'migrations'), path.join(root, 'migrations'), { recursive: true });
     await cp(path.join(repository, 'public/asset-lifecycle.js'), path.join(publicDir, 'asset-lifecycle.js'));
+    await cp(path.join(repository, 'public/layout-config.js'), path.join(publicDir, 'layout-config.js'));
     await writeFile(path.join(publicDir, 'manifest.webmanifest'), '{}');
     await writeFile(path.join(publicDir, 'service-worker.js'), '// no cache');
     const mismatch = `/assets/app.${'0'.repeat(64)}.js`;

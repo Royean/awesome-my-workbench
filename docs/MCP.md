@@ -1,5 +1,7 @@
 # 知衡 MCP 服务
 
+健康首页现支持AI编辑布局：`list_layout_widgets`、`get_layout`、`preview_layout`、`update_layout`、`restore_layout`。布局按账号保存，个人/示例共用，电脑和手机可分别调整。接口、版本冲突、预览和撤销说明见 [AI 布局后端](AI_LAYOUT_BACKEND.md)。客户端需重新获取工具列表才能发现新增工具。
+
 知衡在 `server.mjs` 内置一个远程 MCP 服务端点：`https://vivid-dream.online/mcp`（本地开发为 `http://localhost:3100/mcp`，需 `AUTH_REQUIRED=1`）。
 
 - 传输：MCP Streamable HTTP，JSON-RPC 2.0 over `POST`，只返回 `application/json`（不提供 SSE；`GET /mcp` → 405）。无状态，不使用 `Mcp-Session-Id`。

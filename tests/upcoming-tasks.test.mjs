@@ -6,8 +6,8 @@ import vm from 'node:vm';
 
 const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
 const renderSource=source.slice(source.indexOf('function taskRows('),source.indexOf('function detail('));
-function render(items,today='2026-12-31'){
- const context=vm.createContext({items,today,latestHealthRecord,healthRecordDate,healthRecordStatus,settings:{},metricType:'weight',metricNames:{weight:'Weight',sleep:'Sleep',heart:'Heart'},units:{weight:'kg'},aiTag:()=>'',byKind:kind=>items.filter(x=>x.kind===kind),sorted:a=>a,
+function render(items,today='2026-12-31',layoutOptions={}){
+ const context=vm.createContext({items,today,layoutUI:{options:id=>layoutOptions[id]||{}},latestHealthRecord,healthRecordDate,healthRecordStatus,settings:{},metricType:'weight',metricNames:{weight:'Weight',sleep:'Sleep',heart:'Heart'},units:{weight:'kg'},aiTag:()=>'',byKind:kind=>items.filter(x=>x.kind===kind),sorted:a=>a,
   esc:v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
   icon:()=>'',catClass:()=>'',dateLabel:d=>d,quick:{launcher:()=>''},stats:()=>'',medical:{todayCard:()=>''},trendCard:()=>'',empty:(kind,message)=>`empty:${kind}:${message}`});
  return vm.runInContext(renderSource+'\ndashboard()',context);
@@ -38,4 +38,11 @@ test('empty and all-completed states invite an upcoming task; titles stay escape
   const html=render(input);assert.match(html,/0 项未完成/);assert.match(html,/安排一件接下来要做的事/);assert.doesNotMatch(html,/仅显示最近|完成进度/);
  }
  assert.match(render([task('<script>','2027-01-01')]),/<strong>&lt;script&gt;<\/strong>/);
+});
+
+test('configured task count keeps chronological order and all-pending count without changing records',()=>{
+ const items=[task('later','2027-01-02'),task('earlier','2027-01-01'),task('done','2026-12-31','',true)];
+ const original=structuredClone(items),html=render(items,'2026-12-31',{tasks:{limit:1}});
+ assert.match(html,/2 项未完成/);assert.match(html,/<strong>earlier<\/strong>/);assert.doesNotMatch(html,/<strong>later<\/strong>/);
+ assert.match(html,/仅显示最近 1 项/);assert.deepEqual(items,original);
 });

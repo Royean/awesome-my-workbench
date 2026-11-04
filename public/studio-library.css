@@ -38,3 +38,22 @@ body[data-workbench=reading] .reading-grid .reading-book{background:#f6f7f4;padd
 }
 @media(min-width:901px) and (max-width:1200px){.studio-reading-overview{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}.studio-reading-side{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}.studio-other-grid{grid-template-columns:1fr 1fr}.studio-other-progress{grid-column:2;grid-row:2}.studio-other-files{grid-column:1;grid-row:2}.studio-other-calendar{grid-column:2;grid-row:3}body[data-workbench=reading] .reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:900px){.studio-reading-overview,.studio-other-grid{grid-template-columns:minmax(0,1fr);gap:16px}.studio-reading-side,.studio-other-files{grid-column:auto}.studio-reading-feature{padding:0 20px 24px;gap:18px}.studio-reading-feature>.reading-cover{width:90px;height:135px}.studio-reading-feature h3{font-size:19px}.studio-reading-feature .reading-progress>div{font-size:11px}.studio-reading-side{gap:16px}body[data-workbench=reading] .reading-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}body[data-workbench=reading] .reading-grid .reading-book{padding:13px}.reading-grid .reading-cover{height:140px;padding:16px}.reading-grid .reading-cover span{font-size:19px}body[data-workbench=reading] .reading-dropzone{padding:16px}.reading-grid .reading-book-actions .btn{font-size:11px;padding:8px}.studio-other-toolbar{align-items:flex-start;flex-direction:column}.studio-other-grid .generic-record{padding:16px 18px}.studio-reading-week .studio-reading-bars{height:150px}.studio-other-calendar{max-width:100%}.studio-other-toolbar>div{flex-wrap:wrap}}
+
+/* A fixed track preserves reading-minute ratios; zero minutes draws no column. */
+.studio-reading-bars .studio-reading-bar-track{position:relative;display:block;flex:0 0 88px;height:88px;width:100%;border-bottom:1px solid #dfe4d9}
+.studio-reading-bars .studio-reading-bar-track i{position:absolute;bottom:0;left:0;width:100%;height:var(--bar-height);max-height:none;min-height:0}
+/* Let the bookshelf follow the main cards while notes occupy the side column. */
+@media(min-width:1201px){
+ body[data-workbench=reading] .reading-content:has(.studio-reading-overview){display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.9fr) minmax(260px,1fr);grid-template-areas:"notice notice notice" "continue week side" "shelf shelf side";gap:18px;align-items:start}
+ body[data-workbench=reading] .reading-content:has(.studio-reading-overview):not(:has(.reading-demo)){grid-template-areas:"continue week side" "shelf shelf side"}
+ .reading-content>.reading-demo{grid-area:notice;margin:0}
+ .studio-reading-overview{display:contents}
+ .studio-reading-continue{grid-area:continue}.studio-reading-week{grid-area:week}.studio-reading-side{grid-area:side}
+ body[data-workbench=reading] .reading-content>#reading-dropzone{grid-area:shelf}
+ body[data-workbench=reading] .reading-content .reading-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+.studio-reading-feature>.reading-cover span{font-size:18px;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+/* Override the shared compact cover only in the shelf and featured book. */
+.reading-content .reading-grid .reading-cover{width:100%;height:170px}
+.reading-content .studio-reading-feature>.reading-cover{width:108px;height:154px}
+@media(max-width:900px){.reading-content .reading-grid .reading-cover{height:140px}.reading-content .studio-reading-feature>.reading-cover{width:90px;height:135px}}

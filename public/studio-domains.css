@@ -212,3 +212,8 @@ body[data-workbench] .studio-domain-dashboard .asset-allocation-row i{background
  .studio-domain-dashboard .domain-aside{order:1}
  .studio-domain-dashboard .domain-transactions,.studio-domain-dashboard .domain-trip-archive{order:2}
 }
+
+/* Valuation dates, unknown amounts and source notes must remain readable. */
+.studio-domain-dashboard :is(.domain-accounting-note,.asset-accounting-note,.domain-kicker,.domain-empty p,.domain-countdown small,.domain-hero-copy p,.domain-trip-card small,.domain-travel-trip small,.domain-resource-note){color:#687063}
+.studio-domain-dashboard small:not(.asset-deadline):not(.travel-status):not(.pill),.studio-domain-dashboard time,.studio-domain-dashboard dt{color:#687063;font-size:11px}
+.studio-domain-dashboard .domain-accounting-note{font-size:12px}

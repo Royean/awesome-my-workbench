@@ -1,0 +1,219 @@
+/* Dashboard-only composition: detail pages keep their existing layout and controls. */
+.studio-domain-dashboard{display:grid;grid-template-columns:minmax(0,2.35fr) minmax(270px,1fr);gap:18px;align-items:start;min-width:0;color:var(--ink,#242925)}
+.studio-domain-dashboard :is(.domain-main,.domain-aside){display:grid;gap:16px;min-width:0}
+.studio-domain-dashboard :is(.domain-board,.card){border:1px solid #e5e8e3;border-radius:24px;box-shadow:none;min-width:0;background:#fff}
+.studio-domain-dashboard .domain-board{padding:22px}
+.studio-domain-dashboard .domain-board-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:20px}
+.studio-domain-dashboard .domain-kicker{display:block;font-size:9px;letter-spacing:1.8px;color:#8a9387;margin-bottom:5px}
+.studio-domain-dashboard .domain-board-head h2{font-size:27px;line-height:1.3;margin:0;letter-spacing:-.7px;font-weight:600}
+.studio-domain-dashboard .domain-head-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.studio-domain-dashboard .domain-head-actions .btn{font-size:12px;min-height:38px;padding:9px 14px;border-radius:22px}
+.studio-domain-dashboard .card-head{padding:18px 18px 14px;gap:10px;align-items:center}
+.studio-domain-dashboard .card-title{font-size:16px;line-height:1.5;font-weight:600}
+.studio-domain-dashboard .card-title .subtitle{font-size:10px;font-weight:400;margin-left:5px}
+.studio-domain-dashboard .card-head .btn{padding:5px 0;min-height:28px;border:0;background:none;font-size:10px;white-space:nowrap}
+.studio-domain-dashboard .domain-section-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 18px;padding-bottom:18px;border-bottom:1px solid #edf0e9}
+.studio-domain-dashboard .domain-section-nav>button{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#f6f8f4;border:0;border-radius:12px;text-align:left;font-size:12px;color:var(--ink);min-width:0}
+.studio-domain-dashboard .domain-section-nav>button span{margin-left:auto;font-size:11px;color:#7f8879}
+.studio-domain-dashboard .domain-section-nav>button:hover{background:var(--theme-soft)}
+.studio-domain-dashboard .domain-asset-bento{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;margin-bottom:16px;align-items:stretch}
+.studio-domain-dashboard .domain-total-stack{display:grid;gap:12px;min-width:0}
+.studio-domain-dashboard .domain-total{position:relative;overflow:hidden;padding:22px;background:linear-gradient(150deg,#fff 35%,#f2f7eb);height:100%}
+.studio-domain-dashboard .domain-total:after{content:'';position:absolute;width:230px;height:140px;border-radius:50%;background:var(--theme-soft);opacity:.55;right:-90px;bottom:-90px;pointer-events:none}
+.studio-domain-dashboard .domain-total>*{position:relative;z-index:1}
+.studio-domain-dashboard .domain-total-head,.studio-domain-dashboard .asset-total-head{font-size:12px;color:#687360}
+.studio-domain-dashboard .domain-total>strong{font-size:clamp(24px,2.65vw,42px);font-weight:600;letter-spacing:-1px;margin:26px 0 22px;color:var(--ink);line-height:1.25;overflow-wrap:anywhere}
+.studio-domain-dashboard .domain-total dl{gap:13px;margin-bottom:16px}
+.studio-domain-dashboard .domain-total dt{font-size:10px}.studio-domain-dashboard .domain-total dd{font-size:13px}
+.studio-domain-dashboard .domain-total small{font-size:10px;color:#899182;line-height:1.7;border-color:#e2e8da}
+.studio-domain-dashboard .domain-total p{font-size:12px;line-height:1.8;color:#7d8777}
+.studio-domain-dashboard .asset-allocation{padding:0 18px 12px}
+.studio-domain-dashboard .domain-allocation-group h3{display:flex;gap:8px;flex-wrap:wrap;color:#596551;font-size:11px;margin:0 0 12px}
+.studio-domain-dashboard .domain-allocation-group h3 span{font-size:9px;color:#939a8e;font-weight:400}
+.studio-domain-dashboard .asset-allocation-row{font-size:11px;gap:8px;margin:13px 0}
+.studio-domain-dashboard .asset-allocation-row>span{display:flex;align-items:center;gap:6px}
+.studio-domain-dashboard .asset-allocation-row strong{font-size:11px;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+.studio-domain-dashboard .asset-allocation-row>div{height:5px;background:#f0f2ed}
+.studio-domain-dashboard .asset-allocation-row i{background:var(--theme-chart,var(--theme-accent))}
+.studio-domain-dashboard .domain-allocation-dot{display:inline-block;flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:var(--theme-accent)}
+.studio-domain-dashboard .asset-record{border-top-color:#eef0eb}
+.studio-domain-dashboard .asset-record-main{padding:15px 18px;gap:10px;flex-wrap:nowrap}
+.studio-domain-dashboard .asset-record-icon{width:33px;height:33px;flex-basis:33px;background:#f4f6f1;color:#7f8d72;border-radius:11px}
+.studio-domain-dashboard .asset-record-copy strong{font-size:12px;line-height:1.55}
+.studio-domain-dashboard .asset-record-copy small{font-size:9px;margin-top:3px;line-height:1.65;color:#92998b}
+.studio-domain-dashboard .asset-record-copy{flex:1;min-width:0}
+.studio-domain-dashboard .asset-record-amount{font-size:14px;max-width:42%;margin-left:0;flex:0 1 auto;text-align:right;line-height:1.4}
+.studio-domain-dashboard .asset-record-amount small{font-size:9px;margin-left:0;display:block}
+.studio-domain-dashboard .asset-record-main>svg{width:12px;flex:0 0 12px;color:#8d9686}
+.studio-domain-dashboard .domain-aside .asset-record-amount{font-size:12px;max-width:38%}
+.studio-domain-dashboard .domain-aside .asset-record-main{padding:13px 16px;gap:8px;align-items:start}
+.studio-domain-dashboard .domain-aside .asset-record-copy small{font-size:9px}
+.studio-domain-dashboard .domain-aside .asset-record-icon{width:28px;height:28px;flex-basis:28px}
+.studio-domain-dashboard .domain-aside .asset-record-icon svg{width:16px;height:16px}
+.studio-domain-dashboard .domain-empty{padding:18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px;color:#9ba391}
+.studio-domain-dashboard .domain-empty>span{display:grid;place-items:center;width:38px;height:38px;background:#f6f8f2;border-radius:13px;color:#91a27f}
+.studio-domain-dashboard .domain-empty p{font-size:11px;line-height:1.8;color:#8d9685;margin:5px 0}
+.studio-domain-dashboard .domain-empty .btn{padding:5px 0;border:0;font-size:11px;min-height:28px}
+.studio-domain-dashboard .domain-accounting-note{font-size:10px;line-height:1.8;margin:15px 2px 0;color:#989f92}
+.studio-domain-dashboard .domain-task-row{width:100%;display:flex;align-items:center;gap:10px;padding:13px 18px;border:0;border-top:1px solid #eef0eb;background:none;text-align:left;color:#78866a}
+.studio-domain-dashboard .domain-task-row>span{flex:1;min-width:0}.studio-domain-dashboard .domain-task-row strong{font-weight:500;font-size:12px;color:var(--ink);display:block;overflow-wrap:anywhere}
+.studio-domain-dashboard .domain-task-row small{display:block;font-size:10px;color:#9aa08f;margin-top:4px}
+.studio-domain-dashboard .domain-debt>small{display:block;padding:12px 18px 0;font-size:10px;color:#a78360}
+.studio-domain-dashboard .domain-debt .asset-record{border:0}
+.studio-domain-dashboard .domain-resource-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;padding:14px}
+.studio-domain-dashboard .domain-resource-links>button{display:flex;flex-direction:column;align-items:center;gap:10px;background:#f7f8f5;border:1px solid #f0f2ed;border-radius:14px;padding:14px 3px;color:var(--theme-ink);font-size:10px}
+.studio-domain-dashboard .domain-current-selector{display:flex;gap:10px;align-items:center;margin:-3px 0 15px;font-size:11px;color:#8c9584}
+.studio-domain-dashboard .domain-current-selector select{border:0;background:#f5f7f2;border-radius:14px;padding:7px 12px;color:#626f57;min-width:0;max-width:70%;font-size:11px}
+.studio-domain-dashboard .domain-current-selector .btn{margin-left:auto;border:0;font-size:11px;padding:4px 0}
+.studio-domain-dashboard .domain-trip-hero{display:flex;align-items:stretch;justify-content:space-between;border:1px solid #e8ece2;border-radius:22px;background:linear-gradient(110deg,#f7f9f4 30%,#edf4e6);overflow:hidden;margin-bottom:16px;min-height:220px}
+.studio-domain-dashboard .domain-trip-hero-copy{padding:25px;position:relative;min-width:0;flex:1}
+.studio-domain-dashboard .domain-trip-hero h3{font-size:28px;font-weight:600;line-height:1.4;letter-spacing:-.6px;margin:13px 0 10px;overflow-wrap:anywhere}
+.studio-domain-dashboard .domain-trip-hero p,.studio-domain-dashboard .domain-trip-hero small{display:flex;gap:8px;align-items:center;font-size:12px;line-height:1.8;color:#818c76;margin:8px 0}
+.studio-domain-dashboard .domain-trip-hero-copy>div{margin-top:17px}
+.studio-domain-dashboard .domain-trip-hero-copy .btn{font-size:12px;min-height:36px;border-radius:20px;padding:8px 16px}
+.studio-domain-dashboard .travel-status{font-size:10px;padding:4px 9px;border-radius:14px}
+.studio-domain-dashboard .domain-trip-overview{width:32%;max-width:190px;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;gap:20px 15px;padding:24px 15px;color:#8ba374;border-left:1px solid #e3ebda}
+.studio-domain-dashboard .domain-trip-overview>span{width:100%;text-align:center;color:#a4b894}
+.studio-domain-dashboard .domain-trip-overview>div{text-align:center;min-width:50px}
+.studio-domain-dashboard .domain-trip-overview strong{font-size:27px;font-weight:500;color:#637f4c;display:block;line-height:1.2}
+.studio-domain-dashboard .domain-trip-overview small{display:block;font-size:9px;margin:5px 0 0}
+.studio-domain-dashboard .domain-travel-bento{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;align-items:stretch}
+.studio-domain-dashboard .travel-map-section{margin:0;overflow:hidden}
+.studio-domain-dashboard .travel-map{height:235px;background:#f6f8f2;margin:0 12px;border:1px dashed #dfe6d7;border-radius:17px;overflow:hidden}
+.studio-domain-dashboard .travel-map-placeholder{padding:18px;min-height:230px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.studio-domain-dashboard .travel-map-placeholder h3{font-size:14px;font-weight:500;margin:12px 0 6px}
+.studio-domain-dashboard .travel-map-placeholder p{font-size:10px;max-width:230px;line-height:1.9;color:#919b86;margin:0 0 10px}
+.studio-domain-dashboard .travel-map-placeholder>.btn{font-size:11px;border-radius:18px}
+.studio-domain-dashboard .travel-map-note{font-size:9px;line-height:1.7;color:#a0a694;padding:10px 16px;margin:0}
+.studio-domain-dashboard .travel-map.travel-map-loaded{height:auto;min-height:235px;padding:10px;margin:0 10px;background:#f8faf5;border-style:solid}
+.studio-domain-dashboard .domain-day-label{padding:2px 16px 14px;display:flex;gap:10px;align-items:center}
+.studio-domain-dashboard .domain-day-label span{font-size:10px;padding:7px 10px;background:var(--theme-soft);color:var(--theme-ink);border-radius:15px}
+.studio-domain-dashboard .domain-day-label strong{font-size:12px;font-weight:500}
+.studio-domain-dashboard .domain-itinerary-row{width:100%;display:flex;gap:10px;align-items:start;padding:16px 15px;border:0;border-top:1px solid #f0f2eb;background:none;text-align:left;color:#7e8e6d}
+.studio-domain-dashboard .domain-itinerary-row time{font-size:10px;padding:4px 6px;background:#f5f7f1;border-radius:9px;flex:0 0 45px;text-align:center;color:#77846b}
+.studio-domain-dashboard .domain-itinerary-row>span{flex:1;min-width:0}
+.studio-domain-dashboard .domain-itinerary-row strong{font-size:12px;font-weight:500;color:var(--ink);display:block;overflow-wrap:anywhere}
+.studio-domain-dashboard .domain-itinerary-row small{display:block;font-size:10px;color:#939d87;margin-top:5px;line-height:1.7;overflow-wrap:anywhere}
+.studio-domain-dashboard .domain-travel-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.studio-domain-dashboard .domain-travel-metrics>.card{padding:17px 14px;min-height:172px;background:#f6f8f3}
+.studio-domain-dashboard .domain-travel-metrics>.card>span{display:flex;align-items:center;gap:8px;font-size:12px}
+.studio-domain-dashboard .domain-countdown>strong{display:block;font-size:49px;font-weight:500;line-height:1.25;margin-top:22px;letter-spacing:-2px}
+.studio-domain-dashboard .domain-countdown>strong>small{font-size:15px;margin-left:6px;letter-spacing:0}
+.studio-domain-dashboard .domain-countdown p{font-size:9px;color:#949d8a;line-height:1.6;margin:8px 0 0}
+.studio-domain-dashboard .domain-progress-ring{width:104px;height:104px;max-width:100%;aspect-ratio:1;margin:16px auto 0;border-radius:50%;background:conic-gradient(var(--theme-chart,var(--theme-accent)) var(--progress),#e4ebdd 0);padding:8px;display:grid;place-items:center}
+.studio-domain-dashboard .domain-progress-ring>div{height:100%;width:100%;border-radius:50%;background:#f9fbf6;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.studio-domain-dashboard .domain-progress-ring strong{font-size:24px;font-weight:500;line-height:1.3}.studio-domain-dashboard .domain-progress-ring strong small{font-size:15px}
+.studio-domain-dashboard .domain-progress-ring span{font-size:10px;color:#939e87;margin-top:3px}
+.studio-domain-dashboard .travel-booking-row,.studio-domain-dashboard .travel-check-row{padding:15px 16px;gap:10px;align-items:flex-start;border-top-color:#edf0e7;flex-wrap:wrap}
+.studio-domain-dashboard .travel-booking-symbol{width:31px;height:31px;flex:0 0 31px;border-radius:11px;background:#f4f7ee;color:#82936e}
+.studio-domain-dashboard .travel-row-copy{min-width:0;flex:1}
+.studio-domain-dashboard .travel-row-copy>strong,.studio-domain-dashboard .travel-row-title strong{font-size:12px;font-weight:500;overflow-wrap:anywhere}
+.studio-domain-dashboard .travel-row-title{gap:6px;flex-wrap:wrap}
+.studio-domain-dashboard .travel-row-copy>small,.studio-domain-dashboard .travel-row-copy p{font-size:10px;line-height:1.8;color:#949d89;margin-top:5px;overflow-wrap:anywhere}
+.studio-domain-dashboard .travel-booking-row .travel-row-copy{flex-basis:calc(100% - 42px)}
+.studio-domain-dashboard .travel-booking-row .travel-row-actions{width:100%;display:flex;justify-content:flex-end;margin:0;gap:3px}
+.studio-domain-dashboard .travel-check-row .travel-row-actions{margin-left:auto;gap:2px}
+.studio-domain-dashboard .travel-row-actions .icon-btn{width:26px;min-width:26px;height:27px;color:#abb39e}
+.studio-domain-dashboard .travel-check-row>.check{flex-shrink:0;width:22px;height:22px}
+.studio-domain-dashboard .travel-check-row .travel-row-actions .check{display:none}
+.studio-domain-dashboard .travel-nav-link{font-size:10px}
+.studio-domain-dashboard .domain-travel-files>p{font-size:11px;line-height:1.8;color:#969e8d;margin:0 18px 12px}
+.studio-domain-dashboard .domain-travel-files>.btn{font-size:11px;margin:0 18px 18px}
+.studio-domain-dashboard .domain-trip-archive{padding-bottom:15px}
+.studio-domain-dashboard .domain-trip-archive .travel-toolbar{margin:0 17px 15px;gap:8px}
+.studio-domain-dashboard .domain-trip-archive .travel-search{flex:1 1 180px;min-height:36px;border-radius:18px}
+.studio-domain-dashboard .domain-trip-archive .travel-search input{font-size:11px;padding:9px 0}
+.studio-domain-dashboard .domain-trip-archive .travel-toolbar>select{font-size:11px;padding:8px 10px;min-height:36px;border-radius:18px}
+.studio-domain-dashboard .domain-trip-archive .travel-trip-grid{padding:0 16px;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px}
+.studio-domain-dashboard .travel-trip-card{border:1px solid #e9ede2;border-radius:18px;background:#fbfcf9;overflow:hidden}
+.studio-domain-dashboard .travel-trip-open{padding:17px}
+.studio-domain-dashboard .travel-trip-open h3{font-size:15px}.studio-domain-dashboard .travel-trip-open p{font-size:11px}
+.studio-domain-dashboard .travel-trip-open>small,.studio-domain-dashboard .travel-trip-counts{font-size:10px}
+.studio-domain-dashboard .travel-trip-symbol{width:31px;height:31px;border-radius:10px}
+.studio-domain-dashboard .travel-trip-card-actions{padding:0 14px 10px}
+.studio-domain-dashboard .travel-trip-card-actions .btn{font-size:10px;min-height:26px}
+@media(min-width:901px) and (max-width:1200px){
+ .studio-domain-dashboard{grid-template-columns:minmax(0,1.8fr) minmax(255px,1fr);gap:14px}
+ .studio-domain-dashboard .domain-board{padding:17px}
+ .studio-domain-dashboard .domain-board-head{align-items:flex-start}.studio-domain-dashboard .domain-board-head h2{font-size:24px}
+ .studio-domain-dashboard .domain-head-actions{gap:6px;max-width:230px}.studio-domain-dashboard .domain-head-actions .btn{font-size:11px;padding:7px 10px}
+ .studio-domain-dashboard .domain-asset-bento,.studio-domain-dashboard .domain-travel-bento{grid-template-columns:1fr}
+ .studio-domain-dashboard .domain-total-stack{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+ .studio-domain-dashboard .domain-total{padding:20px}.studio-domain-dashboard .domain-total>strong{font-size:34px;margin:19px 0}
+ .studio-domain-dashboard .domain-allocation .asset-allocation{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+ .studio-domain-dashboard .domain-trip-hero-copy{padding:22px}.studio-domain-dashboard .domain-trip-hero h3{font-size:24px}
+ .studio-domain-dashboard .travel-map{height:220px}.studio-domain-dashboard .travel-map-placeholder{min-height:220px}
+ .studio-domain-dashboard .domain-travel-metrics>.card{padding:15px 11px}
+ .studio-domain-dashboard .domain-travel-metrics>.card>span{gap:5px;font-size:11px}
+ .studio-domain-dashboard .domain-progress-ring{width:93px;height:93px}.studio-domain-dashboard .domain-countdown>strong{font-size:44px}
+}
+@media(max-width:900px){
+ .studio-domain-dashboard{grid-template-columns:1fr;gap:16px}
+ .studio-domain-dashboard .domain-board{padding:18px}
+ .studio-domain-dashboard .domain-board-head{margin-bottom:17px;align-items:flex-start}
+ .studio-domain-dashboard .domain-board-head h2{font-size:25px}
+ .studio-domain-dashboard .domain-kicker{font-size:8px;letter-spacing:1.2px}
+ .studio-domain-dashboard .domain-head-actions .btn{font-size:10px;min-height:34px;padding:7px 10px;gap:5px}
+ .studio-domain-dashboard .domain-head-actions{gap:6px}
+ .studio-domain-dashboard .domain-asset-bento{grid-template-columns:1fr 1fr;gap:12px}
+ .studio-domain-dashboard .domain-total>strong{font-size:28px}
+ .studio-domain-dashboard .domain-travel-bento{grid-template-columns:1fr 1fr;gap:12px}
+ .studio-domain-dashboard .domain-aside{grid-template-columns:1fr 1fr;align-items:start}
+ .studio-domain-dashboard .domain-travel-metrics{grid-column:1/-1}
+ .studio-domain-dashboard .domain-travel-metrics>.card{min-height:165px}
+ .studio-domain-dashboard .domain-countdown>strong{margin-top:17px}
+ .studio-domain-dashboard .domain-preparation{display:grid;grid-template-columns:1fr auto;align-items:center;gap:5px}
+ .studio-domain-dashboard .domain-preparation .domain-progress-ring{margin:0}
+ .studio-domain-dashboard .domain-travel-metrics>.domain-preparation>span{align-self:start;grid-column:1/-1}
+ .studio-domain-dashboard .domain-preparation .domain-progress-ring{grid-column:1/-1;justify-self:center}
+}
+@media(max-width:600px){
+ .studio-domain-dashboard .domain-board{padding:15px}
+ .studio-domain-dashboard .domain-board-head{gap:10px;flex-wrap:wrap}
+ .studio-domain-dashboard .domain-head-actions{margin-left:auto}
+ .studio-domain-dashboard .domain-asset-bento,.studio-domain-dashboard .domain-travel-bento,.studio-domain-dashboard .domain-aside{grid-template-columns:1fr}
+ .studio-domain-dashboard .domain-total>strong{font-size:36px;margin:22px 0}
+ .studio-domain-dashboard .domain-section-nav{gap:6px;padding-bottom:14px;margin-bottom:14px}
+ .studio-domain-dashboard .domain-section-nav>button{font-size:10px;padding:10px 8px;gap:4px}
+ .studio-domain-dashboard .domain-section-nav>button svg{display:none}
+ .studio-domain-dashboard .domain-trip-hero{min-height:0}.studio-domain-dashboard .domain-trip-hero-copy{padding:22px 18px}
+ .studio-domain-dashboard .domain-trip-hero h3{font-size:24px}
+ .studio-domain-dashboard .domain-trip-overview{width:25%;padding:18px 10px;gap:15px}
+ .studio-domain-dashboard .domain-trip-overview>span>svg{width:30px;height:30px}
+ .studio-domain-dashboard .domain-trip-overview strong{font-size:23px}
+ .studio-domain-dashboard .domain-trip-hero small,.studio-domain-dashboard .domain-trip-hero p{font-size:10px}
+ .studio-domain-dashboard .domain-trip-hero small svg{display:none}
+ .studio-domain-dashboard .domain-trip-overview small{font-size:8px}
+ .studio-domain-dashboard .domain-current-selector{gap:6px;font-size:10px}.studio-domain-dashboard .domain-current-selector select{max-width:65%;font-size:10px}
+ .studio-domain-dashboard .asset-record-main{padding:14px;gap:8px}
+ .studio-domain-dashboard .asset-record-copy strong{font-size:12px}
+ .studio-domain-dashboard .asset-record-amount{font-size:13px;max-width:38%}
+ .studio-domain-dashboard .asset-record-icon{width:29px;height:29px;flex-basis:29px}
+ .studio-domain-dashboard .domain-aside .asset-record-amount{font-size:13px}
+ .studio-domain-dashboard .domain-travel-metrics{grid-column:auto}
+ .studio-domain-dashboard .domain-travel-metrics>.card{padding:17px 15px}
+ .studio-domain-dashboard .domain-travel-metrics>.card>span{font-size:12px}
+ .studio-domain-dashboard .domain-progress-ring{width:103px;height:103px;margin:12px auto 0}
+ .studio-domain-dashboard .domain-preparation{display:block}
+ .studio-domain-dashboard .travel-map{height:230px}.studio-domain-dashboard .travel-map-placeholder{min-height:230px}
+ .studio-domain-dashboard .domain-trip-archive .travel-trip-grid{grid-template-columns:1fr}
+ .studio-domain-dashboard .domain-trip-archive .travel-toolbar{margin-inline:15px}
+ .studio-domain-dashboard .domain-trip-archive .travel-search{flex-basis:100%}
+ .studio-domain-dashboard .domain-trip-archive .travel-toolbar>select{width:100%}
+ .studio-domain-dashboard .domain-resource-links{padding:14px;gap:8px}
+ .studio-domain-dashboard .domain-resource-links>button{padding:15px 4px;font-size:10px}
+ .studio-domain-dashboard .domain-empty{padding:22px 15px}
+ .studio-domain-dashboard .domain-accounting-note{font-size:10px;line-height:1.9}
+}
+body[data-workbench] .studio-domain-dashboard .asset-allocation-row i{background:var(--theme-chart,var(--theme-accent))}
+@media(max-width:900px){
+ .studio-domain-dashboard .domain-main{display:contents}
+ .studio-domain-dashboard .domain-board{order:0}
+ .studio-domain-dashboard .domain-aside{order:1}
+ .studio-domain-dashboard .domain-transactions,.studio-domain-dashboard .domain-trip-archive{order:2}
+}
+
+/* Valuation dates, unknown amounts and source notes must remain readable. */
+.studio-domain-dashboard :is(.domain-accounting-note,.asset-accounting-note,.domain-kicker,.domain-empty p,.domain-countdown small,.domain-hero-copy p,.domain-trip-card small,.domain-travel-trip small,.domain-resource-note){color:#687063}
+.studio-domain-dashboard small:not(.asset-deadline):not(.travel-status):not(.pill),.studio-domain-dashboard time,.studio-domain-dashboard dt{color:#687063;font-size:11px}
+.studio-domain-dashboard .domain-accounting-note{font-size:12px}

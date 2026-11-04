@@ -7,7 +7,7 @@ function fixture(run){
  const saved=Object.fromEntries(['window','document','navigator'].map(k=>[k,Object.getOwnPropertyDescriptor(globalThis,k)]));
  const app={innerHTML:'',insertAdjacentHTML(where,html){this.innerHTML+=html}},space={};
  const body={dataset:{},style:{setProperty(){}},classList:{toggle(){}}};
- const workspace={insertAdjacentHTML(){}};
+ const workspace={insertAdjacentHTML(){},querySelector(){return null}};
  Object.defineProperty(globalThis,'window',{value:{addEventListener(){}},configurable:true});
  Object.defineProperty(globalThis,'navigator',{value:{},configurable:true});
  Object.defineProperty(globalThis,'document',{value:{body,querySelector:q=>q==='#app'?app:q==='#space'?space:q==='.workspace'?workspace:null},configurable:true});

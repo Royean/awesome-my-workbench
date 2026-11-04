@@ -36,6 +36,15 @@ body[data-workbench=health] .health-trend .chart svg text{font-size:10px;fill:va
 .health-metric-copy b{font-size:25px;font-weight:600;line-height:1.2;letter-spacing:-.5px;overflow-wrap:anywhere}
 .health-metric-copy b small{font-size:11px;letter-spacing:0;font-weight:400;margin-left:4px;color:var(--muted)}
 .health-metric-copy time{font-size:10px;color:var(--muted)}
+.health-metric-copy time{overflow-wrap:anywhere;line-height:1.6}
+.health-record-status{display:block;font-size:10px;line-height:1.6;color:var(--muted);font-weight:400}
+.health-latest-exercise{display:flex;align-items:center;gap:10px;margin:0 17px 17px;padding:14px 12px;background:#fff;border-radius:16px;min-width:0}
+.health-latest-exercise>div{flex:1;min-width:0}.health-latest-exercise h3{font-size:13px;font-weight:500;margin:0 0 5px}
+.health-latest-exercise time{font-size:11px;color:var(--muted)}.health-latest-exercise p{font-size:12px;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}
+.health-latest-exercise>.icon-btn{flex-shrink:0}
+.health-trend-fallback{padding:20px 23px;display:grid;gap:8px;flex:1;align-content:center;min-height:130px;color:var(--muted);font-size:12px}
+.health-trend-fallback p{margin:0}.health-trend-fallback strong{color:var(--ink);font-size:16px;font-weight:500;overflow-wrap:anywhere}
+.health-meal-row h3 time{display:block;margin:5px 0 0;line-height:1.6}
 .health-body-metric>svg{flex-shrink:0;color:#8e958a;width:13px}
 .health-lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-width:0}
 .health-exercise-total{display:flex;align-items:baseline;gap:7px;padding:0 23px;flex-wrap:wrap}
@@ -125,5 +134,5 @@ body[data-workbench=health] .health-tasks .task-list{padding:0 17px;display:grid
 @media(max-width:900px){
  .health-bento{display:flex;flex-direction:column;align-items:stretch}
  .health-primary,.health-secondary{display:contents}
- .health-monitoring{order:1}.health-water{order:2}.health-tasks{order:3}.health-lower-grid{order:4}.health-visits{order:5}
+ .health-monitoring{order:1}.health-water{order:2}.health-tasks{order:3}.health-lower-grid{order:4}.health-visits{order:5}.health-reports{order:6}
 }

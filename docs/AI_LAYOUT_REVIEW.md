@@ -48,10 +48,14 @@ R1–R4及上述额外边界均已独立复核关闭。限定差异范围内没�
 | --- | --- |
 | `public/layout-config.js` | `b14d53b4cd63b0e5890d1a1e939ca9711873ae9d4c1264588a6b47f518878b7a` |
 | `public/layout-editor.js` | `fafe651534c5bbc7ddc086f6957765ce82c668e3e5465753a636a0e0d9006333` |
-| `public/layout.css` | `3246faee8b0df5a0e23ce08eb1704c4adc290b07c59134d83f67992d058e221b` |
+| `public/layout.css` | `6167e910fefbc6c41c3e156d9824c515775902b5a3da28a238b8c99f9c0ad59f` |
 | `public/app.js` | `d743e32f1b282f0c99e78e3a9c1ec99bca722cf4e86ffb983a0ceb8538935185` |
 | `lib/layouts.mjs` | `83d4509086542f73221a997f927022008f7441fe150d3f3f6925c42eab46e8bf` |
 | `lib/mcp.mjs` | `97a009403c33ea40788a5d3a4146a601d45ae5bb85f0cbad1630adfa06c12006` |
 | `server.mjs` | `3fa2c591620456b2e544d1c49d140b9e05dd757425dddf4d576f9903ca958648` |
 | `migrations/006-dashboard-layouts.sql` | `8307a9e5506b27b6140389fc7f1275caf9f63f3d547e08cb6052f11b07ac5043` |
-| `public/index.html` | `122a3186ceeab05c2d9b7714dbeb871e2b40b9cdbcbe9ce154bf22fb5d08239e` |
+| `public/index.html` | `b3f857f48106832c60d28404f05adbbf0c8cf26cf4e2e02dd8ea44eb170c7788` |
+
+## 手机预览居中增量复核
+
+最终仅新增手机预览容器最大390px的CSS规则，JS `ea231cea` 不变。另行执行3项真实浏览器检查均通过：1440px页面中容器宽390px、x525，与main的水平中心偏差为0；子iframe的CSS视口保持390px。390px手机页面中的电脑预览仍保持子iframe视口1440px，在358px容器内缩放，外文档宽390px无横向溢出。本次只复测该CSS增量，没有重复宣称完整交互矩阵；最新CSS bundle及源码哈希已更新脱敏证据。

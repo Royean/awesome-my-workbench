@@ -24,6 +24,7 @@
 .layout-preview-actions .btn{font-size:12px!important;min-height:44px!important}
 .layout-device-frame{position:relative;width:100%;max-width:1440px;overflow:hidden;border-radius:22px;margin:0 auto 24px;background:#e6e9e0;box-shadow:0 8px 35px #25371c10}
 .layout-device-frame iframe{display:block;max-width:none;border:0;transform-origin:top left;background:#f2f3ef}
+.layout-device-frame:has(iframe[width="390"]){max-width:390px}
 .layout-preview-frame-page .layout-edit-entry{display:none}
 .layout-preview-frame-page .layout-empty button{display:none}
 .layout-preview-frame-page .phone-context button{visibility:hidden}

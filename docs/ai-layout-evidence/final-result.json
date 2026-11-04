@@ -1,0 +1,98 @@
+{
+  "executor": "/root/layout_acceptance",
+  "checks": [
+    {
+      "ok": true,
+      "name": "API rejects invalid declarative change css"
+    },
+    {
+      "ok": true,
+      "name": "API rejects invalid declarative change mobile"
+    },
+    {
+      "ok": true,
+      "name": "API rejects invalid declarative change mobile"
+    },
+    {
+      "ok": true,
+      "name": "API rejects invalid declarative change themeColor"
+    },
+    {
+      "ok": true,
+      "name": "invalid changes leave config and theme unchanged"
+    },
+    {
+      "ok": true,
+      "name": "A selects session default sleep"
+    },
+    {
+      "ok": true,
+      "name": "real logout and login follows existing page reload behavior"
+    },
+    {
+      "ok": true,
+      "name": "B does not inherit A session default trend"
+    },
+    {
+      "ok": true,
+      "name": "B identity visible after login"
+    },
+    {
+      "ok": true,
+      "name": "same account keeps manual default across data-space switch"
+    },
+    {
+      "ok": true,
+      "name": "controller retains same-owner session preference"
+    },
+    {
+      "ok": true,
+      "name": "controller clears session defaults on owner change"
+    },
+    {
+      "ok": true,
+      "name": "top-level frame parameter does not enable readonly iframe mode"
+    },
+    {
+      "ok": true,
+      "name": "top-level frame URL retains preview exit"
+    },
+    {
+      "ok": true,
+      "name": "exit removes frame and preview query parameters"
+    },
+    {
+      "ok": true,
+      "name": "top-level preview exit restores editing control"
+    },
+    {
+      "ok": true,
+      "name": "editing still usable after top-level frame preview"
+    },
+    {
+      "ok": true,
+      "name": "standalone frame flag leaves normal top-level app usable"
+    },
+    {
+      "ok": true,
+      "name": "final incremental no page errors",
+      "detail": []
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/layout-editor.js": "fafe651534c5bbc7ddc086f6957765ce82c668e3e5465753a636a0e0d9006333",
+    "public/layout.css": "3246faee8b0df5a0e23ce08eb1704c4adc290b07c59134d83f67992d058e221b",
+    "public/layout-config.js": "b14d53b4cd63b0e5890d1a1e939ca9711873ae9d4c1264588a6b47f518878b7a",
+    "public/app.js": "d743e32f1b282f0c99e78e3a9c1ec99bca722cf4e86ffb983a0ceb8538935185",
+    "public/shell.js": "b6782341d45ba4b2cdc668bdaaf134c307f121f561814e8548a5bc61fb7d3080",
+    "lib/layouts.mjs": "83d4509086542f73221a997f927022008f7441fe150d3f3f6925c42eab46e8bf",
+    "server.mjs": "3fa2c591620456b2e544d1c49d140b9e05dd757425dddf4d576f9903ca958648",
+    "public/index.html": "122a3186ceeab05c2d9b7714dbeb871e2b40b9cdbcbe9ce154bf22fb5d08239e"
+  },
+  "bundles": {
+    "js": "/assets/app.ea231ceac12f4a377ebc2e2b89415f62bc1b64f87900103baac75dbc1ea1fc21.js",
+    "css": "/assets/app.4a055eba6ebe41392b22881d395c32425c40da04f19e57b6e3e4ee6bfb1ff021.css"
+  }
+}

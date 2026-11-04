@@ -1,0 +1,489 @@
+{
+  "executor": "/root/layout_acceptance",
+  "checkedAt": "2026-11-04T12:44:47.123Z",
+  "checks": [
+    {
+      "name": "default mobile keeps existing bento",
+      "ok": true
+    },
+    {
+      "name": "default desktop keeps existing bento",
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow default desktop",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398
+      }
+    },
+    {
+      "name": "editor lists nine registered cards",
+      "ok": true
+    },
+    {
+      "name": "phone editor targets mobile",
+      "ok": true
+    },
+    {
+      "name": "sorting participates in layout discard guard",
+      "ok": true
+    },
+    {
+      "name": "continue editing preserves sorted draft",
+      "ok": true
+    },
+    {
+      "name": "preview does not persist layout or theme",
+      "ok": true
+    },
+    {
+      "name": "preview renders visibility",
+      "ok": true
+    },
+    {
+      "name": "configured blood pressure renders actual data",
+      "ok": true
+    },
+    {
+      "name": "configured thirty-day range renders",
+      "ok": true
+    },
+    {
+      "name": "configured task limit renders",
+      "ok": true
+    },
+    {
+      "name": "preview theme visible only locally",
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow mobile custom preview",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "canvas": {
+          "x": 16,
+          "y": 466.390625,
+          "width": 358,
+          "height": 2130.828125,
+          "top": 466.390625,
+          "right": 374,
+          "bottom": 2597.21875,
+          "left": 16
+        }
+      }
+    },
+    {
+      "name": "continue preview editing preserves hidden state",
+      "ok": true
+    },
+    {
+      "name": "save only changes mobile layout",
+      "ok": true
+    },
+    {
+      "name": "theme saved by apply",
+      "ok": true
+    },
+    {
+      "name": "size persisted",
+      "ok": true
+    },
+    {
+      "name": "layout apply preserves health records",
+      "ok": true
+    },
+    {
+      "name": "custom mobile layout persists after reload",
+      "ok": true
+    },
+    {
+      "name": "personal and demo share layout preference",
+      "ok": true
+    },
+    {
+      "name": "desktop remains default after mobile apply",
+      "ok": true
+    },
+    {
+      "name": "desktop editor shows actual mobile viewport frame",
+      "ok": true
+    },
+    {
+      "name": "preview frame has no nested editing banner",
+      "ok": true
+    },
+    {
+      "name": "exiting preview returns actual desktop",
+      "ok": true
+    },
+    {
+      "name": "exiting preview does not apply",
+      "ok": true
+    },
+    {
+      "name": "desktop layout editable separately",
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow custom 360",
+      "ok": true,
+      "detail": {
+        "w": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360,
+        "canvas": {
+          "x": 12,
+          "y": 318,
+          "width": 336,
+          "height": 2894,
+          "top": 318,
+          "right": 348,
+          "bottom": 3212,
+          "left": 12
+        }
+      }
+    },
+    {
+      "name": "no horizontal overflow custom 390",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "canvas": {
+          "x": 16,
+          "y": 318,
+          "width": 358,
+          "height": 2130.828125,
+          "top": 318,
+          "right": 374,
+          "bottom": 2448.828125,
+          "left": 16
+        }
+      }
+    },
+    {
+      "name": "no horizontal overflow custom 430",
+      "ok": true,
+      "detail": {
+        "w": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430,
+        "canvas": {
+          "x": 16,
+          "y": 318,
+          "width": 398,
+          "height": 1988.515625,
+          "top": 318,
+          "right": 414,
+          "bottom": 2306.515625,
+          "left": 16
+        }
+      }
+    },
+    {
+      "name": "no horizontal overflow custom 820",
+      "ok": true,
+      "detail": {
+        "w": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "canvas": {
+          "x": 66,
+          "y": 318,
+          "width": 688,
+          "height": 1866.046875,
+          "top": 318,
+          "right": 754,
+          "bottom": 2184.046875,
+          "left": 66
+        }
+      }
+    },
+    {
+      "name": "no horizontal overflow custom 1440",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398,
+        "canvas": {
+          "x": 47,
+          "y": 325,
+          "width": 1346,
+          "height": 1892.5625,
+          "top": 325,
+          "right": 1393,
+          "bottom": 2217.5625,
+          "left": 47
+        }
+      }
+    },
+    {
+      "name": "mobile editor shows actual desktop viewport frame",
+      "ok": true
+    },
+    {
+      "name": "no horizontal overflow desktop frame on mobile",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "canvas": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      }
+    },
+    {
+      "name": "stale editor reports revision conflict",
+      "ok": true
+    },
+    {
+      "name": "conflict preserves unsaved draft",
+      "ok": true
+    },
+    {
+      "name": "reset affects selected device only",
+      "ok": true
+    },
+    {
+      "name": "device reset keeps theme",
+      "ok": true
+    },
+    {
+      "name": "restore initial version creates new revision",
+      "ok": true
+    },
+    {
+      "name": "history restores prior theme",
+      "ok": true
+    },
+    {
+      "name": "MCP lists supported layout components",
+      "ok": true
+    },
+    {
+      "name": "MCP save records AI source",
+      "ok": true
+    },
+    {
+      "name": "AI layout renders through actual web state",
+      "ok": true
+    },
+    {
+      "name": "MCP preview leaves current revision unchanged",
+      "ok": true
+    },
+    {
+      "name": "other account cannot read preview",
+      "ok": true
+    },
+    {
+      "name": "other account layout independent",
+      "ok": true
+    },
+    {
+      "name": "revoked MCP token cannot read layout",
+      "ok": true
+    },
+    {
+      "name": "login preserves private preview destination",
+      "ok": true
+    },
+    {
+      "name": "preview login opens health workbench",
+      "ok": true
+    },
+    {
+      "name": "expired preview has recoverable error",
+      "ok": true
+    },
+    {
+      "name": "expired preview exit restores normal page",
+      "ok": true
+    },
+    {
+      "name": "no browser page errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "screenshots": [
+    "390-default.png",
+    "1440-default.png",
+    "390-editor.png",
+    "390-preview.png",
+    "1440-mobile-preview-frame.png",
+    "360-custom.png",
+    "390-custom.png",
+    "430-custom.png",
+    "820-custom.png",
+    "1440-custom.png",
+    "390-desktop-preview-frame.png",
+    "390-conflict.png",
+    "390-login-preview.png"
+  ],
+  "geometry": [
+    {
+      "label": "default desktop",
+      "w": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398
+    },
+    {
+      "label": "mobile custom preview",
+      "w": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "canvas": {
+        "x": 16,
+        "y": 466.390625,
+        "width": 358,
+        "height": 2130.828125,
+        "top": 466.390625,
+        "right": 374,
+        "bottom": 2597.21875,
+        "left": 16
+      }
+    },
+    {
+      "label": "custom 360",
+      "w": 360,
+      "doc": 360,
+      "main": 360,
+      "mainScroll": 360,
+      "canvas": {
+        "x": 12,
+        "y": 318,
+        "width": 336,
+        "height": 2894,
+        "top": 318,
+        "right": 348,
+        "bottom": 3212,
+        "left": 12
+      }
+    },
+    {
+      "label": "custom 390",
+      "w": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "canvas": {
+        "x": 16,
+        "y": 318,
+        "width": 358,
+        "height": 2130.828125,
+        "top": 318,
+        "right": 374,
+        "bottom": 2448.828125,
+        "left": 16
+      }
+    },
+    {
+      "label": "custom 430",
+      "w": 430,
+      "doc": 430,
+      "main": 430,
+      "mainScroll": 430,
+      "canvas": {
+        "x": 16,
+        "y": 318,
+        "width": 398,
+        "height": 1988.515625,
+        "top": 318,
+        "right": 414,
+        "bottom": 2306.515625,
+        "left": 16
+      }
+    },
+    {
+      "label": "custom 820",
+      "w": 820,
+      "doc": 820,
+      "main": 720,
+      "mainScroll": 720,
+      "canvas": {
+        "x": 66,
+        "y": 318,
+        "width": 688,
+        "height": 1866.046875,
+        "top": 318,
+        "right": 754,
+        "bottom": 2184.046875,
+        "left": 66
+      }
+    },
+    {
+      "label": "custom 1440",
+      "w": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398,
+      "canvas": {
+        "x": 47,
+        "y": 325,
+        "width": 1346,
+        "height": 1892.5625,
+        "top": 325,
+        "right": 1393,
+        "bottom": 2217.5625,
+        "left": 47
+      }
+    },
+    {
+      "label": "desktop frame on mobile",
+      "w": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "canvas": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0,
+        "left": 0
+      }
+    }
+  ],
+  "hashes": {
+    "public/layout-editor.js": "da88fd7d3d7e547175edeb900728138a3a770a781744e67466aeb50abff89e2d",
+    "public/layout-config.js": "b14d53b4cd63b0e5890d1a1e939ca9711873ae9d4c1264588a6b47f518878b7a",
+    "public/layout.css": "3246faee8b0df5a0e23ce08eb1704c4adc290b07c59134d83f67992d058e221b",
+    "public/app.js": "d743e32f1b282f0c99e78e3a9c1ec99bca722cf4e86ffb983a0ceb8538935185",
+    "public/shell.js": "b6782341d45ba4b2cdc668bdaaf134c307f121f561814e8548a5bc61fb7d3080",
+    "lib/layouts.mjs": "83d4509086542f73221a997f927022008f7441fe150d3f3f6925c42eab46e8bf",
+    "lib/mcp.mjs": "97a009403c33ea40788a5d3a4146a601d45ae5bb85f0cbad1630adfa06c12006",
+    "server.mjs": "3fa2c591620456b2e544d1c49d140b9e05dd757425dddf4d576f9903ca958648",
+    "public/index.html": "c08f74642c7ebd31a598abdc6941349a657d0b0975432d9a89d0909ec8f77d54"
+  }
+}

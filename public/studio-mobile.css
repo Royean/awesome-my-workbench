@@ -1,5 +1,5 @@
 /* Mobile Studio: one responsive layer after the domain styles. */
-.phone-context{display:none}
+.phone-context,.reading-drop-mobile{display:none}
 @media(max-width:900px){
  body[data-workbench]{background:#f2f3ef}
  body[data-workbench] .app{background:#f2f3ef}
@@ -128,6 +128,8 @@
  .studio-domain-dashboard .travel-map,.studio-domain-dashboard .travel-map-placeholder{min-height:240px;height:240px}
 
  /* Reading surfaces lead into the shelf before secondary notes. */
+ .reading-drop-desktop{display:none}
+ .reading-drop-mobile{display:inline}
  body[data-workbench=reading] .reading-content{display:flex;flex-direction:column;gap:14px}
  .studio-reading-overview{display:contents}
  .reading-content>.reading-demo{order:0;margin:0}

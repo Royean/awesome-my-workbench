@@ -1,0 +1,3971 @@
+{
+  "executor": "/root/mobile_acceptance",
+  "baseCommit": "3a597ac30f41496a152d4c57ceb5fb6acfca1515",
+  "date": "2026-11-04T11:38:25.207Z",
+  "checks": [
+    {
+      "name": "no page overflow 360 health",
+      "ok": true,
+      "detail": {
+        "width": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 81.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 84.59375,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 146.1875,
+            "bottom": 825.84375,
+            "left": 84.59375
+          },
+          {
+            "x": 149.1875,
+            "y": 768.703125,
+            "width": 61.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 210.796875,
+            "bottom": 826,
+            "left": 149.1875
+          },
+          {
+            "x": 213.796875,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 275.390625,
+            "bottom": 825.84375,
+            "left": 213.796875
+          },
+          {
+            "x": 278.390625,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 339.984375,
+            "bottom": 825.84375,
+            "left": 278.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 360 health",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 360 health",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 360 health",
+      "ok": true
+    },
+    {
+      "name": "profile entry 360 health",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 360 finance",
+      "ok": true,
+      "detail": {
+        "width": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 61.59375,
+            "height": 57,
+            "top": 769,
+            "right": 81.59375,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 84.59375,
+            "y": 769,
+            "width": 61.59375,
+            "height": 57,
+            "top": 769,
+            "right": 146.1875,
+            "bottom": 826,
+            "left": 84.59375
+          },
+          {
+            "x": 149.1875,
+            "y": 769,
+            "width": 61.609375,
+            "height": 57,
+            "top": 769,
+            "right": 210.796875,
+            "bottom": 826,
+            "left": 149.1875
+          },
+          {
+            "x": 213.796875,
+            "y": 769,
+            "width": 61.59375,
+            "height": 57,
+            "top": 769,
+            "right": 275.390625,
+            "bottom": 826,
+            "left": 213.796875
+          },
+          {
+            "x": 278.390625,
+            "y": 769,
+            "width": 61.59375,
+            "height": 57,
+            "top": 769,
+            "right": 339.984375,
+            "bottom": 826,
+            "left": 278.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 360 finance",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 360 finance",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 360 finance",
+      "ok": true
+    },
+    {
+      "name": "profile entry 360 finance",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 360 travel",
+      "ok": true,
+      "detail": {
+        "width": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 81.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 84.59375,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 146.1875,
+            "bottom": 825.84375,
+            "left": 84.59375
+          },
+          {
+            "x": 149.1875,
+            "y": 768.703125,
+            "width": 61.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 210.796875,
+            "bottom": 826,
+            "left": 149.1875
+          },
+          {
+            "x": 213.796875,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 275.390625,
+            "bottom": 825.84375,
+            "left": 213.796875
+          },
+          {
+            "x": 278.390625,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 339.984375,
+            "bottom": 825.84375,
+            "left": 278.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 360 travel",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 360 travel",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 360 travel",
+      "ok": true
+    },
+    {
+      "name": "profile entry 360 travel",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 360 reading",
+      "ok": true,
+      "detail": {
+        "width": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "158.5px 158.5px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 158.5,
+            "height": 57,
+            "top": 769,
+            "right": 178.5,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 181.5,
+            "y": 769,
+            "width": 158.5,
+            "height": 57,
+            "top": 769,
+            "right": 340,
+            "bottom": 826,
+            "left": 181.5
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 360 reading",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 360 reading",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 360 reading",
+      "ok": true
+    },
+    {
+      "name": "reading two equally distributed tabs 360",
+      "ok": true,
+      "detail": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 158.5,
+          "height": 57,
+          "top": 769,
+          "right": 178.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 181.5,
+          "y": 769,
+          "width": 158.5,
+          "height": 57,
+          "top": 769,
+          "right": 340,
+          "bottom": 826,
+          "left": 181.5
+        }
+      ]
+    },
+    {
+      "name": "profile entry 360 reading",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 360 other",
+      "ok": true,
+      "detail": {
+        "width": 360,
+        "doc": 360,
+        "main": 360,
+        "mainScroll": 360,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 81.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 84.59375,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 146.1875,
+            "bottom": 825.84375,
+            "left": 84.59375
+          },
+          {
+            "x": 149.1875,
+            "y": 768.703125,
+            "width": 61.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 210.796875,
+            "bottom": 826,
+            "left": 149.1875
+          },
+          {
+            "x": 213.796875,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 275.390625,
+            "bottom": 825.84375,
+            "left": 213.796875
+          },
+          {
+            "x": 278.390625,
+            "y": 768.84375,
+            "width": 61.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 339.984375,
+            "bottom": 825.84375,
+            "left": 278.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 360 other",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 360 other",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 360 other",
+      "ok": true
+    },
+    {
+      "name": "profile entry 360 other",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 390 health",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 87.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 90.59375,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 158.1875,
+            "bottom": 825.84375,
+            "left": 90.59375
+          },
+          {
+            "x": 161.1875,
+            "y": 768.703125,
+            "width": 67.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 228.796875,
+            "bottom": 826,
+            "left": 161.1875
+          },
+          {
+            "x": 231.796875,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 299.390625,
+            "bottom": 825.84375,
+            "left": 231.796875
+          },
+          {
+            "x": 302.390625,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 369.984375,
+            "bottom": 825.84375,
+            "left": 302.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 390 health",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 390 health",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 390 health",
+      "ok": true
+    },
+    {
+      "name": "profile entry 390 health",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 390 finance",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 67.59375,
+            "height": 57,
+            "top": 769,
+            "right": 87.59375,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 90.59375,
+            "y": 769,
+            "width": 67.59375,
+            "height": 57,
+            "top": 769,
+            "right": 158.1875,
+            "bottom": 826,
+            "left": 90.59375
+          },
+          {
+            "x": 161.1875,
+            "y": 769,
+            "width": 67.609375,
+            "height": 57,
+            "top": 769,
+            "right": 228.796875,
+            "bottom": 826,
+            "left": 161.1875
+          },
+          {
+            "x": 231.796875,
+            "y": 769,
+            "width": 67.59375,
+            "height": 57,
+            "top": 769,
+            "right": 299.390625,
+            "bottom": 826,
+            "left": 231.796875
+          },
+          {
+            "x": 302.390625,
+            "y": 769,
+            "width": 67.59375,
+            "height": 57,
+            "top": 769,
+            "right": 369.984375,
+            "bottom": 826,
+            "left": 302.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 390 finance",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 390 finance",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 390 finance",
+      "ok": true
+    },
+    {
+      "name": "profile entry 390 finance",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 390 travel",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 87.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 90.59375,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 158.1875,
+            "bottom": 825.84375,
+            "left": 90.59375
+          },
+          {
+            "x": 161.1875,
+            "y": 768.703125,
+            "width": 67.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 228.796875,
+            "bottom": 826,
+            "left": 161.1875
+          },
+          {
+            "x": 231.796875,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 299.390625,
+            "bottom": 825.84375,
+            "left": 231.796875
+          },
+          {
+            "x": 302.390625,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 369.984375,
+            "bottom": 825.84375,
+            "left": 302.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 390 travel",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 390 travel",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 390 travel",
+      "ok": true
+    },
+    {
+      "name": "profile entry 390 travel",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 390 reading",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "173.5px 173.5px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 173.5,
+            "height": 57,
+            "top": 769,
+            "right": 193.5,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 196.5,
+            "y": 769,
+            "width": 173.5,
+            "height": 57,
+            "top": 769,
+            "right": 370,
+            "bottom": 826,
+            "left": 196.5
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 390 reading",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 390 reading",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 390 reading",
+      "ok": true
+    },
+    {
+      "name": "reading two equally distributed tabs 390",
+      "ok": true,
+      "detail": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 173.5,
+          "height": 57,
+          "top": 769,
+          "right": 193.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 196.5,
+          "y": 769,
+          "width": 173.5,
+          "height": 57,
+          "top": 769,
+          "right": 370,
+          "bottom": 826,
+          "left": 196.5
+        }
+      ]
+    },
+    {
+      "name": "profile entry 390 reading",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 390 other",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 87.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 90.59375,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 158.1875,
+            "bottom": 825.84375,
+            "left": 90.59375
+          },
+          {
+            "x": 161.1875,
+            "y": 768.703125,
+            "width": 67.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 228.796875,
+            "bottom": 826,
+            "left": 161.1875
+          },
+          {
+            "x": 231.796875,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 299.390625,
+            "bottom": 825.84375,
+            "left": 231.796875
+          },
+          {
+            "x": 302.390625,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 369.984375,
+            "bottom": 825.84375,
+            "left": 302.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 390 other",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 390 other",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 390 other",
+      "ok": true
+    },
+    {
+      "name": "profile entry 390 other",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 430 health",
+      "ok": true,
+      "detail": {
+        "width": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 95.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 98.59375,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 174.1875,
+            "bottom": 825.84375,
+            "left": 98.59375
+          },
+          {
+            "x": 177.1875,
+            "y": 768.703125,
+            "width": 75.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 252.796875,
+            "bottom": 826,
+            "left": 177.1875
+          },
+          {
+            "x": 255.796875,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 331.390625,
+            "bottom": 825.84375,
+            "left": 255.796875
+          },
+          {
+            "x": 334.390625,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 409.984375,
+            "bottom": 825.84375,
+            "left": 334.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 430 health",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 430 health",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 430 health",
+      "ok": true
+    },
+    {
+      "name": "profile entry 430 health",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 430 finance",
+      "ok": true,
+      "detail": {
+        "width": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 75.59375,
+            "height": 57,
+            "top": 769,
+            "right": 95.59375,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 98.59375,
+            "y": 769,
+            "width": 75.59375,
+            "height": 57,
+            "top": 769,
+            "right": 174.1875,
+            "bottom": 826,
+            "left": 98.59375
+          },
+          {
+            "x": 177.1875,
+            "y": 769,
+            "width": 75.609375,
+            "height": 57,
+            "top": 769,
+            "right": 252.796875,
+            "bottom": 826,
+            "left": 177.1875
+          },
+          {
+            "x": 255.796875,
+            "y": 769,
+            "width": 75.59375,
+            "height": 57,
+            "top": 769,
+            "right": 331.390625,
+            "bottom": 826,
+            "left": 255.796875
+          },
+          {
+            "x": 334.390625,
+            "y": 769,
+            "width": 75.59375,
+            "height": 57,
+            "top": 769,
+            "right": 409.984375,
+            "bottom": 826,
+            "left": 334.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 430 finance",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 430 finance",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 430 finance",
+      "ok": true
+    },
+    {
+      "name": "profile entry 430 finance",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 430 travel",
+      "ok": true,
+      "detail": {
+        "width": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 95.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 98.59375,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 174.1875,
+            "bottom": 825.84375,
+            "left": 98.59375
+          },
+          {
+            "x": 177.1875,
+            "y": 768.703125,
+            "width": 75.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 252.796875,
+            "bottom": 826,
+            "left": 177.1875
+          },
+          {
+            "x": 255.796875,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 331.390625,
+            "bottom": 825.84375,
+            "left": 255.796875
+          },
+          {
+            "x": 334.390625,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 409.984375,
+            "bottom": 825.84375,
+            "left": 334.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 430 travel",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 430 travel",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 430 travel",
+      "ok": true
+    },
+    {
+      "name": "profile entry 430 travel",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 430 reading",
+      "ok": true,
+      "detail": {
+        "width": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "193.5px 193.5px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 193.5,
+            "height": 57,
+            "top": 769,
+            "right": 213.5,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 216.5,
+            "y": 769,
+            "width": 193.5,
+            "height": 57,
+            "top": 769,
+            "right": 410,
+            "bottom": 826,
+            "left": 216.5
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 430 reading",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 430 reading",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 430 reading",
+      "ok": true
+    },
+    {
+      "name": "reading two equally distributed tabs 430",
+      "ok": true,
+      "detail": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 193.5,
+          "height": 57,
+          "top": 769,
+          "right": 213.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 216.5,
+          "y": 769,
+          "width": 193.5,
+          "height": 57,
+          "top": 769,
+          "right": 410,
+          "bottom": 826,
+          "left": 216.5
+        }
+      ]
+    },
+    {
+      "name": "profile entry 430 reading",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 430 other",
+      "ok": true,
+      "detail": {
+        "width": 430,
+        "doc": 430,
+        "main": 430,
+        "mainScroll": 430,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 95.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 98.59375,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 174.1875,
+            "bottom": 825.84375,
+            "left": 98.59375
+          },
+          {
+            "x": 177.1875,
+            "y": 768.703125,
+            "width": 75.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 252.796875,
+            "bottom": 826,
+            "left": 177.1875
+          },
+          {
+            "x": 255.796875,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 331.390625,
+            "bottom": 825.84375,
+            "left": 255.796875
+          },
+          {
+            "x": 334.390625,
+            "y": 768.84375,
+            "width": 75.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 409.984375,
+            "bottom": 825.84375,
+            "left": 334.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 430 other",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 430 other",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 430 other",
+      "ok": true
+    },
+    {
+      "name": "profile entry 430 other",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 820 health",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 173.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 330.1875,
+            "bottom": 825.84375,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 768.703125,
+            "width": 153.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 643.390625,
+            "bottom": 825.84375,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 768.84375,
+            "width": 153.609375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 800,
+            "bottom": 825.84375,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 820 health",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 820 health",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 820 health",
+      "ok": true
+    },
+    {
+      "name": "820 document scrolling health",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 173.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 330.1875,
+            "bottom": 825.84375,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 768.703125,
+            "width": 153.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 643.390625,
+            "bottom": 825.84375,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 768.84375,
+            "width": 153.609375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 800,
+            "bottom": 825.84375,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "profile entry 820 health",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 820 finance",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 153.59375,
+            "height": 57,
+            "top": 769,
+            "right": 173.59375,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 769,
+            "width": 153.59375,
+            "height": 57,
+            "top": 769,
+            "right": 330.1875,
+            "bottom": 826,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 769,
+            "width": 153.609375,
+            "height": 57,
+            "top": 769,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 769,
+            "width": 153.59375,
+            "height": 57,
+            "top": 769,
+            "right": 643.390625,
+            "bottom": 826,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 769,
+            "width": 153.609375,
+            "height": 57,
+            "top": 769,
+            "right": 800,
+            "bottom": 826,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 820 finance",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 820 finance",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 820 finance",
+      "ok": true
+    },
+    {
+      "name": "820 document scrolling finance",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 153.59375,
+            "height": 57,
+            "top": 769,
+            "right": 173.59375,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 769,
+            "width": 153.59375,
+            "height": 57,
+            "top": 769,
+            "right": 330.1875,
+            "bottom": 826,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 769,
+            "width": 153.609375,
+            "height": 57,
+            "top": 769,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 769,
+            "width": 153.59375,
+            "height": 57,
+            "top": 769,
+            "right": 643.390625,
+            "bottom": 826,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 769,
+            "width": 153.609375,
+            "height": 57,
+            "top": 769,
+            "right": 800,
+            "bottom": 826,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "profile entry 820 finance",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 820 travel",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 173.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 330.1875,
+            "bottom": 825.84375,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 768.703125,
+            "width": 153.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 643.390625,
+            "bottom": 825.84375,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 768.84375,
+            "width": 153.609375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 800,
+            "bottom": 825.84375,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 820 travel",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 820 travel",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 820 travel",
+      "ok": true
+    },
+    {
+      "name": "820 document scrolling travel",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 173.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 330.1875,
+            "bottom": 825.84375,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 768.703125,
+            "width": 153.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 643.390625,
+            "bottom": 825.84375,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 768.84375,
+            "width": 153.609375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 800,
+            "bottom": 825.84375,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "profile entry 820 travel",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 820 reading",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "388.5px 388.5px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 388.5,
+            "height": 57,
+            "top": 769,
+            "right": 408.5,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 411.5,
+            "y": 769,
+            "width": 388.5,
+            "height": 57,
+            "top": 769,
+            "right": 800,
+            "bottom": 826,
+            "left": 411.5
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 820 reading",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 820 reading",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 820 reading",
+      "ok": true
+    },
+    {
+      "name": "reading two equally distributed tabs 820",
+      "ok": true,
+      "detail": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 388.5,
+          "height": 57,
+          "top": 769,
+          "right": 408.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 411.5,
+          "y": 769,
+          "width": 388.5,
+          "height": 57,
+          "top": 769,
+          "right": 800,
+          "bottom": 826,
+          "left": 411.5
+        }
+      ]
+    },
+    {
+      "name": "820 document scrolling reading",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "388.5px 388.5px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 769,
+            "width": 388.5,
+            "height": 57,
+            "top": 769,
+            "right": 408.5,
+            "bottom": 826,
+            "left": 20
+          },
+          {
+            "x": 411.5,
+            "y": 769,
+            "width": 388.5,
+            "height": 57,
+            "top": 769,
+            "right": 800,
+            "bottom": 826,
+            "left": 411.5
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "profile entry 820 reading",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 820 other",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 173.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 330.1875,
+            "bottom": 825.84375,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 768.703125,
+            "width": 153.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 643.390625,
+            "bottom": 825.84375,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 768.84375,
+            "width": 153.609375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 800,
+            "bottom": 825.84375,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 820 other",
+      "ok": true
+    },
+    {
+      "name": "single selected tab 820 other",
+      "ok": true
+    },
+    {
+      "name": "tabs touch size 820 other",
+      "ok": true
+    },
+    {
+      "name": "820 document scrolling other",
+      "ok": true,
+      "detail": {
+        "width": 820,
+        "doc": 820,
+        "main": 720,
+        "mainScroll": 720,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 173.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 176.59375,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 330.1875,
+            "bottom": 825.84375,
+            "left": 176.59375
+          },
+          {
+            "x": 333.1875,
+            "y": 768.703125,
+            "width": 153.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 486.796875,
+            "bottom": 826,
+            "left": 333.1875
+          },
+          {
+            "x": 489.796875,
+            "y": 768.84375,
+            "width": 153.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 643.390625,
+            "bottom": 825.84375,
+            "left": 489.796875
+          },
+          {
+            "x": 646.390625,
+            "y": 768.84375,
+            "width": 153.609375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 800,
+            "bottom": 825.84375,
+            "left": 646.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "profile entry 820 other",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 1440 health",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398,
+        "mainOverflow": "auto",
+        "workspaceOverflow": "hidden",
+        "tabColumns": "none",
+        "tabRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 1440 health",
+      "ok": true
+    },
+    {
+      "name": "desktop header health",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 1440 finance",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398,
+        "mainOverflow": "auto",
+        "workspaceOverflow": "hidden",
+        "tabColumns": "none",
+        "tabRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 1440 finance",
+      "ok": true
+    },
+    {
+      "name": "desktop header finance",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 1440 travel",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398,
+        "mainOverflow": "auto",
+        "workspaceOverflow": "hidden",
+        "tabColumns": "none",
+        "tabRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 1440 travel",
+      "ok": true
+    },
+    {
+      "name": "desktop header travel",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 1440 reading",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398,
+        "mainOverflow": "auto",
+        "workspaceOverflow": "hidden",
+        "tabColumns": "repeat(2, minmax(0px, 1fr))",
+        "tabRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 1440 reading",
+      "ok": true
+    },
+    {
+      "name": "desktop header reading",
+      "ok": true
+    },
+    {
+      "name": "no page overflow 1440 other",
+      "ok": true,
+      "detail": {
+        "width": 1440,
+        "doc": 1440,
+        "main": 1398,
+        "mainScroll": 1398,
+        "mainOverflow": "auto",
+        "workspaceOverflow": "hidden",
+        "tabColumns": "none",
+        "tabRects": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0,
+            "top": 0,
+            "right": 0,
+            "bottom": 0,
+            "left": 0
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "responsive nav 1440 other",
+      "ok": true
+    },
+    {
+      "name": "desktop header other",
+      "ok": true
+    },
+    {
+      "name": "space switch to personal",
+      "ok": true
+    },
+    {
+      "name": "space switch back to demo",
+      "ok": true
+    },
+    {
+      "name": "mobile theme saved",
+      "ok": true
+    },
+    {
+      "name": "mobile theme after reload",
+      "ok": true
+    },
+    {
+      "name": "record form readable and touchable",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 776.46875,
+        "fields": [
+          {
+            "font": 35,
+            "height": 48
+          },
+          {
+            "font": 16,
+            "height": 48
+          },
+          {
+            "font": 16,
+            "height": 48.796875
+          },
+          {
+            "font": 16,
+            "height": 62
+          }
+        ],
+        "buttons": [
+          48,
+          48
+        ],
+        "scrollable": true
+      }
+    },
+    {
+      "name": "metric saves through real form",
+      "ok": true
+    },
+    {
+      "name": "immersive fullscreen and theme white",
+      "ok": true,
+      "detail": {
+        "theme": "white",
+        "bg": "rgb(255, 255, 255)",
+        "w": 390,
+        "h": 844,
+        "radius": "0px",
+        "body": true,
+        "textBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "name": "immersive fullscreen and theme sepia",
+      "ok": true,
+      "detail": {
+        "theme": "sepia",
+        "bg": "rgb(245, 239, 223)",
+        "w": 390,
+        "h": 844,
+        "radius": "0px",
+        "body": true,
+        "textBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "name": "immersive fullscreen and theme night",
+      "ok": true,
+      "detail": {
+        "theme": "night",
+        "bg": "rgb(32, 33, 36)",
+        "w": 390,
+        "h": 844,
+        "radius": "0px",
+        "body": true,
+        "textBg": "rgba(0, 0, 0, 0)"
+      }
+    },
+    {
+      "name": "reader focus mode",
+      "ok": true
+    },
+    {
+      "name": "reader exits to mobile nav",
+      "ok": true
+    },
+    {
+      "name": "no page overflow long title 390 other",
+      "ok": true,
+      "detail": {
+        "width": 390,
+        "doc": 390,
+        "main": 390,
+        "mainScroll": 390,
+        "mainOverflow": "visible",
+        "workspaceOverflow": "visible",
+        "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+        "tabRects": [
+          {
+            "x": 20,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 87.59375,
+            "bottom": 825.84375,
+            "left": 20
+          },
+          {
+            "x": 90.59375,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 158.1875,
+            "bottom": 825.84375,
+            "left": 90.59375
+          },
+          {
+            "x": 161.1875,
+            "y": 768.703125,
+            "width": 67.609375,
+            "height": 57.296875,
+            "top": 768.703125,
+            "right": 228.796875,
+            "bottom": 826,
+            "left": 161.1875
+          },
+          {
+            "x": 231.796875,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 299.390625,
+            "bottom": 825.84375,
+            "left": 231.796875
+          },
+          {
+            "x": 302.390625,
+            "y": 768.84375,
+            "width": 67.59375,
+            "height": 57,
+            "top": 768.84375,
+            "right": 369.984375,
+            "bottom": 825.84375,
+            "left": 302.390625
+          }
+        ],
+        "bad": []
+      }
+    },
+    {
+      "name": "short screen picker scroll",
+      "ok": true,
+      "detail": {
+        "height": 520.59375,
+        "contentH": 416,
+        "scrollH": 664,
+        "overflow": "auto"
+      }
+    },
+    {
+      "name": "Escape closes sheet",
+      "ok": true
+    },
+    {
+      "name": "no browser exceptions",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "geometry": [
+    {
+      "name": "360 health",
+      "width": 360,
+      "doc": 360,
+      "main": 360,
+      "mainScroll": 360,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 81.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 84.59375,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 146.1875,
+          "bottom": 825.84375,
+          "left": 84.59375
+        },
+        {
+          "x": 149.1875,
+          "y": 768.703125,
+          "width": 61.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 210.796875,
+          "bottom": 826,
+          "left": 149.1875
+        },
+        {
+          "x": 213.796875,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 275.390625,
+          "bottom": 825.84375,
+          "left": 213.796875
+        },
+        {
+          "x": 278.390625,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 339.984375,
+          "bottom": 825.84375,
+          "left": 278.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "360 finance",
+      "width": 360,
+      "doc": 360,
+      "main": 360,
+      "mainScroll": 360,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 61.59375,
+          "height": 57,
+          "top": 769,
+          "right": 81.59375,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 84.59375,
+          "y": 769,
+          "width": 61.59375,
+          "height": 57,
+          "top": 769,
+          "right": 146.1875,
+          "bottom": 826,
+          "left": 84.59375
+        },
+        {
+          "x": 149.1875,
+          "y": 769,
+          "width": 61.609375,
+          "height": 57,
+          "top": 769,
+          "right": 210.796875,
+          "bottom": 826,
+          "left": 149.1875
+        },
+        {
+          "x": 213.796875,
+          "y": 769,
+          "width": 61.59375,
+          "height": 57,
+          "top": 769,
+          "right": 275.390625,
+          "bottom": 826,
+          "left": 213.796875
+        },
+        {
+          "x": 278.390625,
+          "y": 769,
+          "width": 61.59375,
+          "height": 57,
+          "top": 769,
+          "right": 339.984375,
+          "bottom": 826,
+          "left": 278.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "360 travel",
+      "width": 360,
+      "doc": 360,
+      "main": 360,
+      "mainScroll": 360,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 81.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 84.59375,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 146.1875,
+          "bottom": 825.84375,
+          "left": 84.59375
+        },
+        {
+          "x": 149.1875,
+          "y": 768.703125,
+          "width": 61.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 210.796875,
+          "bottom": 826,
+          "left": 149.1875
+        },
+        {
+          "x": 213.796875,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 275.390625,
+          "bottom": 825.84375,
+          "left": 213.796875
+        },
+        {
+          "x": 278.390625,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 339.984375,
+          "bottom": 825.84375,
+          "left": 278.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "360 reading",
+      "width": 360,
+      "doc": 360,
+      "main": 360,
+      "mainScroll": 360,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "158.5px 158.5px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 158.5,
+          "height": 57,
+          "top": 769,
+          "right": 178.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 181.5,
+          "y": 769,
+          "width": 158.5,
+          "height": 57,
+          "top": 769,
+          "right": 340,
+          "bottom": 826,
+          "left": 181.5
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "360 other",
+      "width": 360,
+      "doc": 360,
+      "main": 360,
+      "mainScroll": 360,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "61.5938px 61.5938px 61.6094px 61.5938px 61.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 81.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 84.59375,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 146.1875,
+          "bottom": 825.84375,
+          "left": 84.59375
+        },
+        {
+          "x": 149.1875,
+          "y": 768.703125,
+          "width": 61.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 210.796875,
+          "bottom": 826,
+          "left": 149.1875
+        },
+        {
+          "x": 213.796875,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 275.390625,
+          "bottom": 825.84375,
+          "left": 213.796875
+        },
+        {
+          "x": 278.390625,
+          "y": 768.84375,
+          "width": 61.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 339.984375,
+          "bottom": 825.84375,
+          "left": 278.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "390 health",
+      "width": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 87.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 90.59375,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 158.1875,
+          "bottom": 825.84375,
+          "left": 90.59375
+        },
+        {
+          "x": 161.1875,
+          "y": 768.703125,
+          "width": 67.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 228.796875,
+          "bottom": 826,
+          "left": 161.1875
+        },
+        {
+          "x": 231.796875,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 299.390625,
+          "bottom": 825.84375,
+          "left": 231.796875
+        },
+        {
+          "x": 302.390625,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 369.984375,
+          "bottom": 825.84375,
+          "left": 302.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "390 finance",
+      "width": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 67.59375,
+          "height": 57,
+          "top": 769,
+          "right": 87.59375,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 90.59375,
+          "y": 769,
+          "width": 67.59375,
+          "height": 57,
+          "top": 769,
+          "right": 158.1875,
+          "bottom": 826,
+          "left": 90.59375
+        },
+        {
+          "x": 161.1875,
+          "y": 769,
+          "width": 67.609375,
+          "height": 57,
+          "top": 769,
+          "right": 228.796875,
+          "bottom": 826,
+          "left": 161.1875
+        },
+        {
+          "x": 231.796875,
+          "y": 769,
+          "width": 67.59375,
+          "height": 57,
+          "top": 769,
+          "right": 299.390625,
+          "bottom": 826,
+          "left": 231.796875
+        },
+        {
+          "x": 302.390625,
+          "y": 769,
+          "width": 67.59375,
+          "height": 57,
+          "top": 769,
+          "right": 369.984375,
+          "bottom": 826,
+          "left": 302.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "390 travel",
+      "width": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 87.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 90.59375,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 158.1875,
+          "bottom": 825.84375,
+          "left": 90.59375
+        },
+        {
+          "x": 161.1875,
+          "y": 768.703125,
+          "width": 67.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 228.796875,
+          "bottom": 826,
+          "left": 161.1875
+        },
+        {
+          "x": 231.796875,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 299.390625,
+          "bottom": 825.84375,
+          "left": 231.796875
+        },
+        {
+          "x": 302.390625,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 369.984375,
+          "bottom": 825.84375,
+          "left": 302.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "390 reading",
+      "width": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "173.5px 173.5px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 173.5,
+          "height": 57,
+          "top": 769,
+          "right": 193.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 196.5,
+          "y": 769,
+          "width": 173.5,
+          "height": 57,
+          "top": 769,
+          "right": 370,
+          "bottom": 826,
+          "left": 196.5
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "390 other",
+      "width": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 87.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 90.59375,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 158.1875,
+          "bottom": 825.84375,
+          "left": 90.59375
+        },
+        {
+          "x": 161.1875,
+          "y": 768.703125,
+          "width": 67.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 228.796875,
+          "bottom": 826,
+          "left": 161.1875
+        },
+        {
+          "x": 231.796875,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 299.390625,
+          "bottom": 825.84375,
+          "left": 231.796875
+        },
+        {
+          "x": 302.390625,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 369.984375,
+          "bottom": 825.84375,
+          "left": 302.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "430 health",
+      "width": 430,
+      "doc": 430,
+      "main": 430,
+      "mainScroll": 430,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 95.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 98.59375,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 174.1875,
+          "bottom": 825.84375,
+          "left": 98.59375
+        },
+        {
+          "x": 177.1875,
+          "y": 768.703125,
+          "width": 75.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 252.796875,
+          "bottom": 826,
+          "left": 177.1875
+        },
+        {
+          "x": 255.796875,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 331.390625,
+          "bottom": 825.84375,
+          "left": 255.796875
+        },
+        {
+          "x": 334.390625,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 409.984375,
+          "bottom": 825.84375,
+          "left": 334.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "430 finance",
+      "width": 430,
+      "doc": 430,
+      "main": 430,
+      "mainScroll": 430,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 75.59375,
+          "height": 57,
+          "top": 769,
+          "right": 95.59375,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 98.59375,
+          "y": 769,
+          "width": 75.59375,
+          "height": 57,
+          "top": 769,
+          "right": 174.1875,
+          "bottom": 826,
+          "left": 98.59375
+        },
+        {
+          "x": 177.1875,
+          "y": 769,
+          "width": 75.609375,
+          "height": 57,
+          "top": 769,
+          "right": 252.796875,
+          "bottom": 826,
+          "left": 177.1875
+        },
+        {
+          "x": 255.796875,
+          "y": 769,
+          "width": 75.59375,
+          "height": 57,
+          "top": 769,
+          "right": 331.390625,
+          "bottom": 826,
+          "left": 255.796875
+        },
+        {
+          "x": 334.390625,
+          "y": 769,
+          "width": 75.59375,
+          "height": 57,
+          "top": 769,
+          "right": 409.984375,
+          "bottom": 826,
+          "left": 334.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "430 travel",
+      "width": 430,
+      "doc": 430,
+      "main": 430,
+      "mainScroll": 430,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 95.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 98.59375,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 174.1875,
+          "bottom": 825.84375,
+          "left": 98.59375
+        },
+        {
+          "x": 177.1875,
+          "y": 768.703125,
+          "width": 75.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 252.796875,
+          "bottom": 826,
+          "left": 177.1875
+        },
+        {
+          "x": 255.796875,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 331.390625,
+          "bottom": 825.84375,
+          "left": 255.796875
+        },
+        {
+          "x": 334.390625,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 409.984375,
+          "bottom": 825.84375,
+          "left": 334.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "430 reading",
+      "width": 430,
+      "doc": 430,
+      "main": 430,
+      "mainScroll": 430,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "193.5px 193.5px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 193.5,
+          "height": 57,
+          "top": 769,
+          "right": 213.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 216.5,
+          "y": 769,
+          "width": 193.5,
+          "height": 57,
+          "top": 769,
+          "right": 410,
+          "bottom": 826,
+          "left": 216.5
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "430 other",
+      "width": 430,
+      "doc": 430,
+      "main": 430,
+      "mainScroll": 430,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "75.5938px 75.5938px 75.6094px 75.5938px 75.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 95.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 98.59375,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 174.1875,
+          "bottom": 825.84375,
+          "left": 98.59375
+        },
+        {
+          "x": 177.1875,
+          "y": 768.703125,
+          "width": 75.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 252.796875,
+          "bottom": 826,
+          "left": 177.1875
+        },
+        {
+          "x": 255.796875,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 331.390625,
+          "bottom": 825.84375,
+          "left": 255.796875
+        },
+        {
+          "x": 334.390625,
+          "y": 768.84375,
+          "width": 75.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 409.984375,
+          "bottom": 825.84375,
+          "left": 334.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "820 health",
+      "width": 820,
+      "doc": 820,
+      "main": 720,
+      "mainScroll": 720,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 173.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 176.59375,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 330.1875,
+          "bottom": 825.84375,
+          "left": 176.59375
+        },
+        {
+          "x": 333.1875,
+          "y": 768.703125,
+          "width": 153.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 486.796875,
+          "bottom": 826,
+          "left": 333.1875
+        },
+        {
+          "x": 489.796875,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 643.390625,
+          "bottom": 825.84375,
+          "left": 489.796875
+        },
+        {
+          "x": 646.390625,
+          "y": 768.84375,
+          "width": 153.609375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 800,
+          "bottom": 825.84375,
+          "left": 646.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "820 finance",
+      "width": 820,
+      "doc": 820,
+      "main": 720,
+      "mainScroll": 720,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 153.59375,
+          "height": 57,
+          "top": 769,
+          "right": 173.59375,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 176.59375,
+          "y": 769,
+          "width": 153.59375,
+          "height": 57,
+          "top": 769,
+          "right": 330.1875,
+          "bottom": 826,
+          "left": 176.59375
+        },
+        {
+          "x": 333.1875,
+          "y": 769,
+          "width": 153.609375,
+          "height": 57,
+          "top": 769,
+          "right": 486.796875,
+          "bottom": 826,
+          "left": 333.1875
+        },
+        {
+          "x": 489.796875,
+          "y": 769,
+          "width": 153.59375,
+          "height": 57,
+          "top": 769,
+          "right": 643.390625,
+          "bottom": 826,
+          "left": 489.796875
+        },
+        {
+          "x": 646.390625,
+          "y": 769,
+          "width": 153.609375,
+          "height": 57,
+          "top": 769,
+          "right": 800,
+          "bottom": 826,
+          "left": 646.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "820 travel",
+      "width": 820,
+      "doc": 820,
+      "main": 720,
+      "mainScroll": 720,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 173.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 176.59375,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 330.1875,
+          "bottom": 825.84375,
+          "left": 176.59375
+        },
+        {
+          "x": 333.1875,
+          "y": 768.703125,
+          "width": 153.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 486.796875,
+          "bottom": 826,
+          "left": 333.1875
+        },
+        {
+          "x": 489.796875,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 643.390625,
+          "bottom": 825.84375,
+          "left": 489.796875
+        },
+        {
+          "x": 646.390625,
+          "y": 768.84375,
+          "width": 153.609375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 800,
+          "bottom": 825.84375,
+          "left": 646.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "820 reading",
+      "width": 820,
+      "doc": 820,
+      "main": 720,
+      "mainScroll": 720,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "388.5px 388.5px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 769,
+          "width": 388.5,
+          "height": 57,
+          "top": 769,
+          "right": 408.5,
+          "bottom": 826,
+          "left": 20
+        },
+        {
+          "x": 411.5,
+          "y": 769,
+          "width": 388.5,
+          "height": 57,
+          "top": 769,
+          "right": 800,
+          "bottom": 826,
+          "left": 411.5
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "820 other",
+      "width": 820,
+      "doc": 820,
+      "main": 720,
+      "mainScroll": 720,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "153.594px 153.594px 153.609px 153.594px 153.609px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 173.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 176.59375,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 330.1875,
+          "bottom": 825.84375,
+          "left": 176.59375
+        },
+        {
+          "x": 333.1875,
+          "y": 768.703125,
+          "width": 153.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 486.796875,
+          "bottom": 826,
+          "left": 333.1875
+        },
+        {
+          "x": 489.796875,
+          "y": 768.84375,
+          "width": 153.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 643.390625,
+          "bottom": 825.84375,
+          "left": 489.796875
+        },
+        {
+          "x": 646.390625,
+          "y": 768.84375,
+          "width": 153.609375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 800,
+          "bottom": 825.84375,
+          "left": 646.390625
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "1440 health",
+      "width": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398,
+      "mainOverflow": "auto",
+      "workspaceOverflow": "hidden",
+      "tabColumns": "none",
+      "tabRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "1440 finance",
+      "width": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398,
+      "mainOverflow": "auto",
+      "workspaceOverflow": "hidden",
+      "tabColumns": "none",
+      "tabRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "1440 travel",
+      "width": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398,
+      "mainOverflow": "auto",
+      "workspaceOverflow": "hidden",
+      "tabColumns": "none",
+      "tabRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "1440 reading",
+      "width": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398,
+      "mainOverflow": "auto",
+      "workspaceOverflow": "hidden",
+      "tabColumns": "repeat(2, minmax(0px, 1fr))",
+      "tabRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "1440 other",
+      "width": 1440,
+      "doc": 1440,
+      "main": 1398,
+      "mainScroll": 1398,
+      "mainOverflow": "auto",
+      "workspaceOverflow": "hidden",
+      "tabColumns": "none",
+      "tabRects": [
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0,
+          "top": 0,
+          "right": 0,
+          "bottom": 0,
+          "left": 0
+        }
+      ],
+      "bad": []
+    },
+    {
+      "name": "long title 390 other",
+      "width": 390,
+      "doc": 390,
+      "main": 390,
+      "mainScroll": 390,
+      "mainOverflow": "visible",
+      "workspaceOverflow": "visible",
+      "tabColumns": "67.5938px 67.5938px 67.6094px 67.5938px 67.5938px",
+      "tabRects": [
+        {
+          "x": 20,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 87.59375,
+          "bottom": 825.84375,
+          "left": 20
+        },
+        {
+          "x": 90.59375,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 158.1875,
+          "bottom": 825.84375,
+          "left": 90.59375
+        },
+        {
+          "x": 161.1875,
+          "y": 768.703125,
+          "width": 67.609375,
+          "height": 57.296875,
+          "top": 768.703125,
+          "right": 228.796875,
+          "bottom": 826,
+          "left": 161.1875
+        },
+        {
+          "x": 231.796875,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 299.390625,
+          "bottom": 825.84375,
+          "left": 231.796875
+        },
+        {
+          "x": 302.390625,
+          "y": 768.84375,
+          "width": 67.59375,
+          "height": 57,
+          "top": 768.84375,
+          "right": 369.984375,
+          "bottom": 825.84375,
+          "left": 302.390625
+        }
+      ],
+      "bad": []
+    }
+  ],
+  "screenshots": [
+    "390-health.png",
+    "390-finance.png",
+    "390-travel.png",
+    "390-reading.png",
+    "390-other.png",
+    "1440-health.png",
+    "1440-finance.png",
+    "1440-travel.png",
+    "1440-reading.png",
+    "1440-other.png",
+    "390-health-lime.png",
+    "390-metric-form.png",
+    "390-reader-white.png",
+    "390-reader-sepia.png",
+    "390-reader-night.png",
+    "390-long-name.png"
+  ],
+  "hashes": {
+    "public/shell.js": "0d6a30a1b6a47137729f6f5e91aff8b445f0b50d8e32b927de234b08163ac3e3",
+    "public/studio-mobile.css": "ed22865db9f18038c636f4065aadbacbc3e0b9aa6c8a22f53193454bb89d90eb",
+    "public/index.html": "5ac563222d6c66f2050938d42e618b9a49d3433d1fd0a4a7bb3cd7c32a5e229a",
+    "scripts/build-public.mjs": "dfac75ec7120511e607a86722ccea79e6c36ca698d2a1d8a5fcb66b8f56e3a10"
+  }
+}

@@ -22,3 +22,5 @@
 作者测试：`tests/latest-health.test.mjs` 覆盖日期/时间排序、跨年闰日、类型独立、附件排除、未来观察值、历史展示与当日/周统计隔离、转义和趋势范围外回退；原待办测试继续运行。
 
 独立验收执行真实隔离后端及 Chrome，只使用临时目录中的虚构数据。具体结果及截图路径见 `docs/LATEST_HEALTH_ACCEPTANCE.md`。测试时钟由现有 `NODE_ENV=test` / `ZH_TEST_NOW` 控制，不改变生产时区逻辑。
+
+最终验证：构建成功，作者全套 Node 测试 269/269 通过；独立真实 Chrome 验收 8 组通过，设计复核桌面与 360px 截图通过。已保留两张虚构数据截图于 docs/latest-health-history-desktop-top.png 和 docs/latest-health-history-360-metrics.png。功能代码对应 bc9e6ac，验收脚本与文档后续单独提交；未部署生产。

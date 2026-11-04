@@ -1,0 +1,91 @@
+// Independent real-backend + installed Chrome acceptance. Fictional, disposable data only.
+// Run with Node 24: node tests/latest-health-acceptance.mjs
+import assert from 'node:assert/strict';
+import {mkdtemp,rm,readFile,writeFile} from 'node:fs/promises';
+import os from 'node:os';import path from 'node:path';import {pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';
+import {startServer,stopProcess,waitFor,repoRoot} from './helpers.mjs';
+const {chromium}=await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE||path.join(os.homedir(),'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs')));
+const data=await mkdtemp(path.join(os.tmpdir(),'latest-health-data-')),evidence=await mkdtemp(path.join(os.tmpdir(),'latest-health-evidence-'));
+let server,browser;const checks=[];const ok=s=>{checks.push(s);console.log('PASS '+s)};
+async function boot(now){server=await startServer({env:{HEALTH_DATA_DIR:data,NODE_ENV:'test',AUTH_REQUIRED:'0',HOST:'127.0.0.1',ZH_TEST_NOW:now}})}
+async function api(route,method='GET',body){const r=await fetch(server.base+route+'?space=personal&workbench=health',{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});assert.ok(r.ok,`${method} ${route}: ${r.status} ${await r.clone().text()}`);return r.json()}
+const add=(kind,title,date,time='',extra={})=>api('/api/items','POST',{kind,title,date,time,...extra});
+const upload=(title,date,time,category='一般资料')=>api('/api/upload','POST',{title,name:title+'.txt',date,time,fileCategory:category,content:Buffer.from('Fictional original evidence: '+title).toString('base64')});
+try{
+ await boot('2027-01-02T04:00:00Z');browser=await chromium.launch({channel:'chrome',headless:true});
+ const ctx=await browser.newContext({viewport:{width:1440,height:1100},timezoneId:'Asia/Shanghai'});await ctx.addInitScript(()=>{localStorage.setItem('health-space','personal');localStorage.setItem('active-workbench','health')});
+ const p=await ctx.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
+ await p.goto(server.base+'/#dashboard');await p.locator('.health-overview').waitFor();
+ for(const selector of ['.health-meals','.health-exercise','.health-visits','.health-reports'])assert.match(await p.locator(selector).innerText(),/还没有/);
+ assert.match(await p.locator('.health-trend').innerText(),/还没有体重记录/);assert.equal(await p.locator('.health-trend-fallback').count(),0);
+ assert.match(await p.locator('.health-water-ring').getAttribute('aria-label'),/今日饮水0毫升/);
+ await p.screenshot({path:path.join(evidence,'empty-desktop.png'),fullPage:true});ok('genuinely empty personal space: no fabricated history, explicit empty states and water 0');
+ // Use the supported test clock to create future observations through the real validating API,
+ // then move the isolated server clock back. No database mutation or mocked API responses.
+ await stopProcess(server.proc);await boot('2030-01-01T04:00:00Z');
+ const old='2026-12-03';
+ let lastMeal;for(let i=0;i<6;i++)lastMeal=await add('meal','虚构旧餐食'+i,old,`${String(7+i).padStart(2,'0')}:00`,{mealType:'午餐'});
+ const visit=await add('visit','虚构历史就诊',old,'11:00',{status:'已完成',hospital:'虚构医院'});
+ await add('visit','虚构未来就诊不应混入','2027-01-03','10:00',{status:'待就诊'});
+ await add('exercise','虚构30天前步行',old,'10:00',{type:'步行',duration:90});
+ await add('metric','虚构早间体重',old,'08:00',{type:'weight',value:99.9});
+ await add('metric','虚构晚间体重',old,'18:00',{type:'weight',value:68.7});
+ await add('metric','虚构历史睡眠',old,'07:00',{type:'sleep',value:7.5});
+ await add('metric','虚构历史心率',old,'07:10',{type:'heart',value:62});
+ await add('water','虚构历史饮水',old,'10:00',{volume:1400});
+ await add('meal','虚构未来餐食不应混入','2027-01-03','23:00',{mealType:'晚餐'});
+ await add('exercise','虚构未来运动不应混入','2027-01-03','23:00',{type:'步行',duration:888});
+ await add('metric','虚构未来体重不应混入','2027-01-03','23:00',{type:'weight',value:333});
+ await add('water','虚构未来饮水','2027-01-03','23:00',{volume:1500});
+ await add('task','虚构未来待办仍应显示','2027-01-04','09:00',{done:false});
+ const file=await upload('虚构历史原件',old,'14:00');
+ const report=await add('report','虚构历史报告文字',old,'13:00',{visitId:visit.id,fileId:file.id,content:'Fictional written report evidence',status:'已归档'});
+ await upload('虚构餐食附件排除','2027-01-02','23:00','餐食附件');await upload('虚构药品图片排除','2027-01-02','23:01','药品图片');await upload('虚构未来原件排除','2027-01-03','23:02');
+ const medExtra={visitId:visit.id,dosage:'虚构剂量',route:'虚构途径',frequency:'虚构频次',times:['08:00'],status:'进行中'};
+ const med=await add('medication','虚构当日有效方案',old,'',{...medExtra,endDate:'2027-01-10'});
+ await add('medication','虚构已过期方案',old,'',{...medExtra,endDate:'2026-12-31'});
+ await add('medication','虚构尚未开始方案','2027-01-03','',medExtra);
+ await add('dose','虚构昨天已服用','2027-01-01','08:00',{medicationId:med.id,scheduledTime:'08:00',outcome:'已服用'});
+ await stopProcess(server.proc);await boot('2027-01-02T04:00:00Z');
+ assert.equal((await api('/api/state')).today,'2027-01-02');await p.goto(server.base+'/#dashboard');await p.locator('.health-overview').waitFor();
+ assert.equal(await p.locator('.health-meal-row').count(),1);assert.match(await p.locator('.health-meals').innerText(),/虚构旧餐食5/);
+ for(const selector of ['.health-meals','.health-visits','.health-latest-exercise','.health-reports','.health-body-metrics'])assert.match(await p.locator(selector).innerText(),/2026-12-03/);
+ assert.match(await p.locator('.health-visits').innerText(),/虚构历史就诊/);assert.match(await p.locator('.health-reports').innerText(),/虚构历史原件/);
+ assert.match(await p.locator('.health-latest-exercise').innerText(),/90 分钟/);assert.match(await p.locator('.health-trend-reading').innerText(),/68\.7/);
+ assert.doesNotMatch(await p.locator('.health-trend-reading').innerText(),/99\.9|333/);assert.match(await p.locator('.health-trend-fallback').innerText(),/近 14 天暂无体重记录/);
+ assert.match(await p.locator('.health-trend-fallback').innerText(),/最近一次：68\.7/);assert.equal(await p.locator('.health-trend .chart').count(),0);
+ assert.doesNotMatch(await p.locator('.health-overview').innerText(),/虚构未来就诊|虚构未来餐食|虚构未来运动|虚构餐食附件排除|虚构药品图片排除|虚构未来原件排除/);
+ assert.match(await p.locator('.health-tasks').innerText(),/虚构未来待办仍应显示/);
+ ok('30-day and cross-year history: latest one per category survives meal crowding, same-day later metric wins, future observations excluded while future task remains');
+ assert.equal((await p.locator('.health-exercise-total b').innerText()).trim(),'0');assert.match(await p.locator('.health-exercise-total').innerText(),/0 次/);
+ assert.match(await p.locator('.health-water-ring').getAttribute('aria-label'),/今日饮水0毫升/);
+ await p.locator('.health-medication-summary summary').click();
+ assert.equal(await p.locator('.today-medication-row').count(),1);assert.match(await p.locator('.today-medication-row').innerText(),/虚构当日有效方案/);
+ assert.ok(await p.locator('.today-medication-row [data-action^="med-take:"]').isVisible());assert.doesNotMatch(await p.locator('.today-medication-rows').innerText(),/虚构已过期方案|虚构尚未开始方案/);
+ ok('historical exercise/water/dose never backfill today or 7-day totals; only today-active medication appears with unrecorded dose action');
+ await p.locator('.health-reports [data-action^="med-preview:"]').click();await p.locator('#original-viewer pre').waitFor();assert.match(await p.locator('#original-viewer').innerText(),/Fictional original evidence: 虚构历史原件/);
+ await p.locator('.drawer [data-action="close"]').first().click();await p.locator('.drawer').waitFor({state:'detached'});ok('latest original opens actual uploaded file content');
+ await p.screenshot({path:path.join(evidence,'history-desktop.png'),fullPage:true});
+ await p.evaluate(()=>{document.querySelector('main').scrollTop=0;window.scrollTo(0,0)});await p.screenshot({path:path.join(evidence,'history-desktop-top.png')});
+ await p.setViewportSize({width:360,height:800});
+ const widths=await p.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth,body:document.body.scrollWidth,main:document.querySelector('main').scrollWidth,mainClient:document.querySelector('main').clientWidth}));
+ assert.ok(widths.document<=widths.viewport&&widths.body<=widths.viewport&&widths.main<=widths.mainClient,JSON.stringify(widths));
+ await p.screenshot({path:path.join(evidence,'history-360.png'),fullPage:true});await p.locator('.health-body-metrics').evaluate(el=>el.scrollIntoView({block:'center'}));await p.screenshot({path:path.join(evidence,'history-360-metrics.png')});ok('360px: all latest categories retained and no document/body/main horizontal overflow');
+ await api('/api/items/'+lastMeal.id,'PUT',{date:'2027-01-01',time:'19:30',title:'虚构跨年昨天晚餐'});
+ await api('/api/items/'+report.id,'PUT',{date:'2027-01-01',time:'11:00'});
+ await add('exercise','虚构昨天运动','2027-01-01','20:00',{duration:30,type:'步行'});
+ await p.reload();await p.locator('.health-meal-row').waitFor();assert.match(await p.locator('.health-meals').innerText(),/昨天 · 19:30/);assert.match(await p.locator('.health-meals').innerText(),/今天还未记录/);
+ assert.match(await p.locator('.health-reports').innerText(),/虚构历史报告文字/);assert.match(await p.locator('.health-reports').innerText(),/昨天 · 11:00/);
+ assert.equal((await p.locator('.health-exercise-total b').innerText()).trim(),'30');assert.match(await p.locator('.health-latest-exercise').innerText(),/昨天 · 20:00/);
+ ok('yesterday labels and valid 7-day exercise update independently; written report can become latest over original');
+ await p.locator('.health-quick-actions [data-action="add:meal"]').click();await p.locator('#capture-form').waitFor();await p.locator('#capture-text').fill('虚构今天即时新增餐食');await p.locator('.capture-details summary').click();await p.locator('#field-time').fill('09:30');
+ await p.getByRole('button',{name:'保存记录',exact:true}).click();await p.locator('.drawer').waitFor({state:'detached'});
+ await waitFor(async()=>(await p.locator('.health-meals').innerText()).includes('虚构今天即时新增餐食'));
+ assert.match(await p.locator('.health-meals').innerText(),/今天 · 09:30/);assert.match(await p.locator('.health-meals').innerText(),/今天已记录/);assert.doesNotMatch(await p.locator('.health-meals').innerText(),/虚构跨年昨天晚餐/);
+ assert.equal(await p.locator('.health-meal-row').count(),1);assert.match(await p.locator('.health-visits').innerText(),/虚构历史就诊/);assert.ok((await api('/api/state')).items.some(x=>x.title==='虚构今天即时新增餐食'));
+ ok('real UI save immediately replaces latest meal and today status, keeps other categories and persists to backend');
+ assert.deepEqual(errors,[]);ok('no uncaught browser exceptions');
+ const index=await readFile(path.join(repoRoot,'public/index.html'),'utf8'),source=await readFile(path.join(repoRoot,'public/app.js'));
+ const summary={checkedAt:new Date().toISOString(),executor:'/root/todo_acceptance',fixedToday:'2027-01-02',chrome:browser.version(),node:process.version,bundle:index.match(/app\.[a-f0-9]+\.js/)?.[0],sourceSha256:createHash('sha256').update(source).digest('hex'),checks,widths,evidence};
+ await writeFile(path.join(evidence,'result.json'),JSON.stringify(summary,null,2));console.log(JSON.stringify(summary,null,2));
+}finally{await browser?.close();await stopProcess(server?.proc);await rm(data,{recursive:true,force:true})}

@@ -1,4 +1,5 @@
 import {createLayouts} from './lib/layouts.mjs';
+import {createComponents} from './lib/components.mjs';
 import { READING_KINDS, validateReading, assertReadingPage } from './lib/reading.mjs';
 import { enrichAssetHolding } from './public/asset-lifecycle.js';
 import { TRAVEL_KINDS, validateTravel, assertTravelChildDates } from './lib/travel.mjs';
@@ -340,6 +341,7 @@ function compressed(file,bytes,type,accept,immutable){
  return {body,encoding};
 }
 const layouts=createLayouts({db,authEnabled,origin:appOrigin});
+const components=createComponents({db,authEnabled,origin:appOrigin,getAll,today,getWorkbenches,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}')});
 const accounts=createAccounts({db,enabled:authEnabled,origin:appOrigin,json,readBody,bootstrap:(u,url)=>bootstrapPayload(u,url)});
 // Shared by GET /api/bootstrap and a successful POST /api/auth/login, so both return the identical {me,state} for one user.
 function bootstrapPayload(user,url){
@@ -350,7 +352,7 @@ function bootstrapPayload(user,url){
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  if(!workbench||!space)return {me,state:null};
  const settings=JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||JSON.stringify({name:user?.name||'Captain',focus:'建立可持续的健康习惯'}));
- return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today(),trashedIds:trashedIds(space),...(workbench.type==='health'?{layout:layouts.get({user,workbench})}:{})}};
+ return {me,state:{owner:user?.id??null,space:baseSpace,workbenches,workbench,items:getAll(space),settings,today:today(),trashedIds:trashedIds(space),...(workbench.type==='health'?{layout:layouts.get({user,workbench})}:{}),componentView:components.view({user,workbench,space:baseSpace})}};
 }
 // Remote MCP endpoint (Streamable HTTP, JSON responses, stateless). Bearer token only (personal access token or app token); cookies are never accepted, so a browser cannot be driven cross-site. Host is already checked above.
 // MCP originals use the same private file rows and download authorization as the web.
@@ -424,7 +426,7 @@ function attachMedicationImage(space,{medicationId,fileId}){
  if(medication.imageFileId===fileId)return medication;
  return put(space,'medication',{...medication,imageFileId:fileId},medicationId,'mcp');
 }
-const mcp=createMcp({layouts,db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
+const mcp=createMcp({components,layouts,db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>JSON.parse(db.prepare('SELECT body FROM settings WHERE space=?').get(space)?.body||'{}'),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
 const mcpRate=new Map();const MCP_RATE=Number(process.env.MCP_RATE_PER_MINUTE||120);
 async function handleMcp(req,res){
  const unauthorized=(code,message)=>{res.writeHead(401,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','WWW-Authenticate':`Bearer realm="zhiheng", error="invalid_token"`});res.end(JSON.stringify({error:message,code}));};
@@ -482,6 +484,26 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||['travel','reading'].includes(w.id)||db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file')requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
+ // Reusable component definitions and placements are account-owned; bindings resolve the selected data space.
+ if(url.pathname==='/api/components'||url.pathname.startsWith('/api/components/')){
+  requireExpectedOwner();const input={user,workbench,space:baseSpace,page:url.searchParams.get('page')||'dashboard'};
+  if(url.pathname==='/api/components'){
+   if(req.method==='GET'){const filter=url.searchParams.get('includeArchived');if(filter!==null&&!['true','false'].includes(filter))throw bad('归档筛选无效');return json(res,200,components.list(input,{includeArchived:filter!=='false'}));}
+   if(req.method==='POST')return json(res,201,components.create(input,await readBody(req,65536)));
+  }
+  if(url.pathname==='/api/components/types'&&req.method==='GET')return json(res,200,components.catalog(input));
+  if(url.pathname==='/api/components/placements'){
+   if(req.method==='GET')return json(res,200,components.getPlacements(input));
+   if(req.method==='PUT')return json(res,200,components.updatePlacements(input,await readBody(req,32768)));
+  }
+  if(url.pathname==='/api/components/placements/restore'&&req.method==='POST')return json(res,200,components.restorePlacements(input,await readBody(req,4096)));
+  if(url.pathname==='/api/components/preview'&&req.method==='POST')return json(res,200,components.preview(input,await readBody(req,65536)));
+  const preview=/^\/api\/components\/previews\/([a-f0-9-]{36})(\/save)?$/i.exec(url.pathname);
+  if(preview){if(!preview[2]&&req.method==='GET')return json(res,200,components.getPreview(input,preview[1]));if(preview[2]&&req.method==='POST')return json(res,200,components.savePreview(input,preview[1],await readBody(req,4096)));}
+  const match=/^\/api\/components\/([a-f0-9-]{36})(?:\/(duplicate|archive|publish|restore))?$/i.exec(url.pathname);
+  if(match){if(!match[2]&&req.method==='GET')return json(res,200,components.get(input,match[1]));if(!match[2]&&req.method==='PUT')return json(res,200,components.update(input,match[1],await readBody(req,65536)));if(match[2]&&req.method==='POST')return json(res,200,components[match[2]](input,match[1],await readBody(req,4096)));}
+  return json(res,405,{error:'组件接口不支持此操作',code:'method_not_allowed'});
+ }
  // Layout preferences belong to the account/workbench, independently of personal/demo records.
  if(url.pathname==='/api/layout'||url.pathname.startsWith('/api/layout/')){
   requireExpectedOwner();
@@ -533,7 +555,7 @@ const server=http.createServer(async(req,res)=>{try{
   }
   return json(res,405,{error:'CGM 操作或请求方法不支持'});
  }
- if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space),...(workbench.type==='health'?{layout:layouts.get({user,workbench})}:{})})}
+ if(url.pathname==='/api/state'){if(req.method!=='GET')return json(res,405,{error:'方法不支持'});return json(res,200,{owner:user?.id??null,workbenches,workbench,items:getAll(space),settings:readSettings(),today:today(),trashedIds:trashedIds(space),...(workbench.type==='health'?{layout:layouts.get({user,workbench})}:{}),componentView:components.view({user,workbench,space:baseSpace})})}
  if(url.pathname==='/api/settings'&&req.method==='PUT'){if(['travel','reading'].includes(workbench.type))requireExpectedOwner();const b=await readBody(req);return json(res,200,writeSettings(space,b,user))}
 
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||['travel','reading'].includes(workbench.type))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}

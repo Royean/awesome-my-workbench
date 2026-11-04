@@ -1,0 +1,141 @@
+{
+  "executor": "/root/component_acceptance",
+  "checks": [
+    {
+      "name": "unauthenticated private link survives login",
+      "ok": true
+    },
+    {
+      "name": "preview uses stored demo data scope",
+      "ok": true
+    },
+    {
+      "name": "component preview blocks workbench navigation edits",
+      "ok": true
+    },
+    {
+      "name": "component preview blocks shortcut replacing preview",
+      "ok": true
+    },
+    {
+      "name": "preview exit removes URL state",
+      "ok": true
+    },
+    {
+      "name": "B cannot see A private preview card",
+      "ok": true
+    },
+    {
+      "name": "cross-owner error does not disclose title",
+      "ok": true
+    },
+    {
+      "name": "B library unchanged by foreign preview",
+      "ok": true
+    },
+    {
+      "name": "expired private preview has useful error",
+      "ok": true
+    },
+    {
+      "name": "expired preview exits to normal page",
+      "ok": true
+    },
+    {
+      "name": "409 preserves unsaved component title",
+      "ok": true
+    },
+    {
+      "name": "reload merges local title",
+      "ok": true
+    },
+    {
+      "name": "reload preserves unrelated remote description",
+      "ok": true
+    },
+    {
+      "name": "merged draft saved with both changes",
+      "ok": true
+    },
+    {
+      "name": "conflict resolution does not auto-publish",
+      "ok": true
+    },
+    {
+      "name": "CtrlK respects component dirty guard",
+      "ok": true
+    },
+    {
+      "name": "keep editing retains unsaved description",
+      "ok": true
+    },
+    {
+      "name": "cancelled late preview preserves new record form",
+      "ok": true
+    },
+    {
+      "name": "cancelled late preview does not reopen",
+      "ok": true
+    },
+    {
+      "name": "pending save keeps original editor",
+      "ok": true
+    },
+    {
+      "name": "pending save does not offer discard",
+      "ok": true
+    },
+    {
+      "name": "pending save disables close control",
+      "ok": true
+    },
+    {
+      "name": "old preview finally cannot unlock newer save",
+      "ok": true
+    },
+    {
+      "name": "leaving and returning dashboard retains placed cards",
+      "ok": true
+    },
+    {
+      "name": "old layout iframe hides component manage controls",
+      "ok": true
+    },
+    {
+      "name": "old layout preview blocks component library",
+      "ok": true
+    },
+    {
+      "name": "old layout preview still exits",
+      "ok": true
+    },
+    {
+      "name": "edge tests do not mutate original business records",
+      "ok": true
+    },
+    {
+      "name": "edge browser has no uncaught errors",
+      "detail": [],
+      "ok": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/components.js": "dbb6a60489567f2ea12edd205cbc0081c30786c816a930f9d9e0c633aeee7d23",
+    "public/components.css": "b2a5d1088cb4ce990489135bdecb1f3b84e7567ba7b44296317a1a465d4a2b4e",
+    "public/component-card.js": "f31f9596e02d68cad8da6bf9dac48482d7e09501a9eeb61562cd0e4795bd052a",
+    "public/component-schema.js": "14821dc7f9148db7bcb3c211a1f0657775d7f39bd1248d267a504c64fc5a72e5",
+    "public/app.js": "572b1ac57a55915b579ef23e4475b0b39ed6e444c1cbbfc8098575f1ef3088d8",
+    "server.mjs": "9c7ffefddfbe8c210677adbf439a7df38508f131f23cc03c1a96374f2edbd2be",
+    "lib/components.mjs": "d1eeca05f11a3841386327ace3f0baa1f0034df9fbcf6a2aa8c6513d4a09166e",
+    "lib/mcp.mjs": "65acb5a14121ed732be4685ab2d982f68b8faeab6836f0ef106ae4310ef2655b",
+    "public/index.html": "95c90d3c7307731868a7152684d70e1d02ccde94bb02fd6d682a1653d23ad0fa"
+  },
+  "phase": "02-session-conflict",
+  "observedBundles": [
+    "/assets/app.8f96f4fc8bdf95d3334d46812e79a70ab713c9c6416999ed0fe866e0fa852f8a.css",
+    "/assets/app.16d38f6b13c78b8b566292ef9a960a08ebf028ab46d0118ee5207d53d033b052.js"
+  ],
+  "redaction": "Only fictional isolated test data. Runtime account identifiers, credentials, cookies, bearer tokens, private-preview IDs and URLs, local ports and data directories omitted."
+}

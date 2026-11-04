@@ -1,0 +1,54 @@
+{
+  "executor": "/root/component_acceptance",
+  "checks": [
+    {
+      "name": "mixed distance aggregates include only filled values",
+      "ok": true,
+      "detail": {
+        "stat": 4,
+        "avg": 4,
+        "progress": 4
+      }
+    },
+    {
+      "name": "all numeric blocks declare exact omitted count",
+      "ok": true,
+      "detail": [
+        "2条记录未填写运动距离，仅统计已填写记录",
+        "2条记录未填写运动距离，仅统计已填写记录",
+        "2条记录未填写运动距离，仅统计已填写记录"
+      ]
+    },
+    {
+      "name": "stat chart and progress render missing-value explanation",
+      "ok": true
+    },
+    {
+      "name": "final preview changes neither library nor source records",
+      "ok": true
+    },
+    {
+      "name": "final delta no uncaught browser errors",
+      "ok": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/components.js": "dbb6a60489567f2ea12edd205cbc0081c30786c816a930f9d9e0c633aeee7d23",
+    "public/components.css": "b2a5d1088cb4ce990489135bdecb1f3b84e7567ba7b44296317a1a465d4a2b4e",
+    "public/component-card.js": "484191b178decdc6bf34f035e285429aa922a3617ba55b246647a50f2319e960",
+    "public/component-schema.js": "14821dc7f9148db7bcb3c211a1f0657775d7f39bd1248d267a504c64fc5a72e5",
+    "public/app.js": "572b1ac57a55915b579ef23e4475b0b39ed6e444c1cbbfc8098575f1ef3088d8",
+    "server.mjs": "9c7ffefddfbe8c210677adbf439a7df38508f131f23cc03c1a96374f2edbd2be",
+    "lib/components.mjs": "999f4b9f9dfc9608e23bb674b4e2986578f5bd10923a951e79342a8bda4c5b51",
+    "lib/mcp.mjs": "65acb5a14121ed732be4685ab2d982f68b8faeab6836f0ef106ae4310ef2655b",
+    "public/index.html": "58b8eda6ec5a832e07fe6c70503a0a2d8f8608dcbe7c96958fd3498aa8947554"
+  },
+  "phase": "04-final-numeric-delta",
+  "observedBundles": [
+    "/assets/app.8f96f4fc8bdf95d3334d46812e79a70ab713c9c6416999ed0fe866e0fa852f8a.css",
+    "/assets/app.60673d23764dea8501abc7173717b035633297671df90a42617b4de92ebfda88.js"
+  ],
+  "redaction": "Only fictional isolated test data. Runtime account identifiers, credentials, cookies, bearer tokens, private-preview IDs and URLs, local ports and data directories omitted."
+}

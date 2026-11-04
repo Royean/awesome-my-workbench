@@ -1,0 +1,243 @@
+{
+  "executor": "/root/component_acceptance",
+  "checks": [
+    {
+      "name": "UI adds composable fourth block",
+      "ok": true
+    },
+    {
+      "name": "UI tone and density reach actual renderer",
+      "ok": true
+    },
+    {
+      "name": "UI custom accent survives validated preview",
+      "ok": true
+    },
+    {
+      "name": "new pending count block binds real future task",
+      "ok": true
+    },
+    {
+      "name": "changing source evaluates selected workbench",
+      "ok": true
+    },
+    {
+      "name": "incompatible source fields normalize to supported bindings",
+      "ok": true
+    },
+    {
+      "name": "placement 409 preserves mobile draft",
+      "ok": true
+    },
+    {
+      "name": "conflicting placement did not partially save",
+      "ok": true
+    },
+    {
+      "name": "placement reload asks before discarding unsaved device draft",
+      "ok": true
+    },
+    {
+      "name": "explicit reload reads current mobile state",
+      "ok": true
+    },
+    {
+      "name": "mobile save preserves concurrent desktop placement",
+      "ok": true
+    },
+    {
+      "name": "placement history creates version and restores instance",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow finance 390",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "source badge remains explicit finance 390",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved finance 390",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow travel 390",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "source badge remains explicit travel 390",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved travel 390",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow reading 390",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "source badge remains explicit reading 390",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved reading 390",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow other 390",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "doc": 390
+      }
+    },
+    {
+      "name": "source badge remains explicit other 390",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved other 390",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow finance 1440",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "source badge remains explicit finance 1440",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved finance 1440",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow travel 1440",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "source badge remains explicit travel 1440",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved travel 1440",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow reading 1440",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "source badge remains explicit reading 1440",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved reading 1440",
+      "ok": true
+    },
+    {
+      "name": "reused component no overflow other 1440",
+      "ok": true,
+      "detail": {
+        "w": 1440,
+        "doc": 1440
+      }
+    },
+    {
+      "name": "source badge remains explicit other 1440",
+      "ok": true
+    },
+    {
+      "name": "target theme preserved other 1440",
+      "ok": true
+    },
+    {
+      "name": "reader full-screen independent of component CSS",
+      "ok": true,
+      "detail": {
+        "w": 390,
+        "h": 844,
+        "top": 0,
+        "r": "0px"
+      }
+    },
+    {
+      "name": "reader night theme works",
+      "ok": true
+    },
+    {
+      "name": "reader focus mode works",
+      "ok": true
+    },
+    {
+      "name": "reader next poem works",
+      "ok": true
+    },
+    {
+      "name": "reader returns to shelf",
+      "ok": true
+    },
+    {
+      "name": "MCP preview-save retries are idempotent and unpublished",
+      "ok": true
+    },
+    {
+      "name": "revoked MCP token cannot manage components",
+      "ok": true
+    },
+    {
+      "name": "regression and management do not alter health records",
+      "ok": true
+    },
+    {
+      "name": "regression no browser uncaught errors",
+      "ok": true,
+      "detail": []
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "hashes": {
+    "public/components.js": "dbb6a60489567f2ea12edd205cbc0081c30786c816a930f9d9e0c633aeee7d23",
+    "public/components.css": "b2a5d1088cb4ce990489135bdecb1f3b84e7567ba7b44296317a1a465d4a2b4e",
+    "public/component-card.js": "484191b178decdc6bf34f035e285429aa922a3617ba55b246647a50f2319e960",
+    "public/component-schema.js": "14821dc7f9148db7bcb3c211a1f0657775d7f39bd1248d267a504c64fc5a72e5",
+    "public/app.js": "572b1ac57a55915b579ef23e4475b0b39ed6e444c1cbbfc8098575f1ef3088d8",
+    "server.mjs": "9c7ffefddfbe8c210677adbf439a7df38508f131f23cc03c1a96374f2edbd2be",
+    "lib/components.mjs": "c1be8b3f5191db035b65338404d75fe44c8c9e47aca72a0a1697831188d5a75b",
+    "lib/mcp.mjs": "65acb5a14121ed732be4685ab2d982f68b8faeab6836f0ef106ae4310ef2655b",
+    "public/index.html": "58b8eda6ec5a832e07fe6c70503a0a2d8f8608dcbe7c96958fd3498aa8947554"
+  },
+  "phase": "03-final-regression",
+  "observedBundles": [
+    "/assets/app.8f96f4fc8bdf95d3334d46812e79a70ab713c9c6416999ed0fe866e0fa852f8a.css",
+    "/assets/app.60673d23764dea8501abc7173717b035633297671df90a42617b4de92ebfda88.js"
+  ],
+  "redaction": "Only fictional isolated test data. Runtime account identifiers, credentials, cookies, bearer tokens, private-preview IDs and URLs, local ports and data directories omitted."
+}

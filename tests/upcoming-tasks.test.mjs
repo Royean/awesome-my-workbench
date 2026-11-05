@@ -1,3 +1,4 @@
+import {institutionMark} from '../public/provider-ui.js';
 import {latestHealthRecord,healthRecordDate,healthRecordStatus} from '../public/latest-health.js';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -7,7 +8,7 @@ import vm from 'node:vm';
 const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
 const renderSource=source.slice(source.indexOf('function taskRows('),source.indexOf('function detail('));
 function render(items,today='2026-12-31',layoutOptions={}){
- const context=vm.createContext({items,today,layoutUI:{options:id=>layoutOptions[id]||{}},latestHealthRecord,healthRecordDate,healthRecordStatus,settings:{},metricType:'weight',metricNames:{weight:'Weight',sleep:'Sleep',heart:'Heart'},units:{weight:'kg'},aiTag:()=>'',byKind:kind=>items.filter(x=>x.kind===kind),sorted:a=>a,
+ const context=vm.createContext({institutionMark,items,today,layoutUI:{options:id=>layoutOptions[id]||{}},latestHealthRecord,healthRecordDate,healthRecordStatus,settings:{},metricType:'weight',metricNames:{weight:'Weight',sleep:'Sleep',heart:'Heart'},units:{weight:'kg'},aiTag:()=>'',byKind:kind=>items.filter(x=>x.kind===kind),sorted:a=>a,
   esc:v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
   icon:()=>'',catClass:()=>'',dateLabel:d=>d,quick:{launcher:()=>''},stats:()=>'',medical:{todayCard:()=>''},trendCard:()=>'',empty:(kind,message)=>`empty:${kind}:${message}`});
  return vm.runInContext(renderSource+'\ndashboard()',context);

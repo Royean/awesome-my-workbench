@@ -7,9 +7,9 @@
 ## 版本与结论
 
 - 基线：`eba883a34592f87cf8eed488634ce6c047bc0adf`。
-- 对象：`/tmp/aw-finance-capture` 的实际未提交差异及新增文件，包含后端、网页、Android、测试、构建与新增 Android CI；不是仅阅读作者说明或测试结果。
+- 对象：`/tmp/aw-finance-capture` 的实际差异及新增文件，包含后端、网页、Android、测试、构建与新增 Android CI；初评时为未提交工作树，现对应实现提交 `9b422d62473e886b6ffe8a12c1a13cfa094d50ec`。不是仅阅读作者说明或测试结果。
 - 最终结论：已复核下列五项问题的修复，包括404队列恢复和A→B→A账号回访的运动来源历史。当前代码评审范围内无仍待处理的可复现阻断缺陷，可进入协调者的提交/PR及独立验收交接。真实系统数据源、真实通知模板、后台限制等仍须按验收报告保留待验证。
-- 源输入指纹：对相对基线的修改文件和未跟踪新增文件，排除 `docs/` 与生成目录 `public/assets/`，按路径排序后逐文件计算 SHA-256，组成 `hash␠␠path\n` 清单，共 37 文件；清单 SHA-256 为 `9ceb636b54ff7bde334736640c44590f273e514a64df7edf21d8481a2da5969c`。临时原始清单为 `/tmp/phone-capture-review-source-sha256.txt`。此指纹明确不覆盖后续验收报告修改；源码若变化应重新核对受影响结论。最终源提交由协调者提交后补入交接记录。
+- 原实现源输入指纹：对相对基线的修改文件和未跟踪新增文件，排除 `docs/` 与生成目录 `public/assets/`，按路径排序后逐文件计算 SHA-256，组成 `hash␠␠path\n` 清单，共 37 文件；清单 SHA-256 为 `9ceb636b54ff7bde334736640c44590f273e514a64df7edf21d8481a2da5969c`。临时原始清单为 `/tmp/phone-capture-review-source-sha256.txt`。后续单独的 CI 环境修复指纹见下方补充；两者均不覆盖验收报告修改，源码变化应重新核对受影响结论。
 - 已独立核对最终交接 APK 字节 SHA-256：主APK `1f4148b63827cf67e67881f528fe79cb2477233c841ba02f19c4bd711c0ddc6e`，测试APK `1dc9d21afff60e614236c77ae67f5271fea3e15acf95c49fa31d01f4a78f3753`。本评审没有重新构建或操作设备，不据此宣称真机验证完成。
 
 关键源文件 SHA-256：
@@ -26,6 +26,12 @@
 | `CaptureCoordinator.kt` | `1fdc2dfa2cb006bab48d40b40cccd077e371c8b9e910638fa41c9e1c3faeda3b` |
 
 Android 文件均位于 `android/app/src/main/java/dev/awesome/myworkbench/`。
+
+## CI 环境修复补充复核
+
+2026-11-05，独立评审者 `/root/capture_review` 复核提交 `abc9f5f11bcf6a401bce773ef26ad197273a7c9f`：实际差异仅为 `.github/workflows/android.yml:25` 增加 `android-actions/setup-android@v4`，位于 JDK 安装之后、调用 `sdkmanager` 之前。该 action 的[官方 README](https://github.com/android-actions/setup-android/blob/main/README.md)说明其安装 Android SDK 命令行工具并将包含 sdkmanager 的目录加入 PATH，针对已报告的远端 `sdkmanager` 缺失失败，修复位置与作用相符。仓库读取权限、后续 SDK36/build-tools36 安装及 debug 构建/测试步骤均保持原样；未发现新增阻断问题。
+
+对该提交的不可变 Git 树重新计算相同范围的 37 文件清单，SHA-256 为 `aa06b0317f7095febe1779b74bfa81ac71b1198fb62a5631da0706dec9b29c99`（临时清单 `/tmp/phone-capture-review-source-sha256-ci.txt`）；workflow 文件 SHA-256 为 `b2757d79adb4d5934ecae8916b7d0422dc1e64b782b5d23510a2dbf390762e7f`。将该文件指纹替换回原值后，清单严格匹配原实现指纹，确认此次没有运行时代码变化。因此沿用原运行时验证，本次只做 CI 定点复核；远端 Actions 是否实际通过由协调者读取运行结果后另记。本评审未执行远端工作流。
 
 ## 问题、影响与修复复核
 

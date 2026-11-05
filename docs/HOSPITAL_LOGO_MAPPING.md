@@ -40,3 +40,5 @@ node scripts/export-hospital-logo-map.mjs /absolute/path/hospitals.sqlite public
 ## 验证结果
 
 构建成功；作者全套 Node 测试 310/310 通过；独立离线 SQLite/解析映射 7 项及真实隔离 Chrome 浏览器 8 组通过。新增导出字段不含完整医院详情或私人就诊数据。图像来源和批准依据见上文及独立报告。
+
+主分支 PR #69 资产总览合入后，基于3516912解决唯一index构建入口冲突并重建，功能提交f2b50fa；当前JS71deef1892cb911ef7ce1bc92d7b1d9b0aed53e6ab0370b4a03aad7227856f3c，作者全套323/323通过，独立7项+8组复测通过。

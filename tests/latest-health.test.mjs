@@ -1,3 +1,4 @@
+import {institutionMark} from '../public/provider-ui.js';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -30,7 +31,7 @@ test('date labels handle Shanghai-provided day across year and leap-day boundari
 
 const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
 function dashboard(items){
- const ctx=vm.createContext({items,today:'2026-01-01',settings:{},layoutUI:{options:()=>({})},metricType:'weight',
+ const ctx=vm.createContext({institutionMark,items,today:'2026-01-01',settings:{},layoutUI:{options:()=>({})},metricType:'weight',
   metricNames:{weight:'体重',sleep:'睡眠',heart:'心率'},units:{weight:'kg'},latestHealthRecord,healthRecordDate,healthRecordStatus,
   sorted:a=>[...a].sort((a,b)=>b.date.localeCompare(a.date)),byKind:k=>items.filter(x=>x.kind===k),
   esc:v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
@@ -57,7 +58,7 @@ test('empty classes have their own state; rendered record text remains escaped',
 test('range with no measurements retains an explicitly dated latest value instead of a blank graph',()=>{
  const chartSource=source.slice(source.indexOf('function chart('),source.indexOf('function taskRows('));
  const records=[{kind:'metric',type:'weight',date:'2025-10-28',value:65,unit:'kg'}];
- const ctx=vm.createContext({items:records,today:'2026-01-01',range:14,metricType:'weight',metricNames:{weight:'体重'},units:{weight:'kg'},
+ const ctx=vm.createContext({institutionMark,items:records,today:'2026-01-01',range:14,metricType:'weight',metricNames:{weight:'体重'},units:{weight:'kg'},
   latestHealthRecord,healthRecordDate,byKind:()=>records,esc:String});
  const html=vm.runInContext(chartSource+'\nchart()',ctx);
  assert.match(html,/近 14 天暂无体重记录/);assert.match(html,/最近一次：65 kg/);assert.match(html,/2025-10-28/);

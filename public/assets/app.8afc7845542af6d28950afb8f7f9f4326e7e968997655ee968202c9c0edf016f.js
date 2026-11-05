@@ -164,10 +164,180 @@ return { normalizeHealthRoute };
 })();
 
 const __workbenchModule3 = (() => {
-// institutions.js
+// hospital-logo-map.js
 
-// Public institution directory. Logos are official assets; empty logo uses a neutral placeholder.
-const institutions = [
+// Generated from the reviewed hospital catalog. Run scripts/export-hospital-logo-map.mjs.
+const hospitalLogoMappings = [
+  {
+    "id": "beijing-union",
+    "catalogHospitalId": "ahospital-05bb57c0a967b204af2f",
+    "name": "北京协和医院",
+    "aliases": [
+      "协和医院",
+      "中国医学科学院北京协和医院",
+      "北京協和醫院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-5718522e07d50b8bac45024c528c6599e9026e88b3c3c610f22c572fa26c3fab.png",
+    "website": "https://www.pumch.cn/",
+    "sourceUrl": "https://www.pumch.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/beijing-union.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "nanjing-gulou",
+    "catalogHospitalId": "ahospital-19eb6ebd3f30af32360d",
+    "name": "南京鼓楼医院",
+    "aliases": [
+      "鼓楼医院",
+      "南京大学医学院附属鼓楼医院"
+    ],
+    "kind": "hospital",
+    "city": "南京",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-45f6ccaa3a915eba0e16bb6c9e9de5b80a364d4f123fb4dcb794061ac10f8389.png",
+    "website": "https://www.njglyy.com/",
+    "sourceUrl": "https://www.njglyy.com/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/nanjing-gulou.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "zju-first",
+    "catalogHospitalId": "ahospital-4ce07952d12023fe99b5",
+    "name": "浙江大学医学院附属第一医院",
+    "aliases": [
+      "浙江省第一医院",
+      "浙大一院",
+      "浙大一附院",
+      "浙一医院"
+    ],
+    "kind": "hospital",
+    "city": "杭州",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-4225c4116cb2d2d77dbd893dddb258370370938d59f2f9385932f7a6048c3eed.png",
+    "website": "https://www.zy91.com/",
+    "sourceUrl": "https://www.zy91.com/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/zju-first.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "wuhan-tongji",
+    "catalogHospitalId": "ahospital-542cee44119209bea1ea",
+    "name": "华中科技大学同济医学院附属同济医院",
+    "aliases": [
+      "华中科技大学同济医学院附属同济医院",
+      "武汉同济医院"
+    ],
+    "kind": "hospital",
+    "city": "武汉",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-80164fcceeb33b9dbcd0362bc632d73060da3acadbb3ac2dd2c44473963e77d8.png",
+    "website": "https://www.tjh.com.cn/",
+    "sourceUrl": "https://www.tjh.com.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-tongji.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "sichuan-people",
+    "catalogHospitalId": "ahospital-bd493e5d3528c4138233",
+    "name": "四川省人民医院",
+    "aliases": [
+      "四川省医学科学院·四川省人民医院"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-886d7bcdb3ed64ebff33a3f735eb9b11633e747bbb4384382799339fea5423c9.png",
+    "website": "https://www.samsph.cn/",
+    "sourceUrl": "https://www.samsph.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/sichuan-people.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "fudan-zhongshan",
+    "catalogHospitalId": "ahospital-f20521e51cc2d0df1ac5",
+    "name": "复旦大学附属中山医院",
+    "aliases": [
+      "上海中山医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-a1ff5860166c96432229a97f41faac67ad41931c59df7cbad7ca420000655ab6.png",
+    "website": "https://www.zs-hospital.sh.cn/",
+    "sourceUrl": "https://www.zs-hospital.sh.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/fudan-zhongshan.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "west-china",
+    "catalogHospitalId": "ahospital-f9e10479da0c47e1fec1",
+    "name": "四川大学华西医院",
+    "aliases": [
+      "四川大学华西临床医学院",
+      "华西医院"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-7bb38d414abc61175d76804a1a759a663c1325528c8d060792b9ff234f1ba700.png",
+    "website": "https://www.wchscu.cn/",
+    "sourceUrl": "https://www.wchscu.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/west-china.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "wuhan-union",
+    "catalogHospitalId": "ahospital-fc1f8495fcd0bd0ae1ee",
+    "name": "华中科技大学同济医学院附属协和医院",
+    "aliases": [
+      "华中科技大学同济医学院附属协和医院",
+      "武汉协和医院"
+    ],
+    "kind": "hospital",
+    "city": "武汉",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-05218ca86dbf8269d652d81b6e6c13daa0d403e48f2b1094e476ba65875d06e0.png",
+    "website": "https://www.whuh.com/",
+    "sourceUrl": "https://www.whuh.com/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-union.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "xinqiao-dental",
+    "catalogHospitalId": "supplement-xinqiao-dental",
+    "name": "新桥口腔",
+    "aliases": [
+      "新桥口腔医院",
+      "成都新桥口腔医院"
+    ],
+    "kind": "hospital",
+    "city": "",
+    "scope": "brand",
+    "cities": [
+      "成都",
+      "西宁",
+      "德阳",
+      "自贡"
+    ],
+    "province": "多省市品牌",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-05"
+  }
+];
+return { hospitalLogoMappings };
+})();
+
+const __workbenchModule4 = (() => {
+// institutions.js
+const { hospitalLogoMappings } = __workbenchModule3;
+// Reviewed catalog mappings extend the legacy directory while retaining existing stable IDs.
+const curatedInstitutions = [
   {
     "id": "sichuan-people",
     "name": "四川省人民医院",
@@ -535,22 +705,28 @@ const institutions = [
     "verifiedAt": "2026-11-01"
   }
 ];
+const institutions = [...curatedInstitutions.filter(p=>!hospitalLogoMappings.some(m=>m.id===p.id)),...hospitalLogoMappings];
 return { institutions };
 })();
 
-const __workbenchModule4 = (() => {
+const __workbenchModule5 = (() => {
 // provider-ui.js
-const { institutions } = __workbenchModule3;
+const { institutions } = __workbenchModule4;
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
 const names=p=>[p.name,...(p.aliases||[])];
+const matchesName=(p,hospital)=>names(p).some(name=>{
+ const key=normalize(name);if(key===hospital)return true;
+ // Brand marks may cover a named branch, without claiming a specific clinic registration.
+ return p.scope==='brand'&&hospital.startsWith(key)&&/^[（(][^()（）]{1,50}[）)]$/.test(hospital.slice(key.length));
+});
 const hospitalBuildingIcon=()=>`<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#668371" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M7 10H4a1 1 0 0 0-1 1v10m14-11h3a1 1 0 0 1 1 1v10M2 21h20M10 21v-4h4v4M12 6v4m-2-2h4M10 13h.01M14 13h.01M4.5 14h.01M4.5 17h.01M19.5 14h.01M19.5 17h.01"/></svg>`;
 function resolveInstitution(visit){
- if(visit.hospitalId)return institutions.find(p=>p.id===visit.hospitalId)||null;
- const hospital=normalize(visit.hospital);if(!hospital)return null;
  const city=normalize(visit.city).replace(/市$/,'');
+ if(visit.hospitalId){const p=institutions.find(p=>p.id===visit.hospitalId)||null;return p?.scope==='brand'&&city&&!(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city)?null:p;}
+ const hospital=normalize(visit.hospital);if(!hospital)return null;
  const ambiguous=new Set(['省医院','省人民医院','人民医院','协和医院','中山医院','同济医院','鼓楼医院']);
- const matches=institutions.filter(p=>names(p).some(name=>normalize(name)===hospital));
- const candidates=city?matches.filter(p=>!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
+ const matches=institutions.filter(p=>matchesName(p,hospital));
+ const candidates=city?matches.filter(p=>p.scope==='brand'?(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city):!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
  if(!city&&ambiguous.has(hospital))return null;
  return candidates.length===1?candidates[0]:null;
 }
@@ -569,7 +745,7 @@ if(typeof document!=='undefined')document.addEventListener('error',event=>{if(ev
 return { resolveInstitution, institutionMark, institutionFields, bindInstitutionPicker };
 })();
 
-const __workbenchModule5 = (() => {
+const __workbenchModule6 = (() => {
 // request.js
 
 // JSON API calls never populate the browser cache or automatically retry writes.
@@ -642,7 +818,7 @@ function aiTag(item) {
 return { fetchJSON, showFieldError, aiWhen, aiTagInfo, aiTag };
 })();
 
-const __workbenchModule6 = (() => {
+const __workbenchModule7 = (() => {
 // asset-lifecycle.js
 
 // Pure read adapters shared by the server and browser. Never mutate stored records.
@@ -703,9 +879,9 @@ function assetDeadline(item,today){
 return { enrichAssetHolding, assetGroup, assetDeadline };
 })();
 
-const __workbenchModule7 = (() => {
+const __workbenchModule8 = (() => {
 // assets.js
-const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule6;
+const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule7;
 const ASSET_CATEGORIES={cash:'现金',fund:'基金 / ETF',stock:'股票',server:'服务器',domain:'域名',property:'房产',vehicle:'车辆',equipment:'设备',subscription:'服务 / 订阅',other:'其他资产'};
 const ASSET_PAGES={dashboard:'资产总览',accounts:'账户',financial:'金融资产',fixed:'固定资产',renewals:'到期与续费',holdings:'全部资产',transactions:'流水',liabilities:'负债',history:'历史快照',documents:'资料',tasks:'待办',notes:'备忘',mine:'我的'};
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
@@ -774,7 +950,7 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
 return { assetValue, assetProfit, calculateAssetTotals, assetRenewalCost, assetRowsForPage, createAssetsUI };
 })();
 
-const __workbenchModule8 = (() => {
+const __workbenchModule9 = (() => {
 // travel-map.js
 
 // Local Leaflet code; third-party tiles are requested only after an explicit UI action.
@@ -835,9 +1011,9 @@ function mountTravelMap(container,{points=[],onPick}={}){
 return { travelMapPoints, mountTravelMap };
 })();
 
-const __workbenchModule9 = (() => {
+const __workbenchModule10 = (() => {
 // travel.js
-const { mountTravelMap } = __workbenchModule8;
+const { mountTravelMap } = __workbenchModule9;
 const TRAVEL_PAGES={dashboard:'我的旅行',trip:'每日行程',places:'地点地图',bookings:'预订',checklist:'出发准备',documents:'票据资料',mine:'我的'};
 const TRIP_STATUS={planned:'计划中',active:'旅行中',completed:'已结束',cancelled:'已取消'};
 const STOP_CATEGORIES={attraction:'景点',food:'餐饮',stay:'住宿',transport:'交通',other:'其他'};
@@ -920,7 +1096,7 @@ function createTravel(ctx){
 return { TRAVEL_PAGES, TRIP_STATUS, STOP_CATEGORIES, BOOKING_TYPES, travelMapUrl, travelSafeUrl, travelDays, travelSorted, createTravel };
 })();
 
-const __workbenchModule10 = (() => {
+const __workbenchModule11 = (() => {
 // reading.js
 
 const READING_TYPES={book:'书本',paper:'论文',article:'文章',report:'报告',other:'其他'};
@@ -952,7 +1128,7 @@ function createReading(ctx){
   const total=days.reduce((sum,d)=>sum+d.minutes,0),maximum=Math.max(1,...days.map(d=>d.minutes));
   return `<div class="studio-reading-overview"><section class="card studio-reading-continue"><div class="card-head"><h2 class="card-title">继续阅读</h2><span class="reading-muted">${all.filter(b=>b.status==='reading').length} 本在读</span></div><div class="studio-reading-feature">${active?`${cover(active)}<div><h3>${esc(active.title)}</h3><p>${esc(active.author||'作者未填写')}</p>${progress(active)}${btn('继续阅读','reading-read:'+active.id,'primary','arrow')}</div>`:`<div class="studio-reading-start">${icon('file',32)}<h3>从想读的那一页开始</h3><p>导入材料，或从下方书架选择一本书。</p>${btn('导入材料','original-upload','primary','plus')}</div>`}</div></section><section class="card studio-reading-week"><div class="card-head"><h2 class="card-title">本周阅读</h2><span class="reading-muted">近7天</span></div><div class="studio-reading-minutes"><strong>${total}</strong><span>分钟 · 已记录</span></div><div class="studio-reading-bars" aria-label="近7天已记录阅读时长">${days.map(d=>`<div title="${d.date} · ${d.minutes}分钟"><small>${d.minutes||'—'}</small><span class="studio-reading-bar-track"><i style="--bar-height:${d.minutes/maximum*100}%"></i></span><span>周${d.label}</span></div>`).join('')}</div></section><aside class="studio-reading-side"><section class="card"><div class="card-head"><h2 class="card-title">最近笔记</h2>${btn('全部','nav:entries','text-btn','arrow')}</div><div class="studio-reading-notes">${notes.map(e=>`<button data-action="reading-edit:${esc(e.id)}"><span class="reading-badge">${e.quote?'摘录':'想法'}</span><p>${esc(e.quote||e.note)}</p><small>${esc(find(e.bookId)?.title||e.date)}</small></button>`).join('')||'<p class="studio-card-empty">读到喜欢的段落，留下一句话。</p>'}</div></section><section class="card"><div class="card-head"><h2 class="card-title">阅读计划</h2>${btn('添加','shell-add:task','text-btn','plus')}</div><div class="studio-reading-plans">${plans.map(t=>`<button data-action="shell-edit:${esc(t.id)}"><span>${icon('calendar',16)}</span><div><strong>${esc(t.title)}</strong><small>${esc(t.date)}</small></div>${icon('arrow',14)}</button>`).join('')||'<p class="studio-card-empty">给下一次阅读留一点时间。</p>'}</div></section></aside></div>`;
  }
- function shelf(){return `${shelfOverview()}<section id="reading-dropzone" class="reading-dropzone" aria-label="拖入PDF论文导入书架"><p class="reading-drop-hint">${icon('file',18)} 拖入一份 PDF 论文到这里，确认后加入书架 · 最大 10MB</p><div class="reading-toolbar"><label class="reading-search">${icon('search',17)}<input id="reading-search" aria-label="搜索书名或作者" placeholder="搜索书名、作者或备注…" value="${esc(query)}"></label><select id="reading-type-filter" aria-label="材料类型"><option value="all">全部类型</option>${Object.entries(READING_TYPES).map(([v,t])=>`<option value="${v}" ${materialType===v?'selected':''}>${t}</option>`).join('')}</select><select id="reading-status-filter" aria-label="阅读状态"><option value="all">全部状态</option>${Object.entries(READING_STATUS).map(([v,t])=>`<option value="${v}" ${status===v?'selected':''}>${t}</option>`).join('')}</select>${btn('导入材料','original-upload','primary','plus')}${btn('添加书目','reading-add:reading_book','','plus')}</div><div id="reading-shelf">${shelfRows()}</div></section>`;}
+ function shelf(){return `${shelfOverview()}<section id="reading-dropzone" class="reading-dropzone" aria-label="导入阅读材料"><p class="reading-drop-hint">${icon('file',18)} <span class="reading-drop-desktop">拖入一份 PDF 论文到这里，确认后加入书架 · 最大 10MB</span><span class="reading-drop-mobile">通过「导入材料」选择文件，确认后加入书架 · 最大 10MB</span></p><div class="reading-toolbar"><label class="reading-search">${icon('search',17)}<input id="reading-search" aria-label="搜索书名或作者" placeholder="搜索书名、作者或备注…" value="${esc(query)}"></label><select id="reading-type-filter" aria-label="材料类型"><option value="all">全部类型</option>${Object.entries(READING_TYPES).map(([v,t])=>`<option value="${v}" ${materialType===v?'selected':''}>${t}</option>`).join('')}</select><select id="reading-status-filter" aria-label="阅读状态"><option value="all">全部状态</option>${Object.entries(READING_STATUS).map(([v,t])=>`<option value="${v}" ${status===v?'selected':''}>${t}</option>`).join('')}</select>${btn('导入材料','original-upload','primary','plus')}${btn('添加书目','reading-add:reading_book','','plus')}</div><div id="reading-shelf">${shelfRows()}</div></section>`;}
  function records(){const rows=entries().filter(x=>(bookFilter==='all'||x.bookId===bookFilter)&&(!entryQuery||[x.title,x.quote,x.note,find(x.bookId)?.title].join(' ').toLocaleLowerCase().includes(entryQuery.toLocaleLowerCase())));return `<div class="reading-toolbar"><label class="reading-search">${icon('search',17)}<input id="reading-entry-search" aria-label="搜索阅读记录和摘录" placeholder="搜索书名、摘录或想法…" value="${esc(entryQuery)}"></label><select id="reading-book-filter" aria-label="按书籍筛选记录"><option value="all">全部书籍</option>${books().map(b=>`<option value="${esc(b.id)}" ${bookFilter===b.id?'selected':''}>${esc(b.title)}</option>`).join('')}</select>${btn('写笔记','reading-add:reading_entry','primary','plus')}${btn('记摘录','reading-excerpt')}</div><section class="card">${rows.map(entryRow).join('')||empty('还没有笔记','阅读时的摘录、想法和问答都保存在这里。',books().length?'reading-add:reading_entry':'reading-add:reading_book',books().length?'添加记录':'先添加一本书')}</section>`;}
  function render(){ensure();return `<div class="reading-content">${ctx.space==='demo'?'<p class="reading-demo">示例空间 · 体验记录与个人阅读分别保存</p>':''}${ctx.page==='entries'?records():ctx.page==='documents'?`<div class="reading-section-head">${btn('返回书架','nav:books','text-btn','arrow')}</div>`+ctx.originals.render({title:'导入与管理阅读文件'}):shelf()}</div>`;}
  function bind(){const dropzone=document.querySelector('#reading-dropzone'),boundScope=snapshot();if(dropzone){dropzone.ondragover=e=>{e.preventDefault();if(current(boundScope)){dropzone.classList.add('dragover');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';}};dropzone.ondragleave=e=>{if(!dropzone.contains(e.relatedTarget))dropzone.classList.remove('dragover');};dropzone.ondrop=e=>{e.preventDefault();dropzone.classList.remove('dragover');if(!current(boundScope)||!dropzone.isConnected)return ctx.toast('工作台或账号已变化，请重新打开');ctx.originals.importFiles(e.dataTransfer?.files);};}const typeFilter=document.querySelector('#reading-type-filter');if(typeFilter)typeFilter.onchange=e=>{materialType=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const entrySearch=document.querySelector('#reading-entry-search');if(entrySearch)entrySearch.oninput=e=>{entryQuery=e.target.value;const start=e.target.selectionStart;ctx.render();const fresh=document.querySelector('#reading-entry-search');fresh?.focus({preventScroll:true});fresh?.setSelectionRange(start,start);};const search=document.querySelector('#reading-search');if(search)search.oninput=e=>{query=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const filter=document.querySelector('#reading-status-filter');if(filter)filter.onchange=e=>{status=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const book=document.querySelector('#reading-book-filter');if(book)book.onchange=e=>{bookFilter=e.target.value;ctx.render();};if(ctx.page==='documents')ctx.originals.bind();ctx.previews?.mount();}
@@ -972,9 +1148,9 @@ function createReading(ctx){
 return { READING_TYPES, READING_STATUS, READING_PAGES, readingProgress, readingBooks, createReading };
 })();
 
-const __workbenchModule11 = (() => {
+const __workbenchModule12 = (() => {
 // originals.js
-const { aiTag } = __workbenchModule5;
+const { aiTag } = __workbenchModule6;
 // One metadata browser for every workbench. Original bytes stay in the existing same-origin viewer.
 function originalType(file){const mime=String(file?.mime||'');return mime==='application/pdf'?'pdf':mime.startsWith('image/')?'image':mime==='text/plain'?'text':mime.startsWith('audio/')?'audio':'other';}
 function filterOriginals(files,{query='',fileType='all',from='',to='',relation='all',status='all'}={},relations={}){const q=query.trim().toLocaleLowerCase();return files.filter(f=>{const r=relations[f.id]||{};return (!q||[f.title,f.name,f.note,r.title].filter(Boolean).join(' ').toLocaleLowerCase().includes(q))&&(fileType==='all'||originalType(f)===fileType)&&(!from||f.date>=from)&&(!to||f.date<=to)&&(relation==='all'||(relation==='unassigned'?!r.id:r.id===relation))&&(status==='all'||(status==='linked')===!!r.linked);}).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.time||'').localeCompare(a.time||'')||b.id.localeCompare(a.id));}
@@ -1009,12 +1185,12 @@ function createOriginals(ctx){
 return { originalType, filterOriginals, createOriginals };
 })();
 
-const __workbenchModule12 = (() => {
+const __workbenchModule13 = (() => {
 // shell.js
-const { createAssetsUI } = __workbenchModule7;
-const { createTravel } = __workbenchModule9;
-const { createReading } = __workbenchModule10;
-const { createOriginals } = __workbenchModule11;
+const { createAssetsUI } = __workbenchModule8;
+const { createTravel } = __workbenchModule10;
+const { createReading } = __workbenchModule11;
+const { createOriginals } = __workbenchModule12;
 function workbenchTheme(value,type='health'){const color=/^#[0-9a-f]{6}$/i.test(value||'')?value:(type==='finance'?'#A65343':type==='travel'?'#356A98':type==='reading'?'#74634F':'#2C6B51');const rgb=[1,3,5].map(i=>parseInt(color.slice(i,i+2),16));const mix=(weight)=>'#'+rgb.map(v=>Math.round(v*(1-weight)+255*weight).toString(16).padStart(2,'0')).join('');const light=rgb.reduce((n,v,i)=>n+[.2126,.7152,.0722][i]*(v/255<=.04045?v/255/12.92:((v/255+.055)/1.055)**2.4),0);return {'--theme-accent':color,'--theme-soft':mix(.92),'--theme-border':mix(.72),'--theme-ink':light>.15?'#30332F':color,'--theme-on-accent':light>.179?'#000000':'#FFFFFF','--theme-chart':light>.25?'#'+rgb.map(v=>Math.round(v*.55).toString(16).padStart(2,'0')).join(''):color,'--shell-accent':light>.15?'#30332F':color,'--shell-soft':mix(.92),'--shell-line':mix(.72),'--green':light>.15?'#30332F':color};}
 
 
@@ -1031,9 +1207,9 @@ function createShell(ctx){
  const current=()=>ctx.workbenches.find(w=>w.id===ctx.workbench)||{id:ctx.workbench,name:ctx.workbench==='health'?'健康':ctx.workbench==='finance'?'资产':ctx.workbench==='travel'?'旅行':ctx.workbench==='reading'?'阅读':'工作台',type:ctx.workbench==='health'?'health':ctx.workbench==='finance'?'finance':ctx.workbench==='travel'?'travel':ctx.workbench==='reading'?'reading':'other'};
  const description=w=>w.type==='health'?'就诊、饮食、锻炼与监测':w.type==='finance'?'账户、持仓、固定资产与财务资料':w.type==='travel'?'每日行程、地点、预订与出发准备':w.type==='reading'?'书架、阅读进度、摘录与阅读计划':'独立的资料、备忘与待办空间';
  function switcher(){const w=current();ctx.openDrawer(`<div class="shell-context">工作台和示例/个人空间分别管理</div><div class="workbench-options">${ctx.workbenches.map(x=>`<button class="workbench-option ${x.id===ctx.workbench?'selected':''}" data-action="shell-switch:${esc(x.id)}"><span class="workbench-symbol ${x.type}">${icon(x.type==='health'?'heart':x.type==='finance'?'activity':x.type==='travel'?'compass':x.type==='reading'?'file':'grid',21)}</span><span><strong>${esc(x.name)}</strong><small>${description(x)}</small></span>${x.id===ctx.workbench?icon('check',18):icon('arrow',15)}</button>`).join('')}</div><button class="new-workbench" data-action="shell-create">${icon('plus',18)}创建其他工作台</button><p class="shell-fine">切换后显示该工作台的记录。现有健康资料保留在健康工作台。</p>`,'切换工作台',`当前：${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}`);}
- function bottom(){const health=ctx.workbench==='health';const p=ctx.page;const finance=ctx.workbench==='finance',isTravel=ctx.workbench==='travel';const entries=health?[['dashboard','今天','grid',p==='dashboard'],['library','档案','file',['library','visit','meal','exercise','metric','file','task'].includes(p)],['capture','记录','plus',false],['day','回顾','calendar',p==='day'],['mine','我的','settings',['mine','settings'].includes(p)]]:finance?[['dashboard','总览','grid',['dashboard','history','holdings'].includes(p)],['financial','金融','activity',['financial','accounts','liabilities'].includes(p)],['fixed','固定','building',p==='fixed'],['renewals','事项','calendar',['renewals','tasks'].includes(p)],['mine','我的','settings',p==='mine']]:isTravel?[['dashboard','旅行','compass',p==='dashboard'],['trip','行程','calendar',['trip','places','bookings','documents'].includes(p)],['capture','添加','plus',false],['checklist','准备','task',p==='checklist'],['mine','我的','settings',['mine','notes','tasks'].includes(p)]]:ctx.workbench==='reading'?[['books','书架','file',['books','dashboard','documents'].includes(p)],['entries','笔记','file',p==='entries']]:[['dashboard','今天','grid',p==='dashboard'],['notes','备忘','file',p==='notes'],['capture','记录','plus',false],['tasks','待办','task',p==='tasks'],['mine','我的','settings',p==='mine']];return `<nav class="bottom-tabs" aria-label="底部导航">${entries.map(([route,label,ic,selected])=>`<button class="bottom-tab ${selected?'active':''} ${route==='capture'?'capture-tab':''}" data-action="${route==='capture'?'shell-capture':'nav:'+route}" ${selected?'aria-current="page"':''}><span>${icon(ic,22)}</span><small>${label}</small></button>`).join('')}</nav>`;}
+ function bottom(){const health=ctx.workbench==='health';const p=ctx.page;const finance=ctx.workbench==='finance',isTravel=ctx.workbench==='travel';const entries=health?[['dashboard','今天','grid',p==='dashboard'],['library','档案','file',['library','visit','meal','exercise','metric','file','task'].includes(p)],['capture','记录','plus',false],['day','回顾','calendar',p==='day'],['mine','我的','settings',['mine','settings'].includes(p)]]:finance?[['dashboard','总览','grid',['dashboard','history','holdings'].includes(p)],['financial','金融','activity',['financial','accounts','liabilities'].includes(p)],['fixed','固定','building',p==='fixed'],['renewals','事项','calendar',['renewals','tasks'].includes(p)],['mine','我的','settings',p==='mine']]:isTravel?[['dashboard','旅行','compass',p==='dashboard'],['trip','行程','calendar',['trip','places','bookings','documents'].includes(p)],['capture','添加','plus',false],['checklist','准备','task',p==='checklist'],['mine','我的','settings',['mine','notes','tasks'].includes(p)]]:ctx.workbench==='reading'?[['books','书架','file',['books','dashboard','documents'].includes(p)],['entries','笔记','file',p==='entries']]:[['dashboard','今天','grid',p==='dashboard'],['notes','备忘','file',p==='notes'],['capture','记录','plus',false],['tasks','待办','task',p==='tasks'],['mine','我的','settings',p==='mine']];return `<nav class="bottom-tabs" style="--tab-count:${entries.length}" aria-label="底部导航">${entries.map(([route,label,ic,selected])=>`<button class="bottom-tab ${selected?'active':''} ${route==='capture'?'capture-tab':''}" data-action="${route==='capture'?'shell-capture':'nav:'+route}" ${selected?'aria-current="page"':''}><span>${icon(ic,22)}</span><small>${label}</small></button>`).join('')}</nav>`;}
  function decorate(){const w=current();applyTheme(w);document.body.dataset.workbench=w.type;document.body.classList.toggle('mobile-workbench',true);const workspace=document.querySelector('.workspace');if(!workspace)return;
- const mobileHeader=`<header class="phone-topbar"><button class="phone-workbench-picker" data-action="shell-picker" aria-label="切换工作台，当前${esc(w.name)}"><span class="workbench-symbol ${w.type}">${icon(w.type==='health'?'heart':w.type==='finance'?'activity':w.type==='travel'?'compass':w.type==='reading'?'file':'grid',18)}</span><span>${esc(w.name)}<small>工作台</small></span><span class="picker-chevron">⌄</span></button><div class="phone-top-actions"><button class="space-chip ${ctx.space}" data-action="shell-spaces">${ctx.space==='demo'?'示例 · 虚构':'个人'}</button>${ctx.workbench==='reading'?`<button class="icon-btn" data-action="shell-workbench-settings" aria-label="工作台设置">${icon('settings',20)}</button>`:''}${ctx.workbench==='health'?`<button class="icon-btn" data-action="assistant" aria-label="健康助手，尚未连接模型">${icon('sparkles',21)}</button>`:''}</div></header>`;
+ const mobileHeader=`<header class="phone-topbar"><button class="phone-workbench-picker" data-action="shell-picker" aria-label="切换工作台，当前${esc(w.name)}"><span class="workbench-symbol ${w.type}">${icon(w.type==='health'?'heart':w.type==='finance'?'activity':w.type==='travel'?'compass':w.type==='reading'?'file':'grid',18)}</span><span class="phone-workbench-name"><small>我的工作台</small><strong>${esc(w.name)}</strong></span><span class="picker-chevron">⌄</span></button><div class="phone-top-actions"><button class="space-chip ${ctx.space}" data-action="shell-spaces">${ctx.space==='demo'?'示例 · 虚构':'个人'}</button><button class="phone-profile" data-action="nav:mine" aria-label="个人设置">${esc((ctx.settings.name||'Captain').slice(0,1))}</button></div></header>`;
  workspace.insertAdjacentHTML('afterbegin',mobileHeader);studioFrame(workspace,w);document.querySelector('#app').insertAdjacentHTML('beforeend',bottom());
  const sidebar=document.querySelector('.sidebar');if(sidebar&&!sidebar.querySelector('.desktop-workbench-picker'))sidebar.querySelector('.brand')?.insertAdjacentHTML('afterend',`<button class="desktop-workbench-picker" data-action="shell-picker">${icon(w.type==='health'?'heart':'grid',16)}${esc(w.name)}工作台<span>⌄</span></button>`);
  if(ctx.account?.enabled){const badge=document.querySelector('.local-badge');if(badge)badge.textContent='已登录 · 私有空间';const bottom=document.querySelector('.sidebar .sidebar-bottom');if(bottom&&!bottom.querySelector('[data-desktop-account]'))bottom.insertAdjacentHTML('afterbegin',`<button class="nav-btn" data-action="account-desktop" data-desktop-account>${icon('shield',18)}账号与安全</button>`);const footer=document.querySelector('.footer');if(footer)footer.innerHTML='<span>我的工作台</span><span>'+ (ctx.space==='demo'?'示例空间 · 与个人记录分开保存':'个人空间 · 仅当前账号可访问')+'</span>';}
@@ -1042,13 +1218,13 @@ function createShell(ctx){
  function studioFrame(workspace,w){
   const name=ctx.settings.name||'Captain';
   const date=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'long',day:'numeric',weekday:'long'}).format(new Date(ctx.today+'T12:00:00+08:00'));
-  workspace.insertAdjacentHTML('beforebegin',`<header class="studio-header"><button class="studio-brand" data-action="shell-picker" aria-label="切换工作台"><img class="studio-brand-icon" src="/app-icon.svg" alt="" width="42" height="42"><strong>我的工作台</strong></button><nav class="studio-workbenches" aria-label="工作台">${ctx.workbenches.map(x=>`<button data-action="shell-switch:${esc(x.id)}" class="${x.id===w.id?'active':''}" ${x.id===w.id?'aria-current="page"':''}>${esc(x.name)}</button>`).join('')}</nav><div class="studio-utilities"><button class="studio-user" data-action="nav:mine"><span class="avatar">${esc(name.slice(0,1))}</span><span>${esc(name)}</span>${icon('arrow',14)}</button></div></header>`);
+  workspace.insertAdjacentHTML('beforebegin',`<header class="studio-header"><button class="studio-brand" data-action="shell-picker" aria-label="切换工作台"><img class="studio-brand-icon" src="/app-icon.svg" alt="" width="42" height="42"><strong>我的工作台</strong></button><nav class="studio-workbenches" aria-label="工作台">${ctx.workbenches.map(x=>`<button data-action="shell-switch:${esc(x.id)}" class="${x.id===w.id?'active':''}" ${x.id===w.id?'aria-current="page"':''}>${esc(x.name)}</button>`).join('')}</nav><div class="studio-utilities"><button class="icon-btn" data-action="component-library" aria-label="AI组件库">${icon('grid',20)}</button><button class="studio-user" data-action="nav:mine"><span class="avatar">${esc(name.slice(0,1))}</span><span>${esc(name)}</span>${icon('arrow',14)}</button></div></header>`);
   const topbar=workspace.querySelector('.topbar');
   if(topbar){const label=topbar.querySelector('.breadcrumb,.workspace-label');if(label)label.innerHTML=`<div class="studio-date">${icon('calendar',18)}<span>${date}</span></div><div class="studio-greeting">你好，${esc(name)}</div>`;}
   const sidebar=document.querySelector('.sidebar');
   const routes=sidebar?[...sidebar.querySelectorAll('.nav-btn[data-action^="nav:"]')].filter(b=>b.dataset.action!=='nav:mine'):[];
   const main=workspace.querySelector('.main');
-  if(main){main.dataset.page=ctx.page;main.insertAdjacentHTML('afterbegin',`<nav class="studio-modules" aria-label="${esc(w.name)}模块">${routes.map(b=>`<button class="${b.classList.contains('active')?'active':''}" data-action="${esc(b.dataset.action)}" ${b.classList.contains('active')?'aria-current="page"':''}>${b.innerHTML}</button>`).join('')}<button class="studio-module-settings" data-action="shell-workbench-settings">${icon('settings',16)}工作台设置</button></nav>`);}
+  if(main){main.dataset.page=ctx.page;if(['dashboard','books'].includes(ctx.page))main.insertAdjacentHTML('afterbegin',`<div class="phone-context"><span>${date}</span><div class="phone-context-actions"><button data-action="component-library" aria-label="AI组件库">${icon('grid',14)}组件库</button><button data-action="shell-workbench-settings" aria-label="工作台设置">${icon('settings',14)}设置</button></div></div>`);main.insertAdjacentHTML('afterbegin',`<nav class="studio-modules" aria-label="${esc(w.name)}模块">${routes.map(b=>`<button class="${b.classList.contains('active')?'active':''}" data-action="${esc(b.dataset.action)}" ${b.classList.contains('active')?'aria-current="page"':''}>${b.innerHTML}</button>`).join('')}<button class="studio-module-settings" data-action="shell-workbench-settings">${icon('settings',16)}工作台设置</button></nav>`);}
  }
  function library(){const modules=[['visit','就诊管理','就诊、用药、报告与资料','visit'],['exercise','运动与锻炼','训练、收藏与身体感受','exercise'],['meal','饮食记录','餐食、照片与饮水','meal'],['metric','健康监测','测量数值与变化趋势','metric'],['file','资料原件','缩略图、原件查询与下载','file']];return `<div class="phone-section-intro">健康档案<span>所有健康模块都在这里</span></div><div class="module-directory">${modules.map(([p,title,sub,ic])=>`<button data-action="nav:${p}" class="directory-item"><span class="directory-icon">${icon(ic,22)}</span><span><strong>${title}</strong><small>${sub}</small></span>${icon('arrow',16)}</button>`).join('')}</div>`;}
  function mine(){return `<section class="shell-profile"><span class="profile-orbit">${esc((ctx.settings.name||'C').slice(0,1))}</span><h2>${esc(ctx.settings.name||'Captain')}</h2><p>个人设置 · 所有工作台共用</p></section><div class="shell-menu"><button data-action="shell-profile">${icon('settings',19)}<span>个人设置<small>统一管理称呼、关注目标与饮水目标</small></span>${icon('arrow',16)}</button>${ctx.account?.enabled?`<button data-action="account-open">${icon('shield',19)}<span>账号与安全<small>${esc(ctx.account.user?.email||'')} · 密码与登录管理</small></span>${icon('arrow',16)}</button>`:''}<button data-action="shell-install">${icon('download',19)}<span>添加到主屏幕<small>像应用一样打开工作台</small></span>${icon('arrow',16)}</button></div>`;}
@@ -1077,10 +1253,10 @@ function createShell(ctx){
  document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();assets.bind();
  }
 
- function renderTravel(){const w=current(),p=['notes','tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(travel.titles,ctx.page)?ctx.page:'dashboard';travel.cleanupMap();const entries=[['dashboard','我的旅行','compass'],['trip','每日行程','calendar'],['places','地点地图','map'],['bookings','预订','ticket'],['checklist','出发准备','task'],['documents','票据资料','file'],['mine','我的','settings']];const title=travel.titles[p]||({notes:'旅行备忘',tasks:'通用待办'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:travel.render();
+ function renderTravel(){const w=current(),p=['notes','tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(travel.titles,ctx.page)?ctx.page:'dashboard';travel.cleanupMap();const entries=[['dashboard','我的旅行','compass'],['trip','每日行程','calendar'],['places','地点地图','map'],['bookings','预订','ticket'],['checklist','出发准备','task'],['documents','票据资料','file'],['mine','我的','settings']];const title=travel.titles[p]||({notes:'旅行备忘',tasks:'通用待办',mine:'个人设置'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:travel.render();
  document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('compass',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>`<button class="nav-btn ${p===id?'active':''}" data-action="nav:${id}">${icon(ic,18)}${label}</button>`).join('')}<div class="sidebar-bottom"><div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人旅行工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main"><div class="heading travel-page-heading"><div><h1>${esc(title)}</h1><p>${description(w)}</p></div></div><nav class="travel-module-nav" aria-label="旅行模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${p===id?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();if(!['mine','notes','tasks'].includes(p))travel.bind();
  }
- function renderReading(){const w=current(),p=['tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(reading.titles,ctx.page)?ctx.page:'dashboard';const entries=[['books','书架','file'],['entries','笔记','file']];const title=reading.titles[p]||({tasks:'阅读计划'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:reading.render();
+ function renderReading(){const w=current(),p=['tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(reading.titles,ctx.page)?ctx.page:'dashboard';const entries=[['books','书架','file'],['entries','笔记','file']];const title=reading.titles[p]||({tasks:'阅读计划',mine:'个人设置'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:reading.render();
  document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('file',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>`<button class="nav-btn ${(p===id||id==='books'&&['dashboard','documents'].includes(p))?'active':''}" data-action="nav:${id}">${icon(ic,18)}${label}</button>`).join('')}<div class="sidebar-bottom"><div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人阅读工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main"><div class="heading reading-page-heading"><div><h1>${esc(title)}</h1><p>${description(w)}</p></div></div><nav class="reading-module-nav" aria-label="阅读模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${(p===id||id==='books'&&['dashboard','documents'].includes(p))?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();if(!['mine','notes','tasks'].includes(p))reading.bind();
  }
  function applyTheme(w){const theme=workbenchTheme(w.themeColor,w.type);const root=document.body.style;for(const [k,v] of Object.entries(theme))root.setProperty(k,v);}
@@ -1105,9 +1281,658 @@ function createShell(ctx){
 return { workbenchTheme, createShell };
 })();
 
-const __workbenchModule13 = (() => {
+const __workbenchModule14 = (() => {
+// layout-config.js
+
+// Shared, declarative health-dashboard contract. No DOM or arbitrary executable styles.
+const LAYOUT_WIDGETS = [
+ {id:'trend',title:'监测趋势',description:'体重、血压、睡眠、血糖或静息心率趋势',sizes:{desktop:['medium','large'],mobile:['medium','large']},defaultSize:{desktop:'medium',mobile:'large'}},
+ {id:'bodyMetrics',title:'最近身体指标',description:'最近体重、睡眠和静息心率',sizes:{desktop:['small','medium','large'],mobile:['medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'water',title:'今日饮水',description:'当天饮水记录与个人记录目标',sizes:{desktop:['small','medium','large'],mobile:['medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'tasks',title:'近期待办',description:'未完成待办与复查安排',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'exercise',title:'运动记录',description:'近七天运动与最近一次运动',sizes:{desktop:['medium','large'],mobile:['medium','large']},defaultSize:{desktop:'medium',mobile:'large'}},
+ {id:'meals',title:'最近饮食',description:'最近一次餐食记录',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'visits',title:'最近就诊',description:'最近保存的就诊记录',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'reports',title:'最近报告与资料',description:'最近报告或上传的原件',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'medications',title:'今日用药',description:'现有用药方案与服用记录入口',sizes:{desktop:['large'],mobile:['large']},defaultSize:{desktop:'large',mobile:'large'}}
+];
+function defaultLayoutConfig(){
+ const device=name=>({mode:'default',widgets:LAYOUT_WIDGETS.map(w=>({id:w.id,visible:true,size:w.defaultSize[name],...(w.id==='trend'?{options:{metric:'weight',range:14}}:w.id==='tasks'?{options:{limit:5}}:{})}))});
+ return {schemaVersion:1,desktop:device('desktop'),mobile:device('mobile')};
+}
+function layoutValidationError(message,field){return Object.assign(new Error(message),{status:400,expose:true,code:'validation_failed',...(field?{field}:{})});}
+function plain(value,label){if(!value||typeof value!=='object'||Array.isArray(value)||![Object.prototype,null].includes(Object.getPrototypeOf(value)))throw layoutValidationError(`${label}格式无效`);}
+function keys(value,allowed,label){plain(value,label);if(Object.keys(value).some(k=>!allowed.includes(k)))throw layoutValidationError(`${label}包含不支持的选项`);}
+function options(id,value){
+ const allowed=id==='trend'?['metric','range']:id==='tasks'?['limit']:[];
+ keys(value,allowed,'卡片展示设置');
+ if(value.metric!==undefined&&!['weight','pressure','sleep','glucose','heart'].includes(value.metric))throw layoutValidationError('请选择有效的监测项目','metric');
+ if(value.range!==undefined&&![7,14,30].includes(value.range))throw layoutValidationError('趋势范围只能选择7、14或30天','range');
+ if(value.limit!==undefined&&(!Number.isInteger(value.limit)||value.limit<1||value.limit>8))throw layoutValidationError('待办显示数量需在1至8项之间','limit');
+ return {...value};
+}
+function validateLayoutConfig(config){
+ keys(config,['schemaVersion','desktop','mobile'],'布局');
+ if(config.schemaVersion!==1)throw layoutValidationError('布局版本不支持');
+ for(const device of ['desktop','mobile']){
+  const view=config[device];keys(view,['mode','widgets'],'设备布局');
+  if(!['default','custom'].includes(view.mode)||!Array.isArray(view.widgets)||view.widgets.length!==LAYOUT_WIDGETS.length)throw layoutValidationError('设备布局不完整');
+  const seen=new Set();
+  for(const widget of view.widgets){keys(widget,['id','visible','size','options'],'卡片');const def=LAYOUT_WIDGETS.find(w=>w.id===widget.id);
+   if(!def||seen.has(widget.id))throw layoutValidationError('卡片无效或重复');seen.add(widget.id);
+   if(typeof widget.visible!=='boolean'||!def.sizes[device].includes(widget.size))throw layoutValidationError('请选择该设备支持的卡片大小与显示状态');
+   if(widget.options!==undefined)options(widget.id,widget.options);
+  }
+ }
+ return structuredClone(config);
+}
+function applyLayoutChanges(config,currentTheme,changes){
+ keys(changes,['themeColor','desktop','mobile'],'布局改动');
+ if(!Object.keys(changes).length)throw layoutValidationError('没有需要修改的布局内容');
+ const next=validateLayoutConfig(config),summary=[];let themeColor=currentTheme;
+ if(changes.themeColor!==undefined){if(typeof changes.themeColor!=='string'||!/^#[0-9a-f]{6}$/i.test(changes.themeColor))throw layoutValidationError('主题色需为六位十六进制颜色','themeColor');themeColor=changes.themeColor.toUpperCase();summary.push('调整工作台主题色');}
+ for(const device of ['desktop','mobile']){
+  if(changes[device]===undefined)continue;
+  const patch=changes[device],deviceName=device==='desktop'?'电脑':'手机';keys(patch,['order','widgets','reset'],'设备改动');
+  if(!Object.keys(patch).length)throw layoutValidationError('设备布局改动不能为空');
+  if(patch.reset!==undefined&&patch.reset!==true)throw layoutValidationError('恢复默认选项无效');
+  if(patch.reset){if(Object.keys(patch).length!==1)throw layoutValidationError('恢复默认不能同时调整其他卡片');next[device]=defaultLayoutConfig()[device];summary.push(`恢复${deviceName}默认布局`);continue;}
+  const view=next[device];view.mode='custom';
+  if(patch.order!==undefined){if(!Array.isArray(patch.order)||patch.order.length>LAYOUT_WIDGETS.length||patch.order.some(id=>typeof id!=='string'||!LAYOUT_WIDGETS.some(w=>w.id===id))||new Set(patch.order).size!==patch.order.length)throw layoutValidationError('卡片顺序包含无效或重复卡片');const byId=new Map(view.widgets.map(w=>[w.id,w]));view.widgets=[...patch.order.map(id=>byId.get(id)),...view.widgets.filter(w=>!patch.order.includes(w.id))];}
+  if(patch.widgets!==undefined){if(!Array.isArray(patch.widgets)||patch.widgets.length>LAYOUT_WIDGETS.length)throw layoutValidationError('卡片改动格式无效');const seen=new Set();
+   for(const widget of patch.widgets){keys(widget,['id','visible','size','options'],'卡片改动');const target=view.widgets.find(w=>w.id===widget.id),def=LAYOUT_WIDGETS.find(w=>w.id===widget.id);
+    if(!target||seen.has(widget.id))throw layoutValidationError('卡片改动包含无效或重复卡片');seen.add(widget.id);
+    if(Object.keys(widget).length===1)throw layoutValidationError('卡片改动不能为空');
+    if(widget.visible!==undefined){if(typeof widget.visible!=='boolean')throw layoutValidationError('卡片显示状态无效');target.visible=widget.visible;}
+    if(widget.size!==undefined){if(!def.sizes[device].includes(widget.size))throw layoutValidationError('请选择该设备支持的卡片大小','size');target.size=widget.size;}
+    if(widget.options!==undefined)target.options={...(target.options||{}),...options(widget.id,widget.options)};
+   }
+  }
+  summary.push(`调整${deviceName}卡片布局`);
+ }
+ return {config:validateLayoutConfig(next),themeColor,summary};
+}
+return { LAYOUT_WIDGETS, defaultLayoutConfig, layoutValidationError, validateLayoutConfig, applyLayoutChanges };
+})();
+
+const __workbenchModule15 = (() => {
+// layout-editor.js
+const { LAYOUT_WIDGETS, defaultLayoutConfig, applyLayoutChanges } = __workbenchModule14;
+const clone=value=>structuredClone(value);
+const selectors={trend:'.health-trend',bodyMetrics:'.health-body-metrics',water:'.health-water',tasks:'.health-tasks',exercise:'.health-exercise',meals:'.health-meals',visits:'.health-visits',reports:'.health-reports',medications:'.health-medication-summary'};
+const validPreview=value=>typeof value==='string'&&/^[a-f0-9-]{36}$/i.test(value);
+const initialQuery=new URLSearchParams(location.search);
+
+function createLayoutUI(ctx){
+ const {esc,icon}=ctx, media=matchMedia('(max-width:900px)');
+ let snapshot=null,editor=null,preview=null,returnDraft=null,previewError='',pendingPreview=initialQuery.get('layoutPreview'),generation=0,operation=0,busyOwner=0,busy=false,pendingKind='',previewLoading=false,trendKey='',savedTrend=null,refreshing=false;
+ const defaultTrends={mobile:{metric:'weight',range:14},desktop:{metric:'weight',range:14}};
+ const isFrame=window.self!==window.top&&initialQuery.get('layoutFrame')==='1'&&validPreview(initialQuery.get('layoutPreview'));
+ if(isFrame)document.body.classList.add('layout-preview-frame-page');
+ const device=()=>media.matches?'mobile':'desktop';
+ const owner=()=>ctx.userId||null;
+ let trendOwner=owner();
+ const context=()=>`${generation}:${owner()||'local'}:${ctx.workbench}:${ctx.route}`;
+ const active=key=>ctx.ready&&ctx.workbench==='health'&&key===context();
+ const view=()=>preview||snapshot;
+ const config=()=>view()?.config||defaultLayoutConfig();
+ const options=id=>{const selected=config()[device()];return selected.mode==='custom'?selected.widgets.find(w=>w.id===id)?.options||{}:{};};
+ const api=(path,options={})=>ctx.api(path,{...options,headers:{...options.headers,'X-Workbench-Owner':owner()||''}},ctx.space,'health');
+ const lock=(kind,token)=>{busyOwner=token;busy=true;pendingKind=kind;};
+ const unlock=token=>{if(busyOwner!==token)return false;busyOwner=0;busy=false;pendingKind='';return true;};
+ const button=(label,action,primary=false,disabled=false)=>`<button type="button" class="btn ${primary?'primary':''}" data-action="${action}" ${disabled?'disabled':''}>${label}</button>`;
+ const comparable=d=>JSON.stringify({config:d.config,themeColor:d.themeColor.toUpperCase()});
+ const changed=()=>editor&&comparable(editor.draft)!==comparable(editor.base);
+ const stale=()=>preview&&(preview.baseRevision??preview.revision)!==snapshot?.revision;
+ const expired=()=>preview&&Date.parse(preview.expiresAt)<=Date.now();
+ const clearURL=()=>{const url=new URL(location.href);for(const key of ['layoutPreview','layoutFrame','layoutDevice'])url.searchParams.delete(key);history.replaceState(null,'',url.pathname+url.search+url.hash);};
+ const setURL=(id,target)=>{const url=new URL(location.href);url.searchParams.set('layoutPreview',id);url.searchParams.set('layoutDevice',target);url.hash='dashboard';history.replaceState(null,'',url.pathname+url.search+url.hash);};
+ function clearPreview(){operation++;previewLoading=false;if(savedTrend)ctx.setTrend(savedTrend.metric,savedTrend.range);savedTrend=null;preview=null;previewError='';pendingPreview=null;returnDraft=null;trendKey='';clearURL();}
+ function cleanup({keepLink=false,resetSnapshot=true}={}){generation++;operation++;editor=null;busy=false;busyOwner=0;pendingKind='';previewLoading=false;if(savedTrend)ctx.setTrend(savedTrend.metric,savedTrend.range);savedTrend=null;preview=null;returnDraft=null;previewError='';trendKey='';if(keepLink)pendingPreview=new URLSearchParams(location.search).get('layoutPreview');else{pendingPreview=null;clearURL();}if(resetSnapshot)snapshot=null;}
+ function setSnapshot(next){if(trendOwner!==owner()){trendOwner=owner();defaultTrends.mobile={metric:'weight',range:14};defaultTrends.desktop={metric:'weight',range:14};trendKey='';}snapshot=next?.workbench==='health'&&next.owner===owner()?next:null;}
+ function beforeRender(){
+  if(ctx.workbench!=='health'||ctx.route!=='dashboard')return;
+  const prefs=options('trend'),key=JSON.stringify([snapshot?.owner,snapshot?.revision,preview?.previewId,device(),prefs]);
+  if(key!==trendKey){trendKey=key;const selected=config()[device()].mode==='custom'?prefs:defaultTrends[device()];ctx.setTrend(selected.metric,selected.range);}
+ }
+ function mount(){
+  if(ctx.workbench!=='health'||ctx.route!=='dashboard')return;
+  const root=document.querySelector('.health-overview');if(!root)return;
+  const heading=root.querySelector('.health-overview-heading'),title=heading?.querySelector('h1');
+  if(title){const line=document.createElement('div');line.className='layout-overview-title';title.before(line);line.append(title);line.insertAdjacentHTML('beforeend',`<button class="btn layout-edit-entry" data-action="layout-edit">${icon('grid',15)}编辑布局</button>`);}
+  if(preview)ctx.previewTheme(preview.themeColor);
+  const selected=config()[device()];
+  if(selected.mode==='custom'){
+   const nodes=new Map(LAYOUT_WIDGETS.map(w=>[w.id,root.querySelector(selectors[w.id])]));
+   const canvas=document.createElement('div');canvas.className='layout-canvas';canvas.dataset.device=device();canvas.setAttribute('aria-label','自定义健康首页布局');
+   for(const w of selected.widgets){const node=nodes.get(w.id);if(!node||!w.visible)continue;node.dataset.layoutWidget=w.id;node.dataset.layoutSize=w.size;node.classList.add('layout-widget');canvas.append(node);}
+   root.querySelector('.health-bento')?.remove();root.querySelector('.health-medication-summary')?.remove();root.append(canvas);
+   if(!canvas.children.length)canvas.innerHTML=`<div class="layout-empty"><h2>首页卡片已全部隐藏</h2><p>记录仍保存在各模块中，可以随时重新显示卡片。</p>${button('编辑布局','layout-edit',true)}</div>`;
+  }
+  if((preview||previewError||previewLoading)&&!isFrame){
+   const banner=document.createElement('section');banner.className='layout-preview-banner';banner.setAttribute('aria-label','布局预览状态');
+   const invalid=stale()||expired(),target=preview?.device||device();
+   banner.innerHTML=`<div><strong>${previewLoading?'正在打开布局预览…':previewError?'布局预览需要处理':`${target==='mobile'?'手机':'电脑'}布局预览 · 尚未应用`}</strong><p>${esc(previewError||(invalid?'当前布局已更新或预览已过期，可继续编辑或退出预览。':'正在查看实际卡片，应用后才会保存到你的工作台。'))}</p></div><div class="layout-preview-actions">${preview?button('继续编辑','layout-preview-edit',false,busy):''}${preview?button(busy?'正在应用…':'应用布局','layout-preview-apply',true,invalid||busy):''}${button('退出预览','layout-preview-exit',false,busy&&pendingKind==='save')}</div>`;
+   root.before(banner);
+   if(preview&&target!==device()){
+    root.hidden=true;
+    const width=target==='mobile'?390:1440,height=target==='mobile'?844:1000,url=new URL(location.href);url.searchParams.set('layoutPreview',preview.previewId);url.searchParams.set('layoutFrame','1');url.searchParams.delete('layoutDevice');
+    const wrapper=document.createElement('div');wrapper.className='layout-device-frame';wrapper.setAttribute('aria-label',target==='mobile'?'手机尺寸预览':'电脑尺寸预览');root.before(wrapper);
+    const available=wrapper.clientWidth||document.querySelector('main').clientWidth,scale=Math.min(1,available/width);wrapper.style.height=`${height*scale}px`;
+    const frame=document.createElement('iframe');frame.title=target==='mobile'?'手机布局预览':'电脑布局预览';frame.src=url.pathname+url.search+'#dashboard';frame.width=String(width);frame.height=String(height);frame.style.width=`${width}px`;frame.style.height=`${height}px`;frame.style.transform=`scale(${scale})`;wrapper.append(frame);
+   }
+  }
+ }
+ async function initializePreview(){
+  if(!pendingPreview||ctx.workbench!=='health'||!ctx.ready)return;
+  const id=pendingPreview;pendingPreview=null;const key=context();previewLoading=true;ctx.render();
+  if(!validPreview(id)){previewLoading=false;previewError='预览链接无效，可以退出后编辑当前布局。';ctx.render();return;}
+  try{const data=await api('/api/layout/preview/'+encodeURIComponent(id));if(!active(key)||!previewLoading)return;if(data.owner!==owner())return;const target=initialQuery.get('layoutDevice'),inferred=data.affectedDevices?.length===1?data.affectedDevices[0]:device();savedTrend=ctx.getTrend();preview={...data,device:isFrame?device():['mobile','desktop'].includes(target)?target:inferred};}
+  catch(error){if(active(key)&&previewLoading)previewError=error.message;}
+  finally{if(active(key)&&previewLoading){previewLoading=false;ctx.render();}}
+ }
+ function changes(){
+  const out={};if(editor.draft.themeColor.toUpperCase()!==editor.base.themeColor.toUpperCase())out.themeColor=editor.draft.themeColor;
+  for(const d of ['desktop','mobile'])if(JSON.stringify(editor.draft.config[d])!==JSON.stringify(editor.base.config[d])){
+   const view=editor.draft.config[d],base=editor.base.config[d];
+   if(view.mode==='default'){out[d]={reset:true};continue;}
+   const patch={},ids=view.widgets.map(w=>w.id);
+   if(base.mode!==view.mode||JSON.stringify(ids)!==JSON.stringify(base.widgets.map(w=>w.id)))patch.order=ids;
+   const widgets=[];
+   for(const w of view.widgets){const before=base.widgets.find(x=>x.id===w.id),delta={id:w.id};for(const field of ['size','visible'])if(w[field]!==before[field])delta[field]=w[field];
+    const options={};for(const [field,value]of Object.entries(w.options||{}))if(value!==before.options?.[field])options[field]=value;if(Object.keys(options).length)delta.options=options;if(Object.keys(delta).length>1)widgets.push(delta);}
+   if(widgets.length)patch.widgets=widgets;if(Object.keys(patch).length)out[d]=patch;
+  }
+  return out;
+ }
+ function errorText(error){const box=document.querySelector('#layout-editor-error');if(box){box.textContent=error.message;box.hidden=false;if(error.code==='layout_conflict')box.insertAdjacentHTML('beforeend',button('读取最新并保留我的调整','layout-reload'));}else ctx.toast(error.message);}
+ function editorBody(){
+  const d=editor.device,selected=editor.draft.config[d],canRestore=editor.base.history?.some(h=>h.revision<editor.base.revision);
+  const sizeLabels=d==='mobile'?{small:'半宽',medium:'标准',large:'舒展'}:{small:'紧凑',medium:'半宽',large:'通栏'};
+  return `<form id="layout-editor-form" data-discard-guard><input type="hidden" name="layout-draft" value="${esc(comparable(editor.base))}"><div class="layout-device-tabs" role="group" aria-label="编辑哪种设备">${['mobile','desktop'].map(name=>`<button type="button" data-action="layout-device:${name}" aria-pressed="${d===name}">${icon(name==='mobile'?'grid':'building',17)}${name==='mobile'?'手机':'电脑'}布局</button>`).join('')}</div><p class="layout-editor-intro">${d==='mobile'?'只调整手机的卡片排列。半宽卡片可并排，舒展卡片增加留白。':'只调整电脑的卡片排列。紧凑、半宽和通栏分别使用不同宽度。'}个人与示例空间共用布局。</p><div class="layout-editor-toolbar"><span>${selected.mode==='default'?'默认排列':'自定义排列'} · ${selected.widgets.filter(w=>w.visible).length} 张可见卡片</span>${button('恢复此设备默认','layout-reset')}</div><div class="layout-widget-list">${selected.widgets.map((w,index)=>{const def=LAYOUT_WIDGETS.find(x=>x.id===w.id);return `<section class="layout-widget-row ${w.visible?'':'is-hidden'}" data-widget-row="${w.id}"><div class="layout-widget-row-head"><label><input type="checkbox" data-layout-visible="${w.id}" ${w.visible?'checked':''}><strong>${esc(def.title)}</strong></label><div class="layout-order-buttons"><button type="button" class="icon-btn" data-action="layout-up:${w.id}" aria-label="上移${esc(def.title)}" ${index===0?'disabled':''}>↑</button><button type="button" class="icon-btn" data-action="layout-down:${w.id}" aria-label="下移${esc(def.title)}" ${index===selected.widgets.length-1?'disabled':''}>↓</button></div></div><div class="layout-widget-settings"><label>大小<select data-layout-size="${w.id}" aria-label="${esc(def.title)}卡片大小">${def.sizes[d].map(size=>`<option value="${size}" ${size===w.size?'selected':''}>${sizeLabels[size]}</option>`).join('')}</select></label>${w.id==='trend'?`<label>监测项目<select data-layout-option="trend:metric" aria-label="趋势监测项目">${Object.entries({weight:'体重',pressure:'血压',sleep:'睡眠',glucose:'血糖',heart:'静息心率'}).map(([value,title])=>`<option value="${value}" ${(w.options?.metric||'weight')===value?'selected':''}>${title}</option>`).join('')}</select></label><label>时间范围<select data-layout-option="trend:range" aria-label="趋势时间范围">${[7,14,30].map(value=>`<option value="${value}" ${(w.options?.range||14)===value?'selected':''}>近${value}天</option>`).join('')}</select></label>`:w.id==='tasks'?`<label>显示数量<select data-layout-option="tasks:limit" aria-label="待办显示数量">${[1,2,3,4,5,6,7,8].map(value=>`<option value="${value}" ${(w.options?.limit||5)===value?'selected':''}>${value}项</option>`).join('')}</select></label>`:''}</div></section>`;}).join('')}</div><div class="layout-theme-field"><label for="layout-theme">健康工作台主题色</label><div><input id="layout-theme" type="color" value="${esc(editor.draft.themeColor)}"><span>${esc(editor.draft.themeColor)}</span></div><small>电脑、手机与健康模块共用；预览时不会保存。</small></div><details class="layout-history"><summary>历史版本 · 当前版本 ${editor.base.revision}</summary><p>恢复版本会同时恢复当时的双端布局和主题色。</p><div class="layout-history-actions"><select id="layout-history-revision" aria-label="选择历史布局版本" ${canRestore?'':'disabled'}>${(editor.base.history||[]).filter(h=>h.revision<editor.base.revision).map(h=>`<option value="${h.revision}">版本 ${h.revision} · ${esc((h.summary||[]).join('、'))}</option>`).join('')||'<option>还没有历史版本</option>'}</select>${button('恢复所选版本','layout-restore',false,!canRestore)}</div></details><details class="layout-ai-help"><summary>让 AI 帮我调整</summary><p>向已连接知衡的 AI 描述需求，例如：把手机的饮水卡片放最前，隐藏运动，电脑保持原样。</p><p>AI 可读取组件与布局，创建预览、应用修改或恢复版本；新工具需要连接端刷新工具列表。</p></details><div id="layout-editor-error" class="form-error" role="alert" hidden></div></form>`;
+ }
+ function drawEditor({scrollTop,focus}={}){
+  ctx.openDrawer(editorBody(),'编辑健康首页','分别管理手机和电脑的布局',`${button('取消','close')}${button('预览','layout-preview',false,!changed())}${button('应用布局','layout-save',true,!changed())}`);
+  const form=document.querySelector('#layout-editor-form');form.elements['layout-draft'].value=comparable(editor.draft);form.onsubmit=e=>e.preventDefault();
+  form.onchange=e=>{
+   try{
+    const input=e.target;let patch;
+    if(input.dataset.layoutVisible)patch={widgets:[{id:input.dataset.layoutVisible,visible:input.checked}]};
+    if(input.dataset.layoutSize)patch={widgets:[{id:input.dataset.layoutSize,size:input.value}]};
+    if(input.dataset.layoutOption){const [id,name]=input.dataset.layoutOption.split(':');patch={widgets:[{id,options:{[name]:name==='metric'?input.value:Number(input.value)}}]};}
+    if(input.id==='layout-theme')changeDraft({themeColor:input.value});
+    else if(patch)changeDraft({[editor.device]:patch});
+   }catch(error){errorText(error);}
+  };
+  if(scrollTop!==undefined)document.querySelector('.drawer-content').scrollTop=scrollTop;
+  if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+ }
+ function focusSelector(){const node=document.activeElement;if(!node)return null;if(node.id)return '#'+CSS.escape(node.id);for(const name of ['data-layout-visible','data-layout-size','data-layout-option','data-action'])if(node.hasAttribute(name))return `[${name}="${CSS.escape(node.getAttribute(name))}"]`;return null;}
+ function changeDraft(patch){const next=applyLayoutChanges(editor.draft.config,editor.draft.themeColor,patch);editor.draft={...editor.draft,config:next.config,themeColor:next.themeColor};const scrollTop=document.querySelector('.drawer-content')?.scrollTop||0,focus=focusSelector();drawEditor({scrollTop,focus});}
+ async function open(){
+  if(ctx.workbench!=='health')return;const key=context(),data=await api('/api/layout');if(!active(key)||data.owner!==owner())return;snapshot=data;editor={base:clone(data),draft:clone(data),device:device()};drawEditor();
+ }
+ async function applied(data,key){if(!active(key))return;clearPreview();editor=null;snapshot=data;ctx.closeDrawer();ctx.invalidateCache();await ctx.load();if(active(key))ctx.toast('布局已应用，可在历史版本中恢复');}
+ async function write(path,body){
+  if(busy)return;const key=context(),token=++operation,form=document.querySelector('#layout-editor-form'),previewId=preview?.previewId;lock('save',token);
+  document.querySelectorAll('#layout-editor-form input,#layout-editor-form select,#layout-editor-form button,.drawer-foot button,.layout-preview-actions button').forEach(b=>b.disabled=true);
+  try{const data=await api(path,{method:'POST',body:JSON.stringify(body)});if(!active(key))return;
+   if(operation!==token||(form&&!form.isConnected)||(!form&&preview?.previewId!==previewId)){ctx.invalidateCache();ctx.toast('布局已保存，刷新后可查看');return;}
+   unlock(token);await applied(data,key);
+  }
+  catch(error){if(active(key)&&operation===token){errorText(error);if(preview){previewError=error.message;if(error.code==='layout_conflict'){try{const latest=await api('/api/layout');if(active(key)&&operation===token)snapshot=latest;}catch{}}if(active(key)&&operation===token)ctx.render();}}}
+  finally{if(unlock(token)){if(active(key)&&form?.isConnected){document.querySelectorAll('#layout-editor-form input,#layout-editor-form select,#layout-editor-form button,.drawer-foot button').forEach(b=>b.disabled=false);if(editor){const top=document.querySelector('.drawer-content')?.scrollTop||0;const message=document.querySelector('#layout-editor-error')?.textContent,conflict=Boolean(document.querySelector('[data-action="layout-reload"]'));drawEditor({scrollTop:top});if(message)errorText(Object.assign(new Error(message.replace('读取最新并保留我的调整','')),{code:conflict?'layout_conflict':undefined}));}}if(active(key)&&preview)ctx.render();}}
+ }
+ async function handle(action,arg){
+  if(isFrame)return;
+  if(action==='layout-edit'){if(preview)return handle('layout-preview-edit');return open();}
+  if(action==='layout-preview-exit'){if(busy&&pendingKind==='save')return;clearPreview();ctx.render();await ctx.load({retainOnError:true});return;}
+  if(action==='layout-preview-edit'){
+   if(!preview||busy)return;
+   const draft=returnDraft||{base:clone(snapshot),draft:clone(preview),device:preview.device||device()};clearPreview();ctx.render();editor=draft;drawEditor();if(draft.base.revision!==snapshot?.revision)errorText(Object.assign(new Error('当前布局已更新，你的草稿仍保留。请读取最新布局再应用。'),{code:'layout_conflict'}));return;
+  }
+  if(action==='layout-preview-apply'){if(preview&&!stale()&&!expired())await write('/api/layout',{expectedRevision:preview.baseRevision??preview.revision,previewId:preview.previewId});return;}
+  if(!editor||!document.querySelector('#layout-editor-form')||busy)return;
+  if(action==='layout-device'){if(['mobile','desktop'].includes(arg)){editor.device=arg;drawEditor({focus:`[data-action="layout-device:${arg}"]`});}return;}
+  if(action==='layout-reload'){
+   const key=context(),patch=changes(),target=editor.device,form=document.querySelector('#layout-editor-form'),token=++operation;const data=await api('/api/layout');if(!active(key)||!form?.isConnected||token!==operation)return;
+   const next=Object.keys(patch).length?applyLayoutChanges(data.config,data.themeColor,patch):{config:data.config,themeColor:data.themeColor};snapshot=data;editor={base:clone(data),draft:{...clone(data),config:next.config,themeColor:next.themeColor},device:target};drawEditor();const note=document.querySelector('#layout-editor-error');note.textContent='已读取最新布局并保留你的调整，请检查后预览或应用。';note.hidden=false;return;
+  }
+  if(action==='layout-reset'){changeDraft({[editor.device]:{reset:true}});return;}
+  if(action==='layout-up'||action==='layout-down'){
+   const list=editor.draft.config[editor.device].widgets.map(w=>w.id),i=list.indexOf(arg),j=i+(action==='layout-up'?-1:1);if(i<0||j<0||j>=list.length)return;[list[i],list[j]]=[list[j],list[i]];changeDraft({[editor.device]:{order:list}});return;
+  }
+  if(action==='layout-save'){if(changed())await write('/api/layout',{expectedRevision:editor.base.revision,changes:changes()});return;}
+  if(action==='layout-restore'){
+   if(changed()){errorText(new Error('请先应用当前修改，或取消后重新打开，再恢复历史版本。'));return;}
+   const revision=Number(document.querySelector('#layout-history-revision')?.value);if(Number.isSafeInteger(revision))await write('/api/layout/restore',{expectedRevision:editor.base.revision,revision});return;
+  }
+  if(action==='layout-preview'&&changed()){
+   const key=context(),draft=editor,form=document.querySelector('#layout-editor-form'),token=++operation;lock('preview',token);document.querySelectorAll('.drawer-foot button').forEach(b=>b.disabled=true);
+   try{const result=await api('/api/layout/preview',{method:'POST',body:JSON.stringify({expectedRevision:editor.base.revision,changes:changes()})});if(!active(key)||token!==operation||!form?.isConnected)return;unlock(token);ctx.closeDrawer();returnDraft=draft;savedTrend=ctx.getTrend();preview={...result,device:draft.device};setURL(result.previewId,draft.device);ctx.enterDashboard();ctx.render();}
+   catch(error){if(active(key)&&token===operation&&form?.isConnected)errorText(error);}
+   finally{if(unlock(token)&&form?.isConnected)document.querySelectorAll('.drawer-foot button').forEach(b=>b.disabled=false);}
+  }
+ }
+ async function refresh(){
+  if(refreshing||!ctx.ready||ctx.workbench!=='health'||ctx.route!=='dashboard'||document.hidden||document.querySelector('.drawer')||preview||previewError||busy)return;
+  const key=context();refreshing=true;try{const data=await api('/api/layout');if(active(key)&&data.owner===owner()&&(data.revision!==snapshot?.revision||data.themeColor!==snapshot?.themeColor)){ctx.invalidateCache();await ctx.load({retainOnError:true});}}catch{}finally{refreshing=false;}
+ }
+ media.addEventListener('change',()=>{if(ctx.ready&&ctx.workbench==='health'&&ctx.route==='dashboard')ctx.render();});
+ window.addEventListener('focus',refresh);document.addEventListener('visibilitychange',refresh);setInterval(refresh,30000);
+ const guardClose=()=>{if(busy&&pendingKind==='save'){ctx.toast('正在保存布局，请稍候');return true;}return false;};
+ const rememberTrend=(metric,range)=>{if(!preview&&config()[device()].mode==='default')defaultTrends[device()]={metric,range};};
+ return {setSnapshot,beforeRender,mount,options,handle,cleanup,initializePreview,rememberTrend,guardClose,isBusy:()=>busy,isFrame:()=>isFrame,isPreview:()=>Boolean(preview||previewError||previewLoading||pendingPreview),onDrawerClose:()=>{operation++;if(pendingKind==='preview')unlock(busyOwner);editor=null;},refresh};
+}
+return { createLayoutUI };
+})();
+
+const __workbenchModule16 = (() => {
+// component-schema.js
+
+// Shared component vocabulary. Definitions contain data, never executable markup or queries.
+const common=['health','finance','travel','reading','other'];
+const countOnly=(title,types)=>({title,workbenchTypes:types,fields:{},aggregations:['count','dailyCount','list'],countUnit:'项'});
+const numeric=(title,types,fields,countUnit='次')=>({title,workbenchTypes:types,fields,aggregations:['count','sum','latest','dailySum','dailyAvg','dailyCount','list'],countUnit});
+const COMPONENT_CATALOG={
+ schemaVersion:1,blockTypes:['stat','chart','list','progress'],layouts:['stack','grid'],days:[7,14,30,90],maxBlocks:8,maxComponents:50,maxPlacementsPerDevice:12,
+ kinds:{
+  exercise:numeric('运动记录',['health'],{duration:{label:'运动时长',unit:'分钟'},distance:{label:'运动距离',unit:'公里'}}),
+  water:numeric('饮水记录',['health'],{volume:{label:'饮水量',unit:'ml'}}),
+  metric:{title:'身体指标',workbenchTypes:['health'],fields:{value:{label:'指标数值',unit:'metric'},secondary:{label:'舒张压',unit:'mmHg'}},aggregations:['count','latest','dailyAvg','dailyCount','list'],countUnit:'次'},
+  meal:countOnly('饮食记录',['health']),visit:countOnly('就诊记录',['health']),
+  task:countOnly('待办',common),note:countOnly('备忘',common),
+  reading_entry:numeric('阅读记录',['reading'],{minutes:{label:'阅读时长',unit:'分钟'}},'次'),reading_book:countOnly('书籍',['reading']),
+  travel_trip:countOnly('旅行',['travel']),travel_stop:countOnly('旅行地点',['travel']),travel_booking:countOnly('预订',['travel']),travel_check:countOnly('准备清单',['travel']),
+  asset_account:countOnly('资产账户',['finance']),asset_holding:countOnly('资产持仓',['finance']),asset_liability:countOnly('负债',['finance']),asset_transaction:countOnly('流水',['finance']),asset_snapshot:countOnly('估值快照',['finance'])
+ },metrics:{weight:{title:'体重',unit:'kg'},pressure:{title:'血压',unit:'mmHg'},sleep:{title:'睡眠',unit:'小时'},glucose:{title:'血糖',unit:'mmol/L'},heart:{title:'静息心率',unit:'次/分'}}
+};
+const COMPONENT_TEMPLATES=[
+ {id:'exercise-summary',title:'运动汇总',description:'近7天运动时长、次数和每日柱状图',workbenchTypes:['health'],sourceType:'health'},
+ {id:'metric-trend',title:'身体指标趋势',description:'最近体重与近14天每日平均趋势',workbenchTypes:['health'],sourceType:'health'},
+ {id:'water-progress',title:'今日饮水进度',description:'当天饮水量与已有饮水记录目标',workbenchTypes:['health'],sourceType:'health'},
+ {id:'pending-tasks',title:'待办清单',description:'所有未完成待办数量和最近事项',workbenchTypes:common,sourceType:'current'},
+ {id:'reading-summary',title:'阅读汇总',description:'近7天阅读分钟数、次数和每日柱状图',workbenchTypes:['reading'],sourceType:'reading'},
+ {id:'notes-list',title:'最近备忘',description:'展示最近保存的备忘',workbenchTypes:common,sourceType:'current'}
+];
+const binding=(kind,aggregation,extra={})=>({kind,aggregation,days:null,...extra});
+function createComponentDefinition(templateId='exercise-summary',sourceWorkbench='health'){
+ const base={schemaVersion:1,title:'我的组件',description:'',sourceWorkbench,layout:'grid',appearance:{accent:null,tone:'neutral',density:'comfortable'},blocks:[]};
+ if(templateId==='exercise-summary')Object.assign(base,{title:'近7天运动',blocks:[{id:'duration',type:'stat',label:'运动时长',binding:binding('exercise','sum',{field:'duration',days:7})},{id:'count',type:'stat',label:'运动次数',binding:binding('exercise','count',{days:7})},{id:'daily',type:'chart',label:'每日运动时长',chart:'bar',binding:binding('exercise','dailySum',{field:'duration',days:7})}]});
+ else if(templateId==='metric-trend')Object.assign(base,{title:'体重趋势',blocks:[{id:'latest',type:'stat',label:'最近体重',binding:binding('metric','latest',{field:'value',metric:'weight'})},{id:'daily',type:'chart',label:'每日平均体重',chart:'line',binding:binding('metric','dailyAvg',{field:'value',metric:'weight',days:14})}]});
+ else if(templateId==='water-progress')Object.assign(base,{title:'今日饮水',blocks:[{id:'water',type:'progress',label:'今日记录进度',target:{mode:'waterGoalMl'},binding:binding('water','sum',{field:'volume',days:7,todayOnly:true})}]});
+ else if(templateId==='pending-tasks')Object.assign(base,{title:'接下来要做的事',blocks:[{id:'count',type:'stat',label:'未完成待办',binding:binding('task','count',{onlyPending:true})},{id:'tasks',type:'list',label:'近期待办',binding:binding('task','list',{onlyPending:true,limit:5})}]});
+ else if(templateId==='reading-summary')Object.assign(base,{title:'近7天阅读',blocks:[{id:'minutes',type:'stat',label:'阅读时长',binding:binding('reading_entry','sum',{field:'minutes',days:7})},{id:'count',type:'stat',label:'阅读次数',binding:binding('reading_entry','count',{days:7})},{id:'daily',type:'chart',label:'每日阅读时长',chart:'bar',binding:binding('reading_entry','dailySum',{field:'minutes',days:7})}]});
+ else if(templateId==='notes-list')Object.assign(base,{title:'最近备忘',layout:'stack',blocks:[{id:'notes',type:'list',label:'最近保存',binding:binding('note','list',{limit:5})}]});
+ else throw componentValidationError('组件模板不存在');
+ return validateComponentDefinition(base);
+}
+const componentValidationError=(message,field)=>Object.assign(new Error(message),{status:400,expose:true,code:'validation_failed',...(field?{field}:{})});
+const plain=(v,label)=>{if(!v||typeof v!=='object'||Array.isArray(v)||![Object.prototype,null].includes(Object.getPrototypeOf(v)))throw componentValidationError(label+'格式无效');};
+const exact=(v,allowed,label)=>{plain(v,label);if(Object.keys(v).some(k=>!allowed.includes(k)))throw componentValidationError(label+'包含不支持的选项');};
+const text=(v,min,max,label)=>{if(typeof v!=='string'||v.trim().length<min||v.length>max)throw componentValidationError(label+'长度无效');return v.trim();};
+function validateComponentDefinition(input){
+ exact(input,['schemaVersion','title','description','sourceWorkbench','layout','appearance','blocks'],'组件定义');
+ if(input.schemaVersion!==1)throw componentValidationError('组件版本不支持');
+ const out={schemaVersion:1,title:text(input.title,1,40,'组件名称'),description:text(input.description??'',0,240,'组件说明'),sourceWorkbench:text(input.sourceWorkbench,1,100,'来源工作台'),layout:input.layout,appearance:input.appearance,blocks:input.blocks};
+ if(!COMPONENT_CATALOG.layouts.includes(out.layout))throw componentValidationError('请选择有效排列方式');
+ exact(out.appearance,['accent','tone','density'],'组件外观');
+ if(out.appearance.accent!==null&&(typeof out.appearance.accent!=='string'||!/^#[a-f0-9]{6}$/i.test(out.appearance.accent)))throw componentValidationError('组件颜色需为六位十六进制颜色或跟随工作台');
+ if(!['neutral','tinted'].includes(out.appearance.tone)||!['compact','comfortable'].includes(out.appearance.density))throw componentValidationError('组件外观选项无效');
+ if(!Array.isArray(out.blocks)||out.blocks.length<1||out.blocks.length>8)throw componentValidationError('组件需包含1至8个区块');
+ const ids=new Set();
+ for(const block of out.blocks){
+  exact(block,['id','type','label','binding','chart','target'],'组件区块');
+  if(typeof block.id!=='string'||!/^[-a-zA-Z0-9_]{1,40}$/.test(block.id)||ids.has(block.id))throw componentValidationError('区块编号无效或重复');ids.add(block.id);
+  text(block.label,1,40,'区块标题');if(!COMPONENT_CATALOG.blockTypes.includes(block.type))throw componentValidationError('区块类型无效');
+  const q=block.binding;exact(q,['kind','aggregation','field','metric','days','limit','onlyPending','todayOnly'],'数据绑定');const kind=Object.hasOwn(COMPONENT_CATALOG.kinds,q.kind)?COMPONENT_CATALOG.kinds[q.kind]:null;
+  if(!kind||!kind.aggregations.includes(q.aggregation))throw componentValidationError('此数据类型不支持所选计算');
+  if(q.days!==null&&!COMPONENT_CATALOG.days.includes(q.days))throw componentValidationError('请选择全部时间或7、14、30、90天');
+  if(q.todayOnly!==undefined&&typeof q.todayOnly!=='boolean')throw componentValidationError('当天筛选无效');
+  if(q.todayOnly&&q.days===null)throw componentValidationError('当天筛选需使用有限时间范围');
+  if(q.onlyPending!==undefined&&(typeof q.onlyPending!=='boolean'||!['task','travel_check'].includes(q.kind)))throw componentValidationError('此数据类型不支持未完成筛选');
+  if(q.kind==='metric'){if(!Object.hasOwn(COMPONENT_CATALOG.metrics,q.metric))throw componentValidationError('请选择监测项目');}else if(q.metric!==undefined)throw componentValidationError('仅身体指标可选择监测项目');
+  const numericOps=['sum','latest','dailySum','dailyAvg'];
+  if(numericOps.includes(q.aggregation)){if(!Object.hasOwn(kind.fields,q.field))throw componentValidationError('请选择支持的数值字段');if(q.field==='secondary'&&q.metric!=='pressure')throw componentValidationError('舒张压仅适用于血压');}
+  else if(q.field!==undefined)throw componentValidationError('此计算不需要数值字段');
+  if(q.limit!==undefined&&(!Number.isInteger(q.limit)||q.limit<1||q.limit>8||q.aggregation!=='list'))throw componentValidationError('列表数量需在1至8项之间');
+  const allowed=block.type==='stat'?['count','sum','latest']:block.type==='chart'?['dailyCount','dailySum','dailyAvg']:block.type==='list'?['list']:['count','sum'];
+  if(!allowed.includes(q.aggregation))throw componentValidationError('区块展示与计算方式不匹配');
+  if(block.type==='chart'){if(!['bar','line'].includes(block.chart)||q.days===null)throw componentValidationError('图表需选择类型和有限时间范围');}else if(block.chart!==undefined)throw componentValidationError('此区块不支持图表类型');
+  if(block.type==='progress'){
+   if(!['water','exercise','task','reading_entry','travel_check'].includes(q.kind))throw componentValidationError('此数据类型不支持进度目标');
+   exact(block.target,['mode','value'],'进度目标');if(block.target.mode==='fixed'){if(typeof block.target.value!=='number'||!Number.isFinite(block.target.value)||block.target.value<=0||block.target.value>1000000)throw componentValidationError('进度目标需为有效正数');}
+   else if(block.target.mode==='waterGoalMl'){if(Object.keys(block.target).length!==1||q.kind!=='water'||q.field!=='volume'||q.aggregation!=='sum')throw componentValidationError('饮水目标仅适用于饮水量');}
+   else throw componentValidationError('进度目标类型无效');
+  }else if(block.target!==undefined)throw componentValidationError('此区块不支持进度目标');
+ }
+ return structuredClone(out);
+}
+const STR=(max,min=0)=>({type:'string',minLength:min,maxLength:max});
+const bindingSchema={type:'object',additionalProperties:false,required:['kind','aggregation','days'],properties:{kind:{type:'string',enum:Object.keys(COMPONENT_CATALOG.kinds)},aggregation:{type:'string',enum:['count','sum','latest','dailySum','dailyCount','dailyAvg','list']},field:STR(30,1),metric:{type:'string',enum:Object.keys(COMPONENT_CATALOG.metrics)},days:{anyOf:[{type:'integer',enum:COMPONENT_CATALOG.days},{type:'null'}]},limit:{type:'integer',minimum:1,maximum:8},onlyPending:{type:'boolean'},todayOnly:{type:'boolean'}}};
+const COMPONENT_DEFINITION_SCHEMA={
+ type:'object',additionalProperties:false,required:['schemaVersion','title','sourceWorkbench','layout','appearance','blocks'],
+ properties:{
+  schemaVersion:{type:'integer',enum:[1]},title:STR(40,1),description:STR(240),sourceWorkbench:STR(100,1),layout:{type:'string',enum:COMPONENT_CATALOG.layouts},
+  appearance:{type:'object',additionalProperties:false,required:['accent','tone','density'],properties:{accent:{anyOf:[{type:'string',pattern:'^#[a-fA-F0-9]{6}$'},{type:'null'}]},tone:{type:'string',enum:['neutral','tinted']},density:{type:'string',enum:['compact','comfortable']}}},
+  blocks:{type:'array',minItems:1,maxItems:8,items:{
+   type:'object',additionalProperties:false,required:['id','type','label','binding'],properties:{
+    id:{type:'string',pattern:'^[-a-zA-Z0-9_]{1,40}$'},type:{type:'string',enum:COMPONENT_CATALOG.blockTypes},label:STR(40,1),binding:bindingSchema,chart:{type:'string',enum:['bar','line']},
+    target:{type:'object',additionalProperties:false,required:['mode'],properties:{mode:{type:'string',enum:['fixed','waterGoalMl']},value:{type:'number',exclusiveMinimum:0,maximum:1000000}}}
+   }
+  }}
+ }
+};
+return { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, componentValidationError, validateComponentDefinition, COMPONENT_DEFINITION_SCHEMA };
+})();
+
+const __workbenchModule17 = (() => {
+// component-card.js
+
+// Render only the evaluated component model. Definitions and data queries never
+// become markup, executable styles, URLs, or event handlers here.
+const escapeText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const finite=value=>typeof value==='number'&&Number.isFinite(value);
+const numberFormatter=new Intl.NumberFormat('zh-CN',{maximumFractionDigits:8});
+const number=value=>value===0?'0':Math.abs(value)<1e-7?String(value):numberFormatter.format(value);
+const display=value=>finite(value)?number(value):typeof value==='string'&&value.trim()?value:'—';
+const coordinate=value=>Number.isFinite(value)?Number(value.toFixed(3)):0;
+const array=value=>Array.isArray(value)?value:[];
+const present=value=>value!==undefined&&value!==null&&value!=='';
+const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
+
+function chart(block,esc){
+ const points=array(block.points).slice(0,90).map(point=>({date:String(point?.date??''),label:String(point?.label??point?.date??''),value:finite(point?.value)?point.value:null}));
+ const values=points.filter(point=>point.value!==null).map(point=>point.value);
+ if(!values.length)return '<p class="component-card-empty">这段时间还没有可展示的数据。</p>';
+ const minimum=Math.min(0,...values),maximum=Math.max(0,...values),magnitude=Math.max(1,...values.map(value=>Math.abs(value)));
+ const low=minimum/magnitude,high=maximum/magnitude;
+ const extent=high-low||1;
+ const width=320,height=174,left=10,right=10,top=12,bottom=14,plotWidth=width-left-right,plotHeight=height-top-bottom;
+ const y=value=>coordinate(top+(high-value/magnitude)/extent*plotHeight);
+ // All-zero data has a zero baseline at the bottom and no phantom positive bar.
+ const allZero=values.every(value=>value===0),zero=allZero?height-bottom:y(0);
+ const valueY=value=>allZero?zero:y(value);
+ const x=index=>coordinate(block.chart==='line'?(points.length===1?width/2:left+index/(points.length-1)*plotWidth):left+(index+.5)/points.length*plotWidth);
+ const barWidth=coordinate(Math.min(34,plotWidth/points.length*.66));
+ const unit=String(block.unit??'');
+ const pointTitle=point=>esc(`${point.label||point.date}：${point.value===null?'暂无数据':display(point.value)+(unit?' '+unit:'')}`);
+ const grid=[top,top+plotHeight/2,height-bottom].map(row=>`<line class="component-chart-grid" x1="${left}" y1="${coordinate(row)}" x2="${width-right}" y2="${coordinate(row)}"/>`).join('');
+ let drawing='';
+ if(block.chart==='line'){
+  const segments=[];let current=[];
+  for(let i=0;i<points.length;i++){const point=points[i];if(point.value===null){if(current.length)segments.push(current);current=[];continue;}current.push({x:x(i),y:valueY(point.value)});}
+  if(current.length)segments.push(current);
+  drawing=segments.map(segment=>`<path class="component-chart-line" d="${segment.map((p,i)=>(i?'L':'M')+p.x+' '+p.y).join(' ')}"/>`).join('');
+  drawing+=points.map((point,index)=>point.value===null?'':`<circle class="component-chart-point" cx="${x(index)}" cy="${valueY(point.value)}" r="2.7"><title>${pointTitle(point)}</title></circle>`).join('');
+ }else{
+  drawing=points.map((point,index)=>{
+   if(point.value===null)return '';
+   const endpoint=valueY(point.value),barY=coordinate(Math.min(zero,endpoint)),barHeight=coordinate(Math.abs(zero-endpoint));
+   return `<rect class="component-chart-bar ${point.value<0?'is-negative':''}" x="${coordinate(x(index)-barWidth/2)}" y="${barY}" width="${barWidth}" height="${barHeight}" rx="${Math.min(3,barWidth/3)}"><title>${pointTitle(point)}</title></rect>`;
+  }).join('');
+ }
+ const labelIndices=[...new Set(Array.from({length:Math.min(5,points.length)},(_,i)=>Math.round(i*(points.length-1)/Math.max(1,Math.min(5,points.length)-1))))];
+ const labels=labelIndices.map((index,i)=>`<span class="${i&&i<labelIndices.length-1?'is-intermediate':''}">${esc(points[index].label||points[index].date)}</span>`).join('');
+ const description=`${block.label||'图表'}，${points.map(point=>(point.label||point.date)+' '+(point.value===null?'暂无数据':display(point.value)+' '+unit)).join('，')}`;
+ return `<div class="component-chart"><div class="component-chart-scale"><span>${esc(display(minimum))} – ${esc(display(maximum))}${unit?' '+esc(unit):''}</span><span>${block.chart==='line'?'折线':'柱状'}</span></div><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(description)}" preserveAspectRatio="none">${grid}<line class="component-chart-zero" x1="${left}" y1="${zero}" x2="${width-right}" y2="${zero}"/>${drawing}</svg><div class="component-chart-axis">${labels}</div><details class="component-chart-values"><summary>查看数值</summary><dl>${points.map(point=>`<div><dt>${esc(point.label||point.date)}</dt><dd>${point.value===null?'暂无数据':esc(display(point.value))+(unit?' '+esc(unit):'')}</dd></div>`).join('')}</dl></details></div>`;
+}
+
+function blockContent(block,esc){
+ if(block.type==='stat')return `<div class="component-stat-value">${esc(display(block.value))}${present(block.unit)?`<small>${esc(block.unit)}</small>`:''}</div>${present(block.detail)?`<p class="component-stat-detail">${esc(block.detail)}</p>`:(!present(block.value)||typeof block.value==='number'&&!finite(block.value))?'<p class="component-stat-detail">尚未记录</p>':''}`;
+ if(block.type==='chart')return chart(block,esc)+(present(block.detail)?`<p class="component-stat-detail">${esc(block.detail)}</p>`:'');
+ if(block.type==='list'){
+  const items=array(block.items).slice(0,8).filter(item=>item&&typeof item==='object');
+  return items.length?`<ul class="component-data-list">${items.map(item=>`<li><strong>${esc(item.title||'未命名记录')}</strong>${present(item.date)?`<time>${esc(item.date)}</time>`:''}${present(item.detail)?`<p>${esc(item.detail)}</p>`:''}</li>`).join('')}</ul>`:'<p class="component-card-empty">暂无符合条件的记录。</p>';
+ }
+ if(block.type==='progress'){
+  const hasValue=finite(block.value),hasTarget=finite(block.target)&&block.target>0;
+  const percent=hasValue&&hasTarget?Math.min(100,Math.max(0,block.value/block.target*100)):0;
+  const text=hasValue?display(block.value):'—',unit=present(block.unit)?' '+String(block.unit):'';
+  const label=hasTarget?`${text}${unit}，目标 ${display(block.target)}${unit}`:`${text}${unit}，目标未设置`;
+  return `<div class="component-progress-values"><strong>${esc(text)}${unit?`<small>${esc(unit)}</small>`:''}</strong><span>${hasTarget?'目标 '+esc(display(block.target))+esc(unit):'目标未设置'}</span></div><div class="component-progress-track" ${hasTarget&&hasValue?`role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${coordinate(percent)}"`:'role="img"'} aria-label="${esc(label)}"><span style="width:${coordinate(percent)}%"></span></div><p class="component-progress-detail">${!hasValue?'尚未记录':hasTarget?`${Math.round(percent)}%`:'设置目标后显示进度'}</p>${present(block.detail)?`<p class="component-stat-detail">${esc(block.detail)}</p>`:''}`;
+ }
+ return '';
+}
+
+function renderComponentCard(model,options={}){
+ model=model&&typeof model==='object'?model:{};
+ const esc=typeof options.esc==='function'?options.esc:escapeText;
+ const appearance=model.appearance||{},tone=appearance.tone==='tinted'?'tinted':'neutral',density=appearance.density==='compact'?'compact':'comfortable',layout=model.layout==='grid'?'grid':'stack';
+ const accent=typeof appearance.accent==='string'&&/^#[a-f0-9]{6}$/i.test(appearance.accent)?appearance.accent:null;
+ const rgb=accent?[1,3,5].map(i=>parseInt(accent.slice(i,i+2),16)):null;
+ const luminance=rgb?.reduce((sum,value,i)=>sum+[.2126,.7152,.0722][i]*(value/255<=.04045?value/255/12.92:((value/255+.055)/1.055)**2.4),0);
+ const dataInk=accent&&(luminance>.25?'#'+rgb.map(value=>Math.round(value*.55).toString(16).padStart(2,'0')).join(''):accent);
+ const source=typeof model.source?.name==='string'&&model.source.name?`来自${model.source.name}工作台`:'';
+ const showManage=options.showManage===true&&!options.readOnly&&uuid(options.componentId);
+ const blocks=array(model.blocks).slice(0,8).filter(block=>block&&typeof block==='object'&&['stat','chart','list','progress'].includes(block.type));
+ return `<article class="component-card component-card-tone-${tone} component-card-density-${density}" ${accent?`style="--component-accent:${accent};--component-data-ink:${dataInk}"`:''}><header class="component-card-head"><div><h3>${esc(model.title||'未命名组件')}</h3>${present(model.description)?`<p>${esc(model.description)}</p>`:''}</div>${showManage?`<button type="button" class="component-manage-button" data-action="component-open:${esc(options.componentId)}" aria-label="管理${esc(model.title||'组件')}">管理</button>`:''}</header>${source?`<div class="component-source-badge">${esc(source)}${model.space==='demo'?'<span>示例 · 虚构</span>':''}</div>`:''}<div class="component-card-blocks" data-component-layout="${layout}">${blocks.map(block=>`<section class="component-block component-block-${block.type}"><h4>${esc(block.label||({stat:'指标',chart:'趋势',list:'记录',progress:'进度'})[block.type])}</h4>${blockContent(block,esc)}</section>`).join('')||'<p class="component-card-empty">还没有可展示的组件内容。</p>'}</div></article>`;
+}
+return { renderComponentCard };
+})();
+
+const __workbenchModule18 = (() => {
+// component-draft.js
+
+// Merge deliberate draft edits onto a freshly read definition after a conflict.
+// Unchanged fields retain concurrent edits; stable block ids preserve their identity.
+const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const copy=value=>structuredClone(value);
+function mergeObject(base,draft,fresh){
+ const out=copy(fresh||{});
+ for(const key of new Set([...Object.keys(base||{}),...Object.keys(draft||{})])){
+  if(same(base?.[key],draft?.[key]))continue;
+  if(draft?.[key]===undefined)delete out[key];
+  else if(key==='binding'||key==='appearance')out[key]=mergeObject(base?.[key]||{},draft[key],fresh?.[key]||{});
+  else out[key]=copy(draft[key]);
+ }
+ return out;
+}
+function mergeComponentDraft(base,draft,fresh){
+ const result=mergeObject({...base,blocks:undefined},{...draft,blocks:undefined},{...fresh,blocks:undefined});
+ if(same(base.blocks,draft.blocks)){result.blocks=copy(fresh.blocks);return result;}
+ const original=new Map(base.blocks.map(b=>[b.id,b])),local=new Map(draft.blocks.map(b=>[b.id,b])),latest=new Map(fresh.blocks.map(b=>[b.id,b]));
+ for(const [id,b]of original)if(!local.has(id))latest.delete(id);
+ for(const [id,b]of local){if(!original.has(id))latest.set(id,copy(b));else if(!same(original.get(id),b))latest.set(id,mergeObject(original.get(id),b,latest.get(id)||original.get(id)));}
+ const localOrder=draft.blocks.map(b=>b.id),baseOrder=base.blocks.map(b=>b.id);
+ const order=same(localOrder,baseOrder)?fresh.blocks.map(b=>b.id):localOrder;
+ result.blocks=[...order.filter(id=>latest.has(id)).map(id=>latest.get(id)),...[...latest].filter(([id])=>!order.includes(id)).map(([,b])=>b)];
+ return result;
+}
+return { mergeComponentDraft };
+})();
+
+const __workbenchModule19 = (() => {
+// components.js
+const { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, validateComponentDefinition } = __workbenchModule16;
+const { renderComponentCard } = __workbenchModule17;
+const { mergeComponentDraft } = __workbenchModule18;
+const clone=value=>structuredClone(value),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const initialQuery=new URLSearchParams(location.search);
+const uuid=value=>typeof value==='string'&&/^[a-f0-9-]{36}$/i.test(value);
+const TYPES={stat:'指标',chart:'图表',list:'列表',progress:'进度'};
+const OPS={count:'记录数量',sum:'合计',latest:'最近一次',dailySum:'每日合计',dailyCount:'每日次数',dailyAvg:'每日平均',list:'最近记录'};
+const HISTORY={create:'创建草稿',update:'编辑草稿',duplicate:'复制',publish:'发布',archive:'归档',unarchive:'恢复归档',restore:'恢复为草稿','save-preview':'保存预览'};
+const allowedOps=type=>type==='stat'?['count','sum','latest']:type==='chart'?['dailyCount','dailySum','dailyAvg']:type==='list'?['list']:['count','sum'];
+const progressKinds=['water','exercise','task','reading_entry','travel_check'];
+
+function createComponentUI(ctx){
+ const {esc,icon}=ctx,media=matchMedia('(max-width:900px)');
+ let view=null,library=null,editor=null,slots=null,preview=null,returnEditor=null,pending=initialQuery.get('componentPreview'),previewError='',loadingPreview=false,previewWidth='mobile';
+ let generation=0,operation=0,busyOwner=0,busyKind='',filter='all',refreshing=false;
+ const owner=()=>ctx.userId||null,device=()=>media.matches?'mobile':'desktop';
+ const key=()=>`${generation}:${owner()||'local'}:${ctx.workbench}:${ctx.space}:${ctx.route}`;
+ const active=value=>ctx.ready&&value===key();
+ const busy=()=>Boolean(busyOwner),readonly=()=>Boolean(preview||previewError||loadingPreview||pending);
+ const eligible=()=>ctx.workbench==='reading'?['dashboard','books'].includes(ctx.page):ctx.route==='dashboard';
+ const wbs=()=>library?.workbenches||ctx.workbenches;
+ const sourceType=definition=>wbs().find(w=>w.id===definition.sourceWorkbench)?.type||'other';
+ const api=(path,options={},target=ctx.workbench)=>ctx.api(path,{...options,headers:{...options.headers,'X-Workbench-Owner':owner()||''}},ctx.space,target);
+ const button=(label,action,primary=false,disabled=false)=>`<button type="button" class="btn ${primary?'primary':''}" data-action="${action}" ${disabled?'disabled':''}>${label}</button>`;
+ const input=(label,id,value,extra='')=>`<label class="component-field">${label}<input id="${id}" value="${esc(value)}" ${extra}></label>`;
+ const select=(label,attributes,values,value)=>`<label class="component-field">${label}<select ${attributes}>${values.map(([v,t])=>`<option value="${esc(v)}" ${String(v)===String(value)?'selected':''}>${esc(t)}</option>`).join('')}</select></label>`;
+ const dirty=()=>editor&&!same(editor.original,editor.draft);
+ const slotDirty=()=>slots&&(!same(slots.base.desktop,slots.draft.desktop)||!same(slots.base.mobile,slots.draft.mobile));
+ const currentForm=()=>document.querySelector('#component-editor-form,#component-placement-form');
+ function lock(kind,token){busyOwner=token;busyKind=kind;for(const node of document.querySelectorAll('.drawer input,.drawer select,.drawer textarea,.drawer button,.component-preview-actions button')){if(node.matches('input[type=hidden]')||(kind==='preview'&&node.matches('[data-action="close"]')))continue;node.dataset.componentDisabled=String(node.disabled);node.disabled=true;}}
+ function unlock(token){if(busyOwner!==token)return false;busyOwner=0;busyKind='';for(const node of document.querySelectorAll('[data-component-disabled]')){node.disabled=node.dataset.componentDisabled==='true';delete node.dataset.componentDisabled;}return true;}
+ function cleanURL(){const url=new URL(location.href);url.searchParams.delete('componentPreview');history.replaceState(null,'',url.pathname+url.search+url.hash);}
+ function clearPreview(){operation++;preview=null;previewError='';loadingPreview=false;pending=null;returnEditor=null;document.body.classList.remove('component-preview-active');cleanURL();}
+ function cleanup({keepLink=false,resetView=true}={}){generation++;operation++;unlock(busyOwner);editor=null;slots=null;if(resetView)view=null;library=null;preview=null;returnEditor=null;previewError='';loadingPreview=false;pending=keepLink?new URLSearchParams(location.search).get('componentPreview'):null;document.body.classList.remove('component-preview-active');if(!keepLink)cleanURL();}
+ function onDrawerClose(){operation++;if(busyKind==='preview')unlock(busyOwner);editor=null;slots=null;}
+ function guardClose(){if(busy()&&busyKind!=='preview'){ctx.toast('正在保存组件操作，请稍候');return true;}return false;}
+ function showError(error){const box=document.querySelector('#component-editor-error,#component-placement-error,#component-library-error');if(box){box.hidden=false;box.textContent=error.message;if(error.code==='component_conflict'&&editor)box.insertAdjacentHTML('beforeend',button('读取最新并保留我的调整','component-reload'));if(error.code==='component_placement_conflict'&&slots)box.insertAdjacentHTML('beforeend',button('重新读取页面放置','component-slots-reload'));}else{if(readonly()){previewError=error.message;ctx.render();}ctx.toast(error.message);}}
+ async function transact(kind,request,finish){
+  if(busy())return;const at=key(),token=++operation,drawer=document.querySelector('.drawer');lock(kind,token);
+  try{const result=await request();if(!active(at))return;if(token!==operation||(drawer&&!drawer.isConnected)){ctx.invalidateCache();ctx.toast('组件操作已完成，可重新打开查看');return;}unlock(token);await finish(result);}
+  catch(error){if(active(at)&&token===operation)showError(error);}
+  finally{if(unlock(token)&&readonly())ctx.render();}
+ }
+ const status=component=>component.archived?'已归档':component.publishedRevision?(component.hasDraftChanges?'有未发布修改':'已发布'):'草稿';
+ async function ensureLibrary(){const data=await api('/api/components');if(data.owner!==owner())throw new Error('登录账号已变化，请重新打开');library=data;return data;}
+ async function openLibrary(){const at=key(),token=++operation,drawer=document.querySelector('.drawer'),data=await api('/api/components');if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer||data.owner!==owner())return;library=data;editor=null;slots=null;drawLibrary();}
+ function drawLibrary(){
+  const list=(library.components||[]).filter(c=>filter==='all'||filter==='archived'?filter==='all'||c.archived:filter==='draft'? !c.archived&&(!c.publishedRevision||c.hasDraftChanges):!c.archived&&Boolean(c.publishedRevision));
+  const body=`<div class="component-library-tabs">${button('组件库','component-library',true)}${button('本页放置','component-slots')}</div><div class="component-library-toolbar">${button('从模板创建','component-new',true)}${button('让 AI 生成','component-ai')}<label><span class="sr-only">组件筛选</span><select id="component-filter">${[['all','全部组件'],['draft','草稿与未发布修改'],['published','已发布'],['archived','已归档']].map(([v,t])=>`<option value="${v}" ${filter===v?'selected':''}>${t}</option>`).join('')}</select></label></div><p class="component-help">组件库属于你的账号，可跨工作台复用。编辑先保存为草稿，发布后才会更新页面上的卡片。</p><div class="component-library-list">${list.map(c=>`<article class="component-library-item"><div><h3>${esc(c.title)}</h3><span class="component-status ${c.archived?'is-archived':''}">${status(c)}</span><p>来源：${esc(c.sourceName)} · 版本 ${c.revision}${c.usage?.length?` · 已放置于${c.usage.length}个工作台`:''}</p></div><div class="component-item-actions">${button('查看 / 编辑','component-open:'+c.id)}${button('复制','component-copy:'+c.id)}${button(c.archived?'恢复归档':'归档','component-archive:'+c.id)}</div></article>`).join('')||'<div class="component-library-empty"><h3>从一张适合自己的卡片开始</h3><p>选择运动汇总、指标趋势、待办等模板，或让已连接知衡的AI生成组件草稿。</p></div>'}</div><div id="component-library-error" class="form-error" role="alert" hidden></div>`;
+  ctx.openDrawer(body,'AI 组件库','生成、编辑和管理可复用的工作台卡片');
+  document.querySelector('#component-filter').onchange=e=>{filter=e.target.value;drawLibrary();};
+ }
+ async function templates(){const at=key(),token=++operation,drawer=document.querySelector('.drawer');if(!library)await ensureLibrary();if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer)return;const body=`<p class="component-help">模板会打开未保存的组件草稿。你可以修改内容、数据来源和外观，预览后再保存。</p><div class="component-template-list">${COMPONENT_TEMPLATES.map(t=>`<button class="component-template" data-action="component-template:${t.id}"><span>${icon(t.id.includes('trend')?'activity':t.id.includes('task')?'task':'grid',22)}</span><div><strong>${esc(t.title)}</strong><p>${esc(t.description)}</p></div>${icon('arrow',15)}</button>`).join('')}</div>${button('返回组件库','component-library')}`;ctx.openDrawer(body,'创建组件','用模板组合指标、图表、列表和进度');}
+ async function aiHelp(){const prompt='请使用知衡组件工具，生成一张展示近7天运动时长、次数和每日柱状图的组件。先创建草稿并给我预览，再按我的要求发布和放置。';ctx.openDrawer(`<p class="component-help">在已连接知衡的AI对话里描述组件需求。AI会读取支持的数据字段，生成可编辑组件草稿；当前页面不包含内置模型服务。</p><label class="component-field">示例指令<textarea id="component-ai-prompt" rows="5">${esc(prompt)}</textarea></label>${button('复制指令','component-ai-copy',true)}<div id="component-library-error" role="status"></div><p class="component-help">新工具需要AI连接端刷新工具列表。可以说明标题、数据来源、指标、图表和放置位置。</p>${button('从模板创建','component-new')}`,'让 AI 生成组件','文字描述 → 组件草稿 → 预览 → 发布');}
+ async function openComponent(id){const at=key(),token=++operation,drawer=document.querySelector('.drawer');if(!library){await ensureLibrary();if(!active(at)||token!==operation)return;}const data=await api('/api/components/'+encodeURIComponent(id));if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer||data.owner!==owner())return;editor={base:data,original:clone(data.definition),draft:clone(data.definition)};slots=null;drawEditor();}
+ function createFromTemplate(id){const template=COMPONENT_TEMPLATES.find(t=>t.id===id);if(!template)return;const current=wbs().find(w=>w.id===ctx.workbench),source=template.sourceType==='current'?current:wbs().find(w=>w.type===template.sourceType);if(!source)throw new Error('没有可用于此模板的来源工作台');const definition=createComponentDefinition(id,source.id);editor={base:null,original:clone(definition),draft:definition};slots=null;drawEditor();}
+ function kindsFor(type){const source=sourceType(editor.draft);return Object.entries(COMPONENT_CATALOG.kinds).filter(([kind,c])=>c.workbenchTypes.includes(source)&&c.aggregations.some(op=>allowedOps(type).includes(op))&&(type!=='progress'||progressKinds.includes(kind)));}
+ function normalizeBlock(block){
+  const available=kindsFor(block.type);if(!available.length)throw new Error('这个来源没有可用的数据类型');
+  if(!available.some(([kind])=>kind===block.binding.kind))block.binding={kind:available[0][0],aggregation:'count',days:null};
+  const data=COMPONENT_CATALOG.kinds[block.binding.kind],ops=data.aggregations.filter(op=>allowedOps(block.type).includes(op));if(!ops.includes(block.binding.aggregation))block.binding.aggregation=ops[0];
+  if(['sum','latest','dailySum','dailyAvg'].includes(block.binding.aggregation)){if(!Object.hasOwn(data.fields,block.binding.field))block.binding.field=Object.keys(data.fields)[0];}else delete block.binding.field;
+  if(block.binding.kind==='metric'){block.binding.metric||='weight';if(block.binding.field==='secondary'&&block.binding.metric!=='pressure')block.binding.field='value';}else delete block.binding.metric;
+  if(!['task','travel_check'].includes(block.binding.kind))delete block.binding.onlyPending;
+  if(block.type==='list')block.binding.limit||=5;else delete block.binding.limit;
+  if(block.type==='chart'){block.chart||='bar';block.binding.days||=7;}else delete block.chart;
+  if(block.binding.days===undefined)block.binding.days=null;if(block.binding.days===null)delete block.binding.todayOnly;
+  if(block.type==='progress'){if(block.target?.mode==='waterGoalMl'&&(block.binding.kind!=='water'||block.binding.field!=='volume'||block.binding.aggregation!=='sum'))block.target={mode:'fixed',value:10};block.target||={mode:'fixed',value:10};}else delete block.target;
+  return block;
+ }
+ function focusSelector(){const node=document.activeElement;if(node?.id)return '#'+CSS.escape(node.id);for(const name of ['data-component-label','data-component-binding','data-component-block-field','data-component-placement','data-action'])if(node?.hasAttribute(name))return `[${name}="${CSS.escape(node.getAttribute(name))}"]`;return null;}
+ function rebuildEditor(){const top=document.querySelector('.drawer-content')?.scrollTop||0,focus=focusSelector();drawEditor({scrollTop:top,focus});}
+ function syncDraft(){const form=document.querySelector('#component-editor-form');if(form)form.elements['component-draft'].value=JSON.stringify(editor.draft);for(const b of document.querySelectorAll('[data-action="component-save"]'))b.disabled=Boolean(editor.base)&&!dirty();for(const b of document.querySelectorAll('[data-action="component-publish"]'))b.disabled=!editor.base||dirty()||editor.base.archived||!editor.base.hasDraftChanges;}
+ function blockEditor(block,index){
+  const q=block.binding,kind=COMPONENT_CATALOG.kinds[q.kind],ops=kind.aggregations.filter(op=>allowedOps(block.type).includes(op));
+  return `<section class="component-block-editor" data-component-block="${block.id}"><div class="component-block-editor-head"><strong>${TYPES[block.type]} ${index+1}</strong><div>${button('↑','component-block-up:'+block.id,false,index===0)}${button('↓','component-block-down:'+block.id,false,index===editor.draft.blocks.length-1)}${button('移除','component-block-remove:'+block.id,false,editor.draft.blocks.length===1)}</div></div><label class="component-field">区块标题<input data-component-label="${block.id}" value="${esc(block.label)}" maxlength="40"></label><div class="component-field-grid">${select('数据类型',`data-component-binding="${block.id}:kind"`,kindsFor(block.type).map(([id,c])=>[id,c.title]),q.kind)}${select('展示计算',`data-component-binding="${block.id}:aggregation"`,ops.map(op=>[op,OPS[op]]),q.aggregation)}${q.field!==undefined?select('数值字段',`data-component-binding="${block.id}:field"`,Object.entries(kind.fields).filter(([name])=>name!=='secondary'||q.metric==='pressure').map(([id,f])=>[id,f.label]),q.field):''}${q.kind==='metric'?select('监测项目',`data-component-binding="${block.id}:metric"`,Object.entries(COMPONENT_CATALOG.metrics).map(([id,m])=>[id,m.title]),q.metric):''}${select('时间范围',`data-component-binding="${block.id}:days"`,[...(block.type==='chart'?[]:[['all','全部时间']]),...[7,14,30,90].map(n=>[n,'近'+n+'天'])],q.days??'all')}${q.days!==null?`<label class="component-checkbox"><input type="checkbox" data-component-binding="${block.id}:todayOnly" ${q.todayOnly?'checked':''}>仅今天</label>`:''}${['task','travel_check'].includes(q.kind)?`<label class="component-checkbox"><input type="checkbox" data-component-binding="${block.id}:onlyPending" ${q.onlyPending?'checked':''}>仅未完成</label>`:''}${block.type==='chart'?select('图表样式',`data-component-block-field="${block.id}:chart"`,[['bar','柱状图'],['line','折线图']],block.chart):''}${block.type==='list'?select('记录数量',`data-component-binding="${block.id}:limit"`,[1,2,3,4,5,6,7,8].map(n=>[n,n+'项']),q.limit):''}${block.type==='progress'?select('目标方式',`data-component-block-field="${block.id}:targetMode"`,[['fixed','指定记录目标'],...(q.kind==='water'&&q.field==='volume'&&q.aggregation==='sum'?[['waterGoalMl','已有饮水目标']]:[])],block.target.mode):''}${block.type==='progress'&&block.target.mode==='fixed'?`<label class="component-field">目标数值<input type="number" inputmode="decimal" min="0.01" max="1000000" step="any" data-component-block-field="${block.id}:targetValue" value="${esc(block.target.value)}"></label>`:''}</div></section>`;
+ }
+ function drawEditor({scrollTop,focus}={}){
+  if(!editor)return;const d=editor.draft,b=editor.base,saved=Boolean(b)&&!dirty(),canPublish=saved&&!b.archived&&b.hasDraftChanges;
+  const body=`<form id="component-editor-form" data-discard-guard><input type="hidden" name="component-draft" value="${esc(JSON.stringify(editor.original))}"><div class="component-editor-state"><span class="component-status">${b?status(b):'未保存草稿'}</span><span>${b?'版本 '+b.revision:'预览不会创建组件'}</span>${b?.publishedRevision?button('放置到工作台','component-place:'+b.id,false,!saved||b.archived):''}</div>${input('组件名称','component-title',d.title,'maxlength="40" required')}<label class="component-field">说明<textarea id="component-description" maxlength="240" rows="2">${esc(d.description)}</textarea></label><div class="component-field-grid">${select('数据来源工作台','id="component-source"',wbs().map(w=>[w.id,w.name]),d.sourceWorkbench)}${select('区块排列','id="component-layout"',[['grid','指标并排'],['stack','纵向排列']],d.layout)}</div><p class="component-help">数据按当前个人 / 示例空间读取。跨工作台放置时保留这里的来源，不会改变原始记录。</p><div class="component-field-grid">${select('背景','id="component-tone"',[['neutral','灰白'],['tinted','浅主题色']],d.appearance.tone)}${select('留白','id="component-density"',[['comfortable','舒展'],['compact','紧凑']],d.appearance.density)}</div><div class="component-color-field"><label class="component-checkbox"><input id="component-follow-color" type="checkbox" ${d.appearance.accent===null?'checked':''}>跟随所在工作台主题色</label><input id="component-accent" aria-label="组件自定义颜色" type="color" value="${esc(d.appearance.accent||'#2C6B51')}" ${d.appearance.accent===null?'disabled':''}></div><div class="component-section-heading"><h3>区块结构</h3><span>${d.blocks.length} / 8</span></div><div class="component-block-editors">${d.blocks.map(blockEditor).join('')}</div><div class="component-add-blocks">${Object.entries(TYPES).map(([id,title])=>button('＋ '+title,'component-add-block:'+id,false,d.blocks.length>=8)).join('')}</div>${b?`<details class="component-version-history"><summary>组件版本与管理</summary><p class="component-help">恢复历史会创建新草稿，已发布版本继续显示，直到你再次发布。</p><div class="component-history-row"><select id="component-history" aria-label="组件历史版本">${(b.history||[]).filter(h=>h.revision<b.revision).map(h=>`<option value="${h.revision}">版本 ${h.revision} · ${esc(HISTORY[h.action]||h.action)}</option>`).join('')||'<option value="">暂无更早版本</option>'}</select>${button('恢复为草稿','component-restore',false,!saved||!(b.history||[]).some(h=>h.revision<b.revision))}</div><div class="component-admin-actions">${button('复制组件','component-copy:'+b.id,false,!saved)}${button(b.archived?'恢复归档':'归档组件','component-archive:'+b.id,false,!saved)}</div></details>`:''}<div id="component-editor-error" class="form-error" role="alert" hidden></div></form>`;
+  ctx.openDrawer(body,'编辑组件','修改保存在草稿，发布后才更新页面',`${button('返回组件库','component-back')}${button('预览','component-preview')}${button('保存草稿','component-save',true,Boolean(b)&&!dirty())}${button('发布','component-publish',false,!canPublish)}`);
+  const form=document.querySelector('#component-editor-form');form.elements['component-draft'].value=JSON.stringify(d);form.onsubmit=e=>e.preventDefault();
+  form.oninput=e=>{const node=e.target;if(node.id==='component-title')d.title=node.value;else if(node.id==='component-description')d.description=node.value;else if(node.dataset.componentLabel){const block=d.blocks.find(x=>x.id===node.dataset.componentLabel);if(block)block.label=node.value;}else if(node.dataset.componentBlockField?.endsWith(':targetValue')){const block=d.blocks.find(x=>x.id===node.dataset.componentBlockField.split(':')[0]);if(block)block.target.value=Number(node.value);}else return;syncDraft();};
+  form.onchange=e=>{try{changeControl(e.target);}catch(error){showError(error);}};
+  if(scrollTop!==undefined)document.querySelector('.drawer-content').scrollTop=scrollTop;if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+ }
+ function changeControl(node){
+  const d=editor.draft;
+  if(node.id==='component-title'||node.id==='component-description'||node.dataset.componentLabel||node.dataset.componentBlockField?.endsWith(':targetValue')){syncDraft();return;}
+  if(node.id==='component-source'){d.sourceWorkbench=node.value;for(const block of d.blocks)normalizeBlock(block);}
+  else if(node.id==='component-layout')d.layout=node.value;
+  else if(node.id==='component-tone')d.appearance.tone=node.value;
+  else if(node.id==='component-density')d.appearance.density=node.value;
+  else if(node.id==='component-follow-color')d.appearance.accent=node.checked?null:document.querySelector('#component-accent').value;
+  else if(node.id==='component-accent')d.appearance.accent=node.value;
+  else if(node.dataset.componentBinding){const [id,field]=node.dataset.componentBinding.split(':'),block=d.blocks.find(x=>x.id===id);if(!block)return;block.binding[field]=['onlyPending','todayOnly'].includes(field)?node.checked:field==='days'?(node.value==='all'?null:Number(node.value)):field==='limit'?Number(node.value):node.value;normalizeBlock(block);}
+  else if(node.dataset.componentBlockField){const [id,field]=node.dataset.componentBlockField.split(':'),block=d.blocks.find(x=>x.id===id);if(!block)return;if(field==='chart')block.chart=node.value;else if(field==='targetMode')block.target=node.value==='waterGoalMl'?{mode:'waterGoalMl'}:{mode:'fixed',value:10};normalizeBlock(block);}
+  else return;rebuildEditor();
+ }
+ async function acceptedComponent(data,message='组件草稿已保存'){if(library){const {definition,publishedDefinition,history,...metadata}=data;library.components=[metadata,...(library.components||[]).filter(c=>c.id!==data.id)];}editor={base:data,original:clone(data.definition),draft:clone(data.definition)};slots=null;ctx.invalidateCache();drawEditor();await ctx.load({retainOnError:true});ctx.toast(message);}
+ async function saveEditor(){const definition=validateComponentDefinition(editor.draft),b=editor.base;await transact('save',()=>api(b?'/api/components/'+b.id:'/api/components',{method:b?'PUT':'POST',body:JSON.stringify({...b?{expectedRevision:b.revision}:{},definition})}),data=>acceptedComponent(data));}
+ async function previewEditor(){
+  const definition=validateComponentDefinition(editor.draft),b=editor.base,stash=clone(editor),at=key(),form=currentForm(),token=++operation;lock('preview',token);
+  try{const data=await api('/api/components/preview',{method:'POST',body:JSON.stringify({definition,...b?{componentId:b.id,expectedRevision:b.revision}:{}})});if(!active(at)||operation!==token||!form?.isConnected)return;unlock(token);ctx.closeDrawer();returnEditor=stash;preview=data;previewError='';previewWidth=device();const url=new URL(location.href);url.searchParams.set('componentPreview',data.previewId);url.searchParams.set('space',data.space||ctx.space);history.replaceState(null,'',url.pathname+url.search+url.hash);ctx.clearLayoutPreview();ctx.enterDashboard();ctx.render();}
+  catch(error){if(active(at)&&operation===token&&form?.isConnected)showError(error);}finally{if(unlock(token)&&readonly())ctx.render();}
+ }
+ function setView(data){view=data&&data.owner===owner()&&data.workbench===ctx.workbench&&data.space===ctx.space?data:null;}
+ function renderZone(items,zone){const relevant=items.filter(x=>x.visible&&x.zone===zone);if(!relevant.length)return '';return `<section class="component-canvas-zone" data-component-zone="${zone}" aria-label="我的组件${zone==='top'?'顶部':'底部'}"><div class="component-zone-heading"><span>我的组件</span><button class="text-btn" data-action="component-slots">管理放置</button></div><div class="component-instance-grid">${relevant.map(item=>`<div class="component-instance" data-component-instance="${item.instanceId}" data-component-size="${item.size}">${item.model?renderComponentCard(item.model,{esc,icon,componentId:item.componentId,showManage:true,readOnly:ctx.layoutReadOnly()}):`<article class="component-card component-unavailable"><h3>${esc(item.component?.title||'组件')}</h3><p>${esc(item.unavailable||'组件暂时不可用')}</p>${button('打开组件','component-open:'+item.componentId)}</article>`}</div>`).join('')}</div></section>`;}
+ function mount(){
+  document.body.classList.toggle('component-preview-active',readonly());const main=document.querySelector('#app main');if(!main)return;
+  if(readonly()){mountPreview(main);return;}
+  if(!eligible()||!view)return;const list=view[device()]||[],top=renderZone(list,'top'),bottom=renderZone(list,'bottom');
+  const anchor=main.querySelector('.health-overview,.studio-domain-dashboard,.reading-content,.studio-other-toolbar,.studio-other-grid')||main.querySelector('.heading');
+  if(top&&main.querySelector('.health-overview-heading'))main.querySelector('.health-overview-heading').insertAdjacentHTML('afterend',top);else if(top&&anchor)anchor.insertAdjacentHTML('beforebegin',top);else if(top)main.insertAdjacentHTML('afterbegin',top);
+  const footer=main.querySelector('.footer');if(bottom&&footer)footer.insertAdjacentHTML('beforebegin',bottom);else if(bottom)main.insertAdjacentHTML('beforeend',bottom);
+ }
+ function mountPreview(main){
+  const expired=preview&&Date.parse(preview.expiresAt)<=Date.now(),stage=document.createElement('section');stage.className='component-preview-stage';stage.setAttribute('aria-label','组件预览');
+  stage.innerHTML=`<div class="component-preview-bar"><div><strong>${loadingPreview?'正在加载组件预览…':previewError?'组件预览需要处理':'组件预览'}</strong><p>${esc(previewError||(expired?'预览已过期，仍可继续编辑并生成新预览。':'这里只预览组件，不会自动保存、发布或改变原始记录。'))}</p></div><div class="component-preview-actions">${preview?button('继续编辑','component-preview-edit',false,busy()):''}${preview?button('保存为草稿','component-preview-save',true,busy()||expired):''}${button('退出预览','component-preview-exit',false,busy()&&busyKind!=='preview')}</div></div>${preview?`<div class="component-preview-widths" role="group" aria-label="组件预览宽度">${[['mobile','手机'],['medium','标准卡片'],['desktop','宽屏']].map(([v,t])=>`<button data-action="component-preview-width:${v}" aria-pressed="${previewWidth===v}">${t}</button>`).join('')}</div><div class="component-preview-card" data-preview-width="${previewWidth}">${renderComponentCard(preview.model,{esc,icon,readOnly:true})}</div>`:''}`;main.append(stage);
+ }
+ async function initializePreview(){
+  if(!pending||!ctx.ready)return;const id=pending,at=key();pending=null;loadingPreview=true;ctx.render();if(!uuid(id)){loadingPreview=false;previewError='组件预览链接无效';ctx.render();return;}
+  try{const data=await api('/api/components/previews/'+encodeURIComponent(id));if(!active(at)||!loadingPreview)return;if(data.owner!==owner())return;preview=data;previewWidth=device();}
+  catch(error){if(active(at)&&loadingPreview)previewError=error.message;}finally{if(active(at)&&loadingPreview){loadingPreview=false;ctx.render();}}
+ }
+ async function previewEdit(){
+  const candidate=preview;if(!candidate)return;const old=returnEditor;
+  if(old){clearPreview();ctx.render();editor=old;drawEditor();return;}
+  const at=key();if(!library)await ensureLibrary();if(!active(at))return;
+  let base=null;if(candidate.componentId){base=await api('/api/components/'+candidate.componentId);if(!active(at))return;base={...base,revision:candidate.baseRevision};}
+  clearPreview();ctx.render();editor={base,original:clone(base?.definition||candidate.definition),draft:clone(candidate.definition)};drawEditor();
+ }
+ async function openSlots(){const at=key(),token=++operation,drawer=document.querySelector('.drawer');const [data,freshLibrary]=await Promise.all([api('/api/components/placements'),api('/api/components')]);if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer||data.owner!==owner()||freshLibrary.owner!==owner())return;library=freshLibrary;slots={base:data,draft:clone(data),device:device()};editor=null;drawSlots();}
+ function drawSlots({scrollTop,focus}={}){
+  const d=slots.device,list=slots.draft[d],names=new Map((library.components||[]).map(c=>[c.id,c])),published=(library.components||[]).filter(c=>c.publishedRevision&&!c.archived);
+  const body=`<form id="component-placement-form" data-discard-guard><input type="hidden" name="component-placements" value="${esc(JSON.stringify({desktop:slots.base.desktop,mobile:slots.base.mobile}))}"><div class="component-library-tabs">${button('组件库','component-back')}${button('本页放置','component-slots',true)}</div><div class="component-device-tabs" role="group" aria-label="放置设备">${['mobile','desktop'].map(v=>`<button data-action="component-slots-device:${v}" type="button" aria-pressed="${v===d}">${v==='mobile'?'手机':'电脑'}</button>`).join('')}</div><p class="component-help">管理「${esc(wbs().find(w=>w.id===ctx.workbench)?.name||'当前工作台')}」首页的额外组件。手机和电脑独立，个人 / 示例空间共用排列。删除实例不删除组件或原始记录。</p><div class="component-placement-add"><select id="component-placement-add" aria-label="选择已发布组件">${published.map(c=>`<option value="${c.id}">${esc(c.title)} · ${esc(c.sourceName)}</option>`).join('')||'<option value="">请先创建并发布组件</option>'}</select>${button('添加实例','component-slots-add',true,!published.length||list.length>=12)}</div><div class="component-placement-list">${list.map((p,i)=>`<section class="component-placement-row"><div class="component-placement-row-head"><label><input type="checkbox" data-component-placement="${p.instanceId}:visible" ${p.visible?'checked':''}>${esc(names.get(p.componentId)?.title||'组件')}</label><div>${button('↑','component-slot-up:'+p.instanceId,false,i===0)}${button('↓','component-slot-down:'+p.instanceId,false,i===list.length-1)}${button('移除','component-slot-remove:'+p.instanceId)}</div></div><div class="component-field-grid">${select('位置',`data-component-placement="${p.instanceId}:zone"`,[['top','原首页内容之前'],['bottom','原首页内容之后']],p.zone)}${select('大小',`data-component-placement="${p.instanceId}:size"`,[['small','紧凑'],['medium','标准'],['large','通栏']],p.size)}</div>${names.get(p.componentId)?.archived?'<p class="component-help">此组件已归档，页面会保留可恢复的占位。</p>':''}</section>`).join('')||'<p class="component-help">这个设备还没有放置额外组件。</p>'}</div><details class="component-version-history"><summary>页面组件排列历史</summary><div class="component-history-row"><select id="component-placement-history" aria-label="页面组件历史">${(slots.base.history||[]).filter(h=>h.revision<slots.base.revision).map(h=>`<option value="${h.revision}">版本 ${h.revision}</option>`).join('')||'<option value="">暂无历史版本</option>'}</select>${button('恢复排列','component-slots-restore',false,slotDirty()||!(slots.base.history||[]).some(h=>h.revision<slots.base.revision))}</div></details><div id="component-placement-error" class="form-error" role="alert" hidden></div></form>`;
+  ctx.openDrawer(body,'本页组件放置','按设备管理可复用卡片',`${button('取消','close')}${button('保存放置','component-slots-save',true,!slotDirty())}`);
+  const form=document.querySelector('#component-placement-form');form.elements['component-placements'].value=JSON.stringify({desktop:slots.draft.desktop,mobile:slots.draft.mobile});form.onsubmit=e=>e.preventDefault();form.onchange=e=>{const node=e.target;if(!node.dataset.componentPlacement)return;const [id,field]=node.dataset.componentPlacement.split(':'),p=slots.draft[slots.device].find(x=>x.instanceId===id);if(p){p[field]=field==='visible'?node.checked:node.value;const top=document.querySelector('.drawer-content')?.scrollTop,focus=focusSelector();drawSlots({scrollTop:top,focus});}};if(scrollTop!==undefined)document.querySelector('.drawer-content').scrollTop=scrollTop;if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+ }
+ async function placeComponent(id){if(!editor?.base||dirty())return;const at=key(),token=++operation,form=currentForm(),[data,freshLibrary]=await Promise.all([api('/api/components/placements'),api('/api/components')]);if(!active(at)||token!==operation||!form?.isConnected||dirty()||freshLibrary.owner!==owner())return;library=freshLibrary;const target={base:data,draft:clone(data),device:device()};if(target.draft[target.device].length>=12)throw new Error('此设备最多放置12个组件');target.draft[target.device].push({instanceId:crypto.randomUUID(),componentId:id,zone:'top',size:'medium',visible:true});slots=target;editor=null;drawSlots();}
+ async function acceptedSlots(data){slots={base:data,draft:clone(data),device:slots?.device||device()};ctx.invalidateCache();drawSlots();await ctx.load({retainOnError:true});ctx.toast('页面组件放置已保存');}
+ async function handle(action,arg){
+  if(ctx.layoutReadOnly())return;
+  if(action==='component-preview-exit'){if(guardClose())return;clearPreview();ctx.render();await ctx.load({retainOnError:true});return;}
+  if(action==='component-preview-width'){if(['mobile','medium','desktop'].includes(arg)){previewWidth=arg;ctx.render();}return;}
+  if(action==='component-preview-edit'){if(!busy())await previewEdit();return;}
+  if(action==='component-preview-save'){if(preview&&!busy()){const p=preview;await transact('save',()=>api('/api/components/previews/'+p.previewId+'/save',{method:'POST',body:JSON.stringify(p.componentId?{expectedRevision:p.baseRevision}:{})}),async data=>{clearPreview();ctx.render();await acceptedComponent(data,'预览已保存为草稿，发布后可放置');});}return;}
+  if(busy())return;
+  if(action==='component-library')return openLibrary();
+  if(action==='component-new')return templates();
+  if(action==='component-ai')return aiHelp();
+  if(action==='component-ai-copy'){await navigator.clipboard.writeText(document.querySelector('#component-ai-prompt').value);ctx.toast('已复制，可粘贴给已连接知衡的AI');return;}
+  if(action==='component-template'){createFromTemplate(arg);return;}
+  if(action==='component-open')return openComponent(arg);
+  if(action==='component-back'){ctx.requestClose(()=>openLibrary());return;}
+  if(action==='component-slots'){if(slots&&document.querySelector('#component-placement-form'))return;return openSlots();}
+  if(action==='component-place')return placeComponent(arg);
+  if(action==='component-copy'||action==='component-archive'){
+   const c=editor?.base?.id===arg?editor.base:library?.components?.find(x=>x.id===arg);if(!c)return;if(editor&&dirty())throw new Error('请先保存当前草稿');
+   if(action==='component-copy')return transact('save',()=>api('/api/components/'+arg+'/duplicate',{method:'POST',body:JSON.stringify({expectedRevision:c.revision})}),data=>acceptedComponent(data,'已复制为独立草稿'));
+   return transact('save',()=>api('/api/components/'+arg+'/archive',{method:'POST',body:JSON.stringify({expectedRevision:c.revision,archived:!c.archived})}),async data=>{if(editor)await acceptedComponent(data,data.archived?'组件已归档，页面实例保留占位':'组件已恢复');else{ctx.invalidateCache();await ensureLibrary();drawLibrary();await ctx.load({retainOnError:true});ctx.toast(data.archived?'组件已归档':'组件已恢复');}});
+  }
+  if(action==='component-save'&&editor)return saveEditor();
+  if(action==='component-preview'&&editor)return previewEditor();
+  if(action==='component-publish'&&editor?.base&&!dirty()){const c=editor.base;return transact('save',()=>api('/api/components/'+c.id+'/publish',{method:'POST',body:JSON.stringify({expectedRevision:c.revision})}),data=>acceptedComponent(data,'组件已发布，所有实例使用此版本'));}
+  if(action==='component-reload'&&editor?.base){const at=key(),token=++operation,form=currentForm(),old=clone(editor),data=await api('/api/components/'+editor.base.id);if(!active(at)||token!==operation||!form?.isConnected)return;editor={base:data,original:clone(data.definition),draft:mergeComponentDraft(old.original,old.draft,data.definition)};drawEditor();showError(new Error('已读取最新草稿并保留你的修改，请预览检查后保存。'));return;}
+  if(action==='component-restore'&&editor?.base&&!dirty()){const revision=Number(document.querySelector('#component-history').value);if(Number.isSafeInteger(revision))return transact('save',()=>api('/api/components/'+editor.base.id+'/restore',{method:'POST',body:JSON.stringify({expectedRevision:editor.base.revision,revision})}),data=>acceptedComponent(data,'历史版本已恢复为新草稿，尚未发布'));}
+  if(editor&&action==='component-add-block'){if(editor.draft.blocks.length>=8)return;const block={id:'block-'+crypto.randomUUID().slice(0,8),type:arg,label:TYPES[arg],binding:{kind:'task',aggregation:'count',days:null}};editor.draft.blocks.push(normalizeBlock(block));rebuildEditor();return;}
+  if(editor&&action.startsWith('component-block-')){const list=editor.draft.blocks,i=list.findIndex(b=>b.id===arg);if(i<0)return;if(action==='component-block-remove'){if(list.length>1)list.splice(i,1);}else{const j=i+(action==='component-block-up'?-1:1);if(j>=0&&j<list.length)[list[i],list[j]]=[list[j],list[i]];}rebuildEditor();return;}
+  if(!slots)return;
+  if(action==='component-slots-device'){if(['mobile','desktop'].includes(arg)){slots.device=arg;drawSlots();}return;}
+  if(action==='component-slots-add'){const id=document.querySelector('#component-placement-add').value,list=slots.draft[slots.device];if(id&&list.length<12)list.push({instanceId:crypto.randomUUID(),componentId:id,zone:'bottom',size:'medium',visible:true});drawSlots();return;}
+  if(action==='component-slot-remove'){slots.draft[slots.device]=slots.draft[slots.device].filter(p=>p.instanceId!==arg);drawSlots();return;}
+  if(action==='component-slot-up'||action==='component-slot-down'){const list=slots.draft[slots.device],i=list.findIndex(p=>p.instanceId===arg),j=i+(action==='component-slot-up'?-1:1);if(i>=0&&j>=0&&j<list.length)[list[i],list[j]]=[list[j],list[i]];drawSlots();return;}
+  if(action==='component-slots-save'&&slotDirty()){const body={expectedRevision:slots.base.revision};for(const d of ['desktop','mobile'])if(!same(slots.base[d],slots.draft[d]))body[d]=slots.draft[d];return transact('save',()=>api('/api/components/placements',{method:'PUT',body:JSON.stringify(body)}),acceptedSlots);}
+  if(action==='component-slots-reload'){ctx.requestClose(()=>openSlots());return;}
+  if(action==='component-slots-restore'&&!slotDirty()){const revision=Number(document.querySelector('#component-placement-history').value);if(Number.isSafeInteger(revision))return transact('save',()=>api('/api/components/placements/restore',{method:'POST',body:JSON.stringify({expectedRevision:slots.base.revision,revision})}),acceptedSlots);}
+ }
+ async function refresh(force=false){if(refreshing||!ctx.ready||!eligible()||readonly()||ctx.layoutReadOnly()||document.hidden||document.querySelector('.drawer'))return;const at=key();refreshing=true;try{const data=await api('/api/components/placements');if(active(at)&&data.owner===owner()&&(force||data.revision!==view?.revision||data.libraryRevision!==view?.libraryRevision)){ctx.invalidateCache();await ctx.load({retainOnError:true});}}catch{}finally{refreshing=false;}}
+ media.addEventListener('change',()=>{if(ctx.ready&&(eligible()||readonly()))ctx.render();});window.addEventListener('focus',()=>refresh(true));document.addEventListener('visibilitychange',()=>refresh(true));setInterval(refresh,30000);
+ return {setView,mount,handle,cleanup,onDrawerClose,guardClose,initializePreview,isPreview:readonly,isBusy:busy,allowsPreviewAction:action=>['component-preview-edit','component-preview-save','component-preview-exit','component-preview-width'].includes(action),refresh};
+}
+return { createComponentUI };
+})();
+
+const __workbenchModule20 = (() => {
 // account.js
-const { fetchJSON } = __workbenchModule5;
+const { fetchJSON } = __workbenchModule6;
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
 function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized, onProfileChanged, loginQuery = () => ''} = {}) {
@@ -1301,9 +2126,9 @@ function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticat
 return { createAccount };
 })();
 
-const __workbenchModule14 = (() => {
+const __workbenchModule21 = (() => {
 // daily.js
-const { showFieldError, aiTag } = __workbenchModule5;
+const { showFieldError, aiTag } = __workbenchModule6;
 function createDaily(ctx){
  const {esc,icon,field,btn}=ctx;
  let reviewDate='',reviewSpace=ctx.space;
@@ -1335,7 +2160,7 @@ function createDaily(ctx){
 return { createDaily };
 })();
 
-const __workbenchModule15 = (() => {
+const __workbenchModule22 = (() => {
 // quick-defaults.js
 
 // Pure defaults for the quick-capture sheets (unit-tested in tests/quick-defaults.test.mjs).
@@ -1353,10 +2178,10 @@ function systolicComplete(value){const v=String(value??'').trim();if(!/^\d+$/.te
 return { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete };
 })();
 
-const __workbenchModule16 = (() => {
+const __workbenchModule23 = (() => {
 // quick.js
-const { showFieldError } = __workbenchModule5;
-const { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete } = __workbenchModule15;
+const { showFieldError } = __workbenchModule6;
+const { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete } = __workbenchModule22;
 function createQuick(ctx){
  const {icon,esc,btn,field}=ctx;
  const metricNames={weight:'体重',pressure:'血压',glucose:'血糖',sleep:'睡眠',heart:'静息心率'};
@@ -1428,7 +2253,7 @@ function createQuick(ctx){
 return { createQuick };
 })();
 
-const __workbenchModule17 = (() => {
+const __workbenchModule24 = (() => {
 // report-data.js
 
 // Escape every source value. Empty reference/flag means unrecorded, never 'normal'.
@@ -1439,11 +2264,11 @@ function renderReportObservations(rows,esc){
 return { renderReportObservations };
 })();
 
-const __workbenchModule18 = (() => {
+const __workbenchModule25 = (() => {
 // medical.js
-const { renderReportObservations } = __workbenchModule17;
-const { institutionMark } = __workbenchModule4;
-const { showFieldError, aiTag } = __workbenchModule5;
+const { renderReportObservations } = __workbenchModule24;
+const { institutionMark } = __workbenchModule5;
+const { showFieldError, aiTag } = __workbenchModule6;
 function createMedical(ctx){
  const {icon,esc,field,select,btn,previews}=ctx;
  let view='visits',section='overview',search='',status='all',doseDate='',fileDate='',activeId=null;
@@ -1512,7 +2337,7 @@ function createMedical(ctx){
 return { createMedical };
 })();
 
-const __workbenchModule19 = (() => {
+const __workbenchModule26 = (() => {
 // reader-shell.js
 
 const PREFERENCE_KEY='reading-appearance-v1';
@@ -1540,7 +2365,7 @@ function mountReaderShell(root,{title='',onClose}={}){
 return { readerPreferences, mountReaderShell };
 })();
 
-const __workbenchModule20 = (() => {
+const __workbenchModule27 = (() => {
 // reading-text.js
 
 // Preserve poem boundaries only for the explicitly supported collection export format.
@@ -1564,10 +2389,10 @@ function poetryTextSections(text){const first=text.indexOf('\n'),second=text.ind
 return { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections };
 })();
 
-const __workbenchModule21 = (() => {
+const __workbenchModule28 = (() => {
 // file-preview.js
-const { mountReaderShell } = __workbenchModule19;
-const { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections } = __workbenchModule20;
+const { mountReaderShell } = __workbenchModule26;
+const { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections } = __workbenchModule27;
 // Originals stay on this origin; sensitive preview data lives only for the current view.
 function createFilePreviews(ctx){
  const {esc,icon,btn}=ctx;let observer,queue=[],running=0,epoch=0,viewer=null;const jobs=new Map();
@@ -1642,14 +2467,16 @@ return { createFilePreviews };
 const { latestHealthRecord, healthRecordDate, healthRecordStatus } = __workbenchModule0;
 const { createCgmUI } = __workbenchModule1;
 const { normalizeHealthRoute } = __workbenchModule2;
-const { institutionFields, bindInstitutionPicker } = __workbenchModule4;
-const { fetchJSON, showFieldError, aiTag, aiWhen } = __workbenchModule5;
-const { createShell } = __workbenchModule12;
-const { createAccount } = __workbenchModule13;
-const { createDaily } = __workbenchModule14;
-const { createQuick } = __workbenchModule16;
-const { createMedical } = __workbenchModule18;
-const { createFilePreviews } = __workbenchModule21;
+const { institutionFields, bindInstitutionPicker, institutionMark } = __workbenchModule5;
+const { fetchJSON, showFieldError, aiTag, aiWhen } = __workbenchModule6;
+const { createShell, workbenchTheme } = __workbenchModule13;
+const { createLayoutUI } = __workbenchModule15;
+const { createComponentUI } = __workbenchModule19;
+const { createAccount } = __workbenchModule20;
+const { createDaily } = __workbenchModule21;
+const { createQuick } = __workbenchModule23;
+const { createMedical } = __workbenchModule25;
+const { createFilePreviews } = __workbenchModule28;
 let trashedIds=[];
 const $=(s,r=document)=>r.querySelector(s);
 const paths={compass:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4 6-2 6-6 2 2-6Z',map:'m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16M15 5v16',ticket:'M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4Zm12 0v3m0 3v2m0 3v3',building:'M5 21V3h14v18M2 21h20M9 7h1m4 0h1M9 11h1m4 0h1M10 21v-6h4v6',suitcase:'M8 6V3h8v3M5 6h14a2 2 0 0 1 2 2v11H3V8a2 2 0 0 1 2-2Zm2 0v13M17 6v13',leaf:'M20 4C12 3 3 7 4 15c1 7 12 7 15-1 1-3 1-7 1-10ZM5 19 16 8M10 14l-1-5M13 11l5 1',grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',heart:'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z',visit:'M8 3H5a2 2 0 0 0-2 2v4a5 5 0 0 0 10 0V5a2 2 0 0 0-2-2M8 14v2a5 5 0 0 0 10 0v-3M18 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4',exercise:'m3 9 6-6M2 6l4 4M5 3l4 4M15 21l6-6M14 17l4 4M17 14l4 4M8 8l8 8',meal:'M4 3v6a3 3 0 0 0 6 0V3M7 3v18M19 21V3c-5 3-5 10 0 10',metric:'M3 12h4l3-8 4 16 3-8h4',task:'M9 4h10a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4M8 2h8v4H8zM7 13l3 3 6-6',file:'M14 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9ZM14 2v7h7M7 14h10M7 18h7',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M10 2h4l1 3 3 1 3 3v4l-3 2-1 3-3 3h-4l-2-3-3-1-3-3v-4l3-2 1-3Z',arrow:'m9 5 7 7-7 7',plus:'M12 5v14M5 12h14',search:'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14m5 12 6 6',close:'m6 6 12 12M6 18 18 6',check:'m5 12 4 4L19 6',calendar:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2',sparkles:'m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4M18 4h4',clock:'M12 8v5l4 2M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20',edit:'m16 3 5 5M4 15 16 3l5 5L9 20l-6 1Z',trash:'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7',download:'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5',menu:'M3 6h18M3 12h18M3 18h18',moon:'M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11',scale:'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2M7 7a7 7 0 0 1 10 0M12 7l2-2',shield:'m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6ZM8 12l3 3 5-6',activity:'m3 17 6-6 4 4 8-11M16 4h5v5',info:'M12 11v6M12 7h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20'};
@@ -1659,6 +2486,8 @@ const names={visit:'就诊记录',exercise:'锻炼记录',meal:'饮食记录',me
 const metricNames={weight:'体重',pressure:'血压',sleep:'睡眠',glucose:'血糖',heart:'静息心率'};
 const units={weight:'kg',pressure:'mmHg',sleep:'小时',glucose:'mmol/L',heart:'次/分'};
 let space=localStorage.getItem('health-space')||'demo',route=location.hash.slice(1)||'dashboard',page=route.split('/')[0],items=[],settings={},today='',workbench=localStorage.getItem('active-workbench')||'health',workbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'资产',type:'finance'},{id:'travel',name:'旅行',type:'travel'},{id:'reading',name:'阅读',type:'reading'}],metricType='weight',range=14,query='',filterDate='',filterStatus='all',drawerKind=null,editing=null,undo=null;
+if(new URLSearchParams(location.search).has('componentPreview')){const requestedSpace=new URLSearchParams(location.search).get('space');if(['personal','demo'].includes(requestedSpace))space=requestedSpace;workbench='health';route='dashboard';page='dashboard';history.replaceState(null,'',location.pathname+location.search+'#dashboard');}
+if(new URLSearchParams(location.search).has('layoutPreview')){workbench='health';route='dashboard';page='dashboard';history.replaceState(null,'',location.pathname+location.search+'#dashboard');}
 const stateCache=new Map();let cacheEpoch=0;
 function invalidateStateCache(){stateCache.clear();cacheEpoch++;}
 // Test-only hook: acceptance scripts pre-create window.__zhihengTestHooks via an init script; production never has it, so nothing is exposed.
@@ -1683,7 +2512,7 @@ let loadSequence=0,applicationReady=false;
 function cacheState(key,data){stateCache.delete(key);stateCache.set(key,{data,at:Date.now()});if(stateCache.size>8)stateCache.delete(stateCache.keys().next().value);}
 // The session cookie was replaced by another account (e.g. signed in elsewhere): drop every cached byte and restart clean.
 const foreignOwner=data=>data&&data.owner!=null&&account.user?.id!=null&&data.owner!==account.user.id;
-function sessionReplaced(){shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};shownState=null;$('#app').replaceChildren();location.reload();}
+function sessionReplaced(){componentUI.cleanup();layoutUI.cleanup();shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};shownState=null;$('#app').replaceChildren();location.reload();}
 let shownState=null,refreshing=false,refreshFailure=null;
 // State requests abort after 8s and count as a failed refresh.
 const STATE_TIMEOUT_MS=8000;
@@ -1691,7 +2520,7 @@ const staleAge=at=>{const m=Math.floor((Date.now()-at)/60000);return m<1?'刚刚
 // Background refresh indicators: spinner beside the top bar title; thin retry banner above the content on failure.
 function refreshDecor(){const bar=$('#app .topbar')||$('#app main');let spin=$('#app .refresh-spinner');if(refreshing&&bar&&!spin){spin=document.createElement('span');spin.className='refresh-spinner';spin.setAttribute('role','status');spin.setAttribute('aria-label','正在更新');const title=$('#app main h1');if(title)title.append(spin);else (bar.querySelector('.workspace-label')||bar.firstElementChild||bar).after(spin);}if(!refreshing)spin?.remove();
  const main=$('#app main');let banner=$('#app .stale-banner');if(refreshFailure&&main&&!main.querySelector('.home-skeleton')){if(!banner){banner=document.createElement('div');banner.className='stale-banner';banner.setAttribute('role','status');banner.innerHTML='<span></span><button type="button" class="stale-retry"><span class="stale-retry-label">重试</span></button>';banner.querySelector('button').onclick=()=>{if(!refreshing)load({retainOnError:true,retry:true})};main.prepend(banner);}banner.firstChild.textContent=`网络不稳，显示的是${staleAge(refreshFailure.at)}的数据`;const retry=banner.querySelector('button');retry.disabled=refreshing;retry.classList.toggle('busy',refreshing);if(refreshing)retry.setAttribute('aria-busy','true');else retry.removeAttribute('aria-busy');retry.setAttribute('aria-label',refreshing?'正在重试':'重试');}else banner?.remove();}
-function applyState(key,data){cacheState(key,data);const same=shownState===key+'\n'+JSON.stringify(data)&&!$('#app .home-skeleton');shownState=key+'\n'+JSON.stringify(data);items=data.items;trashedIds=data.trashedIds||[];settings=data.settings;account.syncName(settings.name);today=data.today;workbenches=data.workbenches||workbenches;if(!same)render();scheduleWorkbenchPrefetch()}
+function applyState(key,data){cacheState(key,data);const same=shownState===key+'\n'+JSON.stringify(data)&&!$('#app .home-skeleton');shownState=key+'\n'+JSON.stringify(data);items=data.items;trashedIds=data.trashedIds||[];settings=data.settings;account.syncName(settings.name);today=data.today;workbenches=data.workbenches||workbenches;layoutUI.setSnapshot(data.layout);componentUI.setView(data.componentView);if(!same)render();scheduleWorkbenchPrefetch()}
 // Idle prefetch of other workbenches into the same in-memory cache (sequential, online only, skipped on Save-Data).
 let prefetchTimer=null,prefetching=false;const PREFETCH_DELAY_MS=2000;// let the first screen settle before using the network
 const whenIdle=fn=>typeof requestIdleCallback==='function'?requestIdleCallback(fn,{timeout:3000}):setTimeout(fn,1200);
@@ -1702,7 +2531,7 @@ async function loadInner(sequence,retainOnError){const targetWorkbench=workbench
 function nav(id,label,ic){return `<button class="nav-btn ${page===id?'active':''}" data-action="nav:${id}">${icon(ic)}${label}</button>`}
 let renderedLocation=null;
 let cgmLocation='';
-function render(){const cgKey=JSON.stringify([account.user?.id||null,workbench,space,page]);if(cgmLocation!==cgKey){cgm.cleanup();cgmLocation=cgKey;}const locationKey=[account.user?.id||'local',workbench,space,route].join(':');const keep=renderedLocation===locationKey,mainTop=$('.main')?.scrollTop||0,listTop=$('.minimal-visit-list,.medical-resource-list')?.scrollTop||0;previews.cleanupThumbs();renderView();renderedLocation=locationKey;if(keep){const main=$('.main'),list=$('.minimal-visit-list,.medical-resource-list');if(main)main.scrollTop=mainTop;if(list)list.scrollTop=listTop;}if(applicationReady)previews.mount();if(applicationReady)refreshDecor();if(applicationReady&&page==='mine')loadTrashCount();}
+function render(){const cgKey=JSON.stringify([account.user?.id||null,workbench,space,page]);if(cgmLocation!==cgKey){cgm.cleanup();cgmLocation=cgKey;}const locationKey=[account.user?.id||'local',workbench,space,route].join(':');const keep=renderedLocation===locationKey,mainTop=$('.main')?.scrollTop||0,listTop=$('.minimal-visit-list,.medical-resource-list')?.scrollTop||0;previews.cleanupThumbs();renderView();if(applicationReady)componentUI.mount();renderedLocation=locationKey;if(keep){const main=$('.main'),list=$('.minimal-visit-list,.medical-resource-list');if(main)main.scrollTop=mainTop;if(list)list.scrollTop=listTop;}if(applicationReady)previews.mount();if(applicationReady)refreshDecor();if(applicationReady&&page==='mine')loadTrashCount();}
 // 「最近删除」 (30 days, every workbench of the current space): web and AI deletions; restore puts the record back unchanged.
 const TRASH_KINDS={visit:'就诊',exercise:'运动',meal:'餐食',metric:'身体指标',task:'待办',file:'资料',report:'报告',medication:'用药',dose:'服药',favorite:'收藏',water:'饮水',note:'备忘',asset_account:'账户',asset_holding:'资产',asset_liability:'负债',asset_transaction:'流水',asset_snapshot:'历史估值',travel_trip:'旅行',travel_stop:'地点',travel_booking:'预订',travel_check:'准备事项',reading_book:'书籍',reading_entry:'阅读记录'};let trashItems=[],lastRestored=null;
 const trashKind=x=>x.kind==='meal'&&x.mealType?x.mealType:TRASH_KINDS[x.kind]||'记录';
@@ -1717,15 +2546,15 @@ function trashRoute(x){if(x.workbench==='reading')return ({reading_book:'books',
 async function restoreTrash(id,withParent=false){const x=trashItems.find(t=>t.id===id),sourceSpace=space,sourceWorkbench=workbench,owner=account.user?.id,dialog=$('.drawer'),box=$('#trash-list');const current=()=>space===sourceSpace&&workbench===sourceWorkbench&&account.user?.id===owner;if(!x)return;try{const r=await api('/api/trash/restore',{method:'POST',body:JSON.stringify({id,withParent})},sourceSpace,sourceWorkbench);if(!current())return;lastRestored={...x,...r};const fresh=await api('/api/trash',{},sourceSpace,sourceWorkbench);if(!current())return;trashItems=fresh.items;if(box?.isConnected)box.innerHTML=trashList();await load();if(!current())return;loadTrashCount();toast(r.restoredCount>1?`已恢复 ${r.restoredCount} 条`:'已恢复','查看','trash-view');}
  catch(err){if(!current())return;if(err.code==='parent_deleted'){if(dialog&&!dialog.isConnected)return;const msg=err.message.replace(/，需要一起恢复$/,'')+'，一起恢复？';openDrawer(`<p class="section-desc">${msg}</p>`,'恢复记录',esc(x?`${trashKind(x)} · ${trashTitle(x)}`:''),`${btn('取消','trash-open')}${btn('一起恢复','trash-restore-with:'+id,'primary')}`);$('.drawer')?.classList.add('drawer-compact');return;}throw err;}}
 
-function renderView(){if(!applicationReady)return;if(workbench==='health'){const normalized=normalizeHealthRoute(route);if(normalized!==route){route=normalized;page=route.split('/')[0];history.replaceState(null,'','#'+route);}}if(!$('.drawer'))document.body.classList.remove('scroll-lock');if(workbench!=='health'){if(!(workbench==='finance'?['dashboard','financial','fixed','renewals','accounts','holdings','transactions','liabilities','history','documents','notes','tasks','mine']:workbench==='travel'?['dashboard','trip','places','bookings','checklist','documents','notes','tasks','mine']:workbench==='reading'?['dashboard','books','entries','tasks','documents','mine']:['dashboard','notes','tasks','documents','mine']).includes(page)){page='dashboard';route='dashboard';history.replaceState(null,'','#dashboard');}shell.renderOther();return;}if(!['dashboard','visit','exercise','meal','metric','task','file','settings','day','library','mine'].includes(page))page='dashboard';const title=route==='dashboard/tasks'?'待办与复查':({dashboard:'健康总览',visit:'就诊管理',exercise:'运动与锻炼',meal:'饮食记录',metric:'健康监测',task:'待办',file:'资料档案',settings:'健康连接与数据',day:'每日回顾',library:'健康档案',mine:'我的'})[page];
- $('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('leaf',25)}</div><div><strong>知衡</strong><small>个人健康管理</small></div></div><div class="nav-label">我的健康</div>${nav('dashboard','健康总览','grid')}${nav('visit','就诊管理','visit')}${nav('exercise','运动与锻炼','exercise')}${nav('meal','饮食记录','meal')}${nav('metric','健康监测','metric')}${nav('file','资料原件','file')}${nav('day','每日回顾','calendar')}<div class="sidebar-bottom">${nav('settings','设置与连接','settings')}<div class="local-badge"><i class="dot"></i> 本地运行 · 数据保存在此电脑</div><div class="profile"><div class="avatar">C</div><div><strong>${esc(settings.name)}</strong><small>${space==='demo'?'正在浏览示例空间':'个人健康空间'}</small></div></div></div></aside><div class="workspace"><header class="topbar"><div class="breadcrumb"><button class="icon-btn mobile-menu" aria-label="打开导航" data-action="menu">${icon('menu')}</button><span class="workspace-label">个人健康工作台</span></div><div class="top-actions">${space==='demo'?'<span class="demo-label">虚构示例数据</span>':''}<select class="space-switch" id="space" aria-label="切换空间"><option value="demo" ${space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${space==='personal'?'selected':''}>个人空间</option></select><button class="ai-toggle" data-action="assistant">${icon('sparkles',16)}健康助手<span class="connection-label">未连接</span></button><div class="avatar" style="width:29px;height:29px;font-size:10px">C</div></div></header><main class="main ${page==='visit'&&route.includes('/')&&!['visit/reports','visit/medications','visit/files','visit/inbox'].includes(route)?'visit-detail-page':''}"><div class="heading"><div><h1>${title}</h1><p>${page==='dashboard'?esc(settings.focus||'记录、回顾与跟进'):pageDesc()}</p></div><div class="heading-tools">${page==='dashboard'&&route!=='dashboard/tasks'?`<span class="btn">${icon('calendar',14)}${today.replaceAll('-',' / ')}</span>`:''}${route==='dashboard/tasks'?btn('添加待办','add:task','primary','plus'):!['settings','day','library','mine'].includes(page)&&!(page==='visit'&&route!=='visit')?btn(page==='visit'?'添加就诊':'添加记录','add:'+(page==='dashboard'?'choose':page),'primary','plus'):''}</div></div>${page==='dashboard'?(route==='dashboard/tasks'?taskOverview():dashboard()):page==='visit'?medical.render():page==='metric'?monitoring():page==='settings'?settingsPage():page==='day'?daily.renderDay():page==='library'?shell.library():page==='mine'?shell.mine():listPage()}<footer class="footer"><span>知衡 · 本地健康记录</span><span>${space==='demo'?'示例空间 · 数据均为虚构':'个人空间 · 数据保存在本机'}</span></footer></main></div></div>`;
+function renderView(){if(!applicationReady)return;layoutUI.beforeRender();if(workbench==='health'){const normalized=normalizeHealthRoute(route);if(normalized!==route){route=normalized;page=route.split('/')[0];history.replaceState(null,'','#'+route);}}if(!$('.drawer'))document.body.classList.remove('scroll-lock');if(workbench!=='health'){if(!(workbench==='finance'?['dashboard','financial','fixed','renewals','accounts','holdings','transactions','liabilities','history','documents','notes','tasks','mine']:workbench==='travel'?['dashboard','trip','places','bookings','checklist','documents','notes','tasks','mine']:workbench==='reading'?['dashboard','books','entries','tasks','documents','mine']:['dashboard','notes','tasks','documents','mine']).includes(page)){page='dashboard';route='dashboard';history.replaceState(null,'','#dashboard');}shell.renderOther();return;}if(!['dashboard','visit','exercise','meal','metric','task','file','settings','day','library','mine'].includes(page))page='dashboard';const title=route==='dashboard/tasks'?'待办与复查':({dashboard:'健康总览',visit:'就诊管理',exercise:'运动与锻炼',meal:'饮食记录',metric:'健康监测',task:'待办',file:'资料档案',settings:'健康连接与数据',day:'每日回顾',library:'健康档案',mine:'我的'})[page];
+ $('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('leaf',25)}</div><div><strong>知衡</strong><small>个人健康管理</small></div></div><div class="nav-label">我的健康</div>${nav('dashboard','健康总览','grid')}${nav('visit','就诊管理','visit')}${nav('exercise','运动与锻炼','exercise')}${nav('meal','饮食记录','meal')}${nav('metric','健康监测','metric')}<div class="sidebar-bottom">${nav('settings','设置与连接','settings')}<div class="local-badge"><i class="dot"></i> 本地运行 · 数据保存在此电脑</div><div class="profile"><div class="avatar">C</div><div><strong>${esc(settings.name)}</strong><small>${space==='demo'?'正在浏览示例空间':'个人健康空间'}</small></div></div></div></aside><div class="workspace"><header class="topbar"><div class="breadcrumb"><button class="icon-btn mobile-menu" aria-label="打开导航" data-action="menu">${icon('menu')}</button><span class="workspace-label">个人健康工作台</span></div><div class="top-actions">${space==='demo'?'<span class="demo-label">虚构示例数据</span>':''}<select class="space-switch" id="space" aria-label="切换空间"><option value="demo" ${space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${space==='personal'?'selected':''}>个人空间</option></select><button class="ai-toggle" data-action="assistant">${icon('sparkles',16)}健康助手<span class="connection-label">未连接</span></button><div class="avatar" style="width:29px;height:29px;font-size:10px">C</div></div></header><main class="main ${page==='visit'&&route.includes('/')&&!['visit/reports','visit/medications','visit/files','visit/inbox'].includes(route)?'visit-detail-page':''}"><div class="heading"><div><h1>${title}</h1><p>${page==='dashboard'?esc(settings.focus||'记录、回顾与跟进'):pageDesc()}</p></div><div class="heading-tools">${page==='dashboard'&&route!=='dashboard/tasks'?`<span class="btn">${icon('calendar',14)}${today.replaceAll('-',' / ')}</span>`:''}${route==='dashboard/tasks'?btn('添加待办','add:task','primary','plus'):!['settings','day','library','mine'].includes(page)&&!(page==='visit'&&route!=='visit')?btn(page==='visit'?'添加就诊':'添加记录','add:'+(page==='dashboard'?'choose':page),'primary','plus'):''}</div></div>${page==='dashboard'?(route==='dashboard/tasks'?taskOverview():dashboard()):page==='visit'?medical.render():page==='metric'?monitoring():page==='settings'?settingsPage():page==='day'?daily.renderDay():page==='library'?shell.library():page==='mine'?shell.mine():listPage()}<footer class="footer"><span>知衡 · 本地健康记录</span><span>${space==='demo'?'示例空间 · 数据均为虚构':'个人空间 · 数据保存在本机'}</span></footer></main></div></div>`;
  $('#space').onchange=e=>setSpace(e.target.value);
  const search=$('#record-search');if(search)search.addEventListener('input',e=>{query=e.target.value;previews.cleanupThumbs();$('#records').innerHTML=recordRows(filtered());previews.mount()});
  $('#filter-date')?.addEventListener('change',e=>{filterDate=e.target.value;previews.cleanupThumbs();$('#records').innerHTML=recordRows(filtered());previews.mount()});
  $('#filter-status')?.addEventListener('change',e=>{filterStatus=e.target.value;previews.cleanupThumbs();$('#records').innerHTML=recordRows(filtered());previews.mount()});
- $('#trend-range')?.addEventListener('change',e=>{range=Number(e.target.value);render()});
+ $('#trend-range')?.addEventListener('change',e=>{range=Number(e.target.value);layoutUI.rememberTrend(metricType,range);render()});
  $('#settings-form')?.addEventListener('submit',saveSettings);
- medical.bind();daily.bind();shell.decorate();shell.originals.bind();cgm.mount();
+ medical.bind();daily.bind();shell.decorate();shell.originals.bind();cgm.mount();layoutUI.mount();
 }
 function pageDesc(){if(route==='dashboard/tasks')return '集中查看复查、预约和日常待办。';return ({visit:'把每次就诊、检查与后续安排，放在一起。',exercise:'记录每一次动起来，也留意身体的感受。',meal:'用简单的记录，慢慢看见自己的饮食习惯。',metric:'沿着时间看变化，每个数值都有自己的来处。',task:'把想做的事情，变成每天可完成的小步骤。',file:'让报告与资料有处可寻，随时为就诊做好准备。',settings:'管理你的健康空间、资料与连接。',day:'按天查看饮食、锻炼和饮水，随时补记。',library:'就诊、运动、饮食、监测与原始资料。',mine:'管理工作台、个人设置与数据空间。'})[page]||''}
 function stats(){const latest=t=>latestHealthRecord(items,'metric',today,t);const w=latest('weight'),p=latest('pressure'),s=latest('sleep');const mins=byKind('exercise').filter(x=>x.date===today).reduce((n,x)=>n+x.duration,0);return [{label:'最近体重',value:w?.value??'—',unit:w?'kg':'',ic:'scale',sub:w?`${healthRecordDate(w,today)} · ${healthRecordStatus(w,today)}`:'等待第一条记录',type:'weight'},{label:'今日运动',value:mins,unit:'分钟',ic:'exercise',sub:mins?'今天已记录':'今天还没有运动记录',type:'exercise'},{label:'最近睡眠',value:s?.value??'—',unit:s?'小时':'',ic:'moon',sub:s?`${healthRecordDate(s,today)} · ${healthRecordStatus(s,today)}`:'等待第一条记录',type:'sleep'},{label:'最近血压',value:p?`${p.value}/${p.secondary}`:'—',unit:p?'mmHg':'',ic:'heart',sub:p?`${healthRecordDate(p,today)} · ${healthRecordStatus(p,today)}`:'等待第一条记录',type:'pressure'}].map((s,i)=>`<article class="metric-card"><div class="metric-top">${s.label}<span class="metric-icon">${icon(s.ic,16)}</span></div><div class="metric-value">${s.value}<small>${s.unit}</small></div><div class="metric-bottom">${icon('clock',10)}${esc(s.sub)}</div>${space==='demo'&&i!==1?`<svg class="spark" viewBox="0 0 90 32" fill="none"><path d="M2 20 13 18 24 23 35 12 46 16 57 10 68 15 79 8 89 11" stroke="${['#88a66c','#be9b76','#a0aac1','#c69b8e'][i]}" stroke-width="1.5"/></svg>`:''}</article>`).join('')}
@@ -1735,7 +2564,7 @@ function chart(){const cutoff=new Date(today+'T12:00:00Z');cutoff.setUTCDate(cut
  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${metricNames[metricType]}历史趋势，共${data.length}条记录">${[0,1,2,3].map(i=>{const v=hi-i*(hi-lo)/3,yy=y(v);return `<line x1="45" y1="${yy}" x2="500" y2="${yy}" stroke="#edf1e6" stroke-dasharray="3 4"/><text x="33" y="${yy+3}" text-anchor="end" fill="#a3ae97" font-size="9">${v.toFixed(metricType==='weight'||metricType==='sleep'||metricType==='glucose'?1:0)}</text>`}).join('')}<path d="${line('value')}" stroke="var(--theme-ink)" stroke-width="2" fill="none"/>${metricType==='pressure'?`<path d="${line('secondary')}" stroke="#b89471" stroke-width="2" stroke-dasharray="4 4" fill="none"/>`:''}${data.map((d,i)=>`<circle cx="${x(i)}" cy="${y(d.value)}" r="3" fill="white" stroke="var(--theme-ink)" stroke-width="1.6"><title>${d.date} ${d.value}${d.secondary?'/'+d.secondary:''} ${d.unit}</title></circle>`).join('')}${[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i).map(i=>`<text x="${x(i)}" y="151" fill="#a0ad91" font-size="9" text-anchor="middle">${fmtDate(data[i].date)}</text>`).join('')}</svg></div>`}
 function taskRows(a,upcoming=false){return a.map(t=>`<div class="task-row ${t.done?'done':''}"><button class="check ${t.done?'checked':''}" data-action="toggle:${t.id}" aria-label="${t.done?'取消完成':'完成'}：${esc(t.title)}" aria-pressed="${t.done}">${t.done?icon('check',12):''}</button><div class="task-copy"><strong>${esc(t.title)}</strong><small>${esc(t.time||'当天')} · ${upcoming?(t.date===today?'今天':esc(t.date))+(t.date<today?' · 已逾期':''):dateLabel(t.date)}</small></div><span class="pill ${catClass(t.category)}">${esc(t.category||'日常')}</span><button class="icon-btn" data-action="edit:${t.id}" aria-label="编辑${esc(t.title)}">${icon('edit',13)}</button></div>`).join('')}
 function dashboard(){
- const pending=byKind('task').filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));const tasks=pending.slice(0,5);
+ const pending=byKind('task').filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));const tasks=pending.slice(0,layoutUI.options('tasks').limit||5);
  const latest=type=>latestHealthRecord(items,'metric',today,type),reading=latest(metricType),lastExercise=latestHealthRecord(items,'exercise',today),report=latestHealthRecord(items,['report','file'],today);
  const cutoff=new Date(today+'T12:00:00Z');cutoff.setUTCDate(cutoff.getUTCDate()-6);const startDate=cutoff.toISOString().slice(0,10);
  const exercise=byKind('exercise').filter(x=>x.date>=startDate&&x.date<=today),minutes=exercise.reduce((n,x)=>n+Number(x.duration||0),0);
@@ -1746,7 +2575,7 @@ function dashboard(){
  const action=(label,name,ic='')=>`<button class="btn" data-action="${name}">${ic?icon(ic,18):''}${label}</button>`;
  const blank=(text,name,label)=>`<div class="health-empty"><p>${text}</p>${action(label,name,'plus')}</div>`;
  const trend=trendCard().replace('class="card"','class="card health-trend"').replace('<div class="tabs">',`<div class="health-trend-reading"><span>${reading?`${esc(reading.value)}${reading.secondary?'/'+esc(reading.secondary):''}`:'—'}<small>${esc(reading?.unit||units[metricType])}</small></span><p>${reading?`${esc(healthRecordDate(reading,today))} · ${healthRecordStatus(reading,today)}`:'还没有'+metricNames[metricType]+'记录'}</p></div><div class="tabs">`);
- return `<div class="health-overview"><div class="health-overview-heading"><h1>健康总览</h1><div class="health-quick-actions" aria-label="快捷记录">${action('记一餐','add:meal','meal')}${action('记运动','add:exercise','exercise')}${action('记数值','add:metric','metric')}${action('传报告','qc-open:file','file')}</div></div><div class="health-bento"><div class="health-primary"><div class="health-monitoring">${trend}<section class="health-body-metrics" aria-label="最近身体指标">${['weight','sleep','heart'].map(type=>{const m=latest(type);return `<button class="health-body-metric" data-action="trend:${type}"><span class="health-metric-symbol">${icon(({weight:'scale',sleep:'moon',heart:'heart'})[type],23)}</span><span class="health-metric-copy"><span>${metricNames[type]}</span><b>${m?esc(m.value):'—'}<small>${m?esc(m.unit):''}</small></b><time>${m?esc(healthRecordDate(m,today)):'尚未记录'}</time>${m?`<small class="health-record-status">${healthRecordStatus(m,today)}</small>`:''}</span>${icon('arrow',15)}</button>`;}).join('')}</section></div><div class="health-lower-grid"><section class="card health-exercise"><div class="card-head"><h2 class="card-title">近 7 天运动</h2><button class="text-btn" data-action="nav:exercise">运动记录 ${icon('arrow',12)}</button></div><div class="health-exercise-total"><b>${minutes}</b><span>分钟</span><small>${exercise.length} 次已记录的运动</small></div><div class="health-exercise-bars" role="img" aria-label="近7天运动时长，${days.map(x=>x.date+' '+x.minutes+'分钟').join('，')}">${days.map(d=>`<div class="health-exercise-day"><span>${d.minutes||''}</span><div><i style="height:${d.minutes/maxMinutes*100}%"></i></div><time>${d.date===today?'今天':d.date.slice(5).replace('-','/')}</time></div>`).join('')}</div>${lastExercise?`<article class="health-latest-exercise"><div><h3>最近一次运动</h3><time datetime="${esc(lastExercise.date)}${lastExercise.time?'T'+esc(lastExercise.time):''}">${esc(healthRecordDate(lastExercise,today))}</time><p>${esc(lastExercise.title||lastExercise.type||'运动')} · ${esc(lastExercise.duration)} 分钟</p><small class="health-record-status">${healthRecordStatus(lastExercise,today)}</small></div><button class="icon-btn" data-action="edit:${lastExercise.id}" aria-label="查看或编辑${esc(lastExercise.title)}">${icon('arrow',15)}</button></article>`:blank('还没有运动记录。','add:exercise','记运动')}</section><section class="card health-meals"><div class="card-head"><h2 class="card-title">最近饮食</h2><button class="text-btn" data-action="nav:meal">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${meals.length?meals.map(x=>`<article class="health-meal-row"><span class="health-meal-symbol">${icon('meal',27)}</span><div><h3>${esc(x.mealType||'餐食')} <time datetime="${esc(x.date)}${x.time?'T'+esc(x.time):''}">${esc(healthRecordDate(x,today))}</time></h3><p>${esc(x.title)}</p>${x.portion?`<small>${esc(x.portion)}</small>`:''}${aiTag(x)}<small class="health-record-status">${healthRecordStatus(x,today)}</small></div><button class="icon-btn" data-action="edit:${x.id}" aria-label="查看或编辑${esc(x.title)}">${icon('arrow',15)}</button></article>`).join(''):blank('还没有餐食记录。','add:meal','记一餐')}</div></section></div></div><aside class="health-secondary"><section class="card health-water"><div class="card-head"><h2 class="card-title">饮水</h2><button class="icon-btn" data-action="nav:day" aria-label="查看饮水明细">${icon('info',17)}</button></div><div class="health-water-content"><div class="health-water-ring" style="--water-progress:${waterPercent}%" role="img" aria-label="今日饮水${waterMl}毫升，记录目标${waterGoal}毫升，进度${waterPercent}%"><div><b>${waterMl}</b><span>/ ${waterGoal} ml</span></div></div><div class="health-water-actions">${action('记一次饮水','daily-water','plus')}<small>${water.length?`今天已记录 ${water.length} 次`:'今天还没有饮水记录'}</small><button class="text-btn" data-action="nav:settings">调整记录目标</button></div></div></section><section class="card health-tasks"><div class="card-head"><div><h2 class="card-title">近期待办</h2><p>${pending.length} 项未完成</p></div><button class="icon-btn" data-action="add:task" aria-label="添加待办">${icon('plus',17)}</button></div><div class="task-list">${tasks.length?taskRows(tasks,true):blank('安排一件接下来要做的事。','add:task','添加待办')}</div>${pending.length>tasks.length?`<p class="health-task-overflow">仅显示最近 ${tasks.length} 项</p>`:''}<button class="health-all-tasks" data-action="nav:dashboard/tasks">查看全部待办 ${icon('arrow',13)}</button></section><section class="card health-visits"><div class="card-head"><h2 class="card-title">最近就诊</h2><button class="text-btn" data-action="nav:visit">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${visits.length?visits.map(x=>`<button class="health-visit-row" data-action="med-open:${x.id}"><span class="health-metric-symbol">${icon('visit',23)}</span><span><b>${esc(x.title)}</b><small>${esc(healthRecordDate(x,today))} · ${esc(x.hospital||x.department||'机构待补充')}</small><small class="health-record-status">${healthRecordStatus(x,today)}</small></span>${icon('arrow',15)}</button>`).join(''):blank('还没有保存就诊记录。','add:visit','添加就诊')}</div></section><section class="card health-reports"><div class="card-head"><h2 class="card-title">最近报告与资料</h2><button class="text-btn" data-action="med-view:reports">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${report?`<button class="health-visit-row" data-action="${report.kind==='report'?'med-report':'med-preview'}:${report.id}"><span class="health-metric-symbol">${icon('file',23)}</span><span><b>${esc(report.title)}</b><small>${esc(healthRecordDate(report,today))}${report.kind==='report'?' · 报告文字':' · 原件'}</small><small class="health-record-status">${healthRecordStatus(report,today)}</small></span>${icon('arrow',15)}</button>`:blank('还没有报告或资料。','qc-open:file','上传资料')}</div></section></aside></div><details class="health-medication-summary"><summary><span>${icon('heart',18)}今日用药 <small>${medications.length?`${medications.length} 个进行中的方案`:'暂无进行中的方案'}</small></span><span>展开查看 ${icon('arrow',13)}</span></summary>${medical.todayCard()||`<div class="health-empty"><p>按原处方录入用药方案，再记录实际服用情况。</p><button class="text-btn" data-action="med-view:medications">用药管理 ${icon('arrow',12)}</button></div>`}</details></div>`;
+ return `<div class="health-overview"><div class="health-overview-heading"><h1>健康总览</h1><div class="health-quick-actions" aria-label="快捷记录">${action('记一餐','add:meal','meal')}${action('记运动','add:exercise','exercise')}${action('记数值','add:metric','metric')}${action('传报告','qc-open:file','file')}</div></div><div class="health-bento"><div class="health-primary"><div class="health-monitoring">${trend}<section class="health-body-metrics" aria-label="最近身体指标">${['weight','sleep','heart'].map(type=>{const m=latest(type);return `<button class="health-body-metric" data-action="trend:${type}"><span class="health-metric-symbol">${icon(({weight:'scale',sleep:'moon',heart:'heart'})[type],23)}</span><span class="health-metric-copy"><span>${metricNames[type]}</span><b>${m?esc(m.value):'—'}<small>${m?esc(m.unit):''}</small></b><time>${m?esc(healthRecordDate(m,today)):'尚未记录'}</time>${m?`<small class="health-record-status">${healthRecordStatus(m,today)}</small>`:''}</span>${icon('arrow',15)}</button>`;}).join('')}</section></div><div class="health-lower-grid"><section class="card health-exercise"><div class="card-head"><h2 class="card-title">近 7 天运动</h2><button class="text-btn" data-action="nav:exercise">运动记录 ${icon('arrow',12)}</button></div><div class="health-exercise-total"><b>${minutes}</b><span>分钟</span><small>${exercise.length} 次已记录的运动</small></div><div class="health-exercise-bars" role="img" aria-label="近7天运动时长，${days.map(x=>x.date+' '+x.minutes+'分钟').join('，')}">${days.map(d=>`<div class="health-exercise-day"><span>${d.minutes||''}</span><div><i style="height:${d.minutes/maxMinutes*100}%"></i></div><time>${d.date===today?'今天':d.date.slice(5).replace('-','/')}</time></div>`).join('')}</div>${lastExercise?`<article class="health-latest-exercise"><div><h3>最近一次运动</h3><time datetime="${esc(lastExercise.date)}${lastExercise.time?'T'+esc(lastExercise.time):''}">${esc(healthRecordDate(lastExercise,today))}</time><p>${esc(lastExercise.title||lastExercise.type||'运动')} · ${esc(lastExercise.duration)} 分钟</p><small class="health-record-status">${healthRecordStatus(lastExercise,today)}</small></div><button class="icon-btn" data-action="edit:${lastExercise.id}" aria-label="查看或编辑${esc(lastExercise.title)}">${icon('arrow',15)}</button></article>`:blank('还没有运动记录。','add:exercise','记运动')}</section><section class="card health-meals"><div class="card-head"><h2 class="card-title">最近饮食</h2><button class="text-btn" data-action="nav:meal">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${meals.length?meals.map(x=>`<article class="health-meal-row"><span class="health-meal-symbol">${icon('meal',27)}</span><div><h3>${esc(x.mealType||'餐食')} <time datetime="${esc(x.date)}${x.time?'T'+esc(x.time):''}">${esc(healthRecordDate(x,today))}</time></h3><p>${esc(x.title)}</p>${x.portion?`<small>${esc(x.portion)}</small>`:''}${aiTag(x)}<small class="health-record-status">${healthRecordStatus(x,today)}</small></div><button class="icon-btn" data-action="edit:${x.id}" aria-label="查看或编辑${esc(x.title)}">${icon('arrow',15)}</button></article>`).join(''):blank('还没有餐食记录。','add:meal','记一餐')}</div></section></div></div><aside class="health-secondary"><section class="card health-water"><div class="card-head"><h2 class="card-title">饮水</h2><button class="icon-btn" data-action="nav:day" aria-label="查看饮水明细">${icon('info',17)}</button></div><div class="health-water-content"><div class="health-water-ring" style="--water-progress:${waterPercent}%" role="img" aria-label="今日饮水${waterMl}毫升，记录目标${waterGoal}毫升，进度${waterPercent}%"><div><b>${waterMl}</b><span>/ ${waterGoal} ml</span></div></div><div class="health-water-actions">${action('记一次饮水','daily-water','plus')}<small>${water.length?`今天已记录 ${water.length} 次`:'今天还没有饮水记录'}</small><button class="text-btn" data-action="nav:settings">调整记录目标</button></div></div></section><section class="card health-tasks"><div class="card-head"><div><h2 class="card-title">近期待办</h2><p>${pending.length} 项未完成</p></div><button class="icon-btn" data-action="add:task" aria-label="添加待办">${icon('plus',17)}</button></div><div class="task-list">${tasks.length?taskRows(tasks,true):blank('安排一件接下来要做的事。','add:task','添加待办')}</div>${pending.length>tasks.length?`<p class="health-task-overflow">仅显示最近 ${tasks.length} 项</p>`:''}<button class="health-all-tasks" data-action="nav:dashboard/tasks">查看全部待办 ${icon('arrow',13)}</button></section><section class="card health-visits"><div class="card-head"><h2 class="card-title">最近就诊</h2><button class="text-btn" data-action="nav:visit">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${visits.length?visits.map(x=>`<button class="health-visit-row" data-action="med-open:${x.id}">${institutionMark(x,{esc,icon})}<span><b>${esc(x.title)}</b><small>${esc(healthRecordDate(x,today))} · ${esc(x.hospital||x.department||'机构待补充')}</small><small class="health-record-status">${healthRecordStatus(x,today)}</small></span>${icon('arrow',15)}</button>`).join(''):blank('还没有保存就诊记录。','add:visit','添加就诊')}</div></section><section class="card health-reports"><div class="card-head"><h2 class="card-title">最近报告与资料</h2><button class="text-btn" data-action="med-view:reports">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${report?`<button class="health-visit-row" data-action="${report.kind==='report'?'med-report':'med-preview'}:${report.id}"><span class="health-metric-symbol">${icon('file',23)}</span><span><b>${esc(report.title)}</b><small>${esc(healthRecordDate(report,today))}${report.kind==='report'?' · 报告文字':' · 原件'}</small><small class="health-record-status">${healthRecordStatus(report,today)}</small></span>${icon('arrow',15)}</button>`:blank('还没有报告或资料。','qc-open:file','上传资料')}</div></section></aside></div><details class="health-medication-summary"><summary><span>${icon('heart',18)}今日用药 <small>${medications.length?`${medications.length} 个进行中的方案`:'暂无进行中的方案'}</small></span><span>展开查看 ${icon('arrow',13)}</span></summary>${medical.todayCard()||`<div class="health-empty"><p>按原处方录入用药方案，再记录实际服用情况。</p><button class="text-btn" data-action="med-view:medications">用药管理 ${icon('arrow',12)}</button></div>`}</details></div>`;
 }
 function detail(x){if(x.kind==='metric')return `${metricNames[x.type]} · ${x.value}${x.secondary?'/'+x.secondary:''} ${x.unit}${x.note?' · '+x.note:''}`;if(x.kind==='exercise')return `${x.type||'运动'} · ${x.duration} 分钟`;if(x.kind==='visit')return `${x.hospital||'机构待补充'} · ${x.city||'城市待补充'} · ${x.department||'未填写科室'} · ${x.status}`;if(x.kind==='meal')return `${x.mealType||'餐食'}`;if(x.kind==='water')return `${x.volume} ml`;return x.note||''}
 function fileReportAction(x){const report=byKind('report').find(r=>r.fileId===x.id);if(!report&&x.fileCategory!=='报告待整理'&&!(route==='visit/inbox'))return '';return `<button class="text-btn" data-action="${report?'med-report:'+report.id:'qc-organize:'+x.id}">${report?'查看就诊报告':'整理为就诊报告'} ${icon('arrow',11)}</button>`;}
@@ -1775,12 +2604,12 @@ function guardSnapshot(){const f=$('.drawer form[data-discard-guard]');if(!f)ret
 function markDrawerBaseline(){drawerBaseline=guardSnapshot();}
 function drawerDirty(){const now=guardSnapshot();return now!==null&&drawerBaseline!==null&&now!==drawerBaseline;}
 // Close order: #14 token-reveal guard (「确定已保存？」) first, then #15 half-filled record guard (「放弃这条记录？」).
-function requestClose(){if(account.guardClose?.())return;if($('.discard-confirm'))return;if(!drawerDirty()){closeDrawer();return;}const layer=document.createElement('div');layer.className='discard-layer';layer.innerHTML='<div class="discard-scrim"></div><div class="discard-confirm" role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-desc"><h3 id="discard-title">放弃这条记录？</h3><p id="discard-desc">已填写的内容不会保存。</p><div class="discard-actions"><button type="button" class="btn" id="discard-keep">继续填写</button><button type="button" class="btn discard-yes" id="discard-yes">放弃</button></div></div>';$('#overlay').append(layer);const back=lastDrawerField;const keep=()=>{layer.remove();(back&&back.isConnected&&$('.drawer')?.contains(back)?back:$('.drawer form input:not([type=hidden]):not([type=file]),.drawer form textarea,.drawer form select'))?.focus();};layer.querySelector('#discard-keep').onclick=keep;layer.querySelector('.discard-scrim').onclick=keep;layer.querySelector('#discard-yes').onclick=()=>closeDrawer();layer.querySelector('#discard-keep').focus();}
+function requestClose(afterClose){const finish=()=>{if(typeof afterClose==='function')Promise.resolve().then(afterClose).catch(error=>toast(error.message));};if(componentUI.guardClose()||layoutUI.guardClose())return;if(account.guardClose?.())return;if($('.discard-confirm'))return;if(!drawerDirty()){closeDrawer();finish();return;}const layer=document.createElement('div');layer.className='discard-layer';layer.innerHTML='<div class="discard-scrim"></div><div class="discard-confirm" role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-desc"><h3 id="discard-title">放弃这条记录？</h3><p id="discard-desc">已填写的内容不会保存。</p><div class="discard-actions"><button type="button" class="btn" id="discard-keep">继续填写</button><button type="button" class="btn discard-yes" id="discard-yes">放弃</button></div></div>';$('#overlay').append(layer);const back=lastDrawerField;const keep=()=>{layer.remove();(back&&back.isConnected&&$('.drawer')?.contains(back)?back:$('.drawer form input:not([type=hidden]):not([type=file]),.drawer form textarea,.drawer form select'))?.focus();};if($('#layout-editor-form')){layer.querySelector('#discard-title').textContent='放弃布局修改？';layer.querySelector('#discard-desc').textContent='尚未应用的布局修改不会保存。';layer.querySelector('#discard-keep').textContent='继续编辑';}layer.querySelector('#discard-keep').onclick=keep;layer.querySelector('.discard-scrim').onclick=keep;if($('#component-editor-form,#component-placement-form')){layer.querySelector('#discard-title').textContent='放弃组件修改？';layer.querySelector('#discard-desc').textContent='尚未保存的组件修改不会保留。';layer.querySelector('#discard-keep').textContent='继续编辑';}layer.querySelector('#discard-yes').onclick=()=>{closeDrawer();finish();};layer.querySelector('#discard-keep').focus();}
 // A field hidden in a collapsed <details> (e.g. 时间与备注 date beyond max=today) must be visible for the browser to focus it.
 document.addEventListener('invalid',e=>{const t=e.target;if(t?.name==='date'&&t.validity?.rangeOverflow&&t.form){e.preventDefault();showFieldError(t.form,{field:'date',message:'不能记录未来的日期'});return;}const d=t.closest?.('details');if(d)d.open=true;},true);
 // Last field focused inside the drawer, so 「继续填写」 can return focus there instead of ×.
 let lastDrawerField=null;document.addEventListener('focusin',e=>{if(e.target.matches?.('.drawer input,.drawer textarea,.drawer select'))lastDrawerField=e.target;});
-function closeDrawer(){previews.cleanupViewer();quick.cleanup();$('#overlay').innerHTML='';document.body.classList.remove('scroll-lock');previousFocus?.focus({preventScroll:true})}
+function closeDrawer(){if($('#component-editor-form,#component-placement-form'))componentUI.onDrawerClose();if($('#layout-editor-form'))layoutUI.onDrawerClose();previews.cleanupViewer();quick.cleanup();$('#overlay').innerHTML='';document.body.classList.remove('scroll-lock');previousFocus?.focus({preventScroll:true})}
 function openForm(kind,id=null,draft={}){drawerKind=kind;editing=id;const x={...(items.find(i=>i.id===id)||{date:today,type:kind==='metric'?metricType:kind==='exercise'?'步行':'',status:'待就诊',category:'日常',mealType:'早餐'}),...draft};let fields='';
  if(kind==='metric')fields=select('监测项目','type',Object.entries(metricNames),x.type)+`<div class="form-grid">${field(x.type==='pressure'?'收缩压':'数值','value',x.value||'','number','required min="0.01" max="10000" step="any"')}${x.type==='pressure'?field('舒张压','secondary',x.secondary||'','number','required min="1" step="any"'):field('单位','unit',units[x.type],'text','readonly')}</div>`;
  if(kind==='visit')fields=institutionFields(x,{field,esc})+field('就诊医生','doctor',x.doctor||'','text','maxlength="250"')+select('当前状态','status',['待就诊','已完成','待复查'],x.status)+[['就诊原因 / 主诉','reason'],['医生记录 / 结论原文','assessment'],['医嘱与注意事项','instructions']].map(([l,k])=>`<div class="field"><label for="field-${k}">${l}</label><textarea id="field-${k}" name="${k}" maxlength="8000" placeholder="按实际情况或原文填写">${esc(x[k]||'')}</textarea></div>`).join('');
@@ -1806,8 +2635,12 @@ let toastTimer;function toast(message,actionLabel='',action=''){$('#toast').inne
 // Keep the toast 8px above the mobile bottom navigation (its rect already includes the safe-area inset).
 function placeToast(){const t=$('#toast'),nav=$('.bottom-tabs');const r=nav&&getComputedStyle(nav).display!=='none'?nav.getBoundingClientRect():null;t.style.bottom=r&&r.height?`${Math.max(0,window.innerHeight-r.top)+8}px`:'';}
 window.addEventListener('resize',()=>{if($('#toast')?.style.display==='flex')placeToast();});
-function navigate(p){if(!applicationReady)return;if(workbench==='health')p=normalizeHealthRoute(p);clearTimeout(toastTimer);if($('#toast'))$('#toast').style.display='none';route=p;page=p.split('/')[0];location.hash=p;query='';filterDate='';filterStatus='all';closeDrawer();render();window.scrollTo(0,0)}
+function navigate(p){if(!applicationReady)return;if(p!==route)componentUI.cleanup({resetView:false});if(p!=='dashboard')layoutUI.cleanup({resetSnapshot:false});if(workbench==='health')p=normalizeHealthRoute(p);clearTimeout(toastTimer);if($('#toast'))$('#toast').style.display='none';route=p;page=p.split('/')[0];location.hash=p;query='';filterDate='';filterStatus='all';closeDrawer();render();window.scrollTo(0,0)}
 document.addEventListener('click',async e=>{if(!applicationReady)return;const el=e.target.closest('[data-action]');if(!el)return;const [action,arg]=el.dataset.action.split(':');try{
+ if(componentUI.isPreview()&&!componentUI.allowsPreviewAction(action)){toast('正在预览组件，请先保存、继续编辑或退出预览');return;}
+ if(action.startsWith('component-')){if(layoutUI.isPreview()||layoutUI.isFrame()){toast('请先退出布局预览');return;}await componentUI.handle(action,arg);return;}
+ if(action.startsWith('layout-')){await layoutUI.handle(action,arg);return;}
+ if((layoutUI.isFrame()||layoutUI.isPreview())&&action!=='trend'){toast('正在预览布局，请先应用或退出预览');return;}
  if(action==='account-open'||action==='account-desktop'){await account.open();return;}
  if(action.startsWith('original-')){await shell.originals.handle(action,arg,el);return;}
  if(action.startsWith('reading-')){await shell.reading.handle(action,arg,el);return;}
@@ -1823,7 +2656,7 @@ document.addEventListener('click',async e=>{if(!applicationReady)return;const el
  else if(action==='edit'){const x=items.find(x=>x.id===arg);if(x.kind==='water'){await daily.handle('daily-water-edit',arg,el);return;}if(['meal','exercise'].includes(x.kind)){quick.open(x.kind,x);return;}if(['medication','report','dose'].includes(x.kind))medical.openMedical(x.kind,arg);else openForm(x.kind,arg)}
  else if(action==='close')requestClose();
  else if(action==='personal'){await setSpace('personal');toast('已进入个人空间')}
- else if(action==='trend'){metricType=arg;render()}
+ else if(action==='trend'){metricType=arg;layoutUI.rememberTrend(metricType,range);render()}
  else if(action==='toggle'){const x=items.find(x=>x.id===arg);await api('/api/items/'+arg,{method:'PUT',body:JSON.stringify({done:!x.done})});await load();toast(x.done?'已取消完成':'计划已完成，给自己一点肯定')}
  else if(action==='delete'){const x=items.find(x=>x.id===arg);openDrawer(`<p class="section-desc">确定移除「${esc(x.title)}」？移除后 12 秒内可以撤销，之后 30 天内可在「我的 → 最近删除」恢复。${x.kind==='visit'?'关联附件会保留在资料档案中。':''}</p>`,'移除记录',space==='demo'?'示例空间':'个人空间',`${btn('取消','close')}${btn('确认移除','confirm-delete:'+arg,'danger','trash')}`)}
  else if(action==='confirm-delete'){const targetSpace=space,targetWorkbench=workbench,targetName=workbenches.find(w=>w.id===workbench)?.name||'原工作台',dialog=$('.drawer');const r=await api('/api/items/'+arg,{method:'DELETE'},targetSpace,targetWorkbench);undo={space:targetSpace,workbench:targetWorkbench,name:targetName,record:r.deleted};if(dialog?.isConnected)closeDrawer();await load();toast(`已从${targetName}工作台移除记录`,`撤销${targetName}记录`,'undo')}
@@ -1839,21 +2672,26 @@ document.addEventListener('click',async e=>{if(!applicationReady)return;const el
  else if(action==='reset-filters'){query='';filterDate='';filterStatus='all';render()}
  else if(action==='export'){const data=await api('/api/export');const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`${workbench}-${space}-${today}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('记录已导出')}
  }catch(err){toast(err.message)}});
-document.addEventListener('keydown',e=>{if(!applicationReady)return;if(e.key==='Escape'){if($('.discard-confirm'))$('#discard-keep').click();else requestClose();}if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(workbench==='health')assistant();else shell.handle('shell-capture')}if(e.key==='Tab'&&$('.drawer')){const controls=[...$('.drawer').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.offsetParent!==null);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
+document.addEventListener('keydown',e=>{if(!applicationReady)return;if(e.key==='Escape'){if($('.discard-confirm'))$('#discard-keep').click();else requestClose();}if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(layoutUI.isBusy()||layoutUI.isPreview()||layoutUI.isFrame()||componentUI.isBusy()||componentUI.isPreview())return;if($('#layout-editor-form,#component-editor-form,#component-placement-form')){requestClose();return;}if(workbench==='health')assistant();else shell.handle('shell-capture')}if(e.key==='Tab'&&$('.drawer')){const controls=[...$('.drawer').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.offsetParent!==null);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
 window.addEventListener('hashchange',()=>{if(!applicationReady)return;const p=location.hash.slice(1)||'dashboard';if(p!==route)navigate(p)});
 const previews=createFilePreviews({closeDrawer,onRestore:()=>{if(!applicationReady)return;shownState=null;items=[];settings={};invalidateStateCache();$('#app').innerHTML=homeSkeleton();return load();},onUnauthorized:()=>account.handleUnauthorized(),get items(){return items},get space(){return space},get workbench(){return workbench},openDrawer,esc,icon,btn});
 const medical=createMedical({get originals(){return shell.originals},previews,get trashedIds(){return trashedIds},get items(){return items},get space(){return space},get today(){return today},get workbench(){return workbench},recordRows,fileIsLinked,api,load,render,navigate,openDrawer,closeDrawer,openForm,toast,icon,esc,field,select,btn});
 const quick=createQuick({markDrawerBaseline,get items(){return items},get space(){return space},get today(){return today},get workbench(){return workbench},get medical(){return medical},inbox:()=>navigate('visit/inbox'),api,load,navigate,openDrawer,closeDrawer,toast,icon,esc,field,btn});
 const cgm=createCgmUI({api,esc,icon,btn,openDrawer,closeDrawer,toast,get space(){return space},get workbench(){return workbench},get today(){return today},get userId(){return account.user?.id}});
 const daily=createDaily({markDrawerBaseline,get items(){return items},get settings(){return settings},get space(){return space},get today(){return today},get page(){return page},get workbench(){return workbench},get quick(){return quick},api,load,render,navigate,openDrawer,closeDrawer,toast,icon,esc,field,btn,recordRows});
-async function setSpace(next){shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();space=next==='personal'?'personal':'demo';localStorage.setItem('health-space',space);query='';filterDate='';filterStatus='all';undo=null;closeDrawer();items=[];loadSequence++;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;workbenches=cached.data.workbenches||workbenches;render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
-async function switchWorkbench(id){shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();if(!workbenches.some(w=>w.id===id)){toast('工作台不存在');return;}const routes=JSON.parse(localStorage.getItem('workbench-routes')||'{}');routes[workbench]=route;localStorage.setItem('workbench-routes',JSON.stringify(routes));closeDrawer();workbench=id;localStorage.setItem('active-workbench',id);items=[];query='';filterDate='';filterStatus='all';undo=null;$('#toast').style.display='none';loadSequence++;route=routes[id]||'dashboard';page=route.split('/')[0];location.hash=route;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){/* stale-while-revalidate: any age */shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
+async function setSpace(next){componentUI.cleanup();layoutUI.cleanup();shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();space=next==='personal'?'personal':'demo';localStorage.setItem('health-space',space);query='';filterDate='';filterStatus='all';undo=null;closeDrawer();items=[];loadSequence++;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;workbenches=cached.data.workbenches||workbenches;layoutUI.setSnapshot(cached.data.layout);componentUI.setView(cached.data.componentView);render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
+async function switchWorkbench(id){componentUI.cleanup();layoutUI.cleanup();shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();if(!workbenches.some(w=>w.id===id)){toast('工作台不存在');return;}const routes=JSON.parse(localStorage.getItem('workbench-routes')||'{}');routes[workbench]=route;localStorage.setItem('workbench-routes',JSON.stringify(routes));closeDrawer();workbench=id;localStorage.setItem('active-workbench',id);items=[];query='';filterDate='';filterStatus='all';undo=null;$('#toast').style.display='none';loadSequence++;route=routes[id]||'dashboard';page=route.split('/')[0];location.hash=route;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){/* stale-while-revalidate: any age */shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;layoutUI.setSnapshot(cached.data.layout);componentUI.setView(cached.data.componentView);render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
 // Keep sidebar + bottom navigation; only the content area becomes the home skeleton while data loads.
 function renderSwitchSkeleton(){render();const main=$('#app main');if(main)main.innerHTML=homeSkeleton();else $('#app').innerHTML=homeSkeleton();}
 // Home skeleton shown the instant login succeeds, until the workbench renders.
 const homeSkeleton=()=>'<div class="home-skeleton" role="status" aria-busy="true" aria-label="正在打开工作台"><div class="sk sk-title"></div><div class="sk sk-card"></div><div class="sk sk-row"></div><div class="sk sk-row"></div><div class="sk sk-row short"></div></div>';
-const account=createAccount({openDrawer,closeDrawer,toast,onProfileChanged:async()=>{invalidateStateCache();await load();},onUnauthorized:()=>{shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};undo=null;},loginQuery:()=>'?space=personal&workbench=health',onAuthenticated:async(_user,result)=>{shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;invalidateStateCache();items=[];settings={};undo=null;loadSequence++;space='personal';workbench='health';route='dashboard';page='dashboard';workbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'资产',type:'finance'},{id:'travel',name:'旅行',type:'travel'},{id:'reading',name:'阅读',type:'reading'}];localStorage.setItem('health-space',space);localStorage.setItem('active-workbench',workbench);history.replaceState(null,'','#dashboard');$('#overlay').replaceChildren();$('#app').innerHTML=homeSkeleton();applicationReady=true;const state=result?.state;if(state&&result.me?.user?.id===account.user?.id&&state.space===space&&state.workbench?.id===workbench){loadSequence++;applyState(cacheKey(space,workbench),state);}else await load();}});
+const account=createAccount({openDrawer,closeDrawer,toast,onProfileChanged:async()=>{invalidateStateCache();await load();},onUnauthorized:()=>{componentUI.cleanup({keepLink:true});layoutUI.cleanup({keepLink:true});shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};undo=null;},loginQuery:()=>'?space=personal&workbench=health',onAuthenticated:async(_user,result)=>{componentUI.cleanup({keepLink:true});layoutUI.cleanup({keepLink:true});shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;invalidateStateCache();items=[];settings={};undo=null;loadSequence++;space='personal';workbench='health';route='dashboard';page='dashboard';workbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'资产',type:'finance'},{id:'travel',name:'旅行',type:'travel'},{id:'reading',name:'阅读',type:'reading'}];localStorage.setItem('health-space',space);localStorage.setItem('active-workbench',workbench);history.replaceState(null,'','#dashboard');$('#overlay').replaceChildren();$('#app').innerHTML=homeSkeleton();applicationReady=true;const state=result?.state;if(state&&result.me?.user?.id===account.user?.id&&state.space===space&&state.workbench?.id===workbench){loadSequence++;applyState(cacheKey(space,workbench),state);}else await load();await layoutUI.initializePreview();await componentUI.initializePreview();}});
 const shell=createShell({get items(){return items},get settings(){return settings},get space(){return space},get today(){return today},get page(){return page},get workbench(){return workbench},get workbenches(){return workbenches},get account(){return account},healthOriginalAction:fileReportAction,previews,api,load,render,navigate,setSpace,switchWorkbench,refreshRegistry:async created=>{if(!workbenches.some(x=>x.id===created.id))workbenches.push(created)},openDrawer,closeDrawer,toast,icon,esc,field,btn});
+const layoutUI=createLayoutUI({get userId(){return account.user?.id},get ready(){return applicationReady},get workbench(){return workbench},get route(){return route},get space(){return space},api,load,render,openDrawer,closeDrawer,toast,esc,icon,invalidateCache:invalidateStateCache,enterDashboard:()=>{route='dashboard';page='dashboard';},getTrend:()=>({metric:metricType,range}),setTrend:(metric,days)=>{if(metric)metricType=metric;if(days)range=days},previewTheme:color=>{for(const [key,value]of Object.entries(workbenchTheme(color,'health')))document.body.style.setProperty(key,value)}});
+const componentUI=createComponentUI({get userId(){return account.user?.id},get ready(){return applicationReady},get workbench(){return workbench},get workbenches(){return workbenches},get route(){return route},get page(){return page},get space(){return space},api,load,render,openDrawer,closeDrawer,requestClose,toast,esc,icon,invalidateCache:invalidateStateCache,layoutReadOnly:()=>layoutUI.isPreview()||layoutUI.isFrame(),clearLayoutPreview:()=>layoutUI.cleanup({resetSnapshot:false}),enterDashboard:()=>{route=workbench==='reading'?'books':'dashboard';page=route;history.replaceState(null,'',location.pathname+location.search+'#'+route);}});
+if(new URLSearchParams(location.search).has('componentPreview'))layoutUI.cleanup({resetSnapshot:false});
 // One startup request (/api/bootstrap) replaces /api/auth/me + /api/state; any failure falls back to the old sequence.
 let boot=null;try{const body=await api('/api/bootstrap',{timeoutMs:7000});if(body?.me)boot=body;}catch{}
 if(await account.initialize(boot?.me)){applicationReady=true;if(account.enabled&&!localStorage.getItem('health-space'))space='personal';const state=boot?.state;if(state&&state.space===space&&state.workbench?.id===workbench){loadSequence++;applyState(cacheKey(space,workbench),state);}else await load();}
+await layoutUI.initializePreview();
+await componentUI.initializePreview();

@@ -1,14 +1,19 @@
 import { institutions } from './institutions.js';
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
 const names=p=>[p.name,...(p.aliases||[])];
+const matchesName=(p,hospital)=>names(p).some(name=>{
+ const key=normalize(name);if(key===hospital)return true;
+ // Brand marks may cover a named branch, without claiming a specific clinic registration.
+ return p.scope==='brand'&&hospital.startsWith(key)&&/^[（(][^()（）]{1,50}[）)]$/.test(hospital.slice(key.length));
+});
 const hospitalBuildingIcon=()=>`<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#668371" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M7 10H4a1 1 0 0 0-1 1v10m14-11h3a1 1 0 0 1 1 1v10M2 21h20M10 21v-4h4v4M12 6v4m-2-2h4M10 13h.01M14 13h.01M4.5 14h.01M4.5 17h.01M19.5 14h.01M19.5 17h.01"/></svg>`;
 export function resolveInstitution(visit){
- if(visit.hospitalId)return institutions.find(p=>p.id===visit.hospitalId)||null;
- const hospital=normalize(visit.hospital);if(!hospital)return null;
  const city=normalize(visit.city).replace(/市$/,'');
+ if(visit.hospitalId){const p=institutions.find(p=>p.id===visit.hospitalId)||null;return p?.scope==='brand'&&city&&!(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city)?null:p;}
+ const hospital=normalize(visit.hospital);if(!hospital)return null;
  const ambiguous=new Set(['省医院','省人民医院','人民医院','协和医院','中山医院','同济医院','鼓楼医院']);
- const matches=institutions.filter(p=>names(p).some(name=>normalize(name)===hospital));
- const candidates=city?matches.filter(p=>!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
+ const matches=institutions.filter(p=>matchesName(p,hospital));
+ const candidates=city?matches.filter(p=>p.scope==='brand'?(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city):!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
  if(!city&&ambiguous.has(hospital))return null;
  return candidates.length===1?candidates[0]:null;
 }

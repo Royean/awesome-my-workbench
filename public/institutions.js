@@ -1,5 +1,6 @@
-// Public institution directory. Logos are official assets; empty logo uses a neutral placeholder.
-export const institutions = [
+import {hospitalLogoMappings} from './hospital-logo-map.js';
+// Reviewed catalog mappings extend the legacy directory while retaining existing stable IDs.
+const curatedInstitutions = [
   {
     "id": "sichuan-people",
     "name": "四川省人民医院",
@@ -367,3 +368,4 @@ export const institutions = [
     "verifiedAt": "2026-11-01"
   }
 ];
+export const institutions = [...curatedInstitutions.filter(p=>!hospitalLogoMappings.some(m=>m.id===p.id)),...hospitalLogoMappings];

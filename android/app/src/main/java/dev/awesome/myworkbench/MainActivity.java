@@ -106,12 +106,13 @@ public final class MainActivity extends Activity {
         WebSettings settings=web.getSettings(); settings.setJavaScriptEnabled(true); settings.setDomStorageEnabled(true);
         settings.setAllowFileAccess(false); settings.setAllowContentAccess(false); settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         settings.setSafeBrowsingEnabled(true); settings.setJavaScriptCanOpenWindowsAutomatically(false); settings.setSupportMultipleWindows(false);
-        settings.setMediaPlaybackRequiresUserGesture(true); settings.setUserAgentString(settings.getUserAgentString()+" AwesomeMyWorkbench/0.7.2");
+        settings.setMediaPlaybackRequiresUserGesture(true); settings.setUserAgentString(settings.getUserAgentString()+" AwesomeMyWorkbench/0.7.3");
         CookieManager.getInstance().setAcceptCookie(true); CookieManager.getInstance().setAcceptThirdPartyCookies(web,false);
         web.setWebViewClient(new WebViewClient() {
             @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest req) {
                 Uri uri=req.getUrl();
                 if(!trusted(uri)) { if(req.isForMainFrame()) external(uri); return true; }
+                if(req.isForMainFrame() && "/app/collectors".equals(uri.getPath())) { startActivity(new Intent(MainActivity.this,CaptureSettingsActivity.class)); return true; }
                 if(req.isForMainFrame() && "/api/export".equals(uri.getPath())) { save(uri.toString(),"application/json",null); return true; }
                 return false;
             }
@@ -168,7 +169,7 @@ public final class MainActivity extends Activity {
         String path=uri.getPath();
         return "/api/export".equals(path) || (path!=null && path.startsWith("/api/files/"));
     }
-    private void load(String url) { if(web!=null && trusted(Uri.parse(url))) {failed=false;errorPanel.setVisibility(View.GONE);web.loadUrl(url);} }
+    private void load(String url) { if(trusted(Uri.parse(url)) && "/app/collectors".equals(Uri.parse(url).getPath())) {if(web!=null && web.getUrl()==null)web.loadUrl(HOME);startActivity(new Intent(this,CaptureSettingsActivity.class));return;} if(web!=null && trusted(Uri.parse(url))) {failed=false;errorPanel.setVisibility(View.GONE);web.loadUrl(url);} }
     private void showError(String text) { failed=true;progress.setVisibility(View.GONE);if(errorPanel!=null){errorText.setText(text);errorPanel.setVisibility(View.VISIBLE);} }
     private void external(Uri uri) {
         if(!"https".equalsIgnoreCase(uri.getScheme())) {message("此链接不能在工作台中打开。");return;}
@@ -176,8 +177,8 @@ public final class MainActivity extends Activity {
             .setPositiveButton("打开",(d,w)->{try{startActivity(new Intent(Intent.ACTION_VIEW,uri));}catch(ActivityNotFoundException e){message("没有可用的浏览器。");}}).show();
     }
     private void menu(View anchor) {
-        PopupMenu menu=new PopupMenu(this,anchor);menu.getMenu().add(0,1,0,"重新加载");menu.getMenu().add(0,2,1,"打开网页版");menu.getMenu().add(0,3,2,"关于工作台");
-        menu.setOnMenuItemClickListener(item->{if(item.getItemId()==1){if(web==null)makeWebView();load(HOME);}else if(item.getItemId()==2){try{Intent browser=Intent.createChooser(new Intent(Intent.ACTION_VIEW,Uri.parse(HOME)),"选择浏览器");browser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS,new android.content.ComponentName[]{getComponentName()});startActivity(browser);}catch(ActivityNotFoundException e){message("请在浏览器中打开 vivid-dream.online");}}else new AlertDialog.Builder(this).setTitle("我的工作台 0.7.2").setMessage("健康、金融与其他日常安排\n\n连接你的腾讯云账号，读取和保存记录需要联网。\n附件由你选择后才会上传；麦克风仅在录音时请求权限。").setPositiveButton("知道了",null).show();return true;});menu.show();
+        PopupMenu menu=new PopupMenu(this,anchor);menu.getMenu().add(0,1,0,"重新加载");menu.getMenu().add(0,2,1,"打开网页版");menu.getMenu().add(0,3,2,"关于工作台");menu.getMenu().add(0,4,3,"手机采集设置");
+        menu.setOnMenuItemClickListener(item->{if(item.getItemId()==4){startActivity(new Intent(this,CaptureSettingsActivity.class));}else if(item.getItemId()==1){if(web==null)makeWebView();load(HOME);}else if(item.getItemId()==2){try{Intent browser=Intent.createChooser(new Intent(Intent.ACTION_VIEW,Uri.parse(HOME)),"选择浏览器");browser.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS,new android.content.ComponentName[]{getComponentName()});startActivity(browser);}catch(ActivityNotFoundException e){message("请在浏览器中打开 vivid-dream.online");}}else new AlertDialog.Builder(this).setTitle("我的工作台 0.7.3").setMessage("健康、金融与其他日常安排\n\n连接你的腾讯云账号，读取和保存记录需要联网。\n附件由你选择后才会上传；麦克风仅在录音时请求权限。").setPositiveButton("知道了",null).show();return true;});menu.show();
     }
     private void back() {
         if(web==null||failed){moveTaskToBack(true);return;}
@@ -190,9 +191,9 @@ public final class MainActivity extends Activity {
     }
     @Override protected void onNewIntent(Intent intent) {super.onNewIntent(intent);setIntent(intent);Uri uri=intent.getData();if(trusted(uri)){if(web==null)makeWebView();load(uri.toString());}}
     @Override protected void onSaveInstanceState(Bundle state) {if(web!=null)web.saveState(state);super.onSaveInstanceState(state);}
+    @Override protected void onResume() {super.onResume();if(web!=null)web.onResume();CaptureCoordinator.kick(this,true);}
     @Override protected void onPause() { if(web!=null){web.evaluateJavascript("(()=>{const b=document.querySelector('#capture-record');if(b?.textContent.includes('停止录音'))b.click()})()",null);web.onPause();CookieManager.getInstance().flush();}super.onPause(); }
     @Override protected void onStop() {if(audioRequest!=null){audioRequest.deny();audioRequest=null;}super.onStop();}
-    @Override protected void onResume() {super.onResume();if(web!=null)web.onResume();}
     @Override protected void onDestroy() {if(fileCallback!=null){fileCallback.onReceiveValue(null);fileCallback=null;}if(audioRequest!=null){audioRequest.deny();audioRequest=null;}if(web!=null){content.removeView(web);web.destroy();web=null;}downloads.shutdown();super.onDestroy();}
     @Override public void onRequestPermissionsResult(int request,String[] names,int[] results) {
         super.onRequestPermissionsResult(request,names,results);

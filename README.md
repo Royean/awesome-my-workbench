@@ -116,3 +116,7 @@ v0.3独立验收见 `docs/QUICK_ACCEPTANCE.md`。
 v0.7.1网页性能更新兼容现有APK：登录后直接进入工作台，公共脚本/样式指纹缓存，工作台在当前会话内短暂复用最近内容并后台更新；私人API和附件不缓存。退出或失效立即清除内存内容。源码修改后运行`npm run build`；`npm start`、双击启动和部署脚本会先构建。
 
 原生Android封装位于`android/`，连接同一腾讯云账号与数据库；构建、签名和使用边界见[Android说明](docs/ANDROID.md)。[下载Android APK](https://vivid-dream.online/download/awesome-my-workbench-0.7.0.apk)，签名及当前安装验收限制见[安装包交付记录](docs/ANDROID_RELEASE.md)。APK及密钥不提交到源码仓库。
+
+## 手机采集
+
+安卓工作台内可选采集交易通知，以及 Health Connect 步数、睡眠、体重、静息心率和运动记录。交易通知经人工核对后入账，健康数据进入现有健康工作台；所有来源默认关闭。见[使用说明](docs/PHONE_CAPTURE_INSTALL.md)、[接口与验收范围](docs/PHONE_CAPTURE.md)、[独立验收](docs/PHONE_CAPTURE_ACCEPTANCE.md)。

@@ -6,6 +6,7 @@ import { enrichAssetHolding } from './public/asset-lifecycle.js';
 import { TRAVEL_KINDS, validateTravel, assertTravelChildDates } from './lib/travel.mjs';
 import { ASSET_KINDS, validateAsset, defaultTheme, themeColor } from './lib/assets.mjs';
 import { createCgm } from './lib/cgm.mjs';
+import { createCapture, validateStepMetric, validateHealthMetadata } from './lib/capture.mjs';
 import { validateReportObservations } from './lib/report-observations.mjs';
 import http from 'node:http';
 import fs from 'node:fs';
@@ -54,7 +55,7 @@ const isPlainObject=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const dateError=field=>bad(DATE_ERROR,field);
 const md=d=>`${Number(d.slice(5,7))}月${Number(d.slice(8,10))}日`;
 const validTime=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
-const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分'};
+const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分',steps:'步'};
 // opts.original: the stored record when updating (lets legacy records keep missing optional links).
 function validate(kind,b,opts={}){
  if(!kinds.includes(kind))throw bad('记录类型无效');
@@ -82,10 +83,14 @@ function validate(kind,b,opts={}){
 
  if(kind==='metric'){
   if(!units[clean.type])throw bad('请选择监测项目');
-  if(!Number.isFinite(Number(b.value))||Number(b.value)<=0||Number(b.value)>10000)throw bad('请输入有效监测数值');
-  clean.value=Number(b.value);clean.unit=units[clean.type];
+  if(clean.type==='steps')Object.assign(clean,validateStepMetric(b,{validDate,bad,now,today}));
+  else{
+   if(!Number.isFinite(Number(b.value))||Number(b.value)<=0||Number(b.value)>10000)throw bad('请输入有效监测数值');
+   clean.value=Number(b.value);clean.unit=units[clean.type];
+  }
   if(clean.type==='pressure'){if(!Number.isFinite(Number(b.secondary))||Number(b.secondary)<=0||Number(b.secondary)>=clean.value)throw bad('舒张压需大于 0 且低于收缩压');clean.secondary=Number(b.secondary);}
  }
+ if(kind==='exercise'||kind==='metric'&&clean.type!=='steps')Object.assign(clean,validateHealthMetadata(b,{validDate,bad,now}));
  if(kind==='visit'){
   for(const key of ['city','hospitalId']){if(b[key]!==undefined&&b[key]!==null&&typeof b[key]!=='string')throw bad(key==='city'?'就诊城市格式无效':'医院编号格式无效',key);clean[key]=String(b[key]||'').trim();if(clean[key].length>100)throw bad(key==='city'?'就诊城市最多 100 个字':'医院编号最多 100 个字符',key);}
   if(clean.hospitalId&&!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(clean.hospitalId))throw bad('医院编号格式无效','hospitalId');
@@ -443,6 +448,7 @@ async function handleMcp(req,res){
  return json(res,out.status,out.body);
 }
 const cgm=createCgm({db,dataDir});
+const capture=createCapture({db,put,validDate,bad,today,now});
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
  if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
@@ -479,6 +485,28 @@ const server=http.createServer(async(req,res)=>{try{
  if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||['travel','reading'].includes(w.id)||db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file')requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}
  if(url.pathname.startsWith('/api/')&&!workbench)return json(res,404,{error:'工作台不存在'});
  if(authEnabled&&user&&url.pathname.startsWith('/api/')&&!space)return json(res,404,{error:'工作台空间不存在'});
+ // Phone collection is account-bound even in local development; a stale page cannot read a new owner's inbox.
+ if(url.pathname==='/api/capture'||url.pathname.startsWith('/api/capture/')){
+  if(!authEnabled||!user)return json(res,401,{error:'请先登录后使用手机采集',code:'token_missing'});
+  requireExpectedOwner();
+  if((url.searchParams.get('space')||'personal')!=='personal'||!['health','finance'].includes(workbenchId))return json(res,403,{error:'手机采集仅支持个人健康和资产空间',code:'forbidden_scope'});
+  const captureJson=(status,body)=>json(res,status,{...body,owner:user.id});
+  if(url.pathname==='/api/capture'&&req.method==='GET'){
+   return captureJson(200,{...(workbenchId==='finance'?capture.notifications(space,{limit:url.searchParams.has('limit')?Number(url.searchParams.get('limit')):100,offset:url.searchParams.has('offset')?Number(url.searchParams.get('offset')):0,status:url.searchParams.get('status')??undefined}):capture.health(space)),supportedApps:capture.apps()});
+  }
+  if(req.method==='POST'){
+   const body=await readBody(req,65536);
+   // readBody revalidates the live session after the await; check the owner binding again before mutation.
+   requireExpectedOwner();
+   if(url.pathname==='/api/capture/notifications'&&workbenchId==='finance'){const out=capture.receive(space,body);return captureJson(out.duplicate?200:201,out);}
+   if(url.pathname==='/api/capture/steps'&&workbenchId==='health')return captureJson(200,capture.syncSteps(space,body));
+   if(url.pathname==='/api/capture/health'&&workbenchId==='health')return captureJson(200,capture.syncHealth(space,body));
+   const action=/^\/api\/capture\/events\/([A-Za-z0-9-]{1,100})\/(confirm|ignore)$/.exec(url.pathname);
+   if(action&&workbenchId==='finance')return captureJson(200,capture[action[2]](space,action[1],body));
+   if(url.pathname==='/api/capture/notifications'||url.pathname==='/api/capture/steps'||url.pathname==='/api/capture/health'||action)return json(res,403,{error:'该采集操作不属于当前工作台',code:'forbidden_scope'});
+  }
+  return json(res,405,{error:'采集操作或请求方法不支持'});
+ }
  // Reusable component definitions and placements are account-owned; bindings resolve the selected data space.
  if(url.pathname==='/api/components'||url.pathname.startsWith('/api/components/')){
   requireExpectedOwner();const input={user,workbench,space:baseSpace,page:url.searchParams.get('page')||'dashboard'};

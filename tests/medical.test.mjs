@@ -181,3 +181,26 @@ test('restoring an explicitly owned original checks live references; a missing o
  assert.equal((await api('/api/trash/restore','POST',{id:file.id})).body.visitId,a.id);
  assert.equal(await (await fetch(base+'/api/files/'+file.id+'?space=personal&inline=1')).text(),'虚构原件内容');
 });
+
+test('restoring an unassigned original cannot revive access from two historical visits',async()=>{
+ const a=await add('visit',{status:'已完成'}),b=await add('visit',{status:'已完成'});
+ const file=await original(),first=await add('report',{visitId:a.id,fileId:file.id});
+ const other=await add('report',{visitId:b.id});
+ seedLegacy(other,{fileId:file.id});
+ assert.equal((await update(file,{note:'保留未绑定归属'})).status,200);
+ await api('/api/items/'+file.id,'DELETE');
+ for(const route of ['/api/restore','/api/trash/restore']){
+  const result=await api(route,'POST',{id:file.id});
+  assert.equal(result.status,400);
+  assert.match(result.body.error,/不同就诊/);
+  assert.equal(await active(file.id),undefined);
+  assert.equal((await active(first.id)).fileId,file.id);
+  assert.equal((await active(other.id)).fileId,file.id);
+ }
+ assert.equal((await update(other,{fileId:''})).status,200);
+ const restored=await api('/api/trash/restore','POST',{id:file.id});
+ assert.equal(restored.status,200);
+ assert.equal(restored.body.id,file.id);
+ assert.ok(!restored.body.visitId);
+ assert.equal(await (await fetch(base+'/api/files/'+file.id+'?space=personal&inline=1')).text(),'虚构原件内容');
+});

@@ -173,7 +173,7 @@ function validateReadingReferences(space,kind,body,id){
 function validateReportOriginal(space,kind,body,id,{original={},restoring=false}={}){
  if(kind!=='report'&&kind!=='file')return;
  const visitId=body.visitId||'';
- if(kind==='file'&&(!visitId||original.visitId===visitId))return;
+ if(kind==='file'&&!restoring&&(!visitId||original.visitId===visitId))return;
  if(kind==='report'&&(!body.fileId||original.fileId===body.fileId&&(original.visitId||'')===visitId))return;
 
  const fileId=kind==='file'?id:body.fileId;
@@ -183,9 +183,14 @@ function validateReportOriginal(space,kind,body,id,{original={},restoring=false}
   const fileVisitId=row&&JSON.parse(row.body).visitId;
   if(fileVisitId&&fileVisitId!==visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料','fileId');
  }
- const conflict=db.prepare(`SELECT 1 FROM items WHERE space=? AND kind='report' AND id<>?
-  AND json_extract(body,'$.fileId')=? AND json_extract(body,'$.visitId') NOT IN ('',?) LIMIT 1`).get(space,id,fileId,visitId);
- if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联',kind==='report'?'fileId':'visitId');
+ const visits=db.prepare(`SELECT DISTINCT json_extract(body,'$.visitId') AS visitId FROM items
+  WHERE space=? AND kind='report' AND id<>? AND json_extract(body,'$.fileId')=?
+  AND json_extract(body,'$.visitId')<>'' LIMIT 2`).all(space,id,fileId);
+ if(kind==='file'&&!visitId){
+  if(visits.length>1)throw bad('原件关联了不同就诊的报告，请先调整报告关联再恢复','visitId');
+ }else if(visits.some(row=>row.visitId!==visitId)){
+  throw bad('原件已被其他就诊的报告关联，请先调整报告关联',kind==='report'?'fileId':'visitId');
+ }
 }
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
 // on every write, so a web edit keeps the history. The MCP path passes via='mcp' (create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt).

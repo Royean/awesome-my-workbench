@@ -17,7 +17,7 @@
 ```
 
 如果未设置，请让用户自己完成（你不要经手令牌）：
-1. 浏览器打开 https://vivid-dream.online 登录 → 右上角账号（手机上是「我的」）→「账号与安全」→「个人访问令牌」，填一个名字（如 `Claude Code`）点「生成令牌」。令牌只显示这一次。
+1. 浏览器打开 https://vivid-dream.online 登录 → 「账号与安全」（电脑上在左侧栏底部；手机上是「我的 → 账号与安全」）→「个人访问令牌」，填一个名字（如 `Claude Code`）点「生成令牌」。令牌只显示这一次。
 2. 在终端执行（把 `粘贴令牌` 换成刚才的令牌）：
    - zsh（macOS 默认）：`echo 'export ZHIHENG_TOKEN=粘贴令牌' >> ~/.zshrc && source ~/.zshrc`
    - bash：把上面的 `~/.zshrc` 换成 `~/.bashrc`
@@ -46,13 +46,13 @@ grep -o '"name":"[a-z_]*"' /tmp/zhiheng-check.json | sort -u; rm -f /tmp/zhiheng
 ```bash
 claude mcp get zhiheng >/dev/null 2>&1 && claude mcp remove zhiheng -s user
 claude mcp add --transport http --scope user zhiheng https://vivid-dream.online/mcp \
-  --header "Authorization: Bearer ${ZHIHENG_TOKEN}"
+  --header 'Authorization: Bearer ${ZHIHENG_TOKEN}'
 mkdir -p ~/.claude/skills/zhiheng
 ```
 
 然后把本文末尾「附：SKILL.md」里四个反引号之间的内容，原样写入 `~/.claude/skills/zhiheng/SKILL.md`。
 
-注意：Claude Code 会把令牌存进它自己的配置。以后用户换了令牌，要重新执行这一步。
+注意：上面必须用**单引号**，这样 `~/.claude.json` 里存的是 `${ZHIHENG_TOKEN}` 这个变量名，Claude Code 每次启动时才从环境变量读取，令牌原文不会写进配置。以后用户换了令牌，只要更新 `ZHIHENG_TOKEN` 再新开会话即可。
 
 ### Codex（CLI / IDE 扩展）
 
@@ -64,11 +64,45 @@ url = "https://vivid-dream.online/mcp"
 bearer_token_env_var = "ZHIHENG_TOKEN"
 ```
 
-   如果 Codex 版本较旧、连不上 HTTP 服务，在 `config.toml` **顶层**再加一行 `experimental_use_rmcp_client = true`。
-
-2. `mkdir -p ~/.codex/skills/zhiheng`，然后把本文末尾「附：SKILL.md」的内容原样写入 `~/.codex/skills/zhiheng/SKILL.md`。
+2. `mkdir -p ~/.agents/skills/zhiheng`，然后把本文末尾「附：SKILL.md」的内容原样写入 `~/.agents/skills/zhiheng/SKILL.md`（旧版 Codex 读 `~/.codex/skills/zhiheng/SKILL.md`，新版找不到时再放这里）。
 
 Codex 每次从环境变量读令牌，以后换令牌只要改 `~/.zshrc`。
+
+### 其他 MCP 客户端（Cursor、Cline、Claude Desktop 等）
+
+知衡是远程 MCP 服务：Streamable HTTP，地址 `https://vivid-dream.online/mcp`，每个请求带 `Authorization: Bearer <令牌>`；只返回 JSON（不需要 SSE，`GET` 会得到 405），不用 OAuth。
+
+1. 打开客户端的 MCP 配置文件（JSON，常见顶层键是 `mcpServers`；具体文件位置看该客户端文档），在 `mcpServers` 里加一项。支持在配置里引用环境变量的客户端，用变量引用，不要写入令牌原文：
+
+```json
+{
+  "mcpServers": {
+    "zhiheng": {
+      "type": "http",
+      "url": "https://vivid-dream.online/mcp",
+      "headers": { "Authorization": "Bearer ${ZHIHENG_TOKEN}" }
+    }
+  }
+}
+```
+
+   - 有的客户端把 `type` 写成 `"streamable-http"` 或 `"transport": "http"`，按它的文档改字段名，`url` 和 `headers` 不变。
+   - 环境变量引用的写法因客户端而异（如 `${ZHIHENG_TOKEN}`、`${env:ZHIHENG_TOKEN}`）。**任何配置文件里都不要出现令牌原文**；客户端不支持变量引用时，改用下面的桥接方式。
+   - 不支持变量引用、或只支持本地 stdio 服务的客户端：用桥接工具 [mcp-remote](https://www.npmjs.com/package/mcp-remote)，由 shell 在启动时读取环境变量（客户端需能看到 `ZHIHENG_TOKEN`，图形界面应用可能要从设置了该变量的终端启动）：
+
+```json
+{
+  "mcpServers": {
+    "zhiheng": {
+      "command": "sh",
+      "args": ["-c", "exec npx -y mcp-remote https://vivid-dream.online/mcp --header \"Authorization:Bearer $ZHIHENG_TOKEN\""]
+    }
+  }
+}
+```
+2. 客户端支持 skills / 自定义说明时，把本文末尾「附：SKILL.md」放进去；不支持的，把它的内容加到该客户端的系统提示或项目规则里。
+
+本说明的最新版随时可从 https://vivid-dream.online/install.md 获取（公开、不含任何令牌）；也可从 GitHub 取：[AGENT-INSTALL.md](https://raw.githubusercontent.com/Royean/awesome-my-workbench/main/docs/AGENT-INSTALL.md)、[SKILL.md](https://raw.githubusercontent.com/Royean/awesome-my-workbench/main/skills/zhiheng/SKILL.md)（可用 `curl -fsSL <地址> -o ~/.claude/skills/zhiheng/SKILL.md` 代替手动粘贴附录）。
 
 ## 第 4 步：重启并验证
 
@@ -83,7 +117,7 @@ Codex 每次从环境变量读令牌，以后换令牌只要改 `~/.zshrc`。
 ## 卸载
 
 - Claude Code：`claude mcp remove zhiheng -s user`，删除 `~/.claude/skills/zhiheng/`。
-- Codex：删掉 `config.toml` 里的 `[mcp_servers.zhiheng]` 一段，删除 `~/.codex/skills/zhiheng/`。
+- Codex：删掉 `config.toml` 里的 `[mcp_servers.zhiheng]` 一段，删除 `~/.agents/skills/zhiheng/`（以及旧位置 `~/.codex/skills/zhiheng/`）。
 - 网页「账号与安全 → 个人访问令牌」里吊销对应令牌。
 
 ## 附：SKILL.md

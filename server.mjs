@@ -555,7 +555,15 @@ const server=http.createServer(async(req,res)=>{try{
 
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||['travel','reading'].includes(workbench.type))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||['travel','reading'].includes(workbench.type)||old.kind==='file'))requireExpectedOwner();
-  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId','bookId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+  if(req.method==='PUT'){
+   checkKind(old.kind);
+   const body=await readBody(req);
+   if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId','bookId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}
+   // MCP can associate an image while the PUT body is still arriving.
+   const current=old.kind==='medication'?db.prepare('SELECT body FROM items WHERE id=? AND space=? AND kind=?').get(id,space,old.kind):old;
+   if(!current)return json(res,404,{error:'记录不存在'});
+   return json(res,200,put(space,old.kind,{...JSON.parse(current.body),...body},id));
+  }
   if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){

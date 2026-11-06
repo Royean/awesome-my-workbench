@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {mkdtemp,rm} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {once} from 'node:events';
+import {request} from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import {startServer,freePort} from './helpers.mjs';
@@ -25,3 +27,55 @@ test('visit city and institution ID stay explicit, validated, scoped and durable
 test('web image binding validates MIME and account/space/workbench scope, preserving prescription',async()=>{const v=await create('visit',{title:'图片测试就诊',status:'已完成'});const image=await upload(),pdf=await upload('原件.pdf');const m=await medication(v.id,{imageFileId:image.id});assert.equal(m.imageFileId,image.id);assert.equal((await req('/api/upload?workbench=finance',{method:'POST',body:{name:'金融.png',content:'eA=='}})).status,201);assert.equal((await req('/api/items/'+m.id+'?workbench=finance',{method:'PUT',body:{imageFileId:image.id}})).status,404);assert.equal(m.dosage,'1片');for(const badId of [pdf.id,(await upload('原始语音.webm')).id,'missing',(await upload('别人.png','',otherCookie)).id,(await upload('示例.png','?space=demo')).id])assert.equal((await req('/api/items/'+m.id,{method:'PUT',body:{imageFileId:badId}})).status,400);assert.equal((await req('/api/items/'+m.id,{method:'PUT',body:{imageFileId:image.id},who:otherCookie})).status,404);assert.equal((await req('/api/items/'+m.id,{method:'PUT',body:{imageFileId:7}})).status,400);const edit=await req('/api/items/'+m.id,{method:'PUT',body:{note:'核对图片'}});assert.equal(edit.body.dosage,'1片');assert.deepEqual(edit.body.times,['08:00']);assert.equal((await req('/api/items/'+m.id,{method:'PUT',body:{imageFileId:null}})).body.imageFileId,'');});
 
 test('MCP image tool is append-only, idempotent, private and shares web validation',async()=>{const v=await create('visit',{title:'助手图片测试',status:'已完成'}),m=await medication(v.id);const content=Buffer.from('fictional MCP upload'),up=await rpc('upload_attachment',{name:'药盒.webp',contentBase64:content.toString('base64'),sha256:createHash('sha256').update(content).digest('hex')});assert.equal(up.isError,false);const fileId=up.structuredContent.uploaded.id;const first=await rpc('attach_medication_image',{medicationId:m.id,fileId});assert.equal(first.isError,false);assert.deepEqual(first.structuredContent.updated.image,{name:'药盒.webp',type:'image/webp'});assert.equal(first.structuredContent.updated.imageFileId,undefined);assert.doesNotMatch(JSON.stringify(first.structuredContent),/storageName|contentBase64/);assert.deepEqual((await rpc('attach_medication_image',{medicationId:m.id,fileId})).structuredContent,first.structuredContent);assert.equal(first.structuredContent.updated.dosage,'1片');assert.deepEqual(first.structuredContent.updated.times,['08:00']);const different=await upload('另一张.jpg');assert.equal((await rpc('attach_medication_image',{medicationId:m.id,fileId:different.id})).isError,true);assert.equal((await rpc('attach_medication_image',{medicationId:m.id,fileId},otherToken)).isError,true);assert.equal((await rpc('attach_medication_image',{medicationId:m.id,fileId,space:'demo'})).isError,true);assert.equal((await rpc('attach_medication_image',{medicationId:m.id,fileId,workbench:'finance'})).isError,true);const blank=await medication(v.id),pdf=await upload('拒绝.pdf');assert.equal((await rpc('attach_medication_image',{medicationId:blank.id,fileId:pdf.id})).isError,true);const audio=await upload('语音.ogg');assert.equal((await rpc('attach_medication_image',{medicationId:blank.id,fileId:audio.id})).isError,true);for(const name of ['create_record','update_record']){const args=name==='create_record'?{kind:'medication',title:'bad'}:{id:m.id};for(const key of ['imageFileId','image','attachmentIds'])assert.equal((await rpc(name,{...args,[key]:fileId})).isError,true);}const listed=(await rpc('list_records',{kind:'medication'})).structuredContent.records.find(x=>x.id===m.id);assert.deepEqual(listed.image,first.structuredContent.updated.image);assert.equal(listed.imageFileId,undefined);assert.equal((await req('/api/items/'+fileId,{method:'DELETE'})).status,200);const edited=await req('/api/items/'+m.id,{method:'PUT',body:{note:'图片已删除，保留历史'}});assert.equal(edited.status,200);assert.equal(edited.body.imageFileId,fileId);const mc=await rpc('update_record',{id:m.id,note:'助手核对历史'});assert.equal(mc.isError,false);assert.equal(mc.structuredContent.updated.image,null);assert.equal(mc.structuredContent.updated.dosage,'1片');assert.equal((await req('/api/items/'+blank.id,{method:'PUT',body:{imageFileId:fileId}})).status,400);});
+
+async function withStreamedMedicationPut(id, body, whileBodyIsPending) {
+ const stream = request(base+'/api/items/'+id, {
+  method:'PUT',
+  headers:{Cookie:cookie,Origin:base,'Content-Type':'application/json',Expect:'100-continue'},
+ });
+ const response = once(stream,'response').then(async ([res])=>{
+  const chunks=[];
+  for await (const chunk of res) chunks.push(chunk);
+  return {status:res.statusCode,body:JSON.parse(Buffer.concat(chunks).toString())};
+ });
+ // Keep the response rejection handled if the concurrent operation fails first.
+ response.catch(()=>{});
+ try {
+  const continued=once(stream,'continue');
+  stream.flushHeaders();
+  await continued;
+  const json=JSON.stringify(body);
+  stream.write(json.slice(0,1));
+  await whileBodyIsPending();
+  stream.end(json.slice(1));
+  return await response;
+ } finally {
+  stream.destroy();
+ }
+}
+
+test('streamed medication updates merge the latest same-scope image and cannot revive a deleted plan', async ()=>{
+ const visit=await create('visit',{title:'虚构并发就诊',status:'已完成'});
+ const plan=await medication(visit.id), file=await upload();
+ const attach=async target=>{
+  const result=await rpc('attach_medication_image',{medicationId:target.id,fileId:file.id});
+  assert.equal(result.isError,false,JSON.stringify(result));
+ };
+ const edited=await withStreamedMedicationPut(plan.id,{note:'分段编辑备注'},()=>attach(plan));
+ assert.equal(edited.status,200);
+ assert.equal(edited.body.note,'分段编辑备注');
+ assert.equal(edited.body.imageFileId,file.id);
+ assert.equal(edited.body.dosage,plan.dosage);
+ assert.deepEqual(edited.body.times,plan.times);
+ const other=await medication(visit.id);
+ const removed=await withStreamedMedicationPut(other.id,{imageFileId:''},()=>attach(other));
+ assert.equal(removed.status,200);
+ assert.equal(removed.body.imageFileId,'','an explicit image change still takes effect');
+ const rejected=await withStreamedMedicationPut(plan.id,{note:'不得恢复'},async ()=>{
+  assert.equal((await req('/api/items/'+plan.id,{method:'DELETE'})).status,200);
+ });
+ assert.equal(rejected.status,404);
+ const state=(await req('/api/state')).body;
+ assert.ok(!state.items.some(item=>item.id===plan.id));
+ assert.ok(state.trashedIds.includes(plan.id));
+});

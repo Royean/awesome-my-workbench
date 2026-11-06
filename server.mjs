@@ -170,6 +170,23 @@ function validateReadingReferences(space,kind,body,id){
   if(kind==='reading_entry'){assertReadingPage(body,JSON.parse(row.body),bad);if(body.fileId&&!getAll(space).some(x=>x.kind==='file'&&x.id===body.fileId&&x.bookId===body.bookId))throw bad('笔记原件不存在或未关联此材料','fileId');}
  }
 }
+function validateReportOriginal(space,kind,body,id,{original={},restoring=false}={}){
+ if(kind!=='report'&&kind!=='file')return;
+ const visitId=body.visitId||'';
+ if(kind==='file'&&(!visitId||original.visitId===visitId))return;
+ if(kind==='report'&&(!body.fileId||original.fileId===body.fileId&&(original.visitId||'')===visitId))return;
+
+ const fileId=kind==='file'?id:body.fileId;
+ if(kind==='report'){
+  const row=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space);
+  if(!row&&!restoring)throw bad('关联原件不存在或不在当前空间','fileId');
+  const fileVisitId=row&&JSON.parse(row.body).visitId;
+  if(fileVisitId&&fileVisitId!==visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料','fileId');
+ }
+ const conflict=db.prepare(`SELECT 1 FROM items WHERE space=? AND kind='report' AND id<>?
+  AND json_extract(body,'$.fileId')=? AND json_extract(body,'$.visitId') NOT IN ('',?) LIMIT 1`).get(space,id,fileId,visitId);
+ if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联',kind==='report'?'fileId':'visitId');
+}
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
 // on every write, so a web edit keeps the history. The MCP path passes via='mcp' (create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt).
 const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
@@ -187,8 +204,7 @@ function put(space,kind,body,id=randomUUID(),via){
  for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw bad('关联就诊不存在或不在当前空间');}
- if(kind==='file'&&clean.visitId){const conflict=getAll(space).find(x=>x.kind==='report'&&x.fileId===id&&x.visitId!==clean.visitId);if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联');}
- if(kind==='report'&&clean.fileId){const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.fileId,space);if(!f){if(original.fileId!==clean.fileId)throw bad('关联原件不存在或不在当前空间')}else{const file=JSON.parse(f.body);if(file.visitId&&file.visitId!==clean.visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料');}}
+ validateReportOriginal(space,kind,clean,id,{original});
  if(kind==='medication'&&clean.imageFileId){
   const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.imageFileId,space);
   if(!f){if(original.imageFileId!==clean.imageFileId)throw bad('药品图片不存在或不在当前空间','imageFileId');}
@@ -288,7 +304,9 @@ function restoreFromTrash(space,id,opts={}){
  const t=db.prepare('SELECT * FROM trash_items WHERE id=? AND space=?').get(String(id||''),space);if(!t)throw bad('最近删除里没有这条记录，可能已超过 30 天或已恢复','id','not_found');
  if(db.prepare('SELECT id FROM items WHERE id=?').get(t.id))throw bad('这条记录已经恢复过了');
  if(t.kind==='travel_trip')return restoreTravelTrip(space,t);
- const body=JSON.parse(t.body);const parent=parentOf(t.kind,body);let parentRestored=null;
+ const body=JSON.parse(t.body);
+ validateReportOriginal(space,t.kind,body,t.id,{restoring:true});
+ const parent=parentOf(t.kind,body);let parentRestored=null;
  if([...ASSET_KINDS,...TRAVEL_KINDS].includes(t.kind)&&body.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,t.kind,body.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});
  if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
   const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
@@ -564,7 +582,7 @@ const server=http.createServer(async(req,res)=>{try{
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
   if(ASSET_KINDS.includes(deleted.kind)||['travel','reading'].includes(workbench.type)||deleted.kind==='file')requireExpectedOwner();
   if(['travel','reading'].includes(workbench.type))return json(res,200,restoreFromTrash(space,id));
-  const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
+  const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});validateReportOriginal(space,deleted.kind,clean,id,{restoring:true});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
   const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw bad('保留附件无效');

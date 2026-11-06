@@ -2,6 +2,7 @@ import {test,before,after} from 'node:test';
 import assert from 'node:assert/strict';
 import {spawn} from 'node:child_process';
 import {mkdtemp,rm} from 'node:fs/promises';
+import {DatabaseSync} from 'node:sqlite';
 import os from 'node:os';
 import path from 'node:path';
 let cwd=path.resolve(import.meta.dirname,'..'),base=undefined;
@@ -80,4 +81,103 @@ test('scheduled dose matches plan while historical slots survive plan edits',asy
  assert.equal((await update(m,{times:['10:00']})).status,200);
  assert.equal((await update(d,{note:'保留历史时段原始记录'})).status,200);
  await add('dose',{medicationId:m.id,outcome:'已服用',time:'11:00',scheduledTime:''});
+});
+
+async function original(visitId){
+ const content=Buffer.from('虚构原件内容').toString('base64');
+ const result=await api('/api/upload','POST',{name:'visit-original.txt',date,content,visitId});
+ assert.equal(result.status,201);
+ return result.body;
+}
+async function active(id){return (await api('/api/state')).body.items.find(x=>x.id===id);}
+function seedLegacy(item,change){
+ const {id,kind,...body}=item;
+ const db=new DatabaseSync(path.join(dir,'health.sqlite'));
+ try{db.prepare('UPDATE items SET body=? WHERE id=? AND kind=?').run(JSON.stringify({...body,...change}),id,kind);}
+ finally{db.close();}
+}
+
+test('active report references constrain unassigned originals without writing explicit ownership',async()=>{
+ const a=await add('visit',{status:'已完成'}),b=await add('visit',{status:'已完成'});
+ const file=await original(),replacement=await original(b.id);
+ const one=await add('report',{visitId:a.id,fileId:file.id});
+ const two=await add('report',{visitId:a.id,fileId:file.id});
+ const other=await add('report',{visitId:b.id});
+ const create=await api('/api/items','POST',{kind:'report',title:'虚构跨就诊关联',date,visitId:b.id,fileId:file.id});
+ for(const response of [create,await update(other,{fileId:file.id}),await update(one,{visitId:b.id})]){
+  assert.equal(response.status,400);
+  assert.equal(response.body.field,'fileId');
+  assert.match(response.body.error,/其他就诊/);
+ }
+ assert.deepEqual(await active(one.id),one);
+ assert.deepEqual(await active(other.id),other);
+ assert.deepEqual(await active(file.id),file);
+ assert.equal((await update(one,{visitId:b.id,fileId:replacement.id})).body.fileId,replacement.id);
+ assert.equal((await update(two,{visitId:b.id})).body.fileId,file.id,'only the edited report referenced the original');
+ assert.equal((await update(two,{fileId:''})).body.fileId,'');
+ assert.equal((await add('report',{visitId:a.id,fileId:file.id})).fileId,file.id);
+ assert.deepEqual(await active(file.id),file);
+});
+
+test('legacy cross-visit links can be read, preserved on edit, and corrected',async()=>{
+ const a=await add('visit',{status:'已完成'}),b=await add('visit',{status:'已完成'});
+ const file=await original(a.id);
+ const first=await add('report',{visitId:a.id,fileId:file.id});
+ const legacy=await add('report',{visitId:b.id});
+ seedLegacy(legacy,{fileId:file.id});
+ assert.equal((await active(legacy.id)).fileId,file.id);
+ assert.equal(await (await fetch(base+'/api/files/'+file.id+'?space=personal&inline=1')).text(),'虚构原件内容');
+ assert.equal((await update(first,{note:'保留原归属'})).status,200);
+ assert.equal((await update(legacy,{note:'保留历史冲突'})).body.fileId,file.id);
+ assert.equal((await update(file,{note:'文件无关修改'})).body.visitId,a.id);
+ assert.equal((await update(file,{visitId:b.id})).status,400);
+ assert.equal((await update(legacy,{visitId:a.id})).body.fileId,file.id);
+});
+
+test('conflicting report restore leaves both trash records intact before any parent restore',async()=>{
+ const a=await add('visit',{status:'已完成'}),b=await add('visit',{status:'已完成'});
+ const file=await original();
+ const first=await add('report',{visitId:a.id,fileId:file.id});
+ await api('/api/items/'+first.id,'DELETE');
+ await api('/api/items/'+a.id,'DELETE');
+ const other=await add('report',{visitId:b.id,fileId:file.id});
+ for(const [route,body] of [['/api/restore',{id:first.id}],['/api/trash/restore',{id:first.id,withParent:true}]]){
+  const response=await api(route,'POST',body);
+  assert.equal(response.status,400);
+  assert.equal(response.body.field,'fileId');
+  assert.match(response.body.error,/其他就诊/);
+ }
+ assert.equal(await active(a.id),undefined);
+ assert.equal(await active(first.id),undefined);
+ assert.deepEqual(await active(file.id),file);
+ assert.deepEqual(await active(other.id),other);
+ assert.equal((await update(other,{fileId:''})).status,200);
+ const restored=await api('/api/trash/restore','POST',{id:first.id,withParent:true});
+ assert.equal(restored.status,200);
+ assert.equal(restored.body.restoredCount,2);
+ assert.equal(restored.body.fileId,file.id);
+ assert.deepEqual(await active(a.id),a);
+});
+
+test('restoring an explicitly owned original checks live references; a missing original does not erase an old link',async()=>{
+ const a=await add('visit',{status:'已完成'}),b=await add('visit',{status:'已完成'});
+ const file=await original(a.id),report=await add('report',{visitId:b.id});
+ seedLegacy(report,{fileId:file.id});
+ await api('/api/items/'+file.id,'DELETE');
+ for(const route of ['/api/restore','/api/trash/restore']){
+  const response=await api(route,'POST',{id:file.id});
+  assert.equal(response.status,400);
+  assert.match(response.body.error,/其他就诊/);
+  assert.equal(await active(file.id),undefined);
+  assert.equal((await active(report.id)).fileId,file.id);
+ }
+ for(const route of ['/api/restore','/api/trash/restore']){
+  await api('/api/items/'+report.id,'DELETE');
+  const restored=await api(route,'POST',{id:report.id});
+  assert.equal(restored.status,200);
+  assert.equal(restored.body.fileId,file.id);
+ }
+ assert.equal((await update(report,{fileId:''})).status,200);
+ assert.equal((await api('/api/trash/restore','POST',{id:file.id})).body.visitId,a.id);
+ assert.equal(await (await fetch(base+'/api/files/'+file.id+'?space=personal&inline=1')).text(),'虚构原件内容');
 });

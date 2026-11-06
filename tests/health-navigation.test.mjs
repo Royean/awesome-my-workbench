@@ -16,3 +16,53 @@ test('named medical routes remain usable and are never mistaken for missing visi
  location.hash='#visit/not-real';assert.match(m.render(),/找不到这次就诊/);
  delete globalThis.location;
 });
+
+test('report picker reacts to visit changes and requires an explicit compatible selection',async()=>{
+ const originalDocument=globalThis.document,originalFormData=globalThis.FormData;
+ const visit={value:'a'},file={value:'inferred',innerHTML:''},upload={files:[]},submit={};
+ const notice={},uploadState={},error={};
+ const fields={'#report-upload':upload,'#report-original-notice':notice,'#report-upload-state':uploadState,'#medical-error':error};
+ const form={elements:{visitId:visit,fileId:file},querySelector:id=>fields[id],querySelectorAll:()=>[],isConnected:true};
+ globalThis.document={querySelector:id=>id==='#medical-form'?form:id.startsWith('.drawer-foot')?submit:null};
+ globalThis.FormData=class {constructor(){return [['visitId',visit.value],['fileId',file.value]];}};
+ const date='2026-10-01';
+ const items=[
+  {id:'a',kind:'visit',title:'Visit A',date},{id:'b',kind:'visit',title:'Visit B',date},
+  {id:'inferred',kind:'file',title:'Referenced original'},{id:'explicit',kind:'file',title:'Direct original',visitId:'a'},
+  {id:'available',kind:'file',title:'Free original'},
+  {id:'owner',kind:'report',title:'Visit A report',visitId:'a',fileId:'inferred'},
+  {id:'editing',kind:'report',title:'Report to edit',date,visitId:'a',fileId:'inferred'},
+ ];
+ let html;
+ const requests=[];
+ const medical=createMedical({items,space:'personal',workbench:'health',today:date,esc,icon:()=>'',field:()=>'',select:()=>'',btn:()=>'',openDrawer:content=>{html=content;},
+  api:async(route,request)=>requests.push({route,body:JSON.parse(request.body)}),closeDrawer:()=>{},load:async()=>{},toast:()=>{}});
+ const submitForm=()=>form.onsubmit({target:form,preventDefault(){}});
+ try{
+  medical.openMedical('report','editing');
+  assert.match(html,/<option value="inferred" selected>Referenced original/);
+  assert.match(html,/<option value="explicit">Direct original/);
+  visit.value='b';
+  visit.onchange();
+  assert.match(file.innerHTML,/<option value="inferred" selected disabled>/);
+  assert.doesNotMatch(file.innerHTML,/value="explicit"/);
+  assert.match(file.innerHTML,/value="available"/);
+  assert.match(notice.textContent,/无法使用已选原件/);
+  await submitForm();
+  assert.deepEqual(requests,[]);
+  assert.match(error.innerHTML,/无法使用已选原件/);
+  file.value='';
+  file.onchange();
+  assert.equal(notice.textContent,'');
+  await submitForm();
+  assert.equal(requests[0].body.fileId,'');
+  assert.equal(requests[0].body.visitId,'b');
+
+  items.find(x=>x.id==='editing').visitId='b'; // Simulate a stored pre-fix conflict.
+  medical.openMedical('report','editing');
+  assert.match(html,/<option value="inferred" selected>Referenced original（保留原关联）/);
+ }finally{
+  if(originalDocument===undefined)delete globalThis.document;else globalThis.document=originalDocument;
+  globalThis.FormData=originalFormData;
+ }
+});

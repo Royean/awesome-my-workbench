@@ -189,10 +189,49 @@ test('daily health metrics replace across source IDs/devices, sessions deduplica
  const final=(await req(health('/api/capture'))).body.healthRecords;assert.equal(final.filter(x=>x.type==='weight'&&x.date==='2026-11-03').length,1);assert.equal(final.filter(x=>x.sourceId==='concurrent-session').length,1);
 });
 
+test('Health Connect measurement time follows the winning weight and resting heart rate records',async()=>{
+ for(const [kind,value,time] of [['weight',62.5,'17:15'],['resting_heart_rate',58,'06:04']]){
+  const record=healthRecord(kind,{date:'2026-11-02',sourceId:'timed-'+kind,value});
+  const legacy=await syncHealth([record]);
+  assert.equal(legacy.status,200,JSON.stringify(legacy.body));
+  const id=legacy.body.results[0].id;
+  const stored=response=>response.body.healthRecords.find(x=>x.id===id);
+  assert.equal(stored(legacy).time,undefined);
+
+  const timed={...record,time,observedAt:'2026-11-05T03:10:00Z'};
+  const latest=await syncHealth([timed]);
+  assert.equal(latest.body.results[0].id,id);
+  assert.equal(stored(latest).time,time);
+  assert.equal((await req(health('/api/state'))).body.items.find(x=>x.id===id).time,time);
+
+  const duplicate=await syncHealth([{...timed,time:'12:05'}]);
+  assert.equal(duplicate.body.results[0].status,'unchanged');
+  assert.equal(stored(duplicate).time,time);
+  const stale=await syncHealth([{...timed,time:'11:05',observedAt:'2026-11-05T03:05:00Z'}]);
+  assert.equal(stale.body.results[0].status,'unchanged');
+  assert.equal(stored(stale).time,time);
+
+  const sameSourceWithoutTime=await syncHealth([{...record,observedAt:'2026-11-05T03:20:00Z'}]);
+  assert.equal(sameSourceWithoutTime.body.results[0].status,'updated');
+  assert.equal(stored(sameSourceWithoutTime).time,undefined);
+  const refilled=await syncHealth([{...timed,observedAt:'2026-11-05T03:30:00Z'}]);
+  assert.equal(stored(refilled).time,time);
+  const newSourceWithoutTime=await syncHealth([{...record,sourceId:'replacement-'+kind,observedAt:'2026-11-05T03:40:00Z'}]);
+  assert.equal(newSourceWithoutTime.body.results[0].id,id);
+  assert.equal(stored(newSourceWithoutTime).time,undefined);
+
+  assert.ok([200,204].includes((await req(health('/api/items/'+id),{method:'DELETE'})).status));
+  const afterDelete=await syncHealth([{...timed,observedAt:'2026-11-05T03:50:00Z'}]);
+  assert.equal(afterDelete.body.results[0].status,'deleted');
+  assert.equal(stored(afterDelete),undefined);
+ }
+});
+
 test('additional health batches reject unsupported types, invalid units/ranges/times, and roll back the whole batch',async()=>{
  const badRecords=[
   healthRecord('glucose',{value:5}),healthRecord('weight',{value:0}),healthRecord('weight',{value:1001}),healthRecord('weight',{value:64,unit:'lb'}),healthRecord('sleep',{value:25}),healthRecord('sleep',{value:'7'}),healthRecord('resting_heart_rate',{value:19}),healthRecord('resting_heart_rate',{value:58.5}),
   healthRecord('weight',{value:64,date:'2026-11-06'}),healthRecord('weight',{value:64,observedAt:'2026-11-05T04:00:00.001Z'}),healthRecord('weight',{value:64,sourceId:''}),
+  healthRecord('weight',{value:64,time:'24:00'}),healthRecord('weight',{value:64,time:'8:30'}),healthRecord('resting_heart_rate',{value:58,time:'08:60'}),healthRecord('resting_heart_rate',{value:58,time:null}),
   sessionRecord({durationMinutes:0}),sessionRecord({durationMinutes:50}),sessionRecord({distanceKm:0}),sessionRecord({distanceKm:1001}),sessionRecord({exerciseType:1}),sessionRecord({endAt:'2026-11-03T09:59:00+08:00'}),sessionRecord({startAt:undefined}),
  ];
  for(const record of badRecords){const r=await syncHealth([record]);assert.equal(r.status,400,JSON.stringify({record,response:r.body}));}

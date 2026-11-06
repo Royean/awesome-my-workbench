@@ -448,7 +448,7 @@ async function handleMcp(req,res){
  return json(res,out.status,out.body);
 }
 const cgm=createCgm({db,dataDir});
-const capture=createCapture({db,put,validDate,bad,today,now});
+const capture=createCapture({db,put,validDate,validTime,bad,today,now});
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
  if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');

@@ -47,3 +47,36 @@ test('branch export requires its reviewed brand to cover the branch city', () =>
  assert.equal(exportHospitalLogoMap(source,pub).assets,1);
  assert.equal(mappings(pub).find(m=>m.id==='branch').brandId,'brand');
 }));
+
+test('a saved Xinqiao branch ID falls back when the visit names a different reviewed branch', () => {
+ const hospitalId = 'xinqiao-dental-chengdu-gaoxin';
+ for (const [hospital, city] of [
+  ['新桥口腔（西宁院区）', '成都'],
+  ['新桥口腔（衣冠庙院区）', '成都'],
+  ['新桥口腔医院（衣冠庙分院）', '成都'],
+  ['新桥口腔（西宁分院）', ''],
+ ]) {
+  assert.equal(resolveInstitution({hospitalId, hospital, city}), null, hospital);
+ }
+ assert.equal(resolveInstitution({hospitalId, hospital:'新桥口腔医院（高新分院）', city:'成都'})?.id, hospitalId);
+ assert.equal(resolveInstitution({hospitalId})?.id, hospitalId);
+ assert.equal(resolveInstitution({hospitalId:'sichuan-people', hospital:'自定义医院名称', city:'西宁'})?.id, 'sichuan-people');
+});
+
+test('reviewed branch labels are matched across brand aliases before applying the city filter', () => {
+ for (const [hospital, city, expectedId] of [
+  ['新桥口腔（西宁分院）', '西宁市', 'xinqiao-dental-xining'],
+  ['成都新桥口腔医院（高新分院）', '成都', 'xinqiao-dental-chengdu-gaoxin'],
+  ['新桥口腔医院（衣冠庙分院）', '成都', 'xinqiao-dental-chengdu-yiguanmiao'],
+  ['新桥口腔（西宁分院）', '成都', null],
+  ['成都新桥口腔医院（高新分院）', '西宁', null],
+  ['新桥口腔医院（某分院）', '德阳', 'xinqiao-dental'],
+  ['自定义机构（西宁分院）', '西宁', null],
+ ]) {
+  assert.equal(resolveInstitution({hospital, city})?.id ?? null, expectedId, hospital + city);
+ }
+ const hospitalId = 'xinqiao-dental';
+ const hospital = '新桥口腔医院（西宁分院）';
+ assert.equal(resolveInstitution({hospitalId, hospital, city:'成都'}), null);
+ assert.equal(resolveInstitution({hospitalId, hospital, city:'西宁'})?.id, hospitalId);
+});

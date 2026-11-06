@@ -2,10 +2,19 @@ import { institutions } from './institutions.js';
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
 const names=p=>[p.name,...(p.aliases||[])];
 const matchesName=(p,hospital)=>names(p).some(name=>normalize(name)===hospital);
-const matchesBrandBranch=(p,hospital)=>p.scope==='brand'&&names(p).some(name=>{
- const key=normalize(name);
- return hospital.startsWith(key)&&/^\([^()]{1,50}\)$/.test(hospital.slice(key.length));
-});
+function brandBranchLabel(brand,hospital){
+ const parts=/^(.+)\(([^()]{1,50})\)$/.exec(hospital);
+ if(!parts||!matchesName(brand,parts[1]))return '';
+ return parts[2].replace(/分院$/,'院区');
+}
+
+function reviewedBranches(brand,hospital,label=brandBranchLabel(brand,hospital)){
+ const branches=institutions.filter(p=>p.brandId===brand.id);
+ const exact=branches.filter(p=>matchesName(p,hospital));
+ if(exact.length||!label)return exact;
+ return branches.filter(p=>names(p).some(name=>brandBranchLabel(brand,normalize(name))===label));
+}
+
 const hospitalBuildingIcon=()=>`<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#668371" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M7 10H4a1 1 0 0 0-1 1v10m14-11h3a1 1 0 0 1 1 1v10M2 21h20M10 21v-4h4v4M12 6v4m-2-2h4M10 13h.01M14 13h.01M4.5 14h.01M4.5 17h.01M19.5 14h.01M19.5 17h.01"/></svg>`;
 const cityKey=value=>normalize(value).replace(/市$/,'');
 const matchesCity=(p,city)=>!city||(p.scope==='brand'?(p.cities||[]).some(c=>cityKey(c)===city):!p.city||cityKey(p.city)===city);
@@ -15,9 +24,10 @@ export function resolveInstitution(visit){
  if(visit.hospitalId){
   const selected=institutions.find(p=>p.id===visit.hospitalId)||null;
   if((selected?.brandId||selected?.scope==='brand')&&!matchesCity(selected,city))return null;
-  if(selected?.scope==='brand'&&city&&hospital){
-   const branches=institutions.filter(p=>p.brandId===selected.id&&matchesName(p,hospital));
-   if(branches.length&&!branches.some(p=>matchesCity(p,city)))return null;
+  const brand=selected?.brandId?institutions.find(p=>p.id===selected.brandId):selected?.scope==='brand'?selected:null;
+  if(brand&&hospital){
+   const branches=reviewedBranches(brand,hospital);
+   if(branches.length&&!branches.some(p=>selected.brandId?p.id===selected.id:matchesCity(p,city)))return null;
   }
   return selected;
  }
@@ -25,7 +35,12 @@ export function resolveInstitution(visit){
  const ambiguous=new Set(['省医院','省人民医院','人民医院','协和医院','中山医院','同济医院','鼓楼医院']);
  if(!city&&ambiguous.has(hospital))return null;
  const exactMatches=institutions.filter(p=>matchesName(p,hospital));
- const matches=exactMatches.length?exactMatches:institutions.filter(p=>matchesBrandBranch(p,hospital));
+ const matches=exactMatches.length?exactMatches:institutions.filter(p=>p.scope==='brand').flatMap(brand=>{
+  const label=brandBranchLabel(brand,hospital);
+  if(!label)return [];
+  const branches=reviewedBranches(brand,hospital,label);
+  return branches.length?branches:[brand];
+ });
  const candidates=matches.filter(p=>matchesCity(p,city));
  return candidates.length===1?candidates[0]:null;
 }

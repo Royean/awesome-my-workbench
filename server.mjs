@@ -326,7 +326,7 @@ const medicationImageTypes=['image/png','image/jpeg','image/webp'];
 const maxMedicationImageBytes=10*1024*1024;
 const pngHeader=Buffer.from('89504e470d0a1a0a0000000d49484452','hex');
 const jpegEnd=Buffer.from([0xff,0xd9]);
-const webpFirstChunkMinimum={'VP8 ':10,VP8L:5,VP8X:10};
+const webpImageChunkMinimum={'VP8 ':10,VP8L:5};
 // Check container boundaries without decoding compressed pixels.
 function completePng(bytes){
  if(bytes.length<33||!bytes.subarray(0,pngHeader.length).equals(pngHeader)||!bytes.readUInt32BE(16)||!bytes.readUInt32BE(20))return false;
@@ -345,6 +345,7 @@ function completeJpeg(bytes){
  if(bytes[0]!==0xff||bytes[1]!==0xd8)return false;
  // Camera JPEGs may carry padding or other data after EOI.
  const end=bytes.lastIndexOf(jpegEnd);
+ let hasFrame=false;
  for(let offset=2;offset+3<end;){
   if(bytes[offset++]!==0xff)return false;
   while(bytes[offset]===0xff)offset++;
@@ -353,18 +354,46 @@ function completeJpeg(bytes){
   if(!marker||offset+2>=end)return false;
   const size=bytes.readUInt16BE(offset);
   if(size<2||offset+size>=end)return false;
-  if(marker===0xda)return size>=6; // SOS must leave room for scan data before EOI.
+  if(marker===0xda)return hasFrame&&size>=6; // SOS must leave room for scan data before EOI.
+  // SOF markers define the dimensions and component table. C4/C8/CC are not frame markers.
+  if(marker>=0xc0&&marker<=0xcf&&![0xc4,0xc8,0xcc].includes(marker)){
+   if(size<11||!bytes.readUInt16BE(offset+5)||!bytes[offset+7]||size!==8+3*bytes[offset+7])return false;
+   hasFrame=true;
+  }
   offset+=size;
  }
  return false;
 }
+function completeWebpChunks(bytes,start,end,animated=false){
+ let hasImage=false,hasAnimationHeader=false;
+ for(let offset=start;offset<end;){
+  if(offset+8>end)return false;
+  const chunk=bytes.toString('latin1',offset,offset+4);
+  const size=bytes.readUInt32LE(offset+4);
+  const data=offset+8;
+  offset=data+size+(size%2);
+  if(offset>end)return false;
+  const minimum=webpImageChunkMinimum[chunk];
+  if(minimum!==undefined){
+   if(animated||size<minimum)return false;
+   hasImage=true;
+  }
+  if(chunk==='ANIM')hasAnimationHeader=size===6;
+  if(chunk==='ANMF'){
+   if(!animated||!hasAnimationHeader||size<16||!completeWebpChunks(bytes,data+16,data+size))return false;
+   hasImage=true;
+  }
+ }
+ return hasImage;
+}
 function completeWebp(bytes){
  if(bytes.length<20||bytes.toString('latin1',0,4)!=='RIFF'||bytes.toString('latin1',8,12)!=='WEBP'||bytes.readUInt32LE(4)!==bytes.length-8)return false;
- const chunk=bytes.toString('latin1',12,16);
- const minimum=webpFirstChunkMinimum[chunk];
- const size=bytes.readUInt32LE(16);
- const chunkEnd=20+size+(size%2);
- return minimum!==undefined&&size>=minimum&&chunkEnd<=bytes.length&&(chunk!=='VP8X'||chunkEnd+8<=bytes.length);
+ const first=bytes.toString('latin1',12,16);
+ if(first==='VP8X'){
+  if(bytes.length<30||bytes.readUInt32LE(16)!==10)return false;
+  return completeWebpChunks(bytes,30,bytes.length,(bytes[20]&0x02)!==0);
+ }
+ return webpImageChunkMinimum[first]!==undefined&&completeWebpChunks(bytes,12,bytes.length);
 }
 function validateMedicationImage(type,bytes,field){
  if(!medicationImageTypes.includes(type))throw bad('药品图片仅支持 PNG、JPG 和 WEBP',field);

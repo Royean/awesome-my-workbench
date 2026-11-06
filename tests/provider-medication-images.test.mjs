@@ -7,7 +7,7 @@ import {createHash} from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import {startServer,freePort} from './helpers.mjs';
-import {originalJPEG,originalPDF,originalPNG,originalWebP} from './originals-fixtures.mjs';
+import {originalAnimatedWebP,originalJPEG,originalPDF,originalPNG,originalProgressiveJPEG,originalWebP} from './originals-fixtures.mjs';
 const cwd=path.resolve(import.meta.dirname,'..'),password='Fictional-image-passphrase-93',email='images@example.invalid';
 let dir,server,base,cookie,token,otherCookie,otherToken,env;
 const owners=new Map();
@@ -51,7 +51,12 @@ test('spoofed medication images fail before upload or association writes',async(
  const invalidWebP=originalWebP();
  invalidWebP[0]|=0x80;
  const truncated=[['截断.png',originalPNG().subarray(0,16)],['截断.jpg',originalJPEG().subarray(0,4)],['截断.webp',originalWebP().subarray(0,16)]];
- const rejectedFiles=[['冒充.png',pdf],['冒充.jpg',Buffer.from('arbitrary content')],['冒充.webp',originalPNG()],['损坏签名.webp',invalidWebP],['真实原件.pdf',pdf],...truncated];
+ const noFrameJpeg=Buffer.from('ffd8ffda00060101000000ffd9','hex');
+ const noImageWebp=Buffer.concat([originalAnimatedWebP().subarray(0,44),Buffer.from('4a554e4b00000000','hex')]);
+ const invalidChunkWebp=Buffer.concat([originalWebP(),Buffer.from('4a554e4b64000000','hex')]);
+ for(const bytes of [noImageWebp,invalidChunkWebp])bytes.writeUInt32LE(bytes.length-8,4);
+ const incomplete=[...truncated,['无帧.jpg',noFrameJpeg],['无图像.webp',noImageWebp],['数据块不完整.webp',invalidChunkWebp]];
+ const rejectedFiles=[['冒充.png',pdf],['冒充.jpg',Buffer.from('arbitrary content')],['冒充.webp',originalPNG()],['损坏签名.webp',invalidWebP],['真实原件.pdf',pdf],...incomplete];
  for(const [name,bytes] of rejectedFiles){
   const rejected=await uploadFile(name,bytes,'药品图片');
   assert.equal(rejected.status,400,JSON.stringify(rejected.body));
@@ -65,7 +70,7 @@ test('spoofed medication images fail before upload or association writes',async(
  const mcpUpload=await uploadMcp('助手原件.png',pdf);
  assert.equal(mcpUpload.isError,false);
  const rejectedIds=[ordinary.body.id,mcpUpload.structuredContent.uploaded.id];
- for(const [name,bytes] of truncated){
+ for(const [name,bytes] of incomplete){
   const original=await uploadFile(name,bytes,'一般资料');
   assert.equal(original.status,201,JSON.stringify(original.body));
   rejectedIds.push(original.body.id);
@@ -86,10 +91,10 @@ test('spoofed medication images fail before upload or association writes',async(
  assert.deepEqual(await state(),snapshot);
  assert.deepEqual((await readdir(uploads)).sort(),files);
 
- const webp=await uploadFile('完整小图.webp',originalWebP(),'药品图片');
+ const webp=await uploadFile('动画小图.webp',originalAnimatedWebP(),'药品图片');
  assert.equal(webp.status,201,JSON.stringify(webp.body));
  assert.equal((await rpc('attach_medication_image',{medicationId:blank.id,fileId:webp.body.id})).isError,false);
- const paddedJpeg=Buffer.concat([originalJPEG(),Buffer.alloc(32)]);
+ const paddedJpeg=Buffer.concat([originalProgressiveJPEG(),Buffer.alloc(32)]);
  const replacement=await uploadFile('真实更换.jpg',paddedJpeg,'药品图片');
  assert.equal(replacement.status,201,JSON.stringify(replacement.body));
  const replaced=await req('/api/items/'+existing.id,{method:'PUT',body:{imageFileId:replacement.body.id}});

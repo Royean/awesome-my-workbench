@@ -328,7 +328,7 @@ function validateMedicationImage(type,bytes,field){
  if(!medicationImageTypes.includes(type))throw bad('药品图片仅支持 PNG、JPG 和 WEBP',field);
  const matches=type==='image/png'?bytes.subarray(0,pngHeader.length).equals(pngHeader)
   :type==='image/jpeg'?bytes.length>=4&&bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff
-  :bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP'&&['VP8 ','VP8L','VP8X'].includes(bytes.toString('ascii',12,16));
+  :bytes.toString('latin1',0,4)==='RIFF'&&bytes.toString('latin1',8,12)==='WEBP'&&['VP8 ','VP8L','VP8X'].includes(bytes.toString('latin1',12,16));
  if(!matches)throw bad('药品图片内容与文件格式不符，请选择有效的 PNG、JPG 或 WEBP',field);
 }
 function validateStoredMedicationImage(file){

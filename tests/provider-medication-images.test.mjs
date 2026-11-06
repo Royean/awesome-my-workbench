@@ -48,7 +48,10 @@ test('spoofed medication images fail before upload or association writes',async(
  const originalItems=await state();
  const originalFiles=(await readdir(uploads)).sort();
  const pdf=originalPDF();
- for(const [name,bytes] of [['冒充.png',pdf],['冒充.jpg',Buffer.from('arbitrary content')],['冒充.webp',originalPNG()],['真实原件.pdf',pdf]]){
+ const invalidWebP=originalWebP();
+ invalidWebP[0]|=0x80;
+ const rejectedFiles=[['冒充.png',pdf],['冒充.jpg',Buffer.from('arbitrary content')],['冒充.webp',originalPNG()],['损坏签名.webp',invalidWebP],['真实原件.pdf',pdf]];
+ for(const [name,bytes] of rejectedFiles){
   const rejected=await uploadFile(name,bytes,'药品图片');
   assert.equal(rejected.status,400,JSON.stringify(rejected.body));
   assert.equal(rejected.body.field,'content');

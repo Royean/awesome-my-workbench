@@ -87,23 +87,31 @@ object CaptureCoordinator {
         try {
             val owner = prefs.owner
             val session = cookie()
+            currentCoroutineContext().ensureActive()
+            if (prefs.paused) return@withLock
             val current = request("/api/auth/me", owner, session).optJSONObject("user")?.optString("id")
+            currentCoroutineContext().ensureActive()
+            if (prefs.paused) return@withLock
             if (current != owner || session != cookie()) throw CaptureHttpException(409)
             if (prefs.steps) readSteps(context, prefs, foreground, owner)
             if (prefs.healthKinds.isNotEmpty()) CaptureHealthReader.read(context, prefs, foreground, owner)
-            if (prefs.paused || prefs.owner != owner || session != cookie()) throw CaptureHttpException(409)
+            if (prefs.paused) return@withLock
+            if (prefs.owner != owner || session != cookie()) throw CaptureHttpException(409)
             CaptureStore(context).use { store ->
                 val rows = store.next(owner, prefs.notifications, prefs.steps, prefs.healthKinds)
                 var uploaded = 0
                 for (row in rows) {
                     currentCoroutineContext().ensureActive()
-                    // Pause/selection changes are effective before the next upload.
-                    if (prefs.paused || prefs.owner != owner || session != cookie()) throw CaptureHttpException(409)
+                    if (prefs.paused) return@withLock
                     if (uploaded >= 100) { retry(context); break }
                     val granted = if (row.kind == "notification") emptySet() else grantedHealthPermissions(context)
                     val payload = CaptureUploadPolicy.prepare(prefs, row.kind, row.payload, granted, notificationGranted(context)) ?: continue
                     try {
                         val path = if (row.kind == "notification") "/api/capture/notifications?workbench=finance&space=personal" else if (row.kind == "steps") "/api/capture/steps?workbench=health&space=personal" else "/api/capture/health?workbench=health&space=personal"
+                        // Permissions can suspend. Recheck cancellation, pause and identity before sending.
+                        currentCoroutineContext().ensureActive()
+                        if (prefs.paused) return@withLock
+                        if (prefs.owner != owner || session != cookie()) throw CaptureHttpException(409)
                         request(path, owner, session, payload)
                         uploaded++
                         CaptureResponsePolicy.apply(store, row.id, 200)
@@ -119,9 +127,13 @@ object CaptureCoordinator {
             }
         } catch (e: CancellationException) { throw e }
         catch (e: CaptureHttpException) {
+            currentCoroutineContext().ensureActive()
+            if (prefs.paused) return@withLock
             if (e.status == 401 || e.status == 409) prefs.pause("登录已失效或账号已变化，请回到工作台登录，再重新绑定账号")
             else { prefs.error = if (e.status == 404) "服务器尚未支持手机采集，部署后重试；本机队列已保留" else "同步失败（${e.status}），联网后自动重试"; retry(context) }
         } catch (e: Exception) {
+            currentCoroutineContext().ensureActive()
+            if (prefs.paused) return@withLock
             prefs.error = "暂时无法同步，请检查网络和系统权限后重试"
             retry(context)
         }

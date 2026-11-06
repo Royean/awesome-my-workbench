@@ -7,8 +7,8 @@ android {
         minSdk 26
         targetSdk 36
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        versionCode 703
-        versionName '0.7.3'
+        versionCode 704
+        versionName '0.7.4'
     }
     signingConfigs {
         release {

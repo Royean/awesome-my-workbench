@@ -24,8 +24,11 @@ class CaptureSettingsActivity : ComponentActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var prefs: CapturePrefs
     private lateinit var page: LinearLayout
+    private lateinit var scroll: ScrollView
     private lateinit var status: TextView
     private var busy = false
+    private var manualSync: Job? = null
+    private val syncing get() = manualSync != null
     private val launcher = registerForActivityResult(PermissionController.createRequestPermissionResultContract()) {
         scope.launch {
             if (it.isEmpty()) prefs.error = "没有获得所请求的权限；未授权的数据源不会读取"
@@ -44,8 +47,8 @@ class CaptureSettingsActivity : ComponentActivity() {
     private fun text(value: String, size: Float = 15f): TextView = TextView(this).apply {
         text = value; textSize = size; setTextColor(Color.rgb(35, 56, 47)); setPadding(0, dp(8), 0, dp(8))
     }
-    private fun button(label: String, action: () -> Unit) {
-        page.addView(Button(this).apply { text = label; isEnabled = !busy; setOnClickListener { action() } }, LinearLayout.LayoutParams(-1, -2))
+    private fun button(label: String, enabled: Boolean = true, action: () -> Unit) {
+        page.addView(Button(this).apply { text = label; isEnabled = enabled && !busy; setOnClickListener { action() } }, LinearLayout.LayoutParams(-1, -2))
     }
     private fun toggle(label: String, value: Boolean, enabled: Boolean = true, action: (Boolean) -> Unit) {
         page.addView(Switch(this).apply {
@@ -53,10 +56,13 @@ class CaptureSettingsActivity : ComponentActivity() {
             setPadding(0, dp(14), 0, dp(14)); setOnCheckedChangeListener { _, checked -> action(checked) }
         }, LinearLayout.LayoutParams(-1, -2))
     }
-    private fun refresh() {
+    private fun refresh(preserveScroll: Boolean = false) {
+        val scrollY = if (preserveScroll && ::scroll.isInitialized) scroll.scrollY else 0
         val scroll = ScrollView(this)
+        this.scroll = scroll
         page = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL; setPadding(dp(22), dp(16), dp(22), dp(32)); setBackgroundColor(Color.rgb(245, 246, 244)) }
         scroll.addView(page); setContentView(scroll)
+        if (scrollY > 0) scroll.post { scroll.scrollTo(0, scrollY) }
         scroll.setOnApplyWindowInsetsListener { view, insets ->
             if (Build.VERSION.SDK_INT >= 30) {
                 val bars = insets.getInsets(WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout())
@@ -65,9 +71,9 @@ class CaptureSettingsActivity : ComponentActivity() {
             insets
         }
         page.addView(text("手机采集", 26f))
-        page.addView(text("交易通知只进入资产工作台待核对，经你确认才生成流水。步数只同步到当前账号的个人健康空间。所有采集默认关闭。"))
+        page.addView(text("交易通知只进入资产工作台待核对，经你确认才生成流水。健康数据同步到当前账号的个人健康空间。所有采集默认关闭。"))
         status = text(""); page.addView(status); updateStatus()
-        button(if (prefs.owner.isBlank()) "绑定当前登录账号" else "重新绑定当前登录账号 / 恢复") {
+        button(if (prefs.owner.isBlank()) "绑定当前登录账号" else "重新绑定当前登录账号 / 恢复", enabled = !syncing) {
             busy = true; refresh()
             scope.launch {
                 try { CaptureCoordinator.bind(applicationContext) }
@@ -77,8 +83,16 @@ class CaptureSettingsActivity : ComponentActivity() {
         }
         toggle("暂停全部采集与上传", prefs.paused, prefs.owner.isNotBlank()) { paused ->
             // Resume always revalidates identity; never clear an auth pause with a local toggle.
-            if (paused) { prefs.paused = true; refresh() }
-            else { prefs.paused = true; Toast.makeText(this, "请点击重新绑定，核对当前登录账号后恢复", Toast.LENGTH_LONG).show(); refresh() }
+            if (paused) {
+                prefs.paused = true
+                manualSync?.cancel()
+                manualSync = null
+                refresh(preserveScroll = true)
+            } else {
+                prefs.paused = true
+                Toast.makeText(this, "请点击重新绑定，核对当前登录账号后恢复", Toast.LENGTH_LONG).show()
+                refresh()
+            }
         }
         page.addView(text("交易通知", 21f))
         page.addView(text("Android 通知使用权由系统授予，可能允许本App看到全部通知。本App只保存你勾选应用中的交易提示；聊天、验证码、营销内容会先在本机丢弃。微信只接受固定支付/收款模板，部分手机的交易通知可能无法采集。Android 13+ 侧载安装后若开关受限，请在系统“应用信息”菜单查看“允许受限设置”，再由你决定是否开启。"))
@@ -127,20 +141,60 @@ class CaptureSettingsActivity : ComponentActivity() {
             }
         }
         page.addView(text(if (CaptureCoordinator.supportsBackground(this)) "后台读取需要单独授权；系统会延迟任务，无法保证实时。未授权时，打开App或点下方按钮同步。" else "此设备未提供后台健康读取能力。健康数据在打开App或手动同步时读取；已入队数据联网后由系统重试。"))
-        button("立即读取健康数据并重试上传") { CaptureCoordinator.kick(applicationContext, true); Toast.makeText(this, "已请求同步，请查看上方状态", Toast.LENGTH_SHORT).show() }
-        button("查看交易通知待核对") { openResults("finance", "transactions") }
-        button("查看健康步数结果") { openResults("health", "dashboard") }
+        button(if (syncing) "正在同步，请稍候" else "立即读取健康数据并重试上传", enabled = !syncing) { syncNow() }
+        button("查看交易通知待核对", enabled = !syncing) { openResults("finance", "transactions") }
+        page.addView(text("同步后，可在健康监测查看体重、静息心率和睡眠时长。运动记录显示运动时长，距离在授权且来源有数据时一并显示。"))
+        button("查看健康采集结果", enabled = !syncing) { openResults("health", "dashboard") }
+        button("查看健康监测", enabled = !syncing) { openResults("health", "metric") }
+        button("查看运动记录", enabled = !syncing) { openResults("health", "exercise") }
         button("清理当前绑定账号的本机队列") {
-            AlertDialog.Builder(this).setTitle("清理本机待上传数据？").setMessage("仅清理绑定账号的本机通知和步数队列，未上传的数据无法恢复。已上传记录保留。")
+            AlertDialog.Builder(this).setTitle("清理本机待上传数据？").setMessage("仅清理当前绑定账号的本机待上传采集队列。清理后无法恢复，已上传的记录会保留。")
                 .setNegativeButton("取消", null).setPositiveButton("清理") { _, _ ->
                     scope.launch(Dispatchers.IO) { CaptureStore(applicationContext).use { it.clear(prefs.owner) }; withContext(Dispatchers.Main) { updateStatus() } }
                 }.show()
         }
         button("采集隐私说明") { startActivity(Intent(this, CapturePrivacyActivity::class.java)) }
-        button("返回工作台") { finish() }
+        button("返回工作台") { scope.cancel(); finish() }
+    }
+    private fun syncNow() {
+        if (busy || syncing) return
+        if (prefs.owner.isBlank() || prefs.paused) {
+            Toast.makeText(this, "请先绑定当前登录账号并恢复采集", Toast.LENGTH_SHORT).show()
+            return
+        }
+        if (!prefs.notifications && !prefs.steps && prefs.healthKinds.isEmpty()) {
+            Toast.makeText(this, "请先开启要采集的数据源", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val job = scope.launch(start = CoroutineStart.LAZY) {
+            try {
+                withContext(Dispatchers.IO) { CaptureCoordinator.sync(applicationContext, true) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                prefs.error = "暂时无法同步，请检查网络和系统权限后重试"
+            } finally {
+                if (manualSync === coroutineContext[Job]) {
+                    manualSync = null
+                    if (scope.isActive && !isFinishing && !isDestroyed) refresh(preserveScroll = true)
+                }
+            }
+        }
+        manualSync = job
+        refresh(preserveScroll = true)
+        job.start()
     }
     private fun openResults(workbench: String, fragment: String) {
-        startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP).setData(Uri.parse("https://vivid-dream.online/?phoneCapture=$workbench#$fragment"))); finish()
+        val url = Uri.parse("${CaptureCoordinator.ORIGIN}/").buildUpon()
+            .appendQueryParameter("phoneCapture", workbench)
+            .fragment(fragment)
+        if (workbench == "health" && (fragment == "metric" || fragment == "exercise")) {
+            url.appendQueryParameter("phoneCapturePage", fragment)
+        }
+        startActivity(Intent(this, MainActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            .setData(url.build()))
+        finish()
     }
     private fun notificationGranted(): Boolean = CaptureCoordinator.notificationGranted(this)
     private fun updateStatus() {
@@ -183,7 +237,14 @@ class CaptureSettingsActivity : ComponentActivity() {
         } else safeStart(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata")))
     }
     private fun safeStart(intent: Intent) { try { startActivity(intent) } catch (_: Exception) { Toast.makeText(this, "没有可用的系统页面，请在系统设置中查找对应权限", Toast.LENGTH_LONG).show() } }
-    override fun onResume() { super.onResume(); if (::prefs.isInitialized) { refresh(); CaptureCoordinator.kick(applicationContext, true) }; handler.post(refreshStatus) }
+    override fun onResume() {
+        super.onResume()
+        if (::prefs.isInitialized) {
+            refresh(preserveScroll = busy || syncing)
+            if (!busy && !syncing) CaptureCoordinator.kick(applicationContext, true)
+        }
+        handler.post(refreshStatus)
+    }
     override fun onPause() { handler.removeCallbacks(refreshStatus); super.onPause() }
     override fun onDestroy() { scope.cancel(); super.onDestroy() }
 }

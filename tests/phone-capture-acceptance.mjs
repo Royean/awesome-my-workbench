@@ -93,11 +93,84 @@ async function browserAcceptance(){
  }finally{await browser.close();}
 }
 
+async function seedHealthBrowserRecords(){
+ const records=[
+  {sourceId:'copy-weight',kind:'weight',date:'2026-11-04',value:71,observedAt:'2026-11-04T23:00:00+08:00'},
+  {sourceId:'copy-heart',kind:'resting_heart_rate',date:'2026-11-04',value:58,observedAt:'2026-11-04T22:00:00+08:00'},
+  {sourceId:'copy-sleep',kind:'sleep',date:'2026-11-05',value:7.25,observedAt:'2026-11-05T08:00:00+08:00'},
+  {sourceId:'copy-exercise',kind:'exercise',date:'2026-11-04',observedAt:'2026-11-04T22:15:00+08:00',startAt:'2026-11-04T09:00:00+08:00',endAt:'2026-11-04T09:30:00+08:00',durationMinutes:20,distanceKm:2.4,exerciseType:'步行'}
+ ];
+ ok(await api('/api/capture/health'+health,{method:'POST',body:{deviceId:'independent-copy-device',source:'health-connect',records}}),'health browser fixtures');
+}
+
 async function healthCopyAcceptance(){
- const records=[{sourceId:'copy-weight',kind:'weight',date:'2026-11-04',value:71,observedAt:'2026-11-04T23:00:00+08:00'},{sourceId:'copy-heart',kind:'resting_heart_rate',date:'2026-11-04',value:58,observedAt:'2026-11-04T22:00:00+08:00'},{sourceId:'copy-sleep',kind:'sleep',date:'2026-11-05',value:7.25,observedAt:'2026-11-05T08:00:00+08:00'},{sourceId:'copy-exercise',kind:'exercise',date:'2026-11-04',observedAt:'2026-11-04T22:15:00+08:00',startAt:'2026-11-04T09:00:00+08:00',endAt:'2026-11-04T09:30:00+08:00',durationMinutes:20,distanceKm:2.4,exerciseType:'步行'}];
- ok(await api('/api/capture/health'+health,{method:'POST',body:{deviceId:'independent-copy-device',source:'health-connect',records}}),'copy fixtures');
+ await seedHealthBrowserRecords();
  const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');const browser=await chromium.launch({headless:true,channel:process.env.PW_CHANNEL||'chrome'});const shots=process.env.PHONE_CAPTURE_SHOTS||path.join(os.tmpdir(),'phone-capture-independent-evidence');await mkdir(shots,{recursive:true});
  try{const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(base);await page.locator('[name=email]').fill('capture-a@example.invalid');await page.locator('[name=password]').fill(password);await page.getByRole('button',{name:'登录',exact:true}).click();await page.locator('.bottom-tabs').waitFor();await page.goto(base+'/?phoneCapture=health#dashboard');await page.getByText('其他健康采集',{exact:true}).waitFor();await page.locator('.phone-capture-list').last().scrollIntoViewIfNeeded();for(const width of [360,390]){await page.setViewportSize({width,height:844});await page.evaluate(async()=>{await Promise.all(document.getAnimations().map(a=>a.finished.catch(()=>{})))});const text=await page.locator('.drawer').textContent();assert.match(text,/数据更新于/);assert.doesNotMatch(text,/来源记录时间/);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);await page.screenshot({path:path.join(shots,`health-records-${width}.png`)});}assert.deepEqual(errors,[]);console.log('BROWSER_EVIDENCE '+shots);}finally{await browser.close();}
+}
+
+async function healthRoutesAcceptance(){
+ await seedHealthBrowserRecords();
+ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+ const browser=await chromium.launch({headless:true,channel:process.env.PW_CHANNEL||'chrome'});
+ try{
+  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const page=await context.newPage();
+  const pageErrors=[];
+  page.on('pageerror',error=>pageErrors.push(error.message));
+  await page.goto(base);
+  await page.locator('[name=email]').fill('capture-a@example.invalid');
+  await page.locator('[name=password]').fill(password);
+  await page.getByRole('button',{name:'登录',exact:true}).click();
+  await page.locator('.bottom-tabs').waitFor();
+
+  async function enterFinanceDemo(){
+   await page.locator('.phone-workbench-picker').click();
+   await page.locator('.drawer [data-action="shell-switch:finance"]').click();
+   await page.locator('body[data-workbench=finance] .phone-topbar').waitFor();
+   await page.locator('.phone-top-actions [data-action="shell-spaces"]').click();
+   await page.locator('.drawer [data-action="shell-space:demo"]').click();
+   await page.locator('body[data-workbench=finance] .phone-topbar .space-chip.demo').waitFor();
+  }
+
+  async function openHealthRecords(destination){
+   await enterFinanceDemo();
+   await page.goto(`${base}/?phoneCapture=health&phoneCapturePage=${destination}#${destination}`);
+   const expectedPage=`main[data-page=${destination}] #records`;
+   // The legacy routing opens the capture drawer. Waiting for either outcome makes the regression fail at the route assertion.
+   await page.locator(`${expectedPage}, .drawer .phone-capture-intro`).first().waitFor({state:'visible'});
+   const url=new URL(page.url());
+   assert.equal(url.hash,`#${destination}`,'native link must open the requested regular health page');
+   assert.equal(url.searchParams.has('phoneCapture'),false);
+   assert.equal(url.searchParams.has('phoneCapturePage'),false);
+   assert.equal(await page.locator('body[data-workbench=health] .phone-topbar .space-chip.personal').isVisible(),true);
+   assert.equal(await page.locator(expectedPage).isVisible(),true);
+   assert.equal(await page.locator('.drawer').count(),0,'capture drawer must not cover the regular records');
+  }
+
+  const regularRecord=title=>page.locator('#records .record').filter({has:page.getByRole('heading',{name:title,exact:true})});
+  await openHealthRecords('metric');
+  await page.getByRole('heading',{name:/监测明细/}).waitFor();
+  for(const [title,value] of [['体重',/^71\s*kg$/],['静息心率',/^58\s*次\/分$/],['睡眠时长',/^7\.25\s*小时$/]]){
+   const row=regularRecord(title);
+   await row.waitFor({state:'visible'});
+   assert.match(await row.locator('.record-value').textContent(),value);
+   assert.equal(await row.getByText(/来自 Health Connect/).isVisible(),true);
+  }
+
+  await page.setViewportSize({width:360,height:844});
+  await openHealthRecords('exercise');
+  const walk=regularRecord('步行');
+  await walk.waitFor({state:'visible'});
+  assert.match(await walk.locator('.record-value').textContent(),/^20\s*分钟$/);
+  assert.equal(await walk.getByText(/2\.4\s*公里/).isVisible(),true);
+  assert.equal(await walk.getByText(/来自 Health Connect/).isVisible(),true);
+
+  await page.goto(`${base}/?phoneCapture=health#dashboard`);
+  await page.locator('.drawer').getByText('其他健康采集',{exact:true}).waitFor();
+  assert.equal(new URL(page.url()).hash,'#dashboard');
+  assert.deepEqual(pageErrors,[]);
+ }finally{await browser.close();}
 }
 
 try{
@@ -107,7 +180,8 @@ try{
  const invitation=ok(await api('/api/auth/invitations',{method:'POST',body:{email:'capture-b@example.invalid',name:'虚构采集B'}}),'invite B');
  const loginB=await api('/api/auth/accept-invitation',{as:null,method:'POST',body:{token:invitation.token,password,name:'虚构采集B'}});ok(loginB,'activate B');B={id:loginB.body.user.id,cookie:loginB.cookie};
 
- if(process.env.PHONE_CAPTURE_COPY_ONLY==='1')await check('AC06/08 targeted health update-time label and mobile screenshot',healthCopyAcceptance);
+ if(process.env.PHONE_CAPTURE_ROUTES_ONLY==='1')await check('AC06/08 native deep links open personal monitoring and exercise records from finance demo',healthRoutesAcceptance);
+ else if(process.env.PHONE_CAPTURE_COPY_ONLY==='1')await check('AC06/08 targeted health update-time label and mobile screenshot',healthCopyAcceptance);
  else {
  await check('AC04 anonymous, missing/stale owner, foreign Origin and demo/wrong workbench reject capture',async()=>{
   rejected(await api('/api/capture'+finance,{as:null}),'anonymous list');

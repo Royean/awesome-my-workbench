@@ -233,14 +233,22 @@ if(await account.initialize(boot?.me)){applicationReady=true;if(account.enabled&
 await layoutUI.initializePreview();
 await componentUI.initializePreview();
 
-// Native result links return to the existing workbench and open its collection drawer.
+// Native links open the requested records page or the workbench's collection drawer.
 async function openRequestedCapture(){
  if(!applicationReady)return;
  const url=new URL(location.href),target=url.searchParams.get('phoneCapture');
  if(!['health','finance'].includes(target))return;
- url.searchParams.delete('phoneCapture');history.replaceState(null,'',url.pathname+url.search+url.hash);
+ const requestedPage=url.searchParams.get('phoneCapturePage');
+ const recordsPage=target==='health'&&['metric','exercise'].includes(requestedPage)?requestedPage:null;
+ url.searchParams.delete('phoneCapture');
+ url.searchParams.delete('phoneCapturePage');
+ history.replaceState(null,'',url.pathname+url.search+url.hash);
  if(space!=='personal')await setSpace('personal');
  if(workbench!==target)await switchWorkbench(target);
+ if(recordsPage){
+  navigate(recordsPage);
+  return;
+ }
  navigate(target==='finance'?'transactions':'dashboard');
  await captureUI.open();
 }

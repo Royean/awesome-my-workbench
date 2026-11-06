@@ -50,7 +50,8 @@ test('spoofed medication images fail before upload or association writes',async(
  const pdf=originalPDF();
  const invalidWebP=originalWebP();
  invalidWebP[0]|=0x80;
- const rejectedFiles=[['冒充.png',pdf],['冒充.jpg',Buffer.from('arbitrary content')],['冒充.webp',originalPNG()],['损坏签名.webp',invalidWebP],['真实原件.pdf',pdf]];
+ const truncated=[['截断.png',originalPNG().subarray(0,16)],['截断.jpg',originalJPEG().subarray(0,4)],['截断.webp',originalWebP().subarray(0,16)]];
+ const rejectedFiles=[['冒充.png',pdf],['冒充.jpg',Buffer.from('arbitrary content')],['冒充.webp',originalPNG()],['损坏签名.webp',invalidWebP],['真实原件.pdf',pdf],...truncated];
  for(const [name,bytes] of rejectedFiles){
   const rejected=await uploadFile(name,bytes,'药品图片');
   assert.equal(rejected.status,400,JSON.stringify(rejected.body));
@@ -63,9 +64,15 @@ test('spoofed medication images fail before upload or association writes',async(
  assert.equal(ordinary.status,201,JSON.stringify(ordinary.body));
  const mcpUpload=await uploadMcp('助手原件.png',pdf);
  assert.equal(mcpUpload.isError,false);
+ const rejectedIds=[ordinary.body.id,mcpUpload.structuredContent.uploaded.id];
+ for(const [name,bytes] of truncated){
+  const original=await uploadFile(name,bytes,'一般资料');
+  assert.equal(original.status,201,JSON.stringify(original.body));
+  rejectedIds.push(original.body.id);
+ }
  const snapshot=await state();
  const files=(await readdir(uploads)).sort();
- for(const fileId of [ordinary.body.id,mcpUpload.structuredContent.uploaded.id]){
+ for(const fileId of rejectedIds){
   const created=await req('/api/items',{method:'POST',body:{...blank,imageFileId:fileId}});
   assert.equal(created.status,400,JSON.stringify(created.body));
   assert.equal(created.body.field,'imageFileId');
@@ -79,10 +86,15 @@ test('spoofed medication images fail before upload or association writes',async(
  assert.deepEqual(await state(),snapshot);
  assert.deepEqual((await readdir(uploads)).sort(),files);
 
- const replacement=await upload('真实更换.jpg');
- const replaced=await req('/api/items/'+existing.id,{method:'PUT',body:{imageFileId:replacement.id}});
+ const webp=await uploadFile('完整小图.webp',originalWebP(),'药品图片');
+ assert.equal(webp.status,201,JSON.stringify(webp.body));
+ assert.equal((await rpc('attach_medication_image',{medicationId:blank.id,fileId:webp.body.id})).isError,false);
+ const paddedJpeg=Buffer.concat([originalJPEG(),Buffer.alloc(32)]);
+ const replacement=await uploadFile('真实更换.jpg',paddedJpeg,'药品图片');
+ assert.equal(replacement.status,201,JSON.stringify(replacement.body));
+ const replaced=await req('/api/items/'+existing.id,{method:'PUT',body:{imageFileId:replacement.body.id}});
  assert.equal(replaced.status,200);
- assert.equal(replaced.body.imageFileId,replacement.id);
+ assert.equal(replaced.body.imageFileId,replacement.body.id);
  assert.equal(replaced.body.dosage,existing.dosage);
  assert.deepEqual(replaced.body.times,existing.times);
 });

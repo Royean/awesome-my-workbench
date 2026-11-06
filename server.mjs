@@ -323,12 +323,52 @@ async function readBody(req,maxBytes=15*1024*1024){let chunks=[],size=0;for awai
 const mime={'.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
 const medicationImageTypes=['image/png','image/jpeg','image/webp'];
+const maxMedicationImageBytes=10*1024*1024;
 const pngHeader=Buffer.from('89504e470d0a1a0a0000000d49484452','hex');
+const jpegEnd=Buffer.from([0xff,0xd9]);
+const webpFirstChunkMinimum={'VP8 ':10,VP8L:5,VP8X:10};
+// Check container boundaries without decoding compressed pixels.
+function completePng(bytes){
+ if(bytes.length<33||!bytes.subarray(0,pngHeader.length).equals(pngHeader)||!bytes.readUInt32BE(16)||!bytes.readUInt32BE(20))return false;
+ let hasImageData=false;
+ for(let offset=33;offset+12<=bytes.length;){
+  const size=bytes.readUInt32BE(offset);
+  const chunk=bytes.toString('latin1',offset+4,offset+8);
+  offset+=size+12;
+  if(offset>bytes.length)return false;
+  if(chunk==='IDAT'&&size>0)hasImageData=true;
+  if(chunk==='IEND')return hasImageData&&size===0&&offset===bytes.length;
+ }
+ return false;
+}
+function completeJpeg(bytes){
+ if(bytes[0]!==0xff||bytes[1]!==0xd8)return false;
+ // Camera JPEGs may carry padding or other data after EOI.
+ const end=bytes.lastIndexOf(jpegEnd);
+ for(let offset=2;offset+3<end;){
+  if(bytes[offset++]!==0xff)return false;
+  while(bytes[offset]===0xff)offset++;
+  const marker=bytes[offset++];
+  if(marker===0x01)continue; // TEM has no segment length.
+  if(!marker||offset+2>=end)return false;
+  const size=bytes.readUInt16BE(offset);
+  if(size<2||offset+size>=end)return false;
+  if(marker===0xda)return size>=6; // SOS must leave room for scan data before EOI.
+  offset+=size;
+ }
+ return false;
+}
+function completeWebp(bytes){
+ if(bytes.length<20||bytes.toString('latin1',0,4)!=='RIFF'||bytes.toString('latin1',8,12)!=='WEBP'||bytes.readUInt32LE(4)!==bytes.length-8)return false;
+ const chunk=bytes.toString('latin1',12,16);
+ const minimum=webpFirstChunkMinimum[chunk];
+ const size=bytes.readUInt32LE(16);
+ const chunkEnd=20+size+(size%2);
+ return minimum!==undefined&&size>=minimum&&chunkEnd<=bytes.length&&(chunk!=='VP8X'||chunkEnd+8<=bytes.length);
+}
 function validateMedicationImage(type,bytes,field){
  if(!medicationImageTypes.includes(type))throw bad('药品图片仅支持 PNG、JPG 和 WEBP',field);
- const matches=type==='image/png'?bytes.subarray(0,pngHeader.length).equals(pngHeader)
-  :type==='image/jpeg'?bytes.length>=4&&bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff
-  :bytes.toString('latin1',0,4)==='RIFF'&&bytes.toString('latin1',8,12)==='WEBP'&&['VP8 ','VP8L','VP8X'].includes(bytes.toString('latin1',12,16));
+ const matches=type==='image/png'?completePng(bytes):type==='image/jpeg'?completeJpeg(bytes):completeWebp(bytes);
  if(!matches)throw bad('药品图片内容与文件格式不符，请选择有效的 PNG、JPG 或 WEBP',field);
 }
 function validateStoredMedicationImage(file){
@@ -341,9 +381,10 @@ function validateStoredMedicationImage(file){
  try{fd=fs.openSync(path.join(dataDir,'uploads',name),'r');}
  catch(error){if(error.code==='ENOENT')throw bad('文件内容缺失',field);throw error;}
  try{
-  const header=Buffer.alloc(16);
-  const length=fs.readSync(fd,header,0,header.length,0);
-  validateMedicationImage(file.mime,header.subarray(0,length),field);
+  const stat=fs.fstatSync(fd);
+  if(!stat.isFile())throw bad('文件内容缺失',field);
+  if(stat.size>maxMedicationImageBytes)throw bad('药品图片不能超过 10MB',field);
+  validateMedicationImage(file.mime,fs.readFileSync(fd),field);
  }finally{fs.closeSync(fd);}
 }
 // Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings

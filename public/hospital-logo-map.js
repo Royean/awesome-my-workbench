@@ -95,6 +95,22 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-0fc07127b7a10fda4bf4",
+    "catalogHospitalId": "ahospital-0fc07127b7a10fda4bf4",
+    "name": "河北北方学院附属第一医院",
+    "aliases": [
+      "北方学院附一院"
+    ],
+    "kind": "hospital",
+    "city": "张家口",
+    "province": "河北省",
+    "logo": "/provider-logos/hospital-1a62af2c8321f8aac0134771424eb53bafaaea1541fd459ff25359cbdd78fd57.jpg",
+    "website": "https://www.hbbfyfy.com/",
+    "sourceUrl": "https://www.hbbfyfy.com/",
+    "logoSourceUrl": "https://www.hbbfyfy.com/Public/Home/default/images/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-0fdc9b9c16409e20b61d",
     "catalogHospitalId": "ahospital-0fdc9b9c16409e20b61d",
     "name": "首都医科大学附属复兴医院",
@@ -120,6 +136,20 @@ export const hospitalLogoMappings = [
     "website": "http://www.sddfnk.com/",
     "sourceUrl": "http://www.sddfnk.com/",
     "logoSourceUrl": "http://www.sddfnk.com/images/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-191460b3dd19a73f0341",
+    "catalogHospitalId": "ahospital-191460b3dd19a73f0341",
+    "name": "昆明皮肤病专科医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "昆明",
+    "province": "云南省",
+    "logo": "/provider-logos/hospital-c0cdc70a52cce72cf2335252612c1a9e1659d7a193e073c6aa26d723ed65d13a.jpg",
+    "website": "https://www.kmpfbyy.com/",
+    "sourceUrl": "https://www.kmpfbyy.com/",
+    "logoSourceUrl": "https://www.kmpfbyy.com/skin/kmpfb/images/top_logo.png",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -185,6 +215,36 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.pkuh6.cn/Html/Index.html",
     "logoSourceUrl": "https://www.pkuh6.cn/Content/Areas/Common/images/logo/wxShare.jpg",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-23db06959d415419d917",
+    "catalogHospitalId": "ahospital-23db06959d415419d917",
+    "name": "湘潭市中心医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "湘潭",
+    "province": "湖南省",
+    "logo": "/provider-logos/hospital-eb01305831e80d2e4a85f461a4ca5bc52f54c9c40cafa94116f52eaeb0010372.png",
+    "website": "https://www.huijing.org/",
+    "sourceUrl": "https://www.huijing.org/",
+    "logoSourceUrl": "https://www.huijing.org/images/logo1231.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-2838bba4e3b0230cf2cd",
+    "catalogHospitalId": "ahospital-2838bba4e3b0230cf2cd",
+    "name": "北京华信医院",
+    "aliases": [
+      "酒仙桥医院、清华大学第一附属医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-aa0de2514bea2a5bbd5c428eaf5a208047c2925d62c28a9e9927c96948413ad0.jpg",
+    "website": "http://www.tufh.com.cn/",
+    "sourceUrl": "http://www.tufh.com.cn/",
+    "logoSourceUrl": "http://www.tufh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-08"
   },
   {
     "id": "ahospital-2ab37813646f600c7a62",
@@ -398,6 +458,34 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "ahospital-59287259b56e2a105030",
+    "catalogHospitalId": "ahospital-59287259b56e2a105030",
+    "name": "东莞市中医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "东莞",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-df84fec7579bc02ec6c86359ef2b108ec6a316551d3486c6873043d5d38161af.png",
+    "website": "https://www.dg-tcm.com/",
+    "sourceUrl": "https://www.dg-tcm.com/",
+    "logoSourceUrl": "https://www.dg-tcm.com/h_zhongyiyuan/xhtml/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-5c621f947a3f802791b4",
+    "catalogHospitalId": "ahospital-5c621f947a3f802791b4",
+    "name": "长春骨伤医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "长春",
+    "province": "吉林省",
+    "logo": "/provider-logos/hospital-fbc04c35de8ef024eddcd2c179558a92f58fd706fc73c2282f78369141d11a80.png",
+    "website": "http://www.ccgs120.net/",
+    "sourceUrl": "http://www.ccgs120.net/",
+    "logoSourceUrl": "http://www.ccgs120.net/data/upload/cache/image/logo-450x60h.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-656ae2de173fe2e01a34",
     "catalogHospitalId": "ahospital-656ae2de173fe2e01a34",
     "name": "新疆医科大学第一附属医院",
@@ -476,6 +564,34 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-07"
   },
   {
+    "id": "ahospital-767bf2cb5c3b41747186",
+    "catalogHospitalId": "ahospital-767bf2cb5c3b41747186",
+    "name": "安庆市第一人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "安庆",
+    "province": "安徽省",
+    "logo": "/provider-logos/hospital-706a06361906e5d2753bcbb7b417aa3d86bfd89ba3ae89a5a7d0102a7624170c.jpg",
+    "website": "https://www.aqhospital.com/",
+    "sourceUrl": "https://www.aqhospital.com/",
+    "logoSourceUrl": "https://www.aqhospital.com/img1/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-79b8f9a2374183626c47",
+    "catalogHospitalId": "ahospital-79b8f9a2374183626c47",
+    "name": "南阳市中心医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "南阳",
+    "province": "河南省",
+    "logo": "/provider-logos/hospital-7e00e98117b6573e725f99770b8cc4b497849c511f6702ebc6ccae546f95c60d.png",
+    "website": "https://www.nych.cn/",
+    "sourceUrl": "https://www.nych.cn/",
+    "logoSourceUrl": "https://www.nych.cn/upload/1/appLogo/1733879553526.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "jinan-third",
     "catalogHospitalId": "ahospital-7b5c39c7efb09e1d1e6e",
     "name": "济南市第三人民医院",
@@ -536,6 +652,36 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-8c87d71aa948e9c2dd93",
+    "catalogHospitalId": "ahospital-8c87d71aa948e9c2dd93",
+    "name": "南京医科大学第二附属医院",
+    "aliases": [
+      "南京医二附院、南京医科大学第二临床医学院、江苏省第二红十字医院、南京医科大学附属儿童医院"
+    ],
+    "kind": "hospital",
+    "city": "南京",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-2ff8ea32075e0e9553bb36370d9d1329c89b3f47ef7e6ab93afb4240e985f8b3.png",
+    "website": "https://www.jsnydefy.com/",
+    "sourceUrl": "https://www.jsnydefy.com/",
+    "logoSourceUrl": "https://www.jsnydefy.com/dfiles/13733/statics/hospital/images/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-900474c8fd0663b5f2d2",
+    "catalogHospitalId": "ahospital-900474c8fd0663b5f2d2",
+    "name": "玉溪市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "玉溪",
+    "province": "云南省",
+    "logo": "/provider-logos/hospital-2986a16ef1a3c11639ac76c5e0ed5cc5f12ad2e6523fece7dfecf776328132bb.png",
+    "website": "http://www.yxhospital.com/",
+    "sourceUrl": "http://www.yxhospital.com/",
+    "logoSourceUrl": "http://www.yxhospital.com/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-99fccce776e138400cae",
     "catalogHospitalId": "ahospital-99fccce776e138400cae",
     "name": "信阳市中心医院",
@@ -564,6 +710,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.aier028.com/",
     "logoSourceUrl": "https://www.aier028.com/templets/default/images/logo_2015.png",
     "verifiedAt": "2026-11-07"
+  },
+  {
+    "id": "ahospital-a09de0d8b5f89ec8c5aa",
+    "catalogHospitalId": "ahospital-a09de0d8b5f89ec8c5aa",
+    "name": "厦门市中医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "厦门",
+    "province": "福建省",
+    "logo": "/provider-logos/hospital-ae1bf07b99fb33e5a5e723a51606c0688e6e4452e2a5d252a9f12665ba1da706.png",
+    "website": "https://www.xmtcm.com/",
+    "sourceUrl": "https://www.xmtcm.com/",
+    "logoSourceUrl": "https://www.xmtcm.com/images/260523zyy_logo2.png",
+    "verifiedAt": "2026-11-08"
   },
   {
     "id": "pku-people",
@@ -678,6 +838,22 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-06"
   },
   {
+    "id": "ahospital-b89915aa17d61864fd09",
+    "catalogHospitalId": "ahospital-b89915aa17d61864fd09",
+    "name": "重庆医科大学附属口腔医院",
+    "aliases": [
+      "重庆市口腔医院"
+    ],
+    "kind": "hospital",
+    "city": "重庆",
+    "province": "重庆市",
+    "logo": "/provider-logos/hospital-d8cf1a19e69cb34be0dd8ea2dc16e47e1e704b6006b487857a7e4434628d822b.jpg",
+    "website": "https://www.cqdent.com/index.asp",
+    "sourceUrl": "https://www.cqdent.com/index.asp",
+    "logoSourceUrl": "https://www.cqdent.com/templates/site/images/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "sichuan-people",
     "catalogHospitalId": "ahospital-bd493e5d3528c4138233",
     "name": "四川省人民医院",
@@ -752,6 +928,50 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-ceb687f02448b3840f98",
+    "catalogHospitalId": "ahospital-ceb687f02448b3840f98",
+    "name": "南昌大学附属口腔医院",
+    "aliases": [
+      "江西省口腔医院"
+    ],
+    "kind": "hospital",
+    "city": "南昌",
+    "province": "江西省",
+    "logo": "/provider-logos/hospital-c1d3556fb05a3141279752bcaa38d8104ddec7738764e8fa14d609362b5d96ce.jpg",
+    "website": "https://www.jxskqyy.com/",
+    "sourceUrl": "https://www.jxskqyy.com/",
+    "logoSourceUrl": "https://www.jxskqyy.com/upload/LOGO.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-d0ee88657f14bdfbb4e8",
+    "catalogHospitalId": "ahospital-d0ee88657f14bdfbb4e8",
+    "name": "复旦大学附属儿科医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-ae47dab19fd2eb5c110b5f3461bd8e81a5346d88b8a335585beb82c7c971b6b8.jpg",
+    "website": "https://ch.shmu.edu.cn/",
+    "sourceUrl": "https://ch.shmu.edu.cn/",
+    "logoSourceUrl": "https://ch.shmu.edu.cn/static/newmain/images/webp/logo55.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-d1c64d315b1915a2e9cd",
+    "catalogHospitalId": "ahospital-d1c64d315b1915a2e9cd",
+    "name": "宝鸡市中心医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "宝鸡",
+    "province": "陕西省",
+    "logo": "/provider-logos/hospital-4e027aa9381ddb7acaa5cae136b13e67ff4941a1bd8664d8d58c57b78cba2c09.png",
+    "website": "https://www.bjzxyy.com/",
+    "sourceUrl": "https://www.bjzxyy.com/",
+    "logoSourceUrl": "https://www.bjzxyy.com/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "qidong-people",
     "catalogHospitalId": "ahospital-d3c13939b5f49e2c8bd4",
     "name": "启东市人民医院",
@@ -766,6 +986,20 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-06"
   },
   {
+    "id": "ahospital-d632102272750b062542",
+    "catalogHospitalId": "ahospital-d632102272750b062542",
+    "name": "台州博爱医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "台州",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-2999b2037324a4a5595ae356714d99b75a05c410f96895417979158d111aad11.jpg",
+    "website": "https://www.bo-ai.com/",
+    "sourceUrl": "https://www.bo-ai.com/home.asp",
+    "logoSourceUrl": "https://www.bo-ai.com/images/logo.jpg?v=1.3",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-d810a6bd875fb08ad79a",
     "catalogHospitalId": "ahospital-d810a6bd875fb08ad79a",
     "name": "北京中医药大学第三附属医院",
@@ -778,6 +1012,34 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.zydsy.com/",
     "logoSourceUrl": "https://www.zydsy.com/Content/Areas/Common/images/logo/wxShare.jpg",
     "verifiedAt": "2026-11-07"
+  },
+  {
+    "id": "ahospital-db3d14171e54b02e2b98",
+    "catalogHospitalId": "ahospital-db3d14171e54b02e2b98",
+    "name": "北京叶子整形美容医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-e9b51412a8d947b254047eafb80aa8978cc75ea9f092acbba0579f5fbaf28601.png",
+    "website": "http://www.yezizx.com/",
+    "sourceUrl": "http://www.yezizx.com/",
+    "logoSourceUrl": "http://www.yezizx.com/index/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-dfcb78f4df7534cf7e4e",
+    "catalogHospitalId": "ahospital-dfcb78f4df7534cf7e4e",
+    "name": "南宁市第九人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "南宁",
+    "province": "广西壮族自治区",
+    "logo": "/provider-logos/hospital-6cc1a4019c2fb2e3af6bb6d511a6ca79e48ad067c8f6fc5aae71079a228b8599.png",
+    "website": "https://www.nn9yy.com/",
+    "sourceUrl": "https://www.nn9yy.com/",
+    "logoSourceUrl": "https://www.nn9yy.com/statics/css/jyy/images/nn_img/nn_logo.png",
+    "verifiedAt": "2026-11-08"
   },
   {
     "id": "ahospital-e129e8ef2c6cd666e694",
@@ -808,6 +1070,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.huashan.org.cn/",
     "logoSourceUrl": "https://www.huashan.org.cn/images/logo114.png",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-e2d808e6a305b98d4644",
+    "catalogHospitalId": "ahospital-e2d808e6a305b98d4644",
+    "name": "天门市第一人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "天门",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-13ac22e6bd743992bb44b55aa17b59dba85b6e1daa82d9d44e386488b390753d.png",
+    "website": "https://www.tmsyy.com/index.php/cms/index.html",
+    "sourceUrl": "https://www.tmsyy.com/index.php/cms/index.html",
+    "logoSourceUrl": "https://www.tmsyy.com/public/static/tmsyy/logo.png",
+    "verifiedAt": "2026-11-08"
   },
   {
     "id": "ahospital-e770e2469335f6e4223a",
@@ -934,6 +1210,20 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-06"
   },
   {
+    "id": "ahospital-fb62216ef72b8cad463a",
+    "catalogHospitalId": "ahospital-fb62216ef72b8cad463a",
+    "name": "大连市中医医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "大连",
+    "province": "辽宁省",
+    "logo": "/provider-logos/hospital-2d57fe9bcb31c5adcc7d1359c908e4ee0f904e0abef9d9bbd5108ffcac2d2570.png",
+    "website": "https://www.dalian-tcm.com/",
+    "sourceUrl": "https://www.dalian-tcm.com/",
+    "logoSourceUrl": "https://www.dalian-tcm.com/assets/img/logo/LOGO.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-fb8ebca8c4d2d164833a",
     "catalogHospitalId": "ahospital-fb8ebca8c4d2d164833a",
     "name": "北京友谊医院",
@@ -965,6 +1255,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.whuh.com/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-union.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-fd21469e6d10cf51cc13",
+    "catalogHospitalId": "ahospital-fd21469e6d10cf51cc13",
+    "name": "大庆友谊医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "大庆",
+    "province": "黑龙江省",
+    "logo": "/provider-logos/hospital-86f6d2efe853f53b66785f6bc9b205a4832405ec0dd7aa1d13e50b0cc85f1408.jpg",
+    "website": "http://www.dqyyyy.com/",
+    "sourceUrl": "http://www.dqyyyy.com/",
+    "logoSourceUrl": "http://www.dqyyyy.com/skin/default/images/logo.jpg",
+    "verifiedAt": "2026-11-08"
   },
   {
     "id": "ahospital-fede6c32ead377c78972",

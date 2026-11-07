@@ -41,15 +41,53 @@ export function createMedical(ctx){
  document.querySelector('#field-scheduleMode')?.addEventListener('change',e=>{document.querySelector('#med-time-field').hidden=e.target.value==='asNeeded'});
  if(kind==='dose'){const outcome=document.querySelector('#field-outcome');const timeField=document.querySelector('#field-time').closest('.field');timeField.hidden=outcome.value==='跳过';outcome.onchange=()=>{timeField.hidden=outcome.value==='跳过'};}
  let uploaded=null,initialMedicationImage,removeMedicationImage=false;
+ let selectedMedicationImage=null,medicationUpload=null;
  document.querySelector('#medical-form').onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const imageControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:[];const data=Object.fromEntries(new FormData(e.target));imageControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
  if(kind==='medication'){
  // The select starts with the image seen when the drawer opened. An unchanged
  // value must not replace a newer association created while the drawer was open.
  if(id&&!removeMedicationImage&&data.imageFileId===initialMedicationImage)delete data.imageFileId;
- const file=e.target.querySelector('#medication-image-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');const state=e.target.querySelector('#medication-upload-state');try{state.textContent='正在读取并上传药品图片…';if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content})},sourceSpace,sourceWorkbench);}data.imageFileId=uploaded.id;state.textContent='图片上传成功，正在保存用药方案…';}catch(error){state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';throw error;}}}
+ const file=selectedMedicationImage;
+ if(file){
+  if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');
+  if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');
+  const state=e.target.querySelector('#medication-upload-state');
+  try{
+   state.textContent='正在读取并上传药品图片…';
+   if(!medicationUpload||medicationUpload.visitId!==data.visitId)medicationUpload={visitId:data.visitId,id:crypto.randomUUID()};
+   if(!medicationUpload.body){
+    const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});
+    medicationUpload.body=JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content,uploadAttemptId:medicationUpload.id});
+   }
+   // Keep the same request when the server may have committed before the response was lost.
+   medicationUpload.result??=await ctx.api('/api/upload',{method:'POST',body:medicationUpload.body},sourceSpace,sourceWorkbench);
+   data.imageFileId=medicationUpload.result.id;
+   state.textContent='图片上传成功，正在保存用药方案…';
+  }catch(error){
+   // A validation rejection lets the user fix fields. Keep the key to prevent a second original.
+   if(error.status===400&&error.code==='validation_failed')medicationUpload.body=null;
+   state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';
+   throw error;
+  }
+ }}
  if(kind==='report'){const file=document.querySelector('#report-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);document.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
  await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;imageControls.forEach(el=>el.disabled=false)}};
- if(kind==='medication'){const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');initialMedicationImage=choice.value;const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};upload.onchange=()=>{uploaded=null;const file=upload.files[0];state.textContent=file?'待上传：'+file.name+'（保存用药方案时上传）':'';};choice.onchange=()=>{removeMedicationImage=false;upload.value='';uploaded=null;state.textContent='';update();};form.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';upload.value='';uploaded=null;state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};previews.mount();}
+ if(kind==='medication'){
+  const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');
+  initialMedicationImage=choice.value;
+  const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};
+  const clearUpload=()=>{upload.value='';selectedMedicationImage=null;medicationUpload=null;};
+  // An identical selection should fire change. Cancelling the picker keeps the retained File.
+  upload.onclick=()=>{upload.value='';};
+  upload.onchange=()=>{
+   selectedMedicationImage=upload.files[0]||null;
+   medicationUpload=null;
+   state.textContent=selectedMedicationImage?'待上传：'+selectedMedicationImage.name+'（保存用药方案时上传）':'';
+  };
+  choice.onchange=()=>{removeMedicationImage=false;clearUpload();state.textContent='';update();};
+  form.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';clearUpload();state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};
+  previews.mount();
+ }
  if(kind==='report')document.querySelector('#report-upload').onchange=()=>{uploaded=null;document.querySelector('#report-upload-state').innerHTML=''};
  }
  function showReport(id){const r=find(id);if(!r)return;const f=find(r.fileId);ctx.openDrawer(`<div class="report-flags">${badge(r.type,'visit')}${badge(r.status)}${badge(f?'已关联原件':'原件待补充')}</div><div class="report-metadata"><span>报告日期：${r.date}</span><span>来源：${esc(r.source||'未填写')}</span>${visitLink(r.visitId)}</div>${renderReportObservations(r.observations,esc)}<h3 class="clinical-label">报告原文 / 手工摘录</h3><div class="report-text">${esc(r.content||'尚未录入文字。上传原件不会自动识别，请按原文补充。')}</div>${r.note?`<h3 class="clinical-label">补充备注</h3><div class="report-text">${esc(r.note)}</div>`:''}${f?`<div class="report-original"><span>${icon('file',17)} ${esc(f.title)}</span><div>${btn('查看原件','med-preview-report:'+r.id)}<a class="btn" href="/api/files/${f.id}?space=${ctx.space}&workbench=${ctx.workbench}" download>${icon('download',14)}下载</a></div></div>`:'<div class="notice">原件待补充。可以编辑报告上传文件或关联已有资料。</div>'}`,esc(r.title),'保存原文与来源，不自动生成诊断',`${btn('关闭','close')}${btn('编辑报告','med-edit:'+id,'primary','edit')}`);}

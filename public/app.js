@@ -184,7 +184,7 @@ const deleteUndo=createDeleteUndo({context:()=>({owner:account.user?.id??null,sp
 // Keep the toast 8px above the mobile bottom navigation (its rect already includes the safe-area inset).
 function placeToast(){const t=$('#toast'),nav=$('.bottom-tabs');const r=nav&&getComputedStyle(nav).display!=='none'?nav.getBoundingClientRect():null;t.style.bottom=r&&r.height?`${Math.max(0,window.innerHeight-r.top)+8}px`:'';}
 window.addEventListener('resize',()=>{if($('#toast')?.style.display==='flex')placeToast();});
-function navigate(p){if(!applicationReady)return;deleteUndo.clear();navigationVersion++;if(p!==route)componentUI.cleanup({resetView:false});if(p!=='dashboard')layoutUI.cleanup({resetSnapshot:false});if(workbench==='health')p=normalizeHealthRoute(p);clearTimeout(toastTimer);if($('#toast'))$('#toast').style.display='none';route=p;page=p.split('/')[0];location.hash=p;query='';filterDate='';filterStatus='all';closeDrawer();render();window.scrollTo(0,0)}
+function navigate(p){if(!applicationReady)return;deleteUndo.dismiss();navigationVersion++;if(p!==route)componentUI.cleanup({resetView:false});if(p!=='dashboard')layoutUI.cleanup({resetSnapshot:false});if(workbench==='health')p=normalizeHealthRoute(p);clearTimeout(toastTimer);if($('#toast'))$('#toast').style.display='none';route=p;page=p.split('/')[0];location.hash=p;query='';filterDate='';filterStatus='all';closeDrawer();render();window.scrollTo(0,0)}
 document.addEventListener('click',async e=>{if(!applicationReady)return;const el=e.target.closest('[data-action]');if(!el)return;const [action,arg]=el.dataset.action.split(':');try{
  if(componentUI.isPreview()&&!componentUI.allowsPreviewAction(action)){toast('正在预览组件，请先保存、继续编辑或退出预览');return;}
  if(action.startsWith('component-')){if(layoutUI.isPreview()||layoutUI.isFrame()){toast('请先退出布局预览');return;}await componentUI.handle(action,arg);return;}
@@ -221,7 +221,7 @@ document.addEventListener('click',async e=>{if(!applicationReady)return;const el
  else if(action==='trend'){metricType=arg;layoutUI.rememberTrend(metricType,range);render()}
  else if(action==='toggle'){const x=items.find(x=>x.id===arg);await api('/api/items/'+arg,{method:'PUT',body:JSON.stringify({done:!x.done})});await load();toast(x.done?'已取消完成':'计划已完成，给自己一点肯定')}
  else if(action==='delete'){const x=items.find(x=>x.id===arg);openDrawer(`<p class="section-desc">确定移除「${esc(x.title)}」？移除后12秒内可以撤销；30天内也可从本工作台首页的「设置」（桌面为「工作台设置」）→「最近删除」恢复。${x.kind==='visit'?'关联附件会保留在资料档案中。':''}</p>`,'移除记录',space==='demo'?'示例空间':'个人空间',`${btn('取消','close')}${btn('确认移除','confirm-delete:'+arg,'danger','trash')}`)}
- else if(action==='confirm-delete'){const targetName=workbenches.find(w=>w.id===workbench)?.name||'原工作台',dialog=$('.drawer');await deleteUndo.remove(arg,targetName,()=>{if(dialog?.isConnected)closeDrawer();})}
+ else if(action==='confirm-delete'){if(el.disabled)return;el.disabled=true;const targetName=workbenches.find(w=>w.id===workbench)?.name||'原工作台',dialog=$('.drawer');try{await deleteUndo.remove(arg,targetName,()=>{if(dialog?.isConnected)closeDrawer();})}finally{if(el.isConnected)el.disabled=false;}}
  else if(action==='undo')await deleteUndo.restore();
  else if(action==='trash-open')await openTrash();
  else if(action==='trash-restore')await restoreTrash(arg);

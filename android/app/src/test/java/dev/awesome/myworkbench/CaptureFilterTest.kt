@@ -22,7 +22,8 @@ class CaptureFilterTest {
         val prompts = listOf(
             "登录码 193431", "登陸碼 193431", "登入碼 193431", "認證碼 193431", "驗證碼 193431",
             "短信码 193431", "短訊碼 193431", "收款码", "收錢碼", "付款碼", "支付码",
-            "二維碼", "请勿泄露Passcode", "Security code", "QR code"
+            "二維碼", "请勿泄露Passcode", "Security code", "QR code",
+            "密码 193431", "密碼 193431", "Password 193431", "ＰＡＳＳＷＯＲＤ 193431"
         )
         for (prompt in prompts) {
             assertFalse(prompt, CaptureFilter.accepts("com.tencent.mm", "微信支付", "支付金额 ¥12.00，$prompt"))

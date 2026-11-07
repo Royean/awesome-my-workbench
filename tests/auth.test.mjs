@@ -58,6 +58,22 @@ test('invitation expiry, one-time acceptance and isolated accounts/workbenches/f
  assert.equal((await api('/api/state?space=demo')).body.items.length,0);
  await api('/api/settings',{method:'PUT',body:{name:'Admin private',focus:'private'}});assert.notEqual((await api('/api/state',{cookie:userCookie})).body.settings.name,'Admin private');
  const custom=await api('/api/workbenches',{method:'POST',body:{type:'other',name:'Admin only'}});assert.equal((await api('/api/state?workbench='+custom.body.id,{cookie:userCookie})).status,404);
+ assert.equal((await api('/api/overview',{cookie:null})).status,401);
+ const task=await api('/api/items?workbench='+custom.body.id,{method:'POST',body:{kind:'task',title:'Admin task',date:'2026-10-30',note:'Sensitive detail'}});
+ assert.equal(task.status,201);
+ const overview=await api('/api/overview');
+ assert.equal(overview.body.owner,adminId);
+ assert.equal(overview.body.space,'personal');
+ assert.ok(overview.body.workbenches.some(w=>w.id===custom.body.id&&w.pendingCount===1));
+ assert.ok(overview.body.upcoming.some(row=>row.title==='Admin task'&&row.workbench===custom.body.id));
+ assert.doesNotMatch(JSON.stringify(overview.body),/Sensitive detail|storageName|private admin bytes/);
+ const memberOverview=await api('/api/overview?user_id='+adminId+'&workbench='+custom.body.id,{cookie:userCookie});
+ assert.equal(memberOverview.body.owner,userId);
+ assert.ok(!memberOverview.body.workbenches.some(w=>w.id===custom.body.id));
+ assert.equal(memberOverview.body.pendingCount,0);
+ const demoOverview=await api('/api/overview?space=demo');
+ assert.equal(demoOverview.body.space,'demo');
+ assert.equal(demoOverview.body.workbenches.find(w=>w.id===custom.body.id).pendingCount,0);
  await api('/api/items/'+note.body.id,{method:'DELETE',body:{}});assert.equal((await api('/api/restore',{method:'POST',cookie:userCookie,body:{id:note.body.id}})).status,404);
 });
 test('password/session revocation, user disable, reset invitation and last administrator',async()=>{

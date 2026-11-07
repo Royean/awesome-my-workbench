@@ -596,6 +596,22 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-0bfb8247d22b24348fa0",
+    "catalogHospitalId": "ahospital-0bfb8247d22b24348fa0",
+    "name": "天津中医药大学第一附属医院",
+    "aliases": [
+      "天津中医学院第一附属医院"
+    ],
+    "kind": "hospital",
+    "city": "天津",
+    "province": "天津市",
+    "logo": "/provider-logos/hospital-8867292ed5988506e26b0b27f9d5d29e624536270c00fd1fa05a4a3689a7bca2.jpg",
+    "website": "https://www.tjtcm.cn/",
+    "sourceUrl": "https://www.tjtcm.cn/xlwy/yyjs/index.shtml",
+    "logoSourceUrl": "https://www.tjtcm.cn/pic/003/001/182/00300118239_2c3776ed.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-0c8d6b38f4e3da992e01",
     "catalogHospitalId": "ahospital-0c8d6b38f4e3da992e01",
     "name": "惠阳长安医院",
@@ -1738,6 +1754,22 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-410f5ac35e739a991ef0",
+    "catalogHospitalId": "ahospital-410f5ac35e739a991ef0",
+    "name": "宁波市第二医院",
+    "aliases": [
+      "宁波市第二医院"
+    ],
+    "kind": "hospital",
+    "city": "宁波",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-c04ad2e866d1115d966e0b5087a30247fa074a952e498fbaa0e99161aff5bc7a.png",
+    "website": "http://www.nbdeyy.com/",
+    "sourceUrl": "http://www.nbdeyy.com/",
+    "logoSourceUrl": "http://www.nbdeyy.com/images/in_logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-4217a205f4a6761f0453",
     "catalogHospitalId": "ahospital-4217a205f4a6761f0453",
     "name": "山东省千佛山医院",
@@ -1829,6 +1861,24 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-4739249ac40506402c50",
+    "catalogHospitalId": "ahospital-4739249ac40506402c50",
+    "name": "漳州市医院",
+    "aliases": [
+      "福建省漳州市医院",
+      "漳州市医院",
+      "福建医科大学附属漳州市医院"
+    ],
+    "kind": "hospital",
+    "city": "漳州",
+    "province": "福建省",
+    "logo": "/provider-logos/hospital-b5b3a7cf7d1ed96338beb9ca8c1a6bb14389ca62e3fc8c4d263e5773b0b64d7b.jpg",
+    "website": "https://www.zzfh.com/",
+    "sourceUrl": "https://www.zzfh.com/",
+    "logoSourceUrl": "https://www.zzfh.com/cms/templates/330658101732110000/images/footer_logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-47b0db2b3918c45bef16",
     "catalogHospitalId": "ahospital-47b0db2b3918c45bef16",
     "name": "郑州市骨科医院",
@@ -1858,6 +1908,24 @@ const hospitalLogoMappings = [
     "website": "https://www.chzyy.com.cn/",
     "sourceUrl": "https://www.chzyy.com.cn/",
     "logoSourceUrl": "https://www.chzyy.com.cn/material/picture/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-4900407f533488389388",
+    "catalogHospitalId": "ahospital-4900407f533488389388",
+    "name": "淮安市第二人民医院",
+    "aliases": [
+      "淮安市第二人民医院",
+      "江苏省淮安仁慈医院",
+      "徐州医科大学附属淮安医院"
+    ],
+    "kind": "hospital",
+    "city": "淮安",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-c2c05f4f606b7dd75de3fc63775af83c554e1d9992cd236eb672e04453cd3be4.jpg",
+    "website": "https://www.rcstar.com/",
+    "sourceUrl": "https://www.rcstar.com/",
+    "logoSourceUrl": "https://www.rcstar.com/skin/haiis2/images/logo3.png",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -1954,6 +2022,22 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-5294bb5ecd50e1c4555a",
+    "catalogHospitalId": "ahospital-5294bb5ecd50e1c4555a",
+    "name": "汉中市中心医院",
+    "aliases": [
+      "汉中市中心医院"
+    ],
+    "kind": "hospital",
+    "city": "汉中",
+    "province": "陕西省",
+    "logo": "/provider-logos/hospital-af91449db4455882f521610b0bce8fa17b1b793439e2f0a5bf071a79dcc69fd2.png",
+    "website": "https://www.hzcch.com/",
+    "sourceUrl": "https://www.hzcch.com/",
+    "logoSourceUrl": "https://www.hzcch.com/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-52cfba8eb7cf637acddc",
     "catalogHospitalId": "ahospital-52cfba8eb7cf637acddc",
     "name": "肇庆市中医院",
@@ -1986,6 +2070,20 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-07"
   },
   {
+    "id": "ahospital-54138282f509df1a3947",
+    "catalogHospitalId": "ahospital-54138282f509df1a3947",
+    "name": "陕西省核工业二一五医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "咸阳",
+    "province": "陕西省",
+    "logo": "/provider-logos/hospital-0a86b1818320505313b528bd9d6418c0f37c86a7d82b71702a0e98b6fe989a80.png",
+    "website": "https://www.xy215.com/",
+    "sourceUrl": "https://www.xy215.com/",
+    "logoSourceUrl": "https://www.xy215.com/images/logo-m.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "wuhan-tongji",
     "catalogHospitalId": "ahospital-542cee44119209bea1ea",
     "name": "华中科技大学同济医学院附属同济医院",
@@ -2001,6 +2099,25 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.tjh.com.cn/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-tongji.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-5490688a583f0e19e9c9",
+    "catalogHospitalId": "ahospital-5490688a583f0e19e9c9",
+    "name": "扬州大学附属医院",
+    "aliases": [
+      "东南大学附属扬州医院",
+      "扬州市第一人民医院",
+      "扬州大学附属医院",
+      "扬州大学附属医院（扬州市第一人民医院）"
+    ],
+    "kind": "hospital",
+    "city": "扬州",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-186b3bee93074d01e4c600c6a62154819226428b37cb3143722c977f08a64e1a.png",
+    "website": "https://www.yangzhouyiyuan.com/",
+    "sourceUrl": "https://www.yangzhouyiyuan.com/ylfw",
+    "logoSourceUrl": "https://www.yangzhouyiyuan.com/static/web/images/logo2.png",
+    "verifiedAt": "2026-11-08"
   },
   {
     "id": "ahospital-57026644b3c157cd9166",
@@ -2047,6 +2164,22 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-599a82eaa9e81b25f056",
+    "catalogHospitalId": "ahospital-599a82eaa9e81b25f056",
+    "name": "绍兴市妇幼保健院",
+    "aliases": [
+      "绍兴市妇女儿童医院"
+    ],
+    "kind": "hospital",
+    "city": "绍兴",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-7af433668a1fe6ed599aedf12eecec4b6f4a57e1dac8fc1257a4069b43d971e2.png",
+    "website": "https://www.sxfby.com/",
+    "sourceUrl": "https://www.sxfby.com/",
+    "logoSourceUrl": "https://www.sxfby.com/public/cn/images/fd-logo-new.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-59a8267f00f13d7bdaac",
     "catalogHospitalId": "ahospital-59a8267f00f13d7bdaac",
     "name": "南阳市口腔医院",
@@ -2075,6 +2208,22 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-5c535b42c706e8fda3a9",
+    "catalogHospitalId": "ahospital-5c535b42c706e8fda3a9",
+    "name": "江苏省中西医结合医院",
+    "aliases": [
+      "江苏省中医药研究院"
+    ],
+    "kind": "hospital",
+    "city": "南京",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-e561adf0640f3430a4607812513102b06a86eb11af5910f9484f092acfcdfdca.png",
+    "website": "https://www.jsatcm.com/",
+    "sourceUrl": "https://www.jsatcm.com/",
+    "logoSourceUrl": "https://www.jsatcm.com/static/index/images/newlogo.png?v=2",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-5c621f947a3f802791b4",
     "catalogHospitalId": "ahospital-5c621f947a3f802791b4",
     "name": "长春骨伤医院",
@@ -2086,6 +2235,23 @@ const hospitalLogoMappings = [
     "website": "http://www.ccgs120.net/",
     "sourceUrl": "http://www.ccgs120.net/",
     "logoSourceUrl": "http://www.ccgs120.net/data/upload/cache/image/logo-450x60h.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-60fcf1db609f213c7c0d",
+    "catalogHospitalId": "ahospital-60fcf1db609f213c7c0d",
+    "name": "广州华美医疗美容医院",
+    "aliases": [
+      "广州华美整形美容医院",
+      "广州华美医疗美容医院"
+    ],
+    "kind": "hospital",
+    "city": "广州",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-b561887325054d46fc3ba0059d7c8164b71b3f8c4dae4b626ce6ac267f4a3ff9.jpg",
+    "website": "http://www.gzhuamei.cn/",
+    "sourceUrl": "http://www.gzhuamei.cn/",
+    "logoSourceUrl": "http://img.ubeauty.cn/pc/2021/images/logo.jpg",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -2147,6 +2313,20 @@ const hospitalLogoMappings = [
     "website": "https://www.zzsey.com/",
     "sourceUrl": "https://www.zzsey.com/",
     "logoSourceUrl": "https://www.zzsey.com/img/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-6faa6bec577adf2ff336",
+    "catalogHospitalId": "ahospital-6faa6bec577adf2ff336",
+    "name": "嘉善县第一人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "嘉兴",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-d8caecac1ef1a89e1ae78fa6d4fa13e7f6908768b136f8736095f27b790f9831.png",
+    "website": "https://www.jsdyyy.com/",
+    "sourceUrl": "https://www.jsdyyy.com/",
+    "logoSourceUrl": "https://www.jsdyyy.com/logo.png",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -2225,6 +2405,22 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-72ed5ab47de5893ab103",
+    "catalogHospitalId": "ahospital-72ed5ab47de5893ab103",
+    "name": "开封市儿童医院",
+    "aliases": [
+      "开封市儿童医院"
+    ],
+    "kind": "hospital",
+    "city": "开封",
+    "province": "河南省",
+    "logo": "/provider-logos/hospital-77adcf3e07e975abc4b8981dc756ce0d3976a8b8431f896c7622a22bacdb4525.png",
+    "website": "https://www.kfetyy.com.cn/",
+    "sourceUrl": "https://www.kfetyy.com.cn/",
+    "logoSourceUrl": "https://www.kfetyy.com.cn/templates/main/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-767bf2cb5c3b41747186",
     "catalogHospitalId": "ahospital-767bf2cb5c3b41747186",
     "name": "安庆市第一人民医院",
@@ -2236,6 +2432,39 @@ const hospitalLogoMappings = [
     "website": "https://www.aqhospital.com/",
     "sourceUrl": "https://www.aqhospital.com/",
     "logoSourceUrl": "https://www.aqhospital.com/img1/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-77e4cef7057134675384",
+    "catalogHospitalId": "ahospital-77e4cef7057134675384",
+    "name": "河南省胸科医院",
+    "aliases": [
+      "郑州大学附属胸科医院"
+    ],
+    "kind": "hospital",
+    "city": "郑州",
+    "province": "河南省",
+    "logo": "/provider-logos/hospital-a54b5f7867c39d7c8f5b59f9bd6e93fdbe3c4049546b818e03cfb349806acd94.jpg",
+    "website": "https://www.hnxkyy.com.cn/",
+    "sourceUrl": "https://www.hnxkyy.com.cn/",
+    "logoSourceUrl": "https://www.hnxkyy.com.cn/images/logo.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-78466ae4360ed6d10499",
+    "catalogHospitalId": "ahospital-78466ae4360ed6d10499",
+    "name": "广东省妇幼保健院",
+    "aliases": [
+      "广东省妇产医院",
+      "广东省儿童医院"
+    ],
+    "kind": "hospital",
+    "city": "广州",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-17f3c4f75ae754d1347e364d575a1a1a97fbd1c177340584a8fe0c3773fccdbf.png",
+    "website": "https://www.e3861.com/",
+    "sourceUrl": "https://www.e3861.com/",
+    "logoSourceUrl": "https://www.e3861.com/favicon.ico",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -2282,6 +2511,20 @@ const hospitalLogoMappings = [
     "website": "https://www.nych.cn/",
     "sourceUrl": "https://www.nych.cn/",
     "logoSourceUrl": "https://www.nych.cn/upload/1/appLogo/1733879553526.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-79c46145069420c2e9f9",
+    "catalogHospitalId": "ahospital-79c46145069420c2e9f9",
+    "name": "河南宏力医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "新乡",
+    "province": "河南省",
+    "logo": "/provider-logos/hospital-fa8c96ab0e5f111f2aaf794577b8d4ed1429147c7dddcdb064bb544e0d3e36d1.png",
+    "website": "https://www.honlivhp.com/",
+    "sourceUrl": "https://www.honlivhp.com/",
+    "logoSourceUrl": "https://www.honlivhp.com/images/logo.png",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -2571,6 +2814,36 @@ const hospitalLogoMappings = [
     "website": "https://www.wzhh120.com/",
     "sourceUrl": "https://www.wzhh120.com/",
     "logoSourceUrl": "https://www.wzhh120.com/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-9c63d36a53f6437dd117",
+    "catalogHospitalId": "ahospital-9c63d36a53f6437dd117",
+    "name": "黄石市中心医院",
+    "aliases": [
+      "黄石市中心医院"
+    ],
+    "kind": "hospital",
+    "city": "黄石",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-0251edc14b0db068ad80f512561a8eceee84744b02a118062d991e37a588a2fd.png",
+    "website": "https://www.hszxyy.com.cn/",
+    "sourceUrl": "https://www.hszxyy.com.cn/",
+    "logoSourceUrl": "https://www.hszxyy.com.cn/pub/web/images/index_logo_blg.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-9cea1fc2b883ff3539a5",
+    "catalogHospitalId": "ahospital-9cea1fc2b883ff3539a5",
+    "name": "武汉艾格眼科医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "武汉",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-368476fb2d2cc5e5b56385cc5191fbf51421009b2ec3a902d069cb2508f1bfb4.png",
+    "website": "http://www.aige010.com/",
+    "sourceUrl": "http://www.aige010.com/",
+    "logoSourceUrl": "http://www.aige010.com/static/aier021/img/logof.png",
     "verifiedAt": "2026-11-08"
   },
   {
@@ -2867,6 +3140,24 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-08"
   },
   {
+    "id": "ahospital-c58938c399dbc9cb0168",
+    "catalogHospitalId": "ahospital-c58938c399dbc9cb0168",
+    "name": "首都医科大学附属北京安贞医院",
+    "aliases": [
+      "安贞医院",
+      "首都医科大学附属北京安贞医院",
+      "北京安贞医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-a61de05a45d6b367f40e5d840308dfeb2d5d41eb4fe5032ea4ecc777a3f53035.jpg",
+    "website": "https://www.anzhen.org.cn/",
+    "sourceUrl": "https://www.anzhen.org.cn/",
+    "logoSourceUrl": "https://www.anzhen.org.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-c7725dc7599a1fc2a201",
     "catalogHospitalId": "ahospital-c7725dc7599a1fc2a201",
     "name": "濮阳油田总医院",
@@ -3047,6 +3338,42 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-07"
   },
   {
+    "id": "ahospital-d86f80b8309686181c5c",
+    "catalogHospitalId": "ahospital-d86f80b8309686181c5c",
+    "name": "淄博市市立医院",
+    "aliases": [
+      "淄博市临淄区人民医院",
+      "淄博市市立医院",
+      "淄博市临淄区人民医院（淄博市市立医院）"
+    ],
+    "kind": "hospital",
+    "city": "淄博",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-169929bdad3484fbf989430e65380b41d529912d032a334d81152abef8cfb16b.png",
+    "website": "https://www.lzqrmyy.com/",
+    "sourceUrl": "https://www.lzqrmyy.com/",
+    "logoSourceUrl": "https://www.lzqrmyy.com/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-d8d2bfb1f4531bc560b5",
+    "catalogHospitalId": "ahospital-d8d2bfb1f4531bc560b5",
+    "name": "北京市海淀医院（北京大学第三医院海淀院区）",
+    "aliases": [
+      "北京市海淀医院",
+      "北京大学第三医院海淀院区",
+      "海淀医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-07ff27b8528c5a9208bb7726d31b53a8557a9b76c6bd9902b46e85e0ffd092c8.jpg",
+    "website": "https://www.hdhospital.com/",
+    "sourceUrl": "https://www.hdhospital.com/",
+    "logoSourceUrl": "https://www.hdhospital.com/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-08"
+  },
+  {
     "id": "ahospital-db3d14171e54b02e2b98",
     "catalogHospitalId": "ahospital-db3d14171e54b02e2b98",
     "name": "北京叶子整形美容医院",
@@ -3161,6 +3488,22 @@ const hospitalLogoMappings = [
     "website": "https://www.fydwyy.com/",
     "sourceUrl": "https://www.fydwyy.com/",
     "logoSourceUrl": "https://www.fydwyy.com/template/default/images/logo.png",
+    "verifiedAt": "2026-11-08"
+  },
+  {
+    "id": "ahospital-eba2ed3a7435d166b682",
+    "catalogHospitalId": "ahospital-eba2ed3a7435d166b682",
+    "name": "航天中心医院",
+    "aliases": [
+      "721医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-55424614aff4310ad76a2158d35b6b9c691a7cfdd04c09b0783781b6b129ac5b.png",
+    "website": "https://www.asch.net.cn/",
+    "sourceUrl": "https://www.asch.net.cn/",
+    "logoSourceUrl": "https://www.asch.net.cn/Content/Areas/Common/images/common/logo2.png",
     "verifiedAt": "2026-11-08"
   },
   {

@@ -59,6 +59,12 @@ test('malicious, OTP, private-chat and non-whitelisted notices are rejected with
   {packageName:'com.example.privatechat'},
   {text:'您支付12.34元，验证码123456'},
   {text:'Your payment CNY12.34 verification code is 123456'},
+  ...[
+   '登录码 193431', '登陸碼 193431', '登入碼 193431', '認證碼 193431', '驗證碼 193431',
+   '短信码 193431', '短訊碼 193431', '收款码', '收錢碼', '付款碼', '支付码',
+   '二維碼', '请勿泄露Passcode', 'Security code', 'QR code',
+  ].map(prompt=>({packageName:'com.tencent.mm',title:'微信支付',text:'支付金额 ¥12.00，'+prompt})),
+  {packageName:'com.tencent.mm',title:'微信收款',text:'请使用收款码收款 12元'},
   {packageName:'com.tencent.mm',title:'虚构朋友',text:'请支付12.34元'},
   {title:'虚构支付宝好友',text:'请支付12.34元'},
   {packageName:'com.tencent.mm',title:'微信支付',text:'虚构好友发来一条新消息：支付12.34元'},
@@ -73,6 +79,10 @@ test('malicious, OTP, private-chat and non-whitelisted notices are rejected with
   const r=await req(fin('/api/capture/notifications'),{method:'POST',body:notification('filtered-'+i,fields)});assert.equal(r.status,400,JSON.stringify(r.body));assert.equal(r.body.code,'notification_filtered');
  }
  const d=openDb();assert.equal(d.prepare("SELECT COUNT(*) n FROM capture_notifications WHERE event_id LIKE 'filtered-%'").get().n,0);d.close();
+ const payment=await receive('scan-payment',{packageName:'com.tencent.mm',title:'微信支付',text:'扫码支付成功 12.34元'});
+ assert.equal(payment.event.parsed.amount,-12.34);
+ const receipt=await receive('ordinary-receipt',{packageName:'com.tencent.mm',title:'微信收款',text:'收款到账12.34元'});
+ assert.equal(receipt.event.parsed.amount,12.34);
  for(const postedAt of ['2026-02-30T10:00:00+08:00','2026-11-05T10:00:00','2026-11-05T25:00:00Z'])assert.equal((await req(fin('/api/capture/notifications'),{method:'POST',body:notification('bad-date',{postedAt})})).status,400);
 });
 

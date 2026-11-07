@@ -53,7 +53,8 @@ class CaptureIsolationTest {
     }
     @Test fun sourceDisableAndRevokedPermissionsStopQueuedData() {
         val prefs = CapturePrefs(context); prefs.bind("fictional-a", "虚构A"); prefs.notifications = true
-        val notification = JSONObject().put("packageName", "cmb.pb").toString()
+        val notification = JSONObject().put("packageName", "cmb.pb").put("title", "账户变动通知")
+            .put("text", "您账户支出人民币100.00").toString()
         assertNull(CaptureUploadPolicy.prepare(prefs, "notification", notification, emptySet(), true))
         prefs.selected = setOf("cmb.pb")
         assertNotNull(CaptureUploadPolicy.prepare(prefs, "notification", notification, emptySet(), true))
@@ -66,6 +67,18 @@ class CaptureIsolationTest {
         prefs.healthKinds = emptySet()
         assertNull(CaptureUploadPolicy.prepare(prefs, "weight", "{}", setOf(CaptureHealthReader.permissions.getValue("weight")), true))
     }
+    @Test fun codePromptsFromOlderQueueEntriesCannotBeSent() {
+        val prefs = CapturePrefs(context); prefs.bind("fictional-a", "虚构A"); prefs.notifications = true
+        prefs.selected = setOf("com.tencent.mm")
+        CaptureStore(context).use { store ->
+            val payload = JSONObject().put("packageName", "com.tencent.mm").put("title", "微信收款")
+                .put("text", "请使用收款码收款 12元")
+            store.enqueue(prefs.owner, "notification", "old-code-prompt", payload)
+            val queued = store.next(prefs.owner, notifications = true, steps = false).single()
+            assertNull(CaptureUploadPolicy.prepare(prefs, queued.kind, queued.payload, emptySet(), true))
+        }
+    }
+
     @Test fun disablingDistanceRemovesAlreadyQueuedDistance() {
         val prefs = CapturePrefs(context); prefs.bind("fictional-a", "虚构A"); prefs.healthKinds = setOf("exercise")
         prefs.exerciseSource = "fictional.source"

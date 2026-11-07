@@ -8,7 +8,11 @@ internal object CaptureUploadPolicy {
         if (prefs.paused) return null
         val payload = JSONObject(raw)
         when (kind) {
-            "notification" -> if (!prefs.notifications || !notificationAccess || payload.optString("packageName") !in prefs.selected) return null
+            "notification" -> {
+                val packageName = payload.optString("packageName")
+                if (!prefs.notifications || !notificationAccess || packageName !in prefs.selected) return null
+                if (!CaptureFilter.accepts(packageName, payload.optString("title"), payload.optString("text"))) return null
+            }
             "steps" -> if (!prefs.steps || CaptureCoordinator.stepsPermission !in granted) return null
             else -> {
                 if (kind !in prefs.healthKinds || CaptureHealthReader.permissions[kind] !in granted) return null

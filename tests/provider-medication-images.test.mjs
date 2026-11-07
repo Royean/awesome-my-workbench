@@ -4,6 +4,8 @@ import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {mkdtemp,readdir,rm,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
+import {once} from 'node:events';
+import {request} from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
 import {startServer,freePort} from './helpers.mjs';
@@ -120,4 +122,56 @@ test('unrelated prescription edits preserve a legacy image association with inva
  assert.equal(stored.dosage,linked.dosage);
  assert.deepEqual(stored.times,linked.times);
  assert.equal(stored.note,'助手仅修改备注');
+});
+
+async function withStreamedMedicationPut(id, body, whileBodyIsPending) {
+ const stream = request(base+'/api/items/'+id, {
+  method:'PUT',
+  headers:{Cookie:cookie,Origin:base,'Content-Type':'application/json',Expect:'100-continue'},
+ });
+ const response = once(stream,'response').then(async ([res])=>{
+  const chunks=[];
+  for await (const chunk of res) chunks.push(chunk);
+  return {status:res.statusCode,body:JSON.parse(Buffer.concat(chunks).toString())};
+ });
+ // Keep the response rejection handled if the concurrent operation fails first.
+ response.catch(()=>{});
+ try {
+  const continued=once(stream,'continue');
+  stream.flushHeaders();
+  await continued;
+  const json=JSON.stringify(body);
+  stream.write(json.slice(0,1));
+  await whileBodyIsPending();
+  stream.end(json.slice(1));
+  return await response;
+ } finally {
+  stream.destroy();
+ }
+}
+
+test('streamed medication updates merge the latest same-scope image and cannot revive a deleted plan', async ()=>{
+ const visit=await create('visit',{title:'虚构并发就诊',status:'已完成'});
+ const plan=await medication(visit.id), file=await upload();
+ const attach=async target=>{
+  const result=await rpc('attach_medication_image',{medicationId:target.id,fileId:file.id});
+  assert.equal(result.isError,false,JSON.stringify(result));
+ };
+ const edited=await withStreamedMedicationPut(plan.id,{note:'分段编辑备注'},()=>attach(plan));
+ assert.equal(edited.status,200);
+ assert.equal(edited.body.note,'分段编辑备注');
+ assert.equal(edited.body.imageFileId,file.id);
+ assert.equal(edited.body.dosage,plan.dosage);
+ assert.deepEqual(edited.body.times,plan.times);
+ const other=await medication(visit.id);
+ const removed=await withStreamedMedicationPut(other.id,{imageFileId:''},()=>attach(other));
+ assert.equal(removed.status,200);
+ assert.equal(removed.body.imageFileId,'','an explicit image change still takes effect');
+ const rejected=await withStreamedMedicationPut(plan.id,{note:'不得恢复'},async ()=>{
+  assert.equal((await req('/api/items/'+plan.id,{method:'DELETE'})).status,200);
+ });
+ assert.equal(rejected.status,404);
+ const state=(await req('/api/state')).body;
+ assert.ok(!state.items.some(item=>item.id===plan.id));
+ assert.ok(state.trashedIds.includes(plan.id));
 });

@@ -30,7 +30,7 @@ export function createMedical(ctx){
  function medicationImage(m){const f=find(m.imageFileId);return f?.kind==='file'&&['image/png','image/jpeg','image/webp'].includes(f.mime)?`<span class="medication-image">${previews.thumb(f)}</span>`:`<span class="event-icon metric medication-image-empty">${icon('heart',21)}</span>`;}
  function medicationCard(m){const date=doseDate||ctx.today,logs=sort(all('dose').filter(d=>d.medicationId===m.id)),active=m.status==='进行中'&&m.date<=date&&(!m.endDate||m.endDate>=date),canLog=date<=ctx.today;const times=m.scheduleMode==='asNeeded'?[]:m.times||[];return `<section class="card medication-card"><div class="medication-head">${medicationImage(m)}<div><h3>${esc(m.title)}</h3>${aiTag(m)}<p>${esc(m.prescriber||'处方来源待补充')} · ${m.date} 至 ${m.endDate||'未指定结束日期'}</p>${visitLink(m.visitId)}</div>${badge(m.status,m.status==='进行中'?'':'neutral')}${actions(m,m.status==='进行中'?`<button class="btn" data-action="med-status:${m.id}">停用方案</button>`:'')}</div><div class="medication-facts"><div><small>单次用量（按原处方）</small><strong>${esc(m.dosage)}</strong></div><div><small>用药途径</small><strong>${esc(m.route)}</strong></div><div><small>频次 / 用法</small><strong>${esc(m.frequency)}</strong></div><div><small>服用安排</small><strong>${m.scheduleMode==='asNeeded'?'按需记录':times.map(esc).join(' / ')}</strong></div></div>${m.note?`<div class="medication-note">${esc(m.note)}</div>`:''}<div class="dose-area"><div class="dose-heading"><strong>${date} · 服用记录</strong>${btn('补记一次服用','med-dose:'+m.id,'','plus')}</div>${active&&times.length?times.map(time=>{const d=logs.find(d=>d.date===date&&d.scheduledTime===time);return `<div class="dose-row"><span class="dose-time">${time}</span><span class="dose-outcome ${d?.outcome==='已服用'?'taken':''}">${d?esc(d.outcome)+(d.time?' · 实际 '+esc(d.time):''):'待记录'}</span>${d?aiTag(d):''}${d?`<button class="text-btn" data-action="med-edit:${d.id}">更正记录 ${icon('edit',12)}</button>`:canLog?`<div class="dose-actions"><button class="btn" data-action="med-take:${m.id}" data-time="${time}">记录服用</button><button class="text-btn" data-action="med-skip:${m.id}" data-time="${time}">跳过</button></div>`:''}</div>`}).join(''):`<p class="muted dose-explanation">${m.scheduleMode==='asNeeded'?'按需用药不预设次数，实际使用后记录。':m.status!=='进行中'?'方案已结束或停用，不再生成待服事项，历史记录仍保留。':'所选日期不在方案起止范围内。'}</p>`}</div><details class="dose-history"><summary>全部服用历史 <span>${logs.length} 条</span></summary>${logs.length?logs.map(d=>`<div class="dose-row"><div><strong>${d.date} ${esc(d.scheduledTime||'补记')}</strong>${aiTag(d)}<small>${esc(d.outcome)}${d.time?' · 实际 '+esc(d.time):''}${d.note?' · '+esc(d.note):''}</small></div>${actions(d)}</div>`).join(''):'<p class="muted">尚无服用记录。</p>'}</details></section>`;}
  function bind(){const date=document.querySelector('#medical-file-date');if(date)date.onchange=e=>{fileDate=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount();};const input=document.querySelector('#medical-search');if(input)input.oninput=e=>{search=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};const statusEl=document.querySelector('#medical-status');if(statusEl)statusEl.onchange=e=>{status=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};for(const input of document.querySelectorAll('#med-dose-date,#field-doseDate'))input.onchange=e=>{doseDate=e.target.value||ctx.today;ctx.render()};}
- function medicationImageFields(m){const files=all('file').filter(f=>['image/png','image/jpeg','image/webp'].includes(f.mime));const existing=find(m.imageFileId);return `<div class="medication-image-editor"><h3>药品图片（可选）</h3><div id="med-image-current">${existing?previews.thumb(existing,''):'<p class="muted">暂无药品图片</p>'}</div>${select('选择已保存的图片','imageFileId',[['','不关联图片'],...files.map(f=>[f.id,`${f.title} · ${f.date}`]),...(m.imageFileId&&!existing?[[m.imageFileId,'原图片已删除（保留原关联）']]:[])],m.imageFileId||'')}<label class="upload-box">${icon('file',22)}<p>拍摄药盒或选择图片</p><input type="file" id="medication-image-upload" accept="image/png,image/jpeg,image/webp" aria-label="拍摄药盒或上传药品图片"><small>PNG、JPG、WEBP · 最大 10MB</small></label><button type="button" class="btn" id="med-image-remove">移除图片关联</button><p class="section-desc">使用你上传的真实图片，点图片可查看原图。</p><div id="medication-upload-state" role="status" aria-live="polite"></div></div>`;}
+ function medicationImageFields(m){const files=all('file').filter(f=>['image/png','image/jpeg','image/webp'].includes(f.mime));const existing=find(m.imageFileId);return `<div class="medication-image-editor"><h3>药品图片（可选）</h3><div id="med-image-current">${existing?previews.thumb(existing,''):'<p class="muted">暂无药品图片</p>'}</div>${select('选择已保存的图片','imageFileId',[['','不关联图片'],...files.map(f=>[f.id,`${f.title} · ${f.date}`]),...(m.imageFileId&&!existing?[[m.imageFileId,'原图片已删除（保留原关联）']]:[])],m.imageFileId||'')}<label class="upload-box">${icon('file',22)}<p>拍摄药盒或选择图片</p><input type="file" id="medication-image-upload" accept="image/png,image/jpeg,image/webp" aria-label="拍摄药盒或上传药品图片"><small>PNG、JPG、WEBP · 最大 10MB</small></label><button type="button" class="btn" id="med-image-cancel-upload" hidden>取消待上传</button> <button type="button" class="btn" id="med-image-remove">移除图片关联</button><p class="section-desc">使用你上传的真实图片，点图片可查看原图。</p><div id="medication-upload-state" role="status" aria-live="polite"></div></div>`;}
  function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old?.visitId||visitId||x.visitId||activeId||'';let body='';
  if(kind==='report'){const files=all('file').filter(f=>!f.visitId||f.visitId===x.visitId);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+select('关联已有原件（可选）','fileId',[['','暂不关联'],...files.map(f=>[f.id,f.title])],x.fileId||'')+`<label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
  if(kind==='medication')body=`<div class="helper">请按原始处方或医生交代填写。此处只记录方案，不推算用量。</div>`+medicationImageFields(x)+field('单次用量（含单位）','dosage',x.dosage||'','text','required maxlength="250" placeholder="按处方原文填写"')+`<div class="form-grid">${field('用药途径','route',x.route||'','text','required maxlength="250" placeholder="按处方填写"')}${field('频次 / 用法','frequency',x.frequency||'','text','required maxlength="250" placeholder="按处方填写"')}</div>`+field('处方医生 / 来源','prescriber',x.prescriber||'','text','maxlength="250"')+select('记录方式','scheduleMode',[['scheduled','按指定时间记录'],['asNeeded','按需使用，不设次数']],x.scheduleMode)+`<div id="med-time-field" ${x.scheduleMode==='asNeeded'?'hidden':''}>${field('每日服用时间','times',(x.times||[]).join(', '),'text','placeholder="例如 08:00, 20:00"')}<p class="section-desc">时间以逗号分隔，最多 12 个；只用于应用内记录，不发送系统提醒。</p></div>`+field('结束日期（可选）','endDate',x.endDate||'','date')+select('方案状态','status',['进行中','已停用','已完成'],x.status);
@@ -41,19 +41,59 @@ export function createMedical(ctx){
  document.querySelector('#field-scheduleMode')?.addEventListener('change',e=>{document.querySelector('#med-time-field').hidden=e.target.value==='asNeeded'});
  if(kind==='dose'){const outcome=document.querySelector('#field-outcome');const timeField=document.querySelector('#field-time').closest('.field');timeField.hidden=outcome.value==='跳过';outcome.onchange=()=>{timeField.hidden=outcome.value==='跳过'};}
  let uploaded=null,initialMedicationImage,removeMedicationImage=false;
- let selectedMedicationImage=null,medicationUpload=null;
- document.querySelector('#medical-form').onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const imageControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:[];const data=Object.fromEntries(new FormData(e.target));imageControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
+ let selectedMedicationImage=null,medicationUpload=null,uploadFieldError=null;
+ const medicationForm=kind==='medication'?document.querySelector('#medical-form'):null;
+ const uploadState=medicationForm?.querySelector('#medication-upload-state');
+ const cancelUpload=medicationForm?.querySelector('#med-image-cancel-upload');
+ const visitChoice=medicationForm?.elements.visitId;
+ const visitUploadError=medicationForm?document.createElement('div'):null;
+ if(visitUploadError){
+  visitUploadError.id='medication-upload-visit-error';
+  visitUploadError.className='form-error';
+  visitUploadError.hidden=true;
+  visitUploadError.setAttribute('role','alert');
+  visitChoice.insertAdjacentElement('afterend',visitUploadError);
+ }
+ const showVisitUploadError=message=>{
+  visitUploadError.hidden=false;
+  visitUploadError.textContent=message+'。请选择有效就诊后重试，或在药品图片处选择「'+cancelUpload.textContent+'」。';
+  visitChoice.setAttribute('aria-invalid','true');
+  visitChoice.setAttribute('aria-describedby',visitUploadError.id);
+  visitChoice.disabled=false;
+  visitChoice.focus();
+  uploadState.textContent='待上传图片和处方草稿已保留。';
+ };
+ const clearVisitUploadError=()=>{
+  if(!visitUploadError.textContent)return;
+  visitUploadError.textContent='';
+  visitUploadError.hidden=true;
+  if(visitChoice.getAttribute('aria-describedby')===visitUploadError.id){
+   visitChoice.removeAttribute('aria-describedby');
+   visitChoice.removeAttribute('aria-invalid');
+  }
+ };
+ const clearUploadErrors=()=>{
+  clearVisitUploadError();
+  if(!uploadFieldError?.isConnected)return;
+  const described=medicationForm.querySelector(`[aria-describedby="${CSS.escape(uploadFieldError.id)}"]`);
+  described?.removeAttribute('aria-describedby');
+  described?.removeAttribute('aria-invalid');
+  uploadFieldError.remove();
+  uploadFieldError=null;
+ };
+ document.querySelector('#medical-form').onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const imageControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-cancel-upload,#med-image-remove,[name="imageFileId"],[name="visitId"]')]:[];const data=Object.fromEntries(new FormData(e.target));imageControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
  if(kind==='medication'){
  // The select starts with the image seen when the drawer opened. An unchanged
  // value must not replace a newer association created while the drawer was open.
  if(id&&!removeMedicationImage&&data.imageFileId===initialMedicationImage)delete data.imageFileId;
  const file=selectedMedicationImage;
  if(file){
-  if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');
-  if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');
-  const state=e.target.querySelector('#medication-upload-state');
+  clearUploadErrors();
+  if(!data.visitId){showVisitUploadError('请选择关联就诊');return;}
   try{
-   state.textContent='正在读取并上传药品图片…';
+   if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');
+   if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');
+   uploadState.textContent='正在读取并上传药品图片…';
    if(!medicationUpload||medicationUpload.visitId!==data.visitId)medicationUpload={visitId:data.visitId,id:crypto.randomUUID()};
    if(!medicationUpload.body){
     const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});
@@ -62,30 +102,73 @@ export function createMedical(ctx){
    // Keep the same request when the server may have committed before the response was lost.
    medicationUpload.result??=await ctx.api('/api/upload',{method:'POST',body:medicationUpload.body},sourceSpace,sourceWorkbench);
    data.imageFileId=medicationUpload.result.id;
-   state.textContent='图片上传成功，正在保存用药方案…';
+   cancelUpload.textContent='放弃本次图片关联';
+   uploadState.textContent='图片上传成功，正在保存用药方案…';
   }catch(error){
    // A validation rejection lets the user fix fields. Keep the key to prevent a second original.
-   if(error.status===400&&error.code==='validation_failed')medicationUpload.body=null;
-   state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';
-   throw error;
+   if(error.status===400&&error.code==='validation_failed'&&error.field!=='visitId'&&medicationUpload&&!medicationUpload.uncertain)medicationUpload.body=null;
+   if(!e.target.isConnected)throw error;
+   cancelUpload.textContent='取消待上传';
+   if(error.status===400&&error.code==='validation_failed'&&error.field==='visitId'){
+    showVisitUploadError(error.message);
+   }else if(error.uncertainWrite){
+    medicationUpload.uncertain=true;
+    uploadState.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。未收到上传结果，也可取消待上传。';
+   }else{
+    const message='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';
+    if(showFieldError(e.target,error)){
+     uploadFieldError=e.target.querySelector(`#${CSS.escape(error.field+'-field-error')}`);
+     uploadState.textContent=message;
+    }else{
+     uploadState.textContent=message+' '+error.message;
+    }
+   }
+   return;
   }
  }}
  if(kind==='report'){const file=document.querySelector('#report-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);document.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
- await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;imageControls.forEach(el=>el.disabled=false)}};
+ await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&medicationUpload?.result)uploadState.textContent='图片已保存到资料档案。可重试保存方案或放弃本次图片关联。';if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;imageControls.forEach(el=>el.disabled=false)}};
  if(kind==='medication'){
-  const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');
+  const upload=medicationForm.querySelector('#medication-image-upload'),choice=medicationForm.elements.imageFileId;
   initialMedicationImage=choice.value;
-  const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};
-  const clearUpload=()=>{upload.value='';selectedMedicationImage=null;medicationUpload=null;};
+  const update=()=>{const file=find(choice.value);medicationForm.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};
+  const clearUpload=()=>{
+   upload.value='';
+   selectedMedicationImage=null;
+   medicationUpload=null;
+   cancelUpload.hidden=true;
+   clearUploadErrors();
+  };
+  const showPending=()=>{
+   cancelUpload.hidden=!selectedMedicationImage;
+   cancelUpload.textContent=medicationUpload?.result?'放弃本次图片关联':'取消待上传';
+   if(medicationUpload?.result&&medicationUpload.visitId===visitChoice.value){
+    uploadState.textContent='图片已保存到资料档案，待关联用药方案。';
+   }else{
+    uploadState.textContent=selectedMedicationImage?'待上传：'+selectedMedicationImage.name+'（保存用药方案时上传）':'';
+   }
+  };
   // An identical selection should fire change. Cancelling the picker keeps the retained File.
   upload.onclick=()=>{upload.value='';};
   upload.onchange=()=>{
    selectedMedicationImage=upload.files[0]||null;
    medicationUpload=null;
-   state.textContent=selectedMedicationImage?'待上传：'+selectedMedicationImage.name+'（保存用药方案时上传）':'';
+   clearUploadErrors();
+   showPending();
   };
-  choice.onchange=()=>{removeMedicationImage=false;clearUpload();state.textContent='';update();};
-  form.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';clearUpload();state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};
+  visitChoice.onchange=()=>{
+   clearVisitUploadError();
+   if(selectedMedicationImage)showPending();
+  };
+  cancelUpload.onclick=()=>{
+   const stored=medicationUpload?.result,uncertain=medicationUpload?.uncertain;
+   clearUpload();
+   upload.focus();
+   uploadState.textContent=stored?'已放弃本次图片关联，原件仍保存在资料档案。':
+    uncertain?'已取消待上传。若上传已完成，原件仍保存在资料档案。':'已取消待上传。';
+  };
+  choice.onchange=()=>{removeMedicationImage=false;clearUpload();uploadState.textContent='';update();};
+  medicationForm.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';clearUpload();uploadState.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};
   previews.mount();
  }
  if(kind==='report')document.querySelector('#report-upload').onchange=()=>{uploaded=null;document.querySelector('#report-upload-state').innerHTML=''};

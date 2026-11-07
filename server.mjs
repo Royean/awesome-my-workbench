@@ -610,7 +610,7 @@ const server=http.createServer(async(req,res)=>{try{
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
   validateTravelReferences(space,'file',body);
  validateReadingReferences(space,'file',body);
-  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
+  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在',body.fileCategory==='药品图片'?'visitId':undefined);
   const attemptId=b.uploadAttemptId;
   let fingerprint;
   if(attemptId!==undefined){

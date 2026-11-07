@@ -150,3 +150,19 @@ test('failed storage can retry, while a removed or missing original is never rec
  }
  assert.deepEqual(await readdir(uploads),filesBeforeReplay);
 });
+
+test('a deleted visit rejects uploads and identifies the visit field for medication images',async()=>{
+ const body=intent({visitId:await visit()});
+ assert.equal((await request('/api/items/'+body.visitId,'DELETE')).status,200);
+ const filesBefore=await readdir(uploads);
+
+ const medication=await upload(body);
+ assert.equal(medication.status,400);
+ const rejection={error:'关联就诊记录不存在',code:'validation_failed'};
+ assert.deepEqual(medication.body,{...rejection,field:'visitId'});
+
+ const ordinary=await upload({...body,fileCategory:undefined,uploadAttemptId:undefined});
+ assert.equal(ordinary.status,400);
+ assert.deepEqual(ordinary.body,rejection);
+ assert.deepEqual(await readdir(uploads),filesBefore);
+});

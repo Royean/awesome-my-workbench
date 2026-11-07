@@ -296,6 +296,23 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-06"
   },
   {
+    "id": "zhejiang-people",
+    "catalogHospitalId": "ahospital-70e5603fa47b0ebd4756",
+    "name": "浙江省人民医院",
+    "aliases": [
+      "杭州医学院附属人民医院",
+      "浙江省人民医院浙江省立医院"
+    ],
+    "kind": "hospital",
+    "city": "杭州",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-b3d8bd4571e21b77822cfcf4ef17713d125709ea7a30253547a7992aba9b7cf9.png",
+    "website": "https://www.hospitalstar.com/",
+    "sourceUrl": "https://www.hospitalstar.com/",
+    "logoSourceUrl": "https://www.hospitalstar.com/logo.png",
+    "verifiedAt": "2026-11-07"
+  },
+  {
     "id": "jinan-third",
     "catalogHospitalId": "ahospital-7b5c39c7efb09e1d1e6e",
     "name": "济南市第三人民医院",
@@ -308,6 +325,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.jnslsy.cn/index.htm",
     "logoSourceUrl": "https://www.jnslsy.cn/images/f-logo.png",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-85d91cd429a4a26d5a03",
+    "catalogHospitalId": "ahospital-85d91cd429a4a26d5a03",
+    "name": "丽水市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "丽水",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-8846f5d247026f5670faf8b3d3e09980918fa4b36391b00bd36178be9aba6e75.png",
+    "website": "https://www.ls-hospital.com/",
+    "sourceUrl": "https://www.ls-hospital.com/",
+    "logoSourceUrl": "https://www.ls-hospital.com/Content/app/images/logo.png?v=20241230",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "ahospital-87366aa0de2962c2b8cb",
@@ -372,6 +403,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.bjtth.cn/Home/",
     "logoSourceUrl": "https://www.bjtth.cn/Content/Areas/Common/images/logo/wxShare.jpg",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-b41db90a16d280bf37a1",
+    "catalogHospitalId": "ahospital-b41db90a16d280bf37a1",
+    "name": "贵阳仁爱医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "贵阳",
+    "province": "贵州省",
+    "logo": "/provider-logos/hospital-cf5d5cf973041827de84b18dd25f76bd24d0083ca5327bb22cb24ad3ca3abdd5.jpg",
+    "website": "http://www.5979999.com/",
+    "sourceUrl": "http://www.5979999.com/",
+    "logoSourceUrl": "http://www.5979999.com/images/logo.jpg",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "pku-third",
@@ -526,6 +571,36 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.zs-hospital.sh.cn/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/fudan-zhongshan.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-f2e920e733f537ba23cd",
+    "catalogHospitalId": "ahospital-f2e920e733f537ba23cd",
+    "name": "厦门大学医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "厦门",
+    "province": "福建省",
+    "logo": "/provider-logos/hospital-59827c63afe2e34db15367a41fce88ff3597d532f6309f0127c0b514e7b8f070.png",
+    "website": "https://hospital.xmu.edu.cn/",
+    "sourceUrl": "https://hospital.xmu.edu.cn/",
+    "logoSourceUrl": "https://hospital.xmu.edu.cn/images/xdyylogo20190214.png",
+    "verifiedAt": "2026-11-07"
+  },
+  {
+    "id": "guangzhou-first",
+    "catalogHospitalId": "ahospital-f5be1bfa6c7b1e6933ed",
+    "name": "广州市第一人民医院",
+    "aliases": [
+      "广州市一医院"
+    ],
+    "kind": "hospital",
+    "city": "广州",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-3b14710d9859062383df805e91287f5e3bbc52d0b76aa5bb857f563573b854f7.png",
+    "website": "https://www.gzhosp.cn/",
+    "sourceUrl": "https://www.gzhosp.cn/",
+    "logoSourceUrl": "https://www.gzhosp.cn/upload/image/main_logo.png",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "west-china",

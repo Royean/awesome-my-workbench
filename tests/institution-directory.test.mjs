@@ -6,7 +6,7 @@ import {institutions} from '../public/institutions.js';
 import {resolveInstitution} from '../public/provider-ui.js';
 test('public institution directory has unique IDs, local existing brand files and independent branch cities',()=>{
  assert.equal(new Set(institutions.map(x=>x.id)).size,institutions.length);
- for(const p of institutions){assert.match(p.id,/^[a-z0-9-]+$/);assert.ok(p.name);if(p.kind==='checkup')assert.equal(p.city,'');if(p.logo){assert.match(p.logo,/^\/provider-logos\/[a-z0-9-]+\.(png|jpg|svg)$/);assert.ok(fs.statSync(path.join(import.meta.dirname,'../public',p.logo)).isFile());}}
+ for(const p of institutions){assert.match(p.id,/^[a-z0-9-]+$/);assert.ok(p.name);if(p.kind==='checkup')assert.equal(p.city,'');if(p.logo){assert.match(p.logo,/^\/provider-logos\/[a-z0-9-]+\.(png|jpg|svg|webp)$/);assert.ok(fs.statSync(path.join(import.meta.dirname,'../public',p.logo)).isFile());}}
  assert.notEqual(institutions.find(x=>x.id==='chengdu-wuhou-southwest').id,institutions.find(x=>x.id==='chongqing-southwest').id);
 });
 test('institution resolution rejects ambiguous short names and wrong city, keeps unknown explicit identity unknown',()=>{

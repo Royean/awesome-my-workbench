@@ -19,8 +19,12 @@ export function exportHospitalLogoMap(catalog,publicDir){
    const rawAliases=JSON.parse(row.aliases_json);
    if(!Array.isArray(rawAliases)||(config.aliases!==undefined&&!Array.isArray(config.aliases)))throw Error('Invalid aliases: '+id);
    const name=config.name??row.name;if(typeof name!=='string'||!name.trim())throw Error('Invalid name: '+id);
-   const aliases=[...new Set([...rawAliases,...(config.aliases||[]),...(name!==row.name?[row.name]:[])])];
-   if(!Array.isArray(aliases)||aliases.some(a=>typeof a!=='string'))throw Error('Invalid aliases: '+id);
+   const inheritedAliases=[...new Set([...rawAliases,...(config.aliases||[]),...(name!==row.name?[row.name]:[])])];
+   if(inheritedAliases.some(a=>typeof a!=='string'))throw Error('Invalid aliases: '+id);
+   const excludedAliases=config.excludedAliases??[];
+   if(!Array.isArray(excludedAliases)||excludedAliases.some(a=>typeof a!=='string'||!a.trim()))throw Error('Invalid reviewed alias exclusions: '+id);
+   const excluded=new Set(excludedAliases.map(a=>a.trim()));
+   const aliases=inheritedAliases.filter(a=>!excluded.has(a.trim()));
    if(config.city!==undefined&&typeof config.city!=='string')throw Error('Invalid reviewed city: '+id);
    if(config.scope!==undefined&&!['brand','institution'].includes(config.scope))throw Error('Invalid mapping scope: '+id);
    if(config.brandId!==undefined&&(typeof config.brandId!=='string'||!config.brandId||config.scope==='brand'))throw Error('Invalid branch brand ID: '+id);
@@ -36,8 +40,11 @@ export function exportHospitalLogoMap(catalog,publicDir){
    const original=path.resolve(path.dirname(catalog),row.logo_candidate_path);
    const bytes=fs.readFileSync(original),sha=createHash('sha256').update(bytes).digest('hex');
    if(sha!==candidate.sha256)throw Error('Logo hash mismatch: '+id);
-   const extension=bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))?'png':bytes[0]===255&&bytes[1]===216?'jpg':null;
-   if(!extension)throw Error('Only reviewed PNG/JPEG assets are exported: '+id);
+   let extension=null;
+   if(bytes.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10])))extension='png';
+   else if(bytes[0]===255&&bytes[1]===216)extension='jpg';
+   else if(bytes.length>=20&&bytes.toString('ascii',0,4)==='RIFF'&&bytes.toString('ascii',8,12)==='WEBP'&&bytes.readUInt32LE(4)+8===bytes.length)extension='webp';
+   if(!extension)throw Error('Only reviewed PNG/JPEG/WebP assets are exported: '+id);
    const filename='hospital-'+sha+'.'+extension;
    assets.push({filename,bytes});
    mappings.push({id,catalogHospitalId:row.hospital_id,name,aliases,kind:'hospital',city,

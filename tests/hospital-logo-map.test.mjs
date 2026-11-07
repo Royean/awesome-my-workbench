@@ -1,3 +1,4 @@
+import {originalWebP} from './originals-fixtures.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {DatabaseSync} from 'node:sqlite';import {mkdtempSync,writeFileSync,readFileSync,mkdirSync,rmSync,existsSync} from 'node:fs';
 import os from 'node:os';import path from 'node:path';import {createHash} from 'node:crypto';
@@ -79,4 +80,51 @@ test('reviewed branch labels are matched across brand aliases before applying th
  const hospital = '新桥口腔医院（西宁分院）';
  assert.equal(resolveInstitution({hospitalId, hospital, city:'成都'}), null);
  assert.equal(resolveInstitution({hospitalId, hospital, city:'西宁'})?.id, hospitalId);
+});
+
+
+test('exports approved WebP by content when the cached filename says PNG', () => fixture(({dir,source,pub,row,insert}) => {
+ const bytes=originalWebP();
+ writeFileSync(path.join(dir,'logo.png'),bytes);
+ row.logo_candidates_json=JSON.stringify([{original:'logo.png',review_status:'approved',sha256:createHash('sha256').update(bytes).digest('hex')}]);
+ insert(row);
+ exportHospitalLogoMap(source,pub);
+ const exported=mappings(pub)[0];
+ assert.match(exported.logo,/\.webp$/);
+ assert.deepEqual(readFileSync(path.join(pub,exported.logo)),bytes);
+}));
+
+test('rejects a truncated WebP before replacing an existing logo map', () => fixture(({dir,source,pub,row,insert}) => {
+ const bytes=originalWebP().subarray(0,-1);
+ writeFileSync(path.join(dir,'logo.png'),bytes);
+ row.logo_candidates_json=JSON.stringify([{original:'logo.png',review_status:'approved',sha256:createHash('sha256').update(bytes).digest('hex')}]);
+ insert(row);
+ mkdirSync(pub);
+ writeFileSync(path.join(pub,'hospital-logo-map.js'),'prior-review-map');
+ assert.throws(() => exportHospitalLogoMap(source,pub),/Only reviewed PNG\/JPEG\/WebP/);
+ assert.equal(readFileSync(path.join(pub,'hospital-logo-map.js'),'utf8'),'prior-review-map');
+}));
+
+
+test('reviewed ambiguous aliases cannot return through inherited catalog aliases',()=>fixture(({source,pub,row,insert})=>{
+ row.aliases_json=JSON.stringify(['虚构历史全名','歧义简称']);
+ row.details_json=JSON.stringify({logoMapping:{publicId:'fictional-approved',city:'成都',reviewedAt:'2026-11-08',aliases:['已核实完整别名','歧义简称'],excludedAliases:[' 歧义简称 ']}});
+ insert(row);const before=readFileSync(source);exportHospitalLogoMap(source,pub);
+ const mapping=mappings(pub)[0];assert.deepEqual(mapping.aliases,['虚构历史全名','已核实完整别名']);
+ institutions.push(mapping);
+ try{
+  assert.equal(resolveInstitution({hospital:'歧义简称',city:'成都'}),null);
+  assert.equal(resolveInstitution({hospital:'虚构历史全名',city:'成都'})?.id,mapping.id);
+  assert.equal(resolveInstitution({hospital:'已核实完整别名',city:'成都'})?.id,mapping.id);
+  assert.equal(resolveInstitution({hospitalId:mapping.id,city:'成都'})?.id,mapping.id);
+ }finally{institutions.pop()}
+ assert.deepEqual(readFileSync(source),before);
+}));
+test('malformed reviewed alias exclusions leave the previous export intact',()=>{
+ for(const excludedAliases of ['歧义简称',[null],[' ']])fixture(({source,pub,row,insert})=>{
+  row.details_json=JSON.stringify({logoMapping:{publicId:'fictional-approved',city:'成都',reviewedAt:'2026-11-08',excludedAliases}});insert(row);
+  mkdirSync(pub);const target=path.join(pub,'hospital-logo-map.js');writeFileSync(target,'prior-review-map');
+  assert.throws(()=>exportHospitalLogoMap(source,pub),/Invalid reviewed alias exclusions/);
+  assert.equal(readFileSync(target,'utf8'),'prior-review-map');assert.equal(existsSync(path.join(pub,'provider-logos')),false);
+ });
 });

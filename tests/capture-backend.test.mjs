@@ -284,3 +284,26 @@ test('workout distance can be filled later and omission does not erase previousl
  assert.equal(changed.body.healthRecords.find(x=>x.id===id).distance,3.5);
  assert.equal((await syncHealth([sessionRecord({sourceId,sourcePackage:'<script>'})])).status,400);
 });
+
+test('a past Health Connect workout becomes a reusable favorite without sync identity',async()=>{
+ const sourceId='favorite-workout';
+ const synced=await syncHealth([sessionRecord({sourceId,sourcePackage:'org.example.fitness',observedAt:'2026-11-03T11:00:00+08:00'})]);
+ assert.equal(synced.status,200,JSON.stringify(synced.body));
+ const source=synced.body.healthRecords.find(x=>x.sourceId===sourceId);
+ const {id,kind,date,time,attachmentIds,rawText,...template}=source;
+ const favorite=await req(health('/api/items'),{method:'POST',body:{
+  kind:'favorite',targetKind:kind,title:'收藏同步运动',date:'2026-11-05',sourceId:id,template
+ }});
+ assert.equal(favorite.status,201,JSON.stringify(favorite.body));
+ assert.equal(favorite.body.sourceId,id);
+ const savedTemplate=favorite.body.template;
+ for(const key of ['source','sourceId','deviceId','observedAt','startAt','endAt','sourcePackage','date','time'])assert.ok(!Object.hasOwn(savedTemplate,key),key);
+ for(const key of ['title','type','duration','distance'])assert.equal(savedTemplate[key],source[key]);
+ const reused=await req(health('/api/items'),{method:'POST',body:{...savedTemplate,kind,date:'2026-11-05'}});
+ assert.equal(reused.status,201,JSON.stringify(reused.body));
+ assert.equal(reused.body.source,undefined);
+ const current=(await req(health('/api/state'))).body.items.find(item=>item.id===id);
+ assert.equal(current.date,date);
+ assert.equal(current.source,'health-connect');
+ assert.equal(current.sourceId,sourceId);
+});

@@ -60,7 +60,7 @@ const dateError=field=>bad(DATE_ERROR,field);
 const md=d=>`${Number(d.slice(5,7))}月${Number(d.slice(8,10))}日`;
 const validTime=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d$/.test(v);
 const units={weight:'kg',pressure:'mmHg',glucose:'mmol/L',sleep:'小时',heart:'次/分',steps:'步'};
-// opts.original: the stored record when updating (lets legacy records keep missing optional links).
+// opts.original preserves legacy links on update. Favorite templates omit sync instance metadata.
 function validate(kind,b,opts={}){
  if(!kinds.includes(kind))throw bad('记录类型无效');
  if(READING_KINDS.includes(kind))return validateReading(kind,b,{validDate,bad,today});
@@ -82,7 +82,7 @@ function validate(kind,b,opts={}){
  if(kind==='water'){if(!Number.isFinite(Number(b.volume))||Number(b.volume)<=0||Number(b.volume)>5000)throw bad('饮水量需大于 0 且不超过 5000 毫升');clean.volume=Number(b.volume);}
  if(kind==='favorite'){
   if(b.template!==undefined&&!isPlainObject(b.template))throw bad('收藏模板格式无效','template');if(!['meal','exercise'].includes(b.targetKind))throw bad('收藏类型无效');clean.targetKind=b.targetKind;clean.sourceId=String(b.sourceId||'').slice(0,100);
-  const t=validate(b.targetKind,{...b.template,title:b.template?.title||clean.title,date:clean.date});delete t.date;delete t.time;delete t.attachmentIds;delete t.rawText;delete t.visitId;clean.template=t;
+  const t=validate(b.targetKind,{...b.template,title:b.template?.title||clean.title,date:clean.date},{favoriteTemplate:true});delete t.date;delete t.time;delete t.attachmentIds;delete t.rawText;delete t.visitId;clean.template=t;
  }
 
  if(kind==='metric'){
@@ -94,7 +94,7 @@ function validate(kind,b,opts={}){
   }
   if(clean.type==='pressure'){if(!Number.isFinite(Number(b.secondary))||Number(b.secondary)<=0||Number(b.secondary)>=clean.value)throw bad('舒张压需大于 0 且低于收缩压');clean.secondary=Number(b.secondary);}
  }
- if(kind==='exercise'||kind==='metric'&&clean.type!=='steps')Object.assign(clean,validateHealthMetadata(b,{validDate,bad,now}));
+ if(!opts.favoriteTemplate&&(kind==='exercise'||kind==='metric'&&clean.type!=='steps'))Object.assign(clean,validateHealthMetadata(b,{validDate,bad,now}));
  if(kind==='visit'){
   for(const key of ['city','hospitalId']){if(b[key]!==undefined&&b[key]!==null&&typeof b[key]!=='string')throw bad(key==='city'?'就诊城市格式无效':'医院编号格式无效',key);clean[key]=String(b[key]||'').trim();if(clean[key].length>100)throw bad(key==='city'?'就诊城市最多 100 个字':'医院编号最多 100 个字符',key);}
   if(clean.hospitalId&&!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(clean.hospitalId))throw bad('医院编号格式无效','hospitalId');

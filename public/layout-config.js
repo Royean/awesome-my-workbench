@@ -20,7 +20,7 @@ function keys(value,allowed,label){plain(value,label);if(Object.keys(value).some
 function options(id,value){
  const allowed=id==='trend'?['metric','range']:id==='tasks'?['limit']:[];
  keys(value,allowed,'卡片展示设置');
- if(value.metric!==undefined&&!['weight','pressure','sleep','glucose','heart'].includes(value.metric))throw layoutValidationError('请选择有效的监测项目','metric');
+ if(value.metric!==undefined&&!['weight','pressure','sleep','glucose','heart','steps'].includes(value.metric))throw layoutValidationError('请选择有效的监测项目','metric');
  if(value.range!==undefined&&![7,14,30].includes(value.range))throw layoutValidationError('趋势范围只能选择7、14或30天','range');
  if(value.limit!==undefined&&(!Number.isInteger(value.limit)||value.limit<1||value.limit>8))throw layoutValidationError('待办显示数量需在1至8项之间','limit');
  return {...value};

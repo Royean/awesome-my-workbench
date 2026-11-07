@@ -1,3 +1,4 @@
+import { createDeveloperHubApi } from './lib/developer-hub.mjs';
 import { buildOverview } from './lib/overview.mjs';
 import {createPersonalSettings} from './lib/personal-settings.mjs';
 import {createLayouts} from './lib/layouts.mjs';
@@ -31,6 +32,7 @@ fs.chmodSync(dataDir,0o700);fs.chmodSync(path.join(dataDir,'uploads'),0o700);
 const db=new DatabaseSync(path.join(dataDir,'health.sqlite'));
 fs.chmodSync(path.join(dataDir,'health.sqlite'),0o600);
 migrateAccounts(db);
+db.exec(fs.readFileSync(path.join(root, 'migrations', '008-developer-hub.sql'), 'utf8'));
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
 db.exec(`CREATE TABLE IF NOT EXISTS medication_upload_attempts (
  space TEXT NOT NULL, attempt_id TEXT NOT NULL, fingerprint TEXT NOT NULL, file_id TEXT NOT NULL,
@@ -572,6 +574,14 @@ async function handleMcp(req,res){
  return json(res,out.status,out.body);
 }
 const cgm=createCgm({db,dataDir});
+const developerHubApi = createDeveloperHubApi({
+ db, json, readBody,
+ isAuthorized(req, user) {
+  if (!authEnabled) return true;
+  const current = accounts.session(req);
+  return Boolean(current && current.id === user.id && current.session_id === user.session_id && current.role === user.role);
+ }
+});
 const capture=createCapture({db,put,validDate,validTime,bad,today,now});
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
@@ -597,6 +607,10 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap&&req.method!=='GET')return json(res,405,{error:'方法不支持'});
  if(isBootstrap&&authEnabled&&!user)return json(res,200,{me:{enabled:true,user:null}});
  if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return hasBearerScheme(req)&&!hasSessionCookie(req)?json(res,401,{error:'访问令牌无效或已撤销',code:'token_invalid'}):json(res,401,{error:'请先登录',code:'token_missing'});
+ if(url.pathname.startsWith('/api/developer-hub/')){
+  requireExpectedOwner();
+  return await developerHubApi(req,res,url.pathname,user);
+ }
  const baseSpace=url.searchParams.get('space')==='demo'?'demo':'personal';const workbenchId=url.searchParams.get('workbench')||'health';
  const workbenches=authEnabled&&user?db.prepare('SELECT id,name,type,themeColor FROM user_workbenches WHERE user_id=? ORDER BY rowid').all(user.id):getWorkbenches();
  // Static assets remain available before login; data scopes are resolved only by the authenticated user.

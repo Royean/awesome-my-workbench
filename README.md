@@ -35,6 +35,20 @@ npm start
 - 示例与个人空间分离，设置与数据持久化；JSON导出包括记录和文件元数据，不包括附件字节。
 - 健康助手入口与本地统计摘要；支持通过[账号授权的 MCP](docs/MCP.md)读写记录。模型连接状态单独显示，不提供模拟AI答复。
 
+## 开发、组件和 AI Teams
+
+桌面顶部导航和手机工作台标题下方提供三个全局入口。
+
+- **开发**：粘贴 GitHub 主 Issue 链接开始跟踪。点击需求可查看 Issue 中记录的阶段、下一步、负责人、关联 PR 和可读取的验证证据。手动刷新保留上次成功快照，页面显示同步时间。Issue 可用「阶段」「下一步」「阻塞」「优先级」等字段描述进度；仅关闭 Issue 或合并 PR 不表示已发布。
+- **组件**：按类型浏览可跨工作台复用的 UI 元件，预览常见尺寸、主题和状态。可放置的 AI 卡片仍由现有 AI 组件库管理。
+- **AI Teams**：浏览角色定义和 Skills 来源，按账号登记 Agent 及其 Skills、MCP 和运行环境。角色目录提供常用角色；可通过服务器私有配置接入自己的角色来源与 Skills。连接状态由实际运行环境验证，登记项用于记录配置。
+
+由仓库所有者、成员或协作者创建的主 Issue，可在正文加入 `组件：file-preview` 或 `Agent：<Agent ID>` 建立双向链接。组件 ID 取详情链接末段，Agent ID 在 Agent 详情可复制。
+
+私人角色目录用 `WORKBENCH_ROLE_CATALOG_FILE` 指向服务器上单独保存的 JSON 文件，包含 `source` 和 `roles`。启用账号后，配置 `WORKBENCH_ROLE_CATALOG_ACCOUNT_EMAIL` 可让指定账号查看这些来源和 Skills 引用，默认沿用 GitHub 凭据绑定的邮箱。其他账号可以浏览通用角色。私人目录文件由部署者单独管理。
+
+公开 Issue 可直接读取。私有 Issue 需要在启动环境配置只读 GitHub 凭据 `WORKBENCH_GITHUB_TOKEN`，有账号的部署还要配置使用该凭据的唯一登录邮箱 `WORKBENCH_GITHUB_ACCOUNT_EMAIL`。可用 `WORKBENCH_GITHUB_LOGIN` 指定 GitHub 用户名，以识别分派给本人的需求。令牌只供服务端读取 Issue 和关联证据。具体配置见 `.env.example`。
+
 ## 数据位置与边界
 
 SQLite位于 `data/health.sqlite`，原始附件位于 `data/uploads/`。不自动读取既有私人健康仓库或Drive，也不覆盖它们。个人空间初始为空，示例数值均为虚构。备份时停止服务并复制整个 `data/` 目录（若热备份则需使用SQLite备份机制）。删除资料只移除界面记录，原始附件保留在本机，以支持撤销；此版本不作自动文件清理。

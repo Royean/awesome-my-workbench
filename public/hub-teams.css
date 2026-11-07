@@ -20,6 +20,7 @@
 
 .hub-teams-tabs {
   display: flex;
+  overflow-x: auto;
   gap: 24px;
   margin: 17px 0 22px;
   border-bottom: 1px solid var(--teams-line);
@@ -299,6 +300,8 @@
 .hub-teams-agent-detail > section > p { margin: 0; color: var(--teams-muted); font-size: 13px; }
 .hub-teams-agent-id { font-size: 12px; color: var(--teams-muted); overflow-wrap: anywhere; }
 .hub-teams-agent-id code { color: var(--teams-ink); }
+.hub-teams-agent-runtime { padding: 12px 14px; border: 1px solid var(--teams-line); border-radius: 9px; background: var(--teams-soft); }
+.hub-teams-agent-detail > .execution-ui { margin: 20px 0; }
 
 .hub-teams-agent-counts,
 .hub-teams-row-actions {

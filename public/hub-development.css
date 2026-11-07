@@ -13,6 +13,10 @@
 }
 .dev-hub h1, .dev-hub h2, .dev-hub h3, .dev-hub p, .dev-hub ul, .dev-hub dl, .dev-hub dd { margin: 0; }
 .dev-hub ul { padding: 0; list-style: none; }
+.dev-view-tabs { display: flex; align-items: center; gap: 24px; margin-bottom: 22px; border-bottom: 1px solid var(--dev-line); }
+.dev-view-tabs a { position: relative; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 2px; color: var(--dev-muted); font-size: 13px; font-weight: 600; text-decoration: none; }
+.dev-view-tabs a[aria-current="page"] { color: var(--dev-accent); }
+.dev-view-tabs a[aria-current="page"]::after { position: absolute; content: ''; inset: auto 0 -1px; height: 2px; border-radius: 2px; background: currentColor; }
 .dev-hub button:focus-visible, .dev-hub a:focus-visible, .dev-hub input:focus-visible, .dev-hub select:focus-visible {
   outline: 2px solid var(--dev-accent);
   outline-offset: 3px;

@@ -187,6 +187,34 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "leshan-people",
+    "catalogHospitalId": "ahospital-05d275b74b24aac42afe",
+    "name": "乐山市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "乐山",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-3897da8321a4923077b8947ed46c1a968b63aa881380030259e495fc5a516490.png",
+    "website": "https://leshan-hospital.com.cn/",
+    "sourceUrl": "https://www.leshan-hospital.com.cn/aspx/index.html",
+    "logoSourceUrl": "https://www.leshan-hospital.com.cn/aspx/img/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-0fdc9b9c16409e20b61d",
+    "catalogHospitalId": "ahospital-0fdc9b9c16409e20b61d",
+    "name": "首都医科大学附属复兴医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-45968896b43c13f886562637c6ba56752123ccbe19251e681de0028c317e7e75.jpg",
+    "website": "https://www.bj-fxh.com.cn/",
+    "sourceUrl": "https://www.bj-fxh.com.cn/",
+    "logoSourceUrl": "https://www.bj-fxh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
     "id": "nanjing-gulou",
     "catalogHospitalId": "ahospital-19eb6ebd3f30af32360d",
     "name": "南京鼓楼医院",
@@ -202,6 +230,106 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.njglyy.com/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/nanjing-gulou.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-237ff1bce8629f101f52",
+    "catalogHospitalId": "ahospital-237ff1bce8629f101f52",
+    "name": "北京大学第六医院",
+    "aliases": [
+      "北医六院",
+      "北大六院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-fb0f174c4867812d6f0138dfe4e6fbcf2091e45e53c453fc7303fe3782321805.jpg",
+    "website": "https://www.pkuh6.cn/Html/Index.html",
+    "sourceUrl": "https://www.pkuh6.cn/Html/Index.html",
+    "logoSourceUrl": "https://www.pkuh6.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-first",
+    "catalogHospitalId": "ahospital-2c3abb0ce4f79bce1022",
+    "name": "北京大学第一医院",
+    "aliases": [
+      "北大医院",
+      "北大一院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-f4dd30fcec2168752b0b0abc7de14af9b7d38ffb5cd966028f043cf4edf11b94.jpg",
+    "website": "https://www.pkufh.com/",
+    "sourceUrl": "https://www.pkufh.com/",
+    "logoSourceUrl": "https://www.pkufh.com/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-33b9cad0b0e230408d81",
+    "catalogHospitalId": "ahospital-33b9cad0b0e230408d81",
+    "name": "吉林大学第一医院",
+    "aliases": [
+      "吉林大学白求恩第一医院",
+      "吉大一院"
+    ],
+    "kind": "hospital",
+    "city": "长春",
+    "province": "吉林省",
+    "logo": "/provider-logos/hospital-1167b8109f5d9f13f95ff2e7bc44e5c7df59c93b9df2dd5d68f45abbae702d72.png",
+    "website": "https://www.jdyy.cn/",
+    "sourceUrl": "https://www.jdyy.cn/",
+    "logoSourceUrl": "https://www.jdyy.cn/template/pc/skin/index/img/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-3d93e2ddf11039cb599e",
+    "catalogHospitalId": "ahospital-3d93e2ddf11039cb599e",
+    "name": "首都医科大学附属北京朝阳医院",
+    "aliases": [
+      "朝阳医院",
+      "北京朝阳医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-a51827d1f3b0667d42be73464679b9abd7d57ed8f547aaf4e602db8ba613be75.jpg",
+    "website": "https://www.bjcyh.com.cn/",
+    "sourceUrl": "https://www.bjcyh.com.cn/",
+    "logoSourceUrl": "https://www.bjcyh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-3db10866722bfd13743c",
+    "catalogHospitalId": "ahospital-3db10866722bfd13743c",
+    "name": "山东省立医院",
+    "aliases": [
+      "山东第一医科大学附属省立医院"
+    ],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-c3e90679707ea3913e9b249456a6972333b9b7f586ab2deb334c9751f667f7f2.jpg",
+    "website": "https://www.sph.com.cn/",
+    "sourceUrl": "https://www.sph.com.cn/",
+    "logoSourceUrl": "https://www.sph.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "shandong-qilu-second",
+    "catalogHospitalId": "ahospital-3edef4a7305db5152337",
+    "name": "山东大学齐鲁第二医院",
+    "aliases": [
+      "山东大学第二医院"
+    ],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-330c5851b8fc4e76955dbb478637fd55a89e08b86f8a026a3a98d66e111bdae7.png",
+    "website": "https://www.sdey.net/",
+    "sourceUrl": "https://www.sdey.net/",
+    "logoSourceUrl": "https://www.sdey.net/statics/sdey_new/img/nav_logo.png",
+    "verifiedAt": "2026-11-06"
   },
   {
     "id": "zju-first",
@@ -240,6 +368,137 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "zigong-first",
+    "catalogHospitalId": "ahospital-664068814af5bc5be595",
+    "name": "自贡市第一人民医院",
+    "aliases": [
+      "自贡市仁济医学中心",
+      "自贡市一医院"
+    ],
+    "kind": "hospital",
+    "city": "自贡",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-8583d928102f6ba0f26222dee030acf5f8a6af2b1ba30e33250d6c45446a1290.png",
+    "website": "https://zgno1hos.com.cn/",
+    "sourceUrl": "https://www.zgno1hos.com.cn/",
+    "logoSourceUrl": "https://www.zgno1hos.com.cn/Template/Pc/images/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-6cd908ac222ccb130799",
+    "catalogHospitalId": "ahospital-6cd908ac222ccb130799",
+    "name": "楚雄州人民医院",
+    "aliases": [
+      "楚雄彝族自治州人民医院"
+    ],
+    "kind": "hospital",
+    "city": "楚雄",
+    "province": "云南省",
+    "logo": "/provider-logos/hospital-eb4decb6cb0a978fc22dc94f4c62d13938708412d5d917eb7ee5ab993082232c.png",
+    "website": "https://www.cxzrmyy.com/",
+    "sourceUrl": "https://www.cxzrmyy.com/",
+    "logoSourceUrl": "https://www.cxzrmyy.com/images/250805cx_rmyy_logo2.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "jinan-third",
+    "catalogHospitalId": "ahospital-7b5c39c7efb09e1d1e6e",
+    "name": "济南市第三人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-6fbf322f2b5a162c9ae4a92fb80b06085e9fb3b4525e498c42f2d4c2c14e66bb.png",
+    "website": "https://www.jnslsy.cn/index.htm",
+    "sourceUrl": "https://www.jnslsy.cn/index.htm",
+    "logoSourceUrl": "https://www.jnslsy.cn/images/f-logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-87366aa0de2962c2b8cb",
+    "catalogHospitalId": "ahospital-87366aa0de2962c2b8cb",
+    "name": "海南省人民医院",
+    "aliases": [
+      "海南医科大学附属海南医院"
+    ],
+    "kind": "hospital",
+    "city": "海口",
+    "province": "海南省",
+    "logo": "/provider-logos/hospital-cc97a9caec70f566fdb3351c912b7e1fbf64d88bf08925fd007844eae32fc9d7.png",
+    "website": "https://www.phhp.com.cn/",
+    "sourceUrl": "https://www.phhp.com.cn/",
+    "logoSourceUrl": "https://www.phhp.com.cn/new/images/logoa1.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-people",
+    "catalogHospitalId": "ahospital-a0f2fa02a98d9d20d73e",
+    "name": "北京大学人民医院",
+    "aliases": [
+      "北大人民医",
+      "北大人民医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-1d5b6c9788eb02b6a318d3cb08c7be500baa6780cf617f4341dd46a9a2a999a0.png",
+    "website": "https://www.pkuph.cn/",
+    "sourceUrl": "https://www.pkuph.cn/",
+    "logoSourceUrl": "https://www.pkuph.cn/Uploads/Picture/2025/09/02/s68b63d5fcbed0.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "beijing-tiantan",
+    "catalogHospitalId": "ahospital-a62441df522f47158f17",
+    "name": "首都医科大学附属北京天坛医院",
+    "aliases": [
+      "北京天坛医院",
+      "天坛医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-656fa2c8885b0410890c73d8d82d8da362dd3f74ff98b6d6233cf1fd3b841ea8.jpg",
+    "website": "https://www.bjtth.cn/",
+    "sourceUrl": "https://www.bjtth.cn/Home/",
+    "logoSourceUrl": "https://www.bjtth.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-third",
+    "catalogHospitalId": "ahospital-b576c87aa353eb9f1eda",
+    "name": "北京大学第三医院",
+    "aliases": [
+      "北医三院",
+      "北大三院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-fbbb1048f6eefe8e9f91bd353c373e84258b6994d71892de8caa1bf432e8cf16.jpg",
+    "website": "https://www.puh3.net.cn/",
+    "sourceUrl": "https://www.puh3.net.cn/info/2641/100461.htm",
+    "logoSourceUrl": "https://www.puh3.net.cn/__local/6/05/26/CBEBFAF1256AF3D62FAD11FBC81_DE3B2B45_10D91.jpg?e=.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "west-china-dental",
+    "catalogHospitalId": "ahospital-b89776fe42fea8e3b91e",
+    "name": "四川大学华西口腔医院",
+    "aliases": [
+      "华西口腔医院",
+      "华西口腔"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-2835c6238f873aa0a99902423e058a9a7bc1d38fc2182c2d25b8e09e95a93617.jpg",
+    "website": "https://www.hxkq.org/",
+    "sourceUrl": "https://www.hxkq.org/",
+    "logoSourceUrl": "https://www.hxkq.org/Sites/Uploaded/UserUpLoad/20210108/20210108102002.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
     "id": "sichuan-people",
     "catalogHospitalId": "ahospital-bd493e5d3528c4138233",
     "name": "四川省人民医院",
@@ -254,6 +513,52 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.samsph.cn/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/sichuan-people.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "shenzhen-people",
+    "catalogHospitalId": "ahospital-c3d047eadbed6571d88a",
+    "name": "深圳市人民医院",
+    "aliases": [
+      "深圳市人民医院（留医部）"
+    ],
+    "kind": "hospital",
+    "city": "深圳",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-e32809320c483d11bb68533d6db4b5ff8b79c3a0ddf04196df52d42fdabe8901.png",
+    "website": "https://www.szhospital.com/",
+    "sourceUrl": "https://www.szhospital.com/",
+    "logoSourceUrl": "https://www.szhospital.com/asset/images/nww/logo.png?ver=2024",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "qidong-people",
+    "catalogHospitalId": "ahospital-d3c13939b5f49e2c8bd4",
+    "name": "启东市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "启东",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-65d56239fc3d6980e849514147a2512f95ee77afeaa6fd2c4b08c8ab57db0ec6.png",
+    "website": "https://www.qdsrmyy.com/",
+    "sourceUrl": "https://www.qdsrmyy.com/",
+    "logoSourceUrl": "https://www.qdsrmyy.com/imgs/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "fudan-huashan",
+    "catalogHospitalId": "ahospital-e21ab155a4b76f4ec89a",
+    "name": "复旦大学附属华山医院",
+    "aliases": [
+      "华山医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-a536f1e336ea09e280b544357284302c26f90c26ec7cbadef183e97214b4eee9.png",
+    "website": "https://www.huashan.org.cn/",
+    "sourceUrl": "https://www.huashan.org.cn/",
+    "logoSourceUrl": "https://www.huashan.org.cn/images/logo114.png",
+    "verifiedAt": "2026-11-06"
   },
   {
     "id": "fudan-zhongshan",
@@ -289,6 +594,23 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "ahospital-faa3abe07d21b6cd41fa",
+    "catalogHospitalId": "ahospital-faa3abe07d21b6cd41fa",
+    "name": "上海东方医院",
+    "aliases": [
+      "同济大学附属东方医院",
+      "上海市东方医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-4994370138c965f09033dbf105a6132f73bfa967efb460a4d621a2f6b99ce6e0.png",
+    "website": "https://www.easthospital.cn/",
+    "sourceUrl": "https://www.easthospital.cn/",
+    "logoSourceUrl": "https://www.easthospital.cn/static/mobile/images/yindaologo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
     "id": "wuhan-union",
     "catalogHospitalId": "ahospital-fc1f8495fcd0bd0ae1ee",
     "name": "华中科技大学同济医学院附属协和医院",
@@ -304,6 +626,20 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.whuh.com/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-union.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-fede6c32ead377c78972",
+    "catalogHospitalId": "ahospital-fede6c32ead377c78972",
+    "name": "北京中医药大学东方医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-28c2bf5a62cd33ae68fee3e6801bdfb253210b3d1362fddc5e14f6207579201d.jpg",
+    "website": "https://www.dongfangyy.com.cn/",
+    "sourceUrl": "https://www.dongfangyy.com.cn/",
+    "logoSourceUrl": "https://www.dongfangyy.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
   },
   {
     "id": "xinqiao-dental",
@@ -328,6 +664,215 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.meiweigroup.com/catalog/8",
     "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-gaoxin",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-gaoxin",
+    "name": "成都高新新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（高新院区）",
+      "新桥口腔（高新分院）",
+      "成都新桥口腔高新院区",
+      "新桥口腔（高新旗舰店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-guanghua",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-guanghua",
+    "name": "新桥口腔（光华院区）",
+    "aliases": [
+      "新桥口腔（光华品牌店）",
+      "新桥口腔（光华院区）",
+      "成都新桥瑞联路口腔门诊部",
+      "成都维乐口腔医院管理有限公司新桥瑞联路口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-qionglai",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-qionglai",
+    "name": "成都邛崃新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（邛崃院区）",
+      "新桥口腔（邛崃店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-rennan",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-rennan",
+    "name": "成都人南新桥口腔医院",
+    "aliases": [
+      "新桥口腔成都总院",
+      "新桥口腔（人南院区）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-shuhan",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-shuhan",
+    "name": "成都金牛蜀汉新迪新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（蜀汉品牌店）",
+      "新桥口腔（蜀汉院区）",
+      "新桥口腔（蜀汉分院）",
+      "成都新桥口腔蜀汉院区"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-wuhou-fujin",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-wuhou-fujin",
+    "name": "成都武侯新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（武侯店）",
+      "新桥口腔（武侯院区）",
+      "成都新桥口腔武侯院区",
+      "新桥口腔（武侯品牌店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-yiguanmiao",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-yiguanmiao",
+    "name": "成都新桥口腔医院（衣冠庙院区）",
+    "aliases": [
+      "新桥口腔（衣冠庙店）",
+      "新桥口腔（衣冠庙院区）",
+      "成都新桥口腔衣冠庙院区"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-yushuang",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-yushuang",
+    "name": "新桥口腔（玉双院区）",
+    "aliases": [
+      "新桥口腔（玉双品牌店）",
+      "新桥口腔（玉双院区）",
+      "成都新桥玉双路口腔门诊部",
+      "成都维乐口腔医院管理有限公司新桥玉双路口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-deyang",
+    "catalogHospitalId": "supplement-xinqiao-dental-deyang",
+    "name": "德阳维乐新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（德阳院区）",
+      "德阳新桥口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "德阳",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-xining",
+    "catalogHospitalId": "supplement-xinqiao-dental-xining",
+    "name": "西宁新桥口腔医院",
+    "aliases": [
+      "新桥口腔（西宁院区）",
+      "西宁市新桥口腔医院有限公司"
+    ],
+    "kind": "hospital",
+    "city": "西宁",
+    "brandId": "xinqiao-dental",
+    "province": "青海省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-zigong",
+    "catalogHospitalId": "supplement-xinqiao-dental-zigong",
+    "name": "自贡维乐新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（自贡院区）",
+      "自贡新桥口腔"
+    ],
+    "kind": "hospital",
+    "city": "自贡",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
   }
 ];
 return { hospitalLogoMappings };
@@ -714,20 +1259,47 @@ const __workbenchModule5 = (() => {
 const { institutions } = __workbenchModule4;
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
 const names=p=>[p.name,...(p.aliases||[])];
-const matchesName=(p,hospital)=>names(p).some(name=>{
- const key=normalize(name);if(key===hospital)return true;
- // Brand marks may cover a named branch, without claiming a specific clinic registration.
- return p.scope==='brand'&&hospital.startsWith(key)&&/^[（(][^()（）]{1,50}[）)]$/.test(hospital.slice(key.length));
-});
+const matchesName=(p,hospital)=>names(p).some(name=>normalize(name)===hospital);
+function brandBranchLabel(brand,hospital){
+ const parts=/^(.+)\(([^()]{1,50})\)$/.exec(hospital);
+ if(!parts||!matchesName(brand,parts[1]))return '';
+ return parts[2].replace(/分院$/,'院区');
+}
+
+function reviewedBranches(brand,hospital,label=brandBranchLabel(brand,hospital)){
+ const branches=institutions.filter(p=>p.brandId===brand.id);
+ const exact=branches.filter(p=>matchesName(p,hospital));
+ if(exact.length||!label)return exact;
+ return branches.filter(p=>names(p).some(name=>brandBranchLabel(brand,normalize(name))===label));
+}
+
 const hospitalBuildingIcon=()=>`<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#668371" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M7 10H4a1 1 0 0 0-1 1v10m14-11h3a1 1 0 0 1 1 1v10M2 21h20M10 21v-4h4v4M12 6v4m-2-2h4M10 13h.01M14 13h.01M4.5 14h.01M4.5 17h.01M19.5 14h.01M19.5 17h.01"/></svg>`;
+const cityKey=value=>normalize(value).replace(/市$/,'');
+const matchesCity=(p,city)=>!city||(p.scope==='brand'?(p.cities||[]).some(c=>cityKey(c)===city):!p.city||cityKey(p.city)===city);
+
 function resolveInstitution(visit){
- const city=normalize(visit.city).replace(/市$/,'');
- if(visit.hospitalId){const p=institutions.find(p=>p.id===visit.hospitalId)||null;return p?.scope==='brand'&&city&&!(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city)?null:p;}
- const hospital=normalize(visit.hospital);if(!hospital)return null;
+ const city=cityKey(visit.city),hospital=normalize(visit.hospital);
+ if(visit.hospitalId){
+  const selected=institutions.find(p=>p.id===visit.hospitalId)||null;
+  if((selected?.brandId||selected?.scope==='brand')&&!matchesCity(selected,city))return null;
+  const brand=selected?.brandId?institutions.find(p=>p.id===selected.brandId):selected?.scope==='brand'?selected:null;
+  if(brand&&hospital){
+   const branches=reviewedBranches(brand,hospital);
+   if(branches.length&&!branches.some(p=>selected.brandId?p.id===selected.id:matchesCity(p,city)))return null;
+  }
+  return selected;
+ }
+ if(!hospital)return null;
  const ambiguous=new Set(['省医院','省人民医院','人民医院','协和医院','中山医院','同济医院','鼓楼医院']);
- const matches=institutions.filter(p=>matchesName(p,hospital));
- const candidates=city?matches.filter(p=>p.scope==='brand'?(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city):!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
  if(!city&&ambiguous.has(hospital))return null;
+ const exactMatches=institutions.filter(p=>matchesName(p,hospital));
+ const matches=exactMatches.length?exactMatches:institutions.filter(p=>p.scope==='brand').flatMap(brand=>{
+  const label=brandBranchLabel(brand,hospital);
+  if(!label)return [];
+  const branches=reviewedBranches(brand,hospital,label);
+  return branches.length?branches:[brand];
+ });
+ const candidates=matches.filter(p=>matchesCity(p,city));
  return candidates.length===1?candidates[0]:null;
 }
 function institutionMark(visit,{esc,icon}){const p=resolveInstitution(visit);const crest=['sichuan-people','shanghai-ruijin','wuhan-tongji','wuhan-union','zju-first','nanjing-gulou','chongqing-xinqiao','rich-healthcare'].includes(p?.id);const dark=['west-china','wuhan-union','zju-first'].includes(p?.id);return `<span class="institution-mark${p?.logo?' has-logo':''}${p?.logo&&crest?' logo-crest':''}${p?.logo&&dark?' logo-dark':''}" aria-label="${esc(p?p.name:'机构待补充')}">${p?.logo?`<img src="${esc(p.logo)}" alt="${esc(p.name)}标识" loading="lazy" data-institution-logo><span hidden>${hospitalBuildingIcon()}</span>`:hospitalBuildingIcon()}</span>`;}
@@ -1052,7 +1624,14 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  function render(){const key=[ctx.workbench,ctx.space,ctx.account?.user?.id||'',ctx.page].join(':');if(location!==key){cleanup();location=key;}return `<div class="assets-content">${ctx.space==='demo'?'<div class="asset-demo">示例空间 · 所有数据均为虚构，与个人资产分别保存。</div>':''}${page()==='dashboard'?overview():page()==='documents'?documents():records(page())}</div>`;}
  function bind(){if(page()==='dashboard'){overviewUI.bind();return;}if(page()==='documents'&&ctx.originals){ctx.originals.bind();return;}const input=document.querySelector('#asset-search');if(input)input.oninput=e=>{search=e.target.value;repaintList();};const cat=document.querySelector('#asset-category-filter');if(cat)cat.onchange=e=>{category=e.target.value;repaintList();};const ac=document.querySelector('#asset-account');if(ac)ac.onchange=e=>{account=e.target.value;repaintList();};const due=document.querySelector('#asset-deadline-filter');if(due)due.onchange=e=>{deadlineFilter=e.target.value;repaintList();};}
  function repaintList(){const list=document.querySelector('#asset-record-list'),kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[page()];if(list){const rows=listFor(page());const count=document.querySelector('#asset-list-count');if(count)count.textContent=rows.length+' 条';list.innerHTML=rows.map(row).join('')||empty('没有匹配的记录',kind);}else if(page()==='documents'){const box=document.querySelector('.assets-content');ctx.previews?.cleanupThumbs();if(box)box.innerHTML=documents();bind();ctx.previews?.mount();}}
- function fields(kind,x){const num=(l,n,signed=false)=>field(l,n,x[n]??'','number',(signed?'':'min="0" ')+'step="any"');const cur=select('币种','currency',[['CNY','CNY 人民币'],['USD','USD 美元'],['HKD','HKD 港币'],['EUR','EUR 欧元'],['JPY','JPY 日元'],['GBP','GBP 英镑']],x.currency||'CNY');let html=cur;
+ function fields(kind,x){
+  const num=(l,n,signed=false)=>field(l,n,x[n]??'','number',(signed?'':'min="0" ')+'step="any"');
+  const currentCurrency=x.currency||'CNY';
+  const currencies=[['CNY','CNY 人民币'],['USD','USD 美元'],['HKD','HKD 港币'],['EUR','EUR 欧元'],['JPY','JPY 日元'],['GBP','GBP 英镑']];
+  if(typeof currentCurrency==='string'&&/^[A-Z]{3}$/.test(currentCurrency)&&!currencies.some(([code])=>code===currentCurrency)){
+   currencies.push([currentCurrency,currentCurrency]);
+  }
+  let html=select('币种','currency',currencies,currentCurrency);
   if(kind==='asset_account')html+=field('账户类型','accountType',x.accountType||'','text','maxlength="80" placeholder="银行 / 券商 / 支付账户"')+field('机构','institution',x.institution||'','text','maxlength="250"')+num('账户余额（可留空）','balance')+field('余额日期','balanceAsOf',x.balanceAsOf||x.date||ctx.today,'date')+`<label class="asset-check"><input type="checkbox" name="includeInTotal" ${x.includeInTotal?'checked':''}><span>将账户余额计入资产总额<small>只用于独立现金余额；若余额已包含下方持仓，请不要勾选。</small></span></label>`;
   if(kind==='asset_holding')html+=select('资产分区','assetGroup',[['financial','金融资产'],['fixed','固定资产'],['other','其他资产']],assetGroup({...x,kind:'asset_holding'}))+select('资产类别','category',Object.entries(ASSET_CATEGORIES),x.category||'other')+select('所属账户','accountId',options(),x.accountId||'')+`<div class="form-grid">${num('数量 / 份额（选填）','quantity')}${num('单价 / 净值（选填）','unitPrice')}</div>`+num('当前估值（选填）','value')+num('账本总成本（选填）','cost')+field('估值日期','valuationDate',x.valuationDate||x.date||ctx.today,'date')+select('状态','status',[['active','在用 / 持有'],['closed','已结束'],['pending','待核对']],x.status||'active')+`<details class="asset-lifecycle-fields" ${assetGroup({...x,kind:'asset_holding'})==='fixed'?'open':''}><summary>期限与续费信息（选填）</summary>${field('服务商 / 注册商','provider',x.provider||'','text','maxlength="250"')}${field('资产标识 / 域名','identifier',x.identifier||'','text','maxlength="250"')}<div class="form-grid">${field('到期日期','expiresOn',x.expiresOn||'','date')}${field('续费安排日期','renewalOn',x.renewalOn||'','date')}</div><div class="form-grid">${num('续费参考费用（未知留空）','renewalAmount')}${field('续费币种','renewalCurrency',Object.hasOwn(x,'renewalCurrency')?(x.renewalCurrency??''):(x.currency||''),'text','maxlength="3" pattern="[A-Z]{3}"')}</div>${select('平台自动续费状态','renewalMode',[['unknown','未知 / 未核实'],['manual','未开启自动续费'],['automatic','已开启自动续费']],x.renewalMode||'unknown')}<p class="asset-muted">到期日期与续费安排分别记录；续费费用不计入资产估值。</p></details>`+'<p class="asset-muted">估值留空时，仅在数量和单价都已知时计算；没有可靠价格的固定资产保留为未估值。</p>';
   if(kind==='asset_liability')html+=num('未偿余额（未核实时留空）','balance')+select('关联账户','accountId',options(),x.accountId||'')+field('余额确认日期','asOfDate',x.asOfDate||x.date||ctx.today,'date')+field('到期日（选填）','dueDate',x.dueDate||'','date')+select('状态','status',[['active','尚未结清'],['closed','已结清'],['pending','待核对']],x.status||'active');
@@ -1142,6 +1721,12 @@ function travelMapUrl(item){const query=new URLSearchParams({keyword:[item.title
 function travelSafeUrl(value){try{const url=new URL(value);return ['https:','http:'].includes(url.protocol)?url.href:'';}catch{return '';}}
 function travelDays(start,end){const out=[];let day=new Date(start+'T12:00:00Z'),last=new Date(end+'T12:00:00Z');if(!Number.isFinite(+day)||!Number.isFinite(+last))return out;for(let i=0;i<367&&day<=last;i++,day.setUTCDate(day.getUTCDate()+1))out.push(day.toISOString().slice(0,10));return out;}
 function travelSorted(rows){return [...rows].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'99:99').localeCompare(b.time||'99:99')||(a.position||0)-(b.position||0)||(a.title||'').localeCompare(b.title||''));}
+function dailyItinerary(stops, bookings, day) {
+  return travelSorted([
+    ...stops.filter(stop => stop.date === day),
+    ...bookings.filter(booking => booking.date === day && booking.status !== 'cancelled'),
+  ]);
+}
 function createTravel(ctx){
  const {esc,icon,btn,field}=ctx;
  let selectedTrip='',scopeKey='',query='',statusFilter='all',pendingDelete=null,mapCleanup=null,mapObserver=null;
@@ -1164,7 +1749,7 @@ function createTravel(ctx){
  function dashboard(){
   const t=trip(),rows=trips().filter(t=>(statusFilter==='all'||t.status===statusFilter)&&(!query||`${t.title} ${t.destination||''} ${t.note||''}`.toLowerCase().includes(query.toLowerCase())));
   const checks=children('travel_check'),done=checks.filter(x=>x.done).length,stops=children('travel_stop'),reservations=travelSorted(children('travel_booking')),days=t?travelDays(t.startDate||t.date,t.endDate||t.date):[];
-  const focusDay=days.find(day=>day>=ctx.today)||days.at(-1),dayIndex=days.indexOf(focusDay),dayRows=travelSorted([...stops,...reservations].filter(x=>x.date===focusDay));
+  const focusDay=days.find(day=>day>=ctx.today)||days.at(-1),dayIndex=days.indexOf(focusDay),dayRows=dailyItinerary(stops,reservations,focusDay);
   const until=t?Math.round((Date.parse((t.startDate||t.date)+'T00:00:00Z')-Date.parse(ctx.today+'T00:00:00Z'))/86400000):null;
   const head=(title,action,label)=>`<div class="card-head"><h2 class="card-title">${title}</h2>${action?btn(label,action,'text-btn'):''}</div>`;
   const compactEmpty=(text,action,label)=>`<div class="domain-empty"><span>${icon('compass',23)}</span><p>${esc(text)}</p>${action?btn(label,action,'text-btn'):''}</div>`;
@@ -1173,7 +1758,7 @@ function createTravel(ctx){
  function rowActions(x,{toggle=false}={}){return `<div class="travel-row-actions">${toggle?`<button class="check ${x.done?'checked':''}" data-action="travel-toggle:${esc(x.id)}" aria-label="${x.done?'取消完成':'完成'}${esc(x.title)}" aria-pressed="${!!x.done}">${x.done?icon('check',13):''}</button>`:''}<button class="icon-btn" data-action="travel-edit:${esc(x.id)}" aria-label="编辑${esc(x.title)}">${icon('edit',16)}</button><button class="icon-btn" data-action="travel-delete:${esc(x.id)}" aria-label="删除${esc(x.title)}">${icon('trash',16)}</button></div>`;}
  function stopRow(x){return `<article class="travel-place-row"><div class="travel-time">${esc(x.time||'未定')}<small>${esc(STOP_CATEGORIES[x.category]||'地点')}</small></div><div class="travel-row-copy"><strong class="${x.done?'completed':''}">${esc(x.title)}</strong>${x.address?`<p>${esc(x.address)}</p>`:''}${x.note?`<p class="travel-muted">${esc(x.note)}</p>`:''}<a href="${esc(travelMapUrl(x))}" target="_blank" rel="noopener noreferrer" class="travel-nav-link">高德地图搜索 ${icon('arrow',12)}</a>${finite(x.lat)&&finite(x.lng)?'<small>已标记地图位置</small>':'<small>未标注坐标</small>'}</div>${rowActions(x,{toggle:true})}</article>`;}
  function bookingRow(x){const link=travelSafeUrl(x.referenceUrl);return `<article class="travel-booking-row"><span class="travel-booking-symbol">${icon(x.bookingType==='hotel'?'building':'ticket',21)}</span><div class="travel-row-copy"><div class="travel-row-title"><strong>${esc(x.title)}</strong><span class="travel-status ${esc(x.status)}">${esc({planned:'待确认',confirmed:'已确认',cancelled:'已取消'}[x.status]||'待确认')}</span></div><small>${esc(BOOKING_TYPES[x.bookingType]||'预订')} · ${esc(x.date)}${x.time?' '+esc(x.time):''}${x.endDate?' 至 '+esc(x.endDate):''}</small>${x.location?`<p>${esc(x.location)}</p>`:''}${x.confirmationCode?`<p>确认号：<span class="travel-confirmation">${esc(x.confirmationCode)}</span></p>`:''}${x.note?`<p class="travel-muted">${esc(x.note)}</p>`:''}${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" class="travel-nav-link">打开预订链接 ${icon('arrow',12)}</a>`:''}${money(x)?`<small>预订金额 ${esc(money(x))} · 仅供留档</small>`:''}</div>${rowActions(x)}</article>`;}
- function itinerary(){const t=trip(),stops=children('travel_stop'),bookings=children('travel_booking');const used=travelDays(t.startDate||t.date,t.endDate||t.date);return `<div class="travel-section-head"><p>日期与时间按目的地当地时间记录。</p><div>${btn('添加地点','travel-add:travel_stop','primary','plus')}${btn('添加预订','travel-add:travel_booking','','ticket')}</div></div>${used.map((day,i)=>{const rows=travelSorted([...stops.filter(x=>x.date===day),...bookings.filter(x=>x.date===day)]);return `<section class="card travel-day"><header class="travel-day-head"><span>DAY ${i+1}</span><h2>${day}</h2><button class="text-btn" data-action="travel-add-day:${day}">${icon('plus',14)}地点</button></header>${rows.length?rows.map(x=>x.kind==='travel_stop'?stopRow(x):bookingRow(x)).join(''):'<p class="travel-day-empty">这一天还没有安排，留一点自由时间。</p>'}</section>`;}).join('')}`;}
+ function itinerary(){const t=trip(),stops=children('travel_stop'),bookings=children('travel_booking');const used=travelDays(t.startDate||t.date,t.endDate||t.date);return `<div class="travel-section-head"><p>日期与时间按目的地当地时间记录。</p><div>${btn('添加地点','travel-add:travel_stop','primary','plus')}${btn('添加预订','travel-add:travel_booking','','ticket')}</div></div>${used.map((day,i)=>{const rows=dailyItinerary(stops,bookings,day);return `<section class="card travel-day"><header class="travel-day-head"><span>DAY ${i+1}</span><h2>${day}</h2><button class="text-btn" data-action="travel-add-day:${day}">${icon('plus',14)}地点</button></header>${rows.length?rows.map(x=>x.kind==='travel_stop'?stopRow(x):bookingRow(x)).join(''):'<p class="travel-day-empty">这一天还没有安排，留一点自由时间。</p>'}</section>`;}).join('')}`;}
  function mapPanel(){const located=children('travel_stop').filter(x=>finite(x.lat)&&finite(x.lng));return `<section class="card travel-map-section"><div class="card-head"><h2 class="card-title">地点地图 <span class="subtitle">${located.length} 个位置</span></h2></div><div class="travel-map" id="travel-map"><div class="travel-map-placeholder">${icon('map',35)}<h3>在地图上看看这一程</h3><p>点击后加载 OpenStreetMap。地图服务将收到瓦片请求；不读取手机定位。</p>${btn('加载地图','travel-map','','map')}</div></div><p class="travel-map-note">坐标使用 WGS84。地图不可用时，下方地点和高德搜索仍可使用。</p></section>`;}
  function places(){const rows=travelSorted(children('travel_stop'));return `<div class="travel-section-head"><p>先记下地点；有坐标时会显示在地图上。</p>${btn('添加地点','travel-add:travel_stop','primary','plus')}</div>${mapPanel()}<section class="card"><div class="card-head"><h2 class="card-title">地点清单 <span class="subtitle">${rows.length} 个</span></h2></div>${rows.map(stopRow).join('')||empty('还没有地点','travel_stop','写下名字或地址就能保存，坐标可以稍后补。')}</section>`;}
  function bookings(){const rows=travelSorted(children('travel_booking'));return `<div class="travel-section-head"><p>交通、住宿与门票统一留档，不进行下单或付款。</p>${btn('添加预订','travel-add:travel_booking','primary','plus')}</div><section class="card">${rows.map(bookingRow).join('')||empty('还没有预订记录','travel_booking','保留时间、地点、确认号，出门时随手可查。')}</section>`;}
@@ -1253,7 +1838,9 @@ function createReading(ctx){
  function render(){ensure();return `<div class="reading-content">${ctx.space==='demo'?'<p class="reading-demo">示例空间 · 体验记录与个人阅读分别保存</p>':''}${ctx.page==='entries'?records():ctx.page==='documents'?`<div class="reading-section-head">${btn('返回书架','nav:books','text-btn','arrow')}</div>`+ctx.originals.render({title:'导入与管理阅读文件'}):shelf()}</div>`;}
  function bind(){const dropzone=document.querySelector('#reading-dropzone'),boundScope=snapshot();if(dropzone){dropzone.ondragover=e=>{e.preventDefault();if(current(boundScope)){dropzone.classList.add('dragover');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';}};dropzone.ondragleave=e=>{if(!dropzone.contains(e.relatedTarget))dropzone.classList.remove('dragover');};dropzone.ondrop=e=>{e.preventDefault();dropzone.classList.remove('dragover');if(!current(boundScope)||!dropzone.isConnected)return ctx.toast('工作台或账号已变化，请重新打开');ctx.originals.importFiles(e.dataTransfer?.files);};}const typeFilter=document.querySelector('#reading-type-filter');if(typeFilter)typeFilter.onchange=e=>{materialType=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const entrySearch=document.querySelector('#reading-entry-search');if(entrySearch)entrySearch.oninput=e=>{entryQuery=e.target.value;const start=e.target.selectionStart;ctx.render();const fresh=document.querySelector('#reading-entry-search');fresh?.focus({preventScroll:true});fresh?.setSelectionRange(start,start);};const search=document.querySelector('#reading-search');if(search)search.oninput=e=>{query=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const filter=document.querySelector('#reading-status-filter');if(filter)filter.onchange=e=>{status=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const book=document.querySelector('#reading-book-filter');if(book)book.onchange=e=>{bookFilter=e.target.value;ctx.render();};if(ctx.page==='documents')ctx.originals.bind();ctx.previews?.mount();}
  function detail(id){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id);ctx.openDrawer(`<div class="reading-detail-top">${cover(b)}<div><span class="reading-badge">${READING_STATUS[b.status]}</span><span class="reading-badge">${READING_TYPES[b.materialType||'book']}</span><h2>${esc(b.title)}</h2><p>${esc(b.author||'作者未填写')}</p></div></div>${progress(b)}${b.note?`<p class="reading-detail-note">${esc(b.note)}</p>`:''}<div class="reading-detail-actions">${btn('记阅读','reading-session:'+id,'','calendar')}${btn('记摘录','reading-excerpt:'+id,'','file')}${btn('编辑材料','reading-edit:'+id,'','edit')}</div><h3>阅读记录与摘录</h3><section class="reading-detail-entries">${entries().filter(x=>x.bookId===id).slice(0,10).map(entryRow).join('')||'<p class="reading-muted">还没有记录，读到哪里都可以记下来。</p>'}</section><h3>关联原件 <small>${files.length} 份</small></h3><p class="reading-muted">在阅读资料中上传原件并选择所属书籍。</p>${files.map(f=>`<div class="reading-file">${ctx.previews.thumb(f,'original-preview:'+f.id)}<button data-action="original-preview:${esc(f.id)}">${esc(f.title||f.name)}</button></div>`).join('')}${btn('管理阅读资料','reading-documents','','file')}${btn('删除书籍','reading-delete:'+id,'text-btn','trash')}`,'书籍详情','阅读工作台',`${btn('关闭','close')}${btn('更新进度','reading-progress:'+id,'primary','edit')}`);ctx.previews?.mount();}
- async function read(id,annotation=null){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id).sort((a,b)=>a.id.localeCompare(b.id)),file=files.find(x=>x.id===annotation?.fileId)||files.find(x=>x.id===b.readerFileId)||files[0];if(annotation&&!files.some(x=>x.id===annotation.fileId)){ctx.toast('这条笔记关联的原文件已移除，请先恢复原文件');return;}if(!file){detail(id);ctx.toast('请先导入并关联这本书的文件');return;}const s=snapshot();let saves=Promise.resolve();await ctx.previews.open(file,{initialPage:annotation?.fileId===file.id?annotation.page:!b.readerFileId||file.id===b.readerFileId?b.currentPage||1:1,initialAnnotation:annotation,annotations:ctx.items.filter(x=>x.kind==='reading_entry'&&x.bookId===id&&x.fileId===file.id&&x.annotationType),onAnnotate:async annotation=>{if(!current(s))throw Error('工作台或账号已变化，请重新打开');const {quote='',page,startOffset,endOffset,color='yellow',annotationType='highlight',note=''}=annotation;const body={kind:'reading_entry',bookId:id,fileId:file.id,title:annotationType==='highlight'?'阅读划线':'阅读批注',date:ctx.today,entryType:'excerpt',quote,note,page,startOffset,endOffset,color,annotationType};const response=await ctx.api('/api/items',{method:'POST',headers:headers(s),body:JSON.stringify(body)},s.space,s.workbench);const record=response.item||response;if(current(s)&&record.id)ctx.items.push(record);return record;},onPage:(page,totalPages)=>{saves=saves.catch(()=>{}).then(async()=>{if(!current(s))return;const update={currentPage:page,totalPages,status:'reading',readerFileId:file.id};await ctx.api('/api/items/'+encodeURIComponent(id),{method:'PUT',headers:headers(s),body:JSON.stringify({kind:'reading_book',...update})},s.space,s.workbench);if(current(s))Object.assign(b,update);}).catch(error=>{if(current(s))ctx.toast('阅读位置保存失败：'+error.message);});return saves;}});}
+ async function read(id,annotation=null){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id).sort((a,b)=>a.id.localeCompare(b.id)),file=files.find(x=>x.id===annotation?.fileId)||files.find(x=>x.id===b.readerFileId)||files[0];if(annotation&&!files.some(x=>x.id===annotation.fileId)){ctx.toast('这条笔记关联的原文件已移除，请先恢复原文件');return;}if(!file){detail(id);ctx.toast('请先导入并关联这本书的文件');return;}const s=snapshot();let saves=Promise.resolve();await ctx.previews.open(file,{initialPage:annotation?.fileId===file.id?annotation.page:!b.readerFileId||file.id===b.readerFileId?b.currentPage||1:1,initialAnnotation:annotation,annotations:ctx.items.filter(x=>x.kind==='reading_entry'&&x.bookId===id&&x.fileId===file.id&&x.annotationType),onAnnotate:async annotation=>{if(!current(s))throw Error('工作台或账号已变化，请重新打开');const {quote='',page,startOffset,endOffset,color='yellow',annotationType='highlight',note=''}=annotation;const body={kind:'reading_entry',bookId:id,fileId:file.id,title:annotationType==='highlight'?'阅读划线':'阅读批注',date:ctx.today,entryType:'excerpt',quote,note,page,startOffset,endOffset,color,annotationType};const response=await ctx.api('/api/items',{method:'POST',headers:headers(s),body:JSON.stringify(body)},s.space,s.workbench);const record=response.item||response;if(current(s)&&record.id)ctx.items.push(record);return record;},
+  // Browsing from a note keeps its anchor separate from the shelf's resume position.
+  onPage:annotation?undefined:(page,totalPages)=>{saves=saves.catch(()=>{}).then(async()=>{if(!current(s))return;const update={currentPage:page,totalPages,status:'reading',readerFileId:file.id};await ctx.api('/api/items/'+encodeURIComponent(id),{method:'PUT',headers:headers(s),body:JSON.stringify({kind:'reading_book',...update})},s.space,s.workbench);if(current(s))Object.assign(b,update);}).catch(error=>{if(current(s))ctx.toast('阅读位置保存失败：'+error.message);});return saves;}});}
  function form(kind,id,defaults={},progressOnly=false){ensure();const old=id?find(id):null;if(id&&!old)return;const x=old||defaults,s=snapshot();if(kind==='reading_entry'&&!books().length){ctx.toast('请先添加一本书');form('reading_book');return;}let fields='';
  if(kind==='reading_book'){if(!progressOnly)fields=select('材料类型','materialType',Object.entries(READING_TYPES),x.materialType||'book')+field('材料名称','title',x.title||'','text','required maxlength="120"')+field('作者（选填）','author',x.author||'','text','maxlength="200"')+field('加入日期','date',x.date||ctx.today,'date','required');else fields=`<p class="reading-form-book">${esc(x.title)}</p>`;
  fields+=select('阅读状态','status',Object.entries(READING_STATUS),x.status||'wish')+`<div class="form-grid">${field('总页数（选填）','totalPages',x.totalPages??'','number','min="1" max="1000000" step="1"')}${field('当前读到第几页（选填）','currentPage',x.currentPage??'','number','min="0" max="1000000" step="1"')}</div><p class="reading-muted">没有页码的书可以只记录状态；完成状态由你选择。</p>`;if(!progressOnly)fields+=text('备注（选填）','note',x.note||'');
@@ -2419,8 +3006,24 @@ function createMedical(ctx){
  function medicationCard(m){const date=doseDate||ctx.today,logs=sort(all('dose').filter(d=>d.medicationId===m.id)),active=m.status==='进行中'&&m.date<=date&&(!m.endDate||m.endDate>=date),canLog=date<=ctx.today;const times=m.scheduleMode==='asNeeded'?[]:m.times||[];return `<section class="card medication-card"><div class="medication-head">${medicationImage(m)}<div><h3>${esc(m.title)}</h3>${aiTag(m)}<p>${esc(m.prescriber||'处方来源待补充')} · ${m.date} 至 ${m.endDate||'未指定结束日期'}</p>${visitLink(m.visitId)}</div>${badge(m.status,m.status==='进行中'?'':'neutral')}${actions(m,m.status==='进行中'?`<button class="btn" data-action="med-status:${m.id}">停用方案</button>`:'')}</div><div class="medication-facts"><div><small>单次用量（按原处方）</small><strong>${esc(m.dosage)}</strong></div><div><small>用药途径</small><strong>${esc(m.route)}</strong></div><div><small>频次 / 用法</small><strong>${esc(m.frequency)}</strong></div><div><small>服用安排</small><strong>${m.scheduleMode==='asNeeded'?'按需记录':times.map(esc).join(' / ')}</strong></div></div>${m.note?`<div class="medication-note">${esc(m.note)}</div>`:''}<div class="dose-area"><div class="dose-heading"><strong>${date} · 服用记录</strong>${btn('补记一次服用','med-dose:'+m.id,'','plus')}</div>${active&&times.length?times.map(time=>{const d=logs.find(d=>d.date===date&&d.scheduledTime===time);return `<div class="dose-row"><span class="dose-time">${time}</span><span class="dose-outcome ${d?.outcome==='已服用'?'taken':''}">${d?esc(d.outcome)+(d.time?' · 实际 '+esc(d.time):''):'待记录'}</span>${d?aiTag(d):''}${d?`<button class="text-btn" data-action="med-edit:${d.id}">更正记录 ${icon('edit',12)}</button>`:canLog?`<div class="dose-actions"><button class="btn" data-action="med-take:${m.id}" data-time="${time}">记录服用</button><button class="text-btn" data-action="med-skip:${m.id}" data-time="${time}">跳过</button></div>`:''}</div>`}).join(''):`<p class="muted dose-explanation">${m.scheduleMode==='asNeeded'?'按需用药不预设次数，实际使用后记录。':m.status!=='进行中'?'方案已结束或停用，不再生成待服事项，历史记录仍保留。':'所选日期不在方案起止范围内。'}</p>`}</div><details class="dose-history"><summary>全部服用历史 <span>${logs.length} 条</span></summary>${logs.length?logs.map(d=>`<div class="dose-row"><div><strong>${d.date} ${esc(d.scheduledTime||'补记')}</strong>${aiTag(d)}<small>${esc(d.outcome)}${d.time?' · 实际 '+esc(d.time):''}${d.note?' · '+esc(d.note):''}</small></div>${actions(d)}</div>`).join(''):'<p class="muted">尚无服用记录。</p>'}</details></section>`;}
  function bind(){const date=document.querySelector('#medical-file-date');if(date)date.onchange=e=>{fileDate=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount();};const input=document.querySelector('#medical-search');if(input)input.oninput=e=>{search=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};const statusEl=document.querySelector('#medical-status');if(statusEl)statusEl.onchange=e=>{status=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};for(const input of document.querySelectorAll('#med-dose-date,#field-doseDate'))input.onchange=e=>{doseDate=e.target.value||ctx.today;ctx.render()};}
  function medicationImageFields(m){const files=all('file').filter(f=>['image/png','image/jpeg','image/webp'].includes(f.mime));const existing=find(m.imageFileId);return `<div class="medication-image-editor"><h3>药品图片（可选）</h3><div id="med-image-current">${existing?previews.thumb(existing,''):'<p class="muted">暂无药品图片</p>'}</div>${select('选择已保存的图片','imageFileId',[['','不关联图片'],...files.map(f=>[f.id,`${f.title} · ${f.date}`]),...(m.imageFileId&&!existing?[[m.imageFileId,'原图片已删除（保留原关联）']]:[])],m.imageFileId||'')}<label class="upload-box">${icon('file',22)}<p>拍摄药盒或选择图片</p><input type="file" id="medication-image-upload" accept="image/png,image/jpeg,image/webp" aria-label="拍摄药盒或上传药品图片"><small>PNG、JPG、WEBP · 最大 10MB</small></label><button type="button" class="btn" id="med-image-remove">移除图片关联</button><p class="section-desc">使用你上传的真实图片，点图片可查看原图。</p><div id="medication-upload-state" role="status" aria-live="polite"></div></div>`;}
- function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old?.visitId||visitId||x.visitId||activeId||'';let body='';
- if(kind==='report'){const files=all('file').filter(f=>!f.visitId||f.visitId===x.visitId);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+select('关联已有原件（可选）','fileId',[['','暂不关联'],...files.map(f=>[f.id,f.title])],x.fileId||'')+`<label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
+ function reportOriginalChoices(visitId,selected,old){
+  const otherVisitFiles=new Set(all('report').filter(r=>r.id!==old?.id&&r.visitId&&r.visitId!==visitId).map(r=>r.fileId));
+  const files=all('file').filter(f=>(!f.visitId||f.visitId===visitId)&&!otherVisitFiles.has(f.id));
+  const choices=[['','暂不关联'],...files.map(f=>[f.id,f.title])];
+  const historicalId=(old?.visitId||'')===visitId?old?.fileId:'';
+  if(historicalId&&!files.some(f=>f.id===historicalId)){
+   const file=find(historicalId);
+   choices.push([historicalId,file?`${file.title}（保留原关联）`:'原件已删除（保留原关联）']);
+  }
+  const blocked=Boolean(selected&&!choices.some(([value])=>value===selected));
+  if(blocked)choices.push([selected,`${find(selected)?.title||'原件已删除'}（此就诊不可用）`,true]);
+  const notice=blocked?'此就诊无法使用已选原件。请换选原件、上传新原件或选择「暂不关联」。'
+   :selected&&selected===historicalId&&!files.some(f=>f.id===selected)?'此报告可以保留原件的历史关联，也可以更换或解除关联。':'';
+  const options=choices.map(([value,label,disabled])=>`<option value="${esc(value)}"${value===selected?' selected':''}${disabled?' disabled':''}>${esc(label)}</option>`).join('');
+  return {options,notice,blocked};
+ }
+ function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old&&kind==='report'?(old.visitId||''):(old?.visitId||visitId||x.visitId||activeId||'');let body='';
+ if(kind==='report'){const originals=reportOriginalChoices(x.visitId,x.fileId||'',old);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+`<div class="field"><label for="field-fileId">关联已有原件（可选）</label><select id="field-fileId" name="fileId" aria-describedby="report-original-notice">${originals.options}</select><small id="report-original-notice" role="status">${originals.notice}</small></div><label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
  if(kind==='medication')body=`<div class="helper">请按原始处方或医生交代填写。此处只记录方案，不推算用量。</div>`+medicationImageFields(x)+field('单次用量（含单位）','dosage',x.dosage||'','text','required maxlength="250" placeholder="按处方原文填写"')+`<div class="form-grid">${field('用药途径','route',x.route||'','text','required maxlength="250" placeholder="按处方填写"')}${field('频次 / 用法','frequency',x.frequency||'','text','required maxlength="250" placeholder="按处方填写"')}</div>`+field('处方医生 / 来源','prescriber',x.prescriber||'','text','maxlength="250"')+select('记录方式','scheduleMode',[['scheduled','按指定时间记录'],['asNeeded','按需使用，不设次数']],x.scheduleMode)+`<div id="med-time-field" ${x.scheduleMode==='asNeeded'?'hidden':''}>${field('每日服用时间','times',(x.times||[]).join(', '),'text','placeholder="例如 08:00, 20:00"')}<p class="section-desc">时间以逗号分隔，最多 12 个；只用于应用内记录，不发送系统提醒。</p></div>`+field('结束日期（可选）','endDate',x.endDate||'','date')+select('方案状态','status',['进行中','已停用','已完成'],x.status);
  if(kind==='dose'){const med=find(x.medicationId);if(!med){ctx.toast('找不到用药方案');return}body=`<div class="helper"><b>${esc(med.title)}</b><br>${esc(med.dosage)} · ${esc(med.frequency)}<br>${x.scheduledTime?'对应计划时段 '+esc(x.scheduledTime):'补记一次实际使用，不额外生成计划次数。'}</div><input type="hidden" name="medicationId" value="${med.id}"><input type="hidden" name="scheduledTime" value="${esc(x.scheduledTime||'')}">`+select('服用结果','outcome',['已服用','跳过'],x.outcome||'已服用')+field('实际服用时间（跳过时可留空）','time',x.time||new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date()),'time');}
  const label={report:'就诊报告',medication:'用药方案',dose:'服用记录'}[kind];
@@ -2428,13 +3031,75 @@ function createMedical(ctx){
  ctx.openDrawer(`<form id="medical-form"><div class="helper">${ctx.space==='demo'?'示例空间 · 虚构示例，不构成处方':'个人空间 · 按原始记录填写'}</div>${kind==='dose'?'':select('关联就诊','visitId',visitOptions(x.visitId),x.visitId)}${field(kind==='medication'?'药物名称':kind==='report'?'报告标题':'记录名称','title',x.title||'','text','required maxlength="120"')}${field(kind==='medication'?'开始日期':'记录日期','date',x.date,'date',kind==='dose'?`required max="${ctx.today}"`:'required')}${body}${textarea(kind==='dose'?'备注 / 跳过原因（跳过必填）':'补充备注','note',x.note||'')}<div id="medical-error" role="alert"></div></form>`,`${id?'编辑':'添加'}${label}`,`${ctx.space==='demo'?'示例空间':'个人空间'} · 保存后回到当前页面`,`${btn('取消','close')}<button type="submit" form="medical-form" class="btn primary">${icon('check',14)}保存${label}</button>`);
  document.querySelector('#field-scheduleMode')?.addEventListener('change',e=>{document.querySelector('#med-time-field').hidden=e.target.value==='asNeeded'});
  if(kind==='dose'){const outcome=document.querySelector('#field-outcome');const timeField=document.querySelector('#field-time').closest('.field');timeField.hidden=outcome.value==='跳过';outcome.onchange=()=>{timeField.hidden=outcome.value==='跳过'};}
- let uploaded=null;
- document.querySelector('#medical-form').onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const imageControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:[];const data=Object.fromEntries(new FormData(e.target));imageControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
- if(kind==='medication'){const file=e.target.querySelector('#medication-image-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');const state=e.target.querySelector('#medication-upload-state');try{state.textContent='正在读取并上传药品图片…';if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content})},sourceSpace,sourceWorkbench);}data.imageFileId=uploaded.id;state.textContent='图片上传成功，正在保存用药方案…';}catch(error){state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';throw error;}}}
- if(kind==='report'){const file=document.querySelector('#report-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);document.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
- await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;imageControls.forEach(el=>el.disabled=false)}};
- if(kind==='medication'){const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};upload.onchange=()=>{uploaded=null;const file=upload.files[0];state.textContent=file?'待上传：'+file.name+'（保存用药方案时上传）':'';};choice.onchange=()=>{upload.value='';uploaded=null;state.textContent='';update();};form.querySelector('#med-image-remove').onclick=()=>{choice.value='';upload.value='';uploaded=null;state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};previews.mount();}
- if(kind==='report')document.querySelector('#report-upload').onchange=()=>{uploaded=null;document.querySelector('#report-upload-state').innerHTML=''};
+ const form=document.querySelector('#medical-form');
+ const reportChoice=kind==='report'?form.elements.fileId:null;
+ const reportVisit=kind==='report'?form.elements.visitId:null;
+ const reportUpload=kind==='report'?form.querySelector('#report-upload'):null;
+ let uploaded=null,initialMedicationImage,removeMedicationImage=false;
+ let selectedMedicationImage=null,medicationUpload=null;
+ form.onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const attachmentControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:kind==='report'?[reportVisit,reportChoice,reportUpload]:[];const data=Object.fromEntries(new FormData(e.target));attachmentControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
+ if(kind==='medication'){
+ // The select starts with the image seen when the drawer opened. An unchanged
+ // value must not replace a newer association created while the drawer was open.
+ if(id&&!removeMedicationImage&&data.imageFileId===initialMedicationImage)delete data.imageFileId;
+ const file=selectedMedicationImage;
+ if(file){
+  if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');
+  if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');
+  const state=e.target.querySelector('#medication-upload-state');
+  try{
+   state.textContent='正在读取并上传药品图片…';
+   if(!medicationUpload||medicationUpload.visitId!==data.visitId)medicationUpload={visitId:data.visitId,id:crypto.randomUUID()};
+   if(!medicationUpload.body){
+    const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});
+    medicationUpload.body=JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content,uploadAttemptId:medicationUpload.id});
+   }
+   // Keep the same request when the server may have committed before the response was lost.
+   medicationUpload.result??=await ctx.api('/api/upload',{method:'POST',body:medicationUpload.body},sourceSpace,sourceWorkbench);
+   data.imageFileId=medicationUpload.result.id;
+   state.textContent='图片上传成功，正在保存用药方案…';
+  }catch(error){
+   // A validation rejection lets the user fix fields. Keep the key to prevent a second original.
+   if(error.status===400&&error.code==='validation_failed')medicationUpload.body=null;
+   state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';
+   throw error;
+  }
+ }}
+ if(kind==='report'){
+  const file=reportUpload.files[0];
+  const selected=reportOriginalChoices(data.visitId,reportChoice.value,old);
+  if(!file&&selected.blocked)throw Error(selected.notice);
+  if(uploaded&&uploaded.visitId!==data.visitId)throw Error('已上传的原件属于之前选择的就诊，请重新选择文件或已有原件。');
+  data.fileId=reportChoice.value;
+  if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);e.target.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
+ await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;attachmentControls.forEach(el=>el.disabled=false)}};
+ if(kind==='medication'){
+  const upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');
+  initialMedicationImage=choice.value;
+  const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};
+  const clearUpload=()=>{upload.value='';selectedMedicationImage=null;medicationUpload=null;};
+  // An identical selection should fire change. Cancelling the picker keeps the retained File.
+  upload.onclick=()=>{upload.value='';};
+  upload.onchange=()=>{
+   selectedMedicationImage=upload.files[0]||null;
+   medicationUpload=null;
+   state.textContent=selectedMedicationImage?'待上传：'+selectedMedicationImage.name+'（保存用药方案时上传）':'';
+  };
+  choice.onchange=()=>{removeMedicationImage=false;clearUpload();state.textContent='';update();};
+  form.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';clearUpload();state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};
+  previews.mount();
+ }
+ if(kind==='report'){
+  const notice=form.querySelector('#report-original-notice'),state=form.querySelector('#report-upload-state');
+  const updateChoices=()=>{
+   const options=reportOriginalChoices(reportVisit.value,reportChoice.value,old);
+   reportChoice.innerHTML=options.options;
+   notice.textContent=uploaded&&uploaded.visitId!==reportVisit.value?'已上传的原件属于之前选择的就诊，请重新选择文件或已有原件。':reportUpload.files[0]?'':options.notice;
+  };
+  reportVisit.onchange=updateChoices;
+  reportChoice.onchange=()=>{reportUpload.value='';uploaded=null;state.textContent='';updateChoices();};
+  reportUpload.onchange=()=>{uploaded=null;state.textContent='';updateChoices();};
+ }
  }
  function showReport(id){const r=find(id);if(!r)return;const f=find(r.fileId);ctx.openDrawer(`<div class="report-flags">${badge(r.type,'visit')}${badge(r.status)}${badge(f?'已关联原件':'原件待补充')}</div><div class="report-metadata"><span>报告日期：${r.date}</span><span>来源：${esc(r.source||'未填写')}</span>${visitLink(r.visitId)}</div>${renderReportObservations(r.observations,esc)}<h3 class="clinical-label">报告原文 / 手工摘录</h3><div class="report-text">${esc(r.content||'尚未录入文字。上传原件不会自动识别，请按原文补充。')}</div>${r.note?`<h3 class="clinical-label">补充备注</h3><div class="report-text">${esc(r.note)}</div>`:''}${f?`<div class="report-original"><span>${icon('file',17)} ${esc(f.title)}</span><div>${btn('查看原件','med-preview-report:'+r.id)}<a class="btn" href="/api/files/${f.id}?space=${ctx.space}&workbench=${ctx.workbench}" download>${icon('download',14)}下载</a></div></div>`:'<div class="notice">原件待补充。可以编辑报告上传文件或关联已有资料。</div>'}`,esc(r.title),'保存原文与来源，不自动生成诊断',`${btn('关闭','close')}${btn('编辑报告','med-edit:'+id,'primary','edit')}`);}
  async function preview(id,backAction=''){const f=find(id);if(f?.kind==='file')await previews.open(f,{backAction});}

@@ -30,6 +30,10 @@ const db=new DatabaseSync(path.join(dataDir,'health.sqlite'));
 fs.chmodSync(path.join(dataDir,'health.sqlite'),0o600);
 migrateAccounts(db);
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
+db.exec(`CREATE TABLE IF NOT EXISTS medication_upload_attempts (
+ space TEXT NOT NULL, attempt_id TEXT NOT NULL, fingerprint TEXT NOT NULL, file_id TEXT NOT NULL,
+ PRIMARY KEY(space, attempt_id)
+)`);
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 if(!db.prepare('PRAGMA table_info(workbenches)').all().some(c=>c.name==='themeColor'))db.exec('ALTER TABLE workbenches ADD COLUMN themeColor TEXT');
@@ -727,11 +731,35 @@ const server=http.createServer(async(req,res)=>{try{
   validateTravelReferences(space,'file',body);
   validateReadingReferences(space,'file',body);
   if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
+  const attemptId=b.uploadAttemptId;
+  let fingerprint;
+  if(attemptId!==undefined){
+   if(typeof attemptId!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(attemptId))throw bad('药品图片上传标识无效','uploadAttemptId');
+   if(body.fileCategory!=='药品图片'||!['image/png','image/jpeg','image/webp'].includes(body.mime)||b.importReading===true)throw bad('上传标识仅用于药品图片','uploadAttemptId');
+   const {storageName:unused,...metadata}=body;
+   fingerprint=createHash('sha256').update(JSON.stringify({...metadata,date:b.date?body.date:null})).update(bytes).digest('hex');
+  }
   const destination=path.join(dataDir,'uploads',storageName);
-  db.exec('BEGIN');try{
-   if(workbench.type==='reading'&&b.importReading===true&&!body.bookId){const book=put(space,'reading_book',{title:body.title,date:body.date,materialType:b.materialType||'book',status:'wish'});body.bookId=book.id;}
-   fs.writeFileSync(destination,bytes,{mode:0o600});const result=put(space,'file',body);db.exec('COMMIT');return json(res,201,result);
-  }catch(error){db.exec('ROLLBACK');fs.rmSync(destination,{force:true});throw error;}
+  let result,status=201,written=false;
+  // Serialize lookup and creation across writers. The original row and its receipt commit together.
+  db.exec(attemptId?'BEGIN IMMEDIATE':'BEGIN');try{
+   const prior=attemptId&&db.prepare('SELECT fingerprint,file_id FROM medication_upload_attempts WHERE space=? AND attempt_id=?').get(space,attemptId);
+   if(prior){
+    if(prior.fingerprint!==fingerprint)throw Object.assign(bad('此上传标识已用于另一次药品图片上传，请重新选择图片',undefined,'upload_attempt_conflict'),{status:409});
+    const row=db.prepare("SELECT body FROM items WHERE space=? AND kind='file' AND id=?").get(space,prior.file_id);
+    const file=row&&JSON.parse(row.body);
+    if(!file||(file.visitId||'')!==(body.visitId||'')||!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw Object.assign(bad('此前上传的图片已不可用，请重新选择图片',undefined,'upload_attempt_unavailable'),{status:409});
+    result={id:prior.file_id,kind:'file',...file};status=200;
+   }else{
+    if(workbench.type==='reading'&&b.importReading===true&&!body.bookId){const book=put(space,'reading_book',{title:body.title,date:body.date,materialType:b.materialType||'book',status:'wish'});body.bookId=book.id;}
+    const fd=fs.openSync(destination,'wx',0o600);written=true;
+    try{fs.writeFileSync(fd,bytes);}finally{fs.closeSync(fd);}
+    result=put(space,'file',body);
+    if(attemptId)db.prepare('INSERT INTO medication_upload_attempts VALUES(?,?,?,?)').run(space,attemptId,fingerprint,result.id);
+   }
+   db.exec('COMMIT');
+  }catch(error){if(db.isTransaction)db.exec('ROLLBACK');if(written)fs.rmSync(destination,{force:true});throw error;}
+  return json(res,status,result);
  }
  if(url.pathname.startsWith('/api/files/')&&req.method==='GET'){
   const file=getAll(space).find(x=>x.kind==='file'&&x.id===url.pathname.split('/').pop());if(!file)return json(res,404,{error:'文件不存在'});

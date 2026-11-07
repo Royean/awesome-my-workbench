@@ -210,10 +210,10 @@ function put(space,kind,body,id=randomUUID(),via){
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw bad('关联就诊不存在或不在当前空间');}
  validateReportOriginal(space,kind,clean,id,{original});
- if(kind==='medication'&&clean.imageFileId){
+ if(kind==='medication'&&clean.imageFileId&&clean.imageFileId!==original.imageFileId){
   const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.imageFileId,space);
-  if(!f){if(original.imageFileId!==clean.imageFileId)throw bad('药品图片不存在或不在当前空间','imageFileId');}
-  else if(!['image/png','image/jpeg','image/webp'].includes(JSON.parse(f.body).mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP','imageFileId');
+  if(!f)throw bad('药品图片不存在或不在当前空间','imageFileId');
+  validateStoredMedicationImage(JSON.parse(f.body));
  }
  if(kind==='meal')for(const fileId of clean.attachmentIds){if(!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space)&&!(original.attachmentIds||[]).includes(fileId))throw bad('餐食附件不存在或不在当前空间');}
  if(kind==='dose'){
@@ -345,6 +345,100 @@ const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application
 async function readBody(req,maxBytes=15*1024*1024){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>maxBytes){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
 const mime={'.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
+const medicationImageTypes=['image/png','image/jpeg','image/webp'];
+const maxMedicationImageBytes=10*1024*1024;
+const pngHeader=Buffer.from('89504e470d0a1a0a0000000d49484452','hex');
+const jpegEnd=Buffer.from([0xff,0xd9]);
+const webpImageChunkMinimum={'VP8 ':10,VP8L:5};
+// Check container boundaries without decoding compressed pixels.
+function completePng(bytes){
+ if(bytes.length<33||!bytes.subarray(0,pngHeader.length).equals(pngHeader)||!bytes.readUInt32BE(16)||!bytes.readUInt32BE(20))return false;
+ let hasImageData=false;
+ for(let offset=33;offset+12<=bytes.length;){
+  const size=bytes.readUInt32BE(offset);
+  const chunk=bytes.toString('latin1',offset+4,offset+8);
+  offset+=size+12;
+  if(offset>bytes.length)return false;
+  if(chunk==='IDAT'&&size>0)hasImageData=true;
+  if(chunk==='IEND')return hasImageData&&size===0&&offset===bytes.length;
+ }
+ return false;
+}
+function completeJpeg(bytes){
+ if(bytes[0]!==0xff||bytes[1]!==0xd8)return false;
+ // Camera JPEGs may carry padding or other data after EOI.
+ const end=bytes.lastIndexOf(jpegEnd);
+ let hasFrame=false;
+ for(let offset=2;offset+3<end;){
+  if(bytes[offset++]!==0xff)return false;
+  while(bytes[offset]===0xff)offset++;
+  const marker=bytes[offset++];
+  if(marker===0x01)continue; // TEM has no segment length.
+  if(!marker||offset+2>=end)return false;
+  const size=bytes.readUInt16BE(offset);
+  if(size<2||offset+size>=end)return false;
+  if(marker===0xda)return hasFrame&&size>=6; // SOS must leave room for scan data before EOI.
+  // SOF markers define the dimensions and component table. C4/C8/CC are not frame markers.
+  if(marker>=0xc0&&marker<=0xcf&&![0xc4,0xc8,0xcc].includes(marker)){
+   if(size<11||!bytes.readUInt16BE(offset+5)||!bytes[offset+7]||size!==8+3*bytes[offset+7])return false;
+   hasFrame=true;
+  }
+  offset+=size;
+ }
+ return false;
+}
+function completeWebpChunks(bytes,start,end,animated=false){
+ let hasImage=false,hasAnimationHeader=false;
+ for(let offset=start;offset<end;){
+  if(offset+8>end)return false;
+  const chunk=bytes.toString('latin1',offset,offset+4);
+  const size=bytes.readUInt32LE(offset+4);
+  const data=offset+8;
+  offset=data+size+(size%2);
+  if(offset>end)return false;
+  const minimum=webpImageChunkMinimum[chunk];
+  if(minimum!==undefined){
+   if(animated||size<minimum)return false;
+   hasImage=true;
+  }
+  if(chunk==='ANIM')hasAnimationHeader=size===6;
+  if(chunk==='ANMF'){
+   if(!animated||!hasAnimationHeader||size<16||!completeWebpChunks(bytes,data+16,data+size))return false;
+   hasImage=true;
+  }
+ }
+ return hasImage;
+}
+function completeWebp(bytes){
+ if(bytes.length<20||bytes.toString('latin1',0,4)!=='RIFF'||bytes.toString('latin1',8,12)!=='WEBP'||bytes.readUInt32LE(4)!==bytes.length-8)return false;
+ const first=bytes.toString('latin1',12,16);
+ if(first==='VP8X'){
+  if(bytes.length<30||bytes.readUInt32LE(16)!==10)return false;
+  return completeWebpChunks(bytes,30,bytes.length,(bytes[20]&0x02)!==0);
+ }
+ return webpImageChunkMinimum[first]!==undefined&&completeWebpChunks(bytes,12,bytes.length);
+}
+function validateMedicationImage(type,bytes,field){
+ if(!medicationImageTypes.includes(type))throw bad('药品图片仅支持 PNG、JPG 和 WEBP',field);
+ const matches=type==='image/png'?completePng(bytes):type==='image/jpeg'?completeJpeg(bytes):completeWebp(bytes);
+ if(!matches)throw bad('药品图片内容与文件格式不符，请选择有效的 PNG、JPG 或 WEBP',field);
+}
+function validateStoredMedicationImage(file){
+ const field='imageFileId';
+ if(!file.storageName)throw bad('文件内容缺失',field);
+ const name=path.basename(file.storageName);
+ // Downloads derive their MIME from the stored extension. Require it to agree with the record.
+ if(allowedFiles[path.extname(name).toLowerCase()]!==file.mime)throw bad('药品图片内容与文件格式不符，请重新上传',field);
+ let fd;
+ try{fd=fs.openSync(path.join(dataDir,'uploads',name),'r');}
+ catch(error){if(error.code==='ENOENT')throw bad('文件内容缺失',field);throw error;}
+ try{
+  const stat=fs.fstatSync(fd);
+  if(!stat.isFile())throw bad('文件内容缺失',field);
+  if(stat.size>maxMedicationImageBytes)throw bad('药品图片不能超过 10MB',field);
+  validateMedicationImage(file.mime,fs.readFileSync(fd),field);
+ }finally{fs.closeSync(fd);}
+}
 // Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings
 // (verified against the source hash) or are compressed once and kept in memory; mutable files are compressed per request.
 const compressible=type=>/^(text\/|application\/(javascript|json|manifest\+json)|image\/svg\+xml)/.test(type);
@@ -438,10 +532,12 @@ function attachMedicationImage(space,{medicationId,fileId}){
  const medication=getAll(space).find(x=>x.id===medicationId&&x.kind==='medication');
  const file=getAll(space).find(x=>x.id===fileId&&x.kind==='file');
  if(!medication||!file)throw bad('没有找到用药方案或图片，请重新查询');
- if(!['image/png','image/jpeg','image/webp'].includes(file.mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP');
  if(medication.imageFileId&&medication.imageFileId!==fileId)throw bad('用药已有其他图片，请到网页核对后调整');
- if(!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw bad('文件内容缺失');
- if(medication.imageFileId===fileId)return medication;
+ if(medication.imageFileId===fileId){
+  if(!medicationImageTypes.includes(file.mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP');
+  if(!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw bad('文件内容缺失');
+  return medication;
+ }
  return put(space,'medication',{...medication,imageFileId:fileId},medicationId,'mcp');
 }
 const mcp=createMcp({components,layouts,db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>personalSettings.read(space),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
@@ -619,8 +715,9 @@ const server=http.createServer(async(req,res)=>{try{
   if(workbench.type!=='health'&&!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext))throw bad('一般资料上传仅支持PDF、图片和TXT');
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
+  if(body.fileCategory==='药品图片')validateMedicationImage(body.mime,bytes,'content');
   validateTravelReferences(space,'file',body);
- validateReadingReferences(space,'file',body);
+  validateReadingReferences(space,'file',body);
   if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
   const destination=path.join(dataDir,'uploads',storageName);
   db.exec('BEGIN');try{

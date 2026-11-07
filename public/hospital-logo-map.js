@@ -64,6 +64,22 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "ahospital-223d1af79c8732b6e762",
+    "catalogHospitalId": "ahospital-223d1af79c8732b6e762",
+    "name": "上海市同济医院",
+    "aliases": [
+      "同济大学附属同济医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-d15d648682c1aef6571be63215cef720cb23d06133c73cf379ac7fc0a6c5eb73.png",
+    "website": "https://www.tongjihospital.com.cn/",
+    "sourceUrl": "https://www.tongjihospital.com.cn/",
+    "logoSourceUrl": "https://www.tongjihospital.com.cn/static/index/images/logo.png",
+    "verifiedAt": "2026-11-07"
+  },
+  {
     "id": "ahospital-237ff1bce8629f101f52",
     "catalogHospitalId": "ahospital-237ff1bce8629f101f52",
     "name": "北京大学第六医院",
@@ -115,6 +131,20 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-06"
   },
   {
+    "id": "ahospital-37f5aafed1e8683a3c72",
+    "catalogHospitalId": "ahospital-37f5aafed1e8683a3c72",
+    "name": "中国康复研究中心北京博爱医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-7c80f9864e405623af62f6ca9c409a45a2aab2e187a26659d365500d2d99b7a5.jpg",
+    "website": "https://www.crrc.com.cn/",
+    "sourceUrl": "https://www.crrc.com.cn/",
+    "logoSourceUrl": "https://www.crrc.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-07"
+  },
+  {
     "id": "ahospital-3d93e2ddf11039cb599e",
     "catalogHospitalId": "ahospital-3d93e2ddf11039cb599e",
     "name": "首都医科大学附属北京朝阳医院",
@@ -146,6 +176,23 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.sph.com.cn/",
     "logoSourceUrl": "https://www.sph.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "chengdu-tcm",
+    "catalogHospitalId": "ahospital-3eb3a994f8b12a47b950",
+    "name": "成都中医药大学附属医院",
+    "aliases": [
+      "四川省中医院",
+      "四川省中医医院"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-7cfd511d5c103e550a34ad3eb4cae45d6adfdab4ac69eb729152408359d1c4b8.png",
+    "website": "https://www.sctcm120.cn/",
+    "sourceUrl": "https://www.sctcm120.cn/",
+    "logoSourceUrl": "https://www.sctcm120.cn/images/logo12023.png",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "shandong-qilu-second",
@@ -181,6 +228,22 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.zy91.com/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/zju-first.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-53b45355daebc41ff655",
+    "catalogHospitalId": "ahospital-53b45355daebc41ff655",
+    "name": "上海交通大学医学院附属新华医院",
+    "aliases": [
+      "上海新华医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-8022ca676abd24124cc4d4d7a2b60f6c9a2156d51d6112ad4a15650649c9cd47.png",
+    "website": "https://www.xinhuamed.com.cn/index.html",
+    "sourceUrl": "https://www.xinhuamed.com.cn/index.html",
+    "logoSourceUrl": "https://www.xinhuamed.com.cn/images/logo.png?ver=20250301",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "wuhan-tongji",
@@ -261,6 +324,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.phhp.com.cn/",
     "logoSourceUrl": "https://www.phhp.com.cn/new/images/logoa1.png",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-9f5c07bbfa67ae802f69",
+    "catalogHospitalId": "ahospital-9f5c07bbfa67ae802f69",
+    "name": "成都爱尔眼科医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-a92cdc20b2e2cc8a96f4d8f76217b6529aedd528bd510b303c4c3cdc19823bed.png",
+    "website": "https://www.aier028.com/",
+    "sourceUrl": "https://www.aier028.com/",
+    "logoSourceUrl": "https://www.aier028.com/templets/default/images/logo_2015.png",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "pku-people",
@@ -377,6 +454,34 @@ export const hospitalLogoMappings = [
     "verifiedAt": "2026-11-06"
   },
   {
+    "id": "ahospital-d810a6bd875fb08ad79a",
+    "catalogHospitalId": "ahospital-d810a6bd875fb08ad79a",
+    "name": "北京中医药大学第三附属医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-dc1d9e3852638a57b83170edbef06e78435676f8c91bdcffc418cea49848c4a4.jpg",
+    "website": "https://www.zydsy.com/",
+    "sourceUrl": "https://www.zydsy.com/",
+    "logoSourceUrl": "https://www.zydsy.com/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-07"
+  },
+  {
+    "id": "ahospital-e129e8ef2c6cd666e694",
+    "catalogHospitalId": "ahospital-e129e8ef2c6cd666e694",
+    "name": "沧州市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "沧州",
+    "province": "河北省",
+    "logo": "/provider-logos/hospital-24da535a1249375c2c83415aeea8bda18849c3b00c7da8b4f020b31891bdc365.jpg",
+    "website": "https://www.czrmyy.com/",
+    "sourceUrl": "https://www.czrmyy.com/",
+    "logoSourceUrl": "https://www.czrmyy.com/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-07"
+  },
+  {
     "id": "fudan-huashan",
     "catalogHospitalId": "ahospital-e21ab155a4b76f4ec89a",
     "name": "复旦大学附属华山医院",
@@ -391,6 +496,20 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.huashan.org.cn/",
     "logoSourceUrl": "https://www.huashan.org.cn/images/logo114.png",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-e770e2469335f6e4223a",
+    "catalogHospitalId": "ahospital-e770e2469335f6e4223a",
+    "name": "自贡市第四人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "自贡",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-495e296e4020fd7591a6067242c1d7a9572bb0e89ac0542638d023f7185b0ea0.png",
+    "website": "https://www.zg120.cn/",
+    "sourceUrl": "https://www.zg120.cn/",
+    "logoSourceUrl": "https://www.zg120.cn/Template/Pc/image/logo.png",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "fudan-zhongshan",
@@ -441,6 +560,22 @@ export const hospitalLogoMappings = [
     "sourceUrl": "https://www.easthospital.cn/",
     "logoSourceUrl": "https://www.easthospital.cn/static/mobile/images/yindaologo.png",
     "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-fb8ebca8c4d2d164833a",
+    "catalogHospitalId": "ahospital-fb8ebca8c4d2d164833a",
+    "name": "北京友谊医院",
+    "aliases": [
+      "首都医科大学附属北京友谊医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-916248587fc889bb9007a524e8ce5e35341740ab16a3c541d0e36b0c996a7f1c.jpg",
+    "website": "https://www.bfh.com.cn/",
+    "sourceUrl": "https://www.bfh.com.cn/",
+    "logoSourceUrl": "https://www.bfh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-07"
   },
   {
     "id": "wuhan-union",

@@ -50,3 +50,9 @@ node scripts/export-hospital-logo-map.mjs /absolute/path/hospitals.sqlite public
 - 保留已有目录 ID `pku-first`、`pku-third`、`fudan-huashan` 及其常用别名。山东大学齐鲁第二医院沿用历史医院表 ID，目录展示校方现用名称，同时支持旧名“山东大学第二医院”。[北大三院院徽](https://www.puh3.net.cn/info/2641/100461.htm) · [华西口腔院徽说明](https://www.hxkq.org/Html/News/Articles/3766.html)
 - 新桥口腔的品牌条目与成都 8 个院区、西宁、德阳、自贡各 1 个院区共用用户已确认的蓝底标识。人南总院和衣冠庙院区分开建档。德阳的门牌号有冲突，地址栏留空并在详情保留两种来源。[集团品牌页](https://www.meiweigroup.com/catalog/8) · [人南院区开业资料](https://health.baidu.com/m/detail/ar_10067343745011966639) · [四川卫健委历史机构名录](https://wsjkw.sc.gov.cn/scwsjkw/wszy/2017/1/9/6abf3ec8fde641499c1d14cde078fd8e/files/c81cc40e07594b98b02c90a91a1379ec.pdf) · [平安医疗服务网络](https://iobs.pingan.com.cn/download/pah-ows-dmz-prd/3960dc1609914b6983201fa2a87cecfe)
 - 以机构名称和城市自动匹配时，优先匹配已核对的确切院区名和别名。已知院区与填写城市冲突时用通用医院图标，使用已保存的品牌或院区 ID 时也检查这类冲突。旧品牌 ID 仍可读取，品牌范围内只有名称带括号分院后缀时才尝试品牌回退。重庆新桥医院保留自己的院徽。
+
+## 2026-11-07 定时采集增量
+
+本轮从既有候选中核实上海同济、上海新华、成都爱尔、自贡四院、北京博爱、北京中医药大学三附院、北京友谊和沧州人民的院徽，并从新官网补采成都中医药大学附属医院的彩色标识。审核保留当前官网原文、原图、来源和哈希。四川省肿瘤医院与四川生殖专科医院的白色横向组合字标继续留待显示适配，龙华和西苑的访问限制及整形外科医院的城市核对也保留在待办中。[成都中医药大学附属医院](https://www.sctcm120.cn/) · [北京友谊医院](https://www.bfh.com.cn/)
+
+本机统一表有 25,984 条机构资料，416 条记录有图片候选，共 684 个关联、652 张按内容去重的候选图片。审核映射增加至 50 条，使用 39 张独立图片。366 条有图记录待审核，22,925 条尚缺可用采集线索。数据库完整性、旧映射及城市匹配按本轮产物核对。原网页、审核决策、变更前记录和本轮统计位于参考缓存的 `hospital-catalog/runs/2026-11-07T2317/`，持久断点为 `hospital-catalog/heartbeat-checkpoint.json`。

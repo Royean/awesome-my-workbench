@@ -1,7 +1,11 @@
+import { createExecutionUI } from './hub-execution.js';
+
 const BASE = '/api/developer-hub';
 const VIEWS = [
   ['roles', '角色库', 'grid', 'ai-teams'],
-  ['agents', 'Agent', 'settings', 'ai-teams/agents'],
+  ['agents', 'Agents', 'settings', 'ai-teams/agents'],
+  ['devices', '设备', 'activity', 'ai-teams/devices'],
+  ['execution', '执行状态', 'task', 'ai-teams/execution'],
   ['capabilities', '能力索引', 'sparkles', 'ai-teams/capabilities'],
 ];
 const GROUPS = new Map([
@@ -30,6 +34,7 @@ function httpsUrl(value) {
 
 export function createHubTeams(ctx) {
   const { esc, icon } = ctx;
+  const execution = createExecutionUI(ctx);
   const accountScope = () => ctx.accountScope ?? ctx.userId ?? 'local';
   const emptyState = scope => ({
     scope,
@@ -164,6 +169,7 @@ export function createHubTeams(ctx) {
         <div class="hub-teams-row-name">
           <h3>${routeLink(agent.name, 'ai-teams/agents/' + agent.id, 'hub-teams-name-link')}</h3>
           <p>${esc(role?.name || agent.roleId)}<span aria-hidden="true"> · </span>${esc(agent.environment)}</p>
+          ${execution.agentSummary(agent)}
         </div>
         <div class="hub-teams-agent-counts"><span>${skillsOf(agent).length} Skills</span><span>${mcpOf(agent).length} MCP</span></div>
         <div class="hub-teams-row-actions">
@@ -193,6 +199,8 @@ export function createHubTeams(ctx) {
         ${button('编辑配置', 'agent-edit', { value: id, symbol: 'edit' })}
       </header>
       <div class="hub-teams-agent-id"><span>Agent ID</span> <code>${esc(id)}</code></div>
+      <section class="hub-teams-agent-runtime"><h3>默认执行分配</h3>${execution.agentSummary(agent)}${agent.projectId ? `<p>项目 <code>${esc(agent.projectId)}</code></p>` : '<p>编辑配置，为 Agent 绑定执行设备、环境和项目。</p>'}</section>
+      ${execution.render('agent', { agentId: id })}
       ${capabilities.map(([label, entries, symbol]) => `<section><h3>${label}</h3>${entries.length ? `<div class="hub-teams-table">${entries.map(entry => `<article class="hub-teams-capability">
         <span class="hub-teams-mark">${icon(symbol, 17)}</span><div class="hub-teams-row-name"><h3>${esc(entry.name)}</h3>${entry.scope ? `<p>${esc(entry.scope)}</p>` : ''}</div>
         <span class="hub-teams-status${entry.status === 'configured' ? ' is-configured' : ''}"><i></i>${statusLabel(entry.status)}</span>
@@ -273,10 +281,11 @@ export function createHubTeams(ctx) {
         </div>` : ''}
         <div data-teams-results>${roleWall(snapshot)}</div>
       ` : view === 'agents' ? `
-        <p class="hub-teams-note">${icon('info', 16)}这里登记已经选用的角色、运行环境和能力。实际运行与权限由对应的 Agent 环境管理。</p>
+        <p class="hub-teams-note">${icon('info', 16)}角色定义已导入为团队成员。为 Agent 绑定设备与环境，即可分配任务；实际能力以设备核验为准。</p>
+        ${agentId ? '' : execution.render('bindings')}
         ${roles.status === 'error' ? resourcePlaceholder('roles', roles) : ''}
         ${agentId ? agentDetail(snapshot, agentId) : agentList(snapshot)}
-      ` : `
+      ` : view === 'devices' ? execution.render('devices') : view === 'execution' ? execution.render('tasks', { taskId: route.split('/')[2], baseRoute: 'ai-teams/execution' }) : `
         <div class="hub-teams-tools hub-teams-cap-tools" role="group" aria-label="能力类型">
           ${[['role-skills', '角色推荐 Skills'], ['agent-skills', 'Agent Skills'], ['agent-mcp', 'Agent MCP']].map(([key, label]) => `<button type="button" class="hub-teams-chip" aria-pressed="${capability === key}" data-team-action="capability" data-team-value="${key}">${label}</button>`).join('')}
         </div>
@@ -378,6 +387,7 @@ export function createHubTeams(ctx) {
         <option value=""${agent?.environment ? '' : ' selected'} disabled>选择环境</option>
         ${environments.map(environment => `<option value="${esc(environment)}"${environment === agent?.environment ? ' selected' : ''}>${esc(environment)}</option>`).join('')}
       </select></div>
+      ${execution.bindingFields(agent || {})}
       <p class="hub-teams-form-note">填写已选用的 Skills 和 MCP，可将尚未核实的项目标记为「待核验」。</p>
       ${entrySection('skills', 'Skills', agent ? skillsOf(agent) : [])}
       ${entrySection('mcp', 'MCP', agent ? mcpOf(agent) : [])}
@@ -386,6 +396,7 @@ export function createHubTeams(ctx) {
     '<button type="button" class="btn" data-action="close">取消</button><button type="submit" class="btn primary" form="hub-teams-agent-form">保存配置</button>');
     const form = document.getElementById('hub-teams-agent-form');
     if (!form) return;
+    execution.bindBinding(form);
     form.addEventListener('click', event => {
       const action = event.target.closest('[data-entry-add], [data-entry-remove]');
       if (!action) return;
@@ -404,13 +415,14 @@ export function createHubTeams(ctx) {
     form.addEventListener('submit', event => {
       event.preventDefault();
       mutate(form, snapshot, async () => {
-        const { roleId: selectedRole, name, environment } = Object.fromEntries(new FormData(form));
+        const { roleId: selectedRole, name, environment, deviceId, harnessId, projectId } = Object.fromEntries(new FormData(form));
         if (!name.trim()) throw new Error('请填写 Agent 名称。');
-        const data = { roleId: selectedRole, name: name.trim(), environment, skills: entryData(form, 'skills'), mcp: entryData(form, 'mcp') };
+        const data = { roleId: selectedRole, name: name.trim(), environment, deviceId: deviceId || '', harnessId: harnessId || '', projectId: projectId || '', skills: entryData(form, 'skills'), mcp: entryData(form, 'mcp') };
         const { agent: saved } = await ctx.api(BASE + '/agents/' + encodeURIComponent(id), { method: 'PUT', body: JSON.stringify(data) });
         if (current() !== snapshot) return;
         const records = snapshot.agents.records;
         snapshot.agents.records = records.some(item => item.id === id) ? records.map(item => item.id === id ? saved : item) : [saved, ...records];
+        execution.invalidate();
       }, '已保存 Agent 配置');
     });
   }
@@ -459,6 +471,14 @@ export function createHubTeams(ctx) {
     if (!section || section === mounted) return;
     const snapshot = current();
     mounted = section;
+    const view = getView(route);
+    if (view === 'devices') execution.bind(section, 'devices');
+    else if (view === 'execution') execution.bind(section, 'tasks', { taskId: route.split('/')[2], baseRoute: 'ai-teams/execution' });
+    else if (view === 'agents') {
+      const id = route.split('/')[2];
+      if (id) execution.bind(section, 'agent', { agentId: id, baseRoute: 'ai-teams/execution' });
+      else execution.bind(section, 'bindings');
+    } else execution.cleanup();
 
     section.addEventListener('click', event => {
       const control = event.target.closest('[data-team-action]');
@@ -505,6 +525,7 @@ export function createHubTeams(ctx) {
   }
 
   function cleanup() {
+    execution.cleanup();
     mounted = null;
     state = undefined;
   }

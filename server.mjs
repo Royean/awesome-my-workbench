@@ -1,4 +1,6 @@
-import { createDeveloperHubApi } from './lib/developer-hub.mjs';
+import { createDeveloperHubApi, getRoleCatalogForUser } from './lib/developer-hub.mjs';
+import { createAgentExecution } from './lib/agent-execution.mjs';
+import { loadHubRoleCatalog } from './lib/hub-roles.mjs';
 import { buildOverview } from './lib/overview.mjs';
 import {createPersonalSettings} from './lib/personal-settings.mjs';
 import {createLayouts} from './lib/layouts.mjs';
@@ -33,6 +35,7 @@ const db=new DatabaseSync(path.join(dataDir,'health.sqlite'));
 fs.chmodSync(path.join(dataDir,'health.sqlite'),0o600);
 migrateAccounts(db);
 db.exec(fs.readFileSync(path.join(root, 'migrations', '008-developer-hub.sql'), 'utf8'));
+db.exec(fs.readFileSync(path.join(root, 'migrations', '009-agent-execution.sql'), 'utf8'));
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
 db.exec(`CREATE TABLE IF NOT EXISTS medication_upload_attempts (
  space TEXT NOT NULL, attempt_id TEXT NOT NULL, fingerprint TEXT NOT NULL, file_id TEXT NOT NULL,
@@ -574,8 +577,18 @@ async function handleMcp(req,res){
  return json(res,out.status,out.body);
 }
 const cgm=createCgm({db,dataDir});
+const executionRoleCatalog = loadHubRoleCatalog();
+const agentExecution = createAgentExecution({
+ db, roleCatalog: executionRoleCatalog,
+ rolesForOwner(owner) {
+  const user = authEnabled ? db.prepare('SELECT id,email FROM users WHERE id=? AND disabled=0').get(owner) : null;
+  if (authEnabled && !user) return { source: null, roles: [] };
+  return getRoleCatalogForUser(user, executionRoleCatalog);
+ }
+});
 const developerHubApi = createDeveloperHubApi({
- db, json, readBody,
+ db, json, readBody, roleCatalog: executionRoleCatalog,
+ ensureAgents: owner => agentExecution.ensureAgents(owner),
  isAuthorized(req, user) {
   if (!authEnabled) return true;
   const current = accounts.session(req);
@@ -583,6 +596,70 @@ const developerHubApi = createDeveloperHubApi({
  }
 });
 const capture=createCapture({db,put,validDate,validTime,bad,today,now});
+function executionDevice(req) {
+ const token = bearerToken(req);
+ if (!token || hasSessionCookie(req)) throw Object.assign(bad('请使用设备凭据连接', undefined, 'device_unauthorized'), { status: 401 });
+ const device = agentExecution.authenticateDevice(token);
+ if (authEnabled && !db.prepare('SELECT id FROM users WHERE id=? AND disabled=0').get(device.owner)) {
+  throw Object.assign(bad('设备所属账号已停用', undefined, 'device_unauthorized'), { status: 401 });
+ }
+ return device;
+}
+async function handleExecutionDevice(req,res,url) {
+ const prefix='/api/agent-execution';
+ if(url.pathname!==prefix+'/pair'&&!url.pathname.startsWith(prefix+'/device/'))return false;
+ if(req.method!=='POST'){json(res,405,{error:'设备接口仅支持 POST'});return true;}
+ if(url.pathname===prefix+'/pair'){
+  if(hasSessionCookie(req))throw Object.assign(bad('请从本机连接程序完成配对'),{status:403});
+  const body=await readBody(req,8192);
+  const paired=agentExecution.pair(body);
+  json(res,201,paired);
+  return true;
+ }
+ executionDevice(req);
+ const body=await readBody(req,256*1024);
+ const device=executionDevice(req);
+ if(url.pathname===prefix+'/device/heartbeat')json(res,200,agentExecution.heartbeat(device,body));
+ else if(url.pathname===prefix+'/device/claim')json(res,200,agentExecution.claim(device));
+ else{
+  const match=/^\/api\/agent-execution\/device\/runs\/([A-Za-z0-9_-]{1,100})\/events$/.exec(url.pathname);
+  if(!match){json(res,404,{error:'设备接口不存在'});return true;}
+  json(res,200,agentExecution.appendEvents(device,match[1],body));
+ }
+ return true;
+}
+async function handleExecutionUser(req,res,url,user) {
+ if(user?.auth_via==='pat')return json(res,403,{error:'请使用登录会话管理本机执行',code:'token_forbidden'});
+ const owner=user?.id||'local',p=url.pathname,method=req.method;
+ const send=(status,body)=>json(res,status,{owner:user?.id??null,...body});
+ if(p==='/api/agent-execution/devices'&&method==='GET')return send(200,agentExecution.listDevices(owner));
+ if(p==='/api/agent-execution/tasks'&&method==='GET')return send(200,agentExecution.listTasks(owner));
+ if(p==='/api/agent-execution/pairing-codes'&&method==='POST'){
+  await readBody(req,4096);
+  return send(201,agentExecution.createPairingCode(owner));
+ }
+ if(p==='/api/agent-execution/tasks'&&method==='POST'){
+  const body=await readBody(req,65536);
+  return send(201,agentExecution.createTask(owner,body));
+ }
+ const device=/^\/api\/agent-execution\/devices\/([A-Za-z0-9_-]{1,100})$/.exec(p);
+ if(device&&method==='DELETE'){await readBody(req,4096);return send(200,agentExecution.revokeDevice(owner,device[1]));}
+ const task=/^\/api\/agent-execution\/tasks\/([A-Za-z0-9_-]{1,100})(?:\/(retry|cancel))?$/.exec(p);
+ if(task){
+  if(!task[2]&&method==='GET')return send(200,agentExecution.getTask(owner,task[1]));
+  if(method==='POST'&&task[2]){
+   const body=await readBody(req,8192);
+   return send(200,task[2]==='retry'?agentExecution.retryTask(owner,task[1],body):agentExecution.cancelTask(owner,task[1]));
+  }
+ }
+ const approval=/^\/api\/agent-execution\/runs\/([A-Za-z0-9_-]{1,100})\/approvals\/([A-Za-z0-9_-]{1,100})$/.exec(p);
+ if(approval&&method==='POST'){
+  const body=await readBody(req,16384);
+  return send(200,agentExecution.decideApproval(owner,approval[1],approval[2],body));
+ }
+ return send(404,{error:'执行接口不存在'});
+}
+
 const server=http.createServer(async(req,res)=>{try{
  res.setHeader('X-Content-Type-Options','nosniff');
  if(appOrigin?.startsWith('https:'))res.setHeader('Strict-Transport-Security','max-age=31536000');
@@ -594,10 +671,11 @@ const server=http.createServer(async(req,res)=>{try{
  if(req.method!=='GET'&&req.method!=='HEAD'){
   const expected=appOrigin||`http://${requestHost}`;const origin=req.headers.origin;
   // Native app exemption (never for cookie auth): a request with a Bearer token and no session cookie authenticates only via that token, so a forged cross-site browser request cannot ride an ambient credential. App login issues the token in the body and sets no cookie; it is exempt only when no session cookie is sent and any Origin present is ours.
-  const noCookie=!hasSessionCookie(req);const appRequest=authEnabled&&noCookie&&(bearerToken(req)||(url.pathname==='/api/auth/app-login'&&(!origin||origin===expected)));
+  const noCookie=!hasSessionCookie(req);const appRequest=authEnabled&&noCookie&&(bearerToken(req)||((url.pathname==='/api/auth/app-login'||url.pathname==='/api/agent-execution/pair')&&(!origin||origin===expected)));
   if(!appRequest&&((authEnabled&&origin!==expected)||(origin&&origin!==expected)||req.headers['sec-fetch-site']==='cross-site'))return json(res,403,{error:'只接受同源操作'});
   if(!/^application\/json(?:\s*;|$)/i.test(req.headers['content-type']||''))return json(res,415,{error:'需使用 JSON 请求'});
  }
+ if(await handleExecutionDevice(req,res,url))return;
  const user=authEnabled?accounts.session(req,res,{renew:url.pathname.startsWith('/api/')}):null;
  const requireExpectedOwner=()=>{if(authEnabled&&user&&req.headers['x-workbench-owner']!==user.id)throw Object.assign(bad('登录账号已变化，请重新打开页面',undefined,'workbench_owner_changed'),{status:409});};
  if(user&&!['/api/auth/login','/api/auth/accept-invitation'].includes(url.pathname))req.authSnapshot=user;
@@ -607,7 +685,12 @@ const server=http.createServer(async(req,res)=>{try{
  if(isBootstrap&&req.method!=='GET')return json(res,405,{error:'方法不支持'});
  if(isBootstrap&&authEnabled&&!user)return json(res,200,{me:{enabled:true,user:null}});
  if(authEnabled&&url.pathname.startsWith('/api/')&&!user)return hasBearerScheme(req)&&!hasSessionCookie(req)?json(res,401,{error:'访问令牌无效或已撤销',code:'token_invalid'}):json(res,401,{error:'请先登录',code:'token_missing'});
+ if(url.pathname.startsWith('/api/agent-execution/')){
+  requireExpectedOwner();
+  return await handleExecutionUser(req,res,url,user);
+ }
  if(url.pathname.startsWith('/api/developer-hub/')){
+  if(user?.auth_via==='pat'&&url.pathname.startsWith('/api/developer-hub/agents')&&!['GET','HEAD'].includes(req.method))return json(res,403,{error:'请使用登录会话配置 Agent 执行能力',code:'token_forbidden'});
   requireExpectedOwner();
   return await developerHubApi(req,res,url.pathname,user);
  }

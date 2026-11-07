@@ -86,9 +86,9 @@ test('global hub routes require the expected account and isolate Agent configura
  const body={name:'Private Agent',roleId:'developer',environment:'Codex',skills:[],mcp:[]};
  assert.equal((await api(root+'/agents/'+id,{method:'PUT',origin:'https://attacker.invalid',body})).status,403);
  assert.equal((await api(root+'/agents/'+id,{method:'PUT',body})).status,200);
- assert.deepEqual((await api(root+'/agents',{cookie:userCookie})).body.agents,[]);
+ const otherAgents=(await api(root+'/agents',{cookie:userCookie})).body.agents;assert.ok(otherAgents.length>0);assert.equal(otherAgents.some(agent=>agent.id===id),false);
  assert.equal((await api(root+'/agents/'+id,{method:'DELETE',cookie:userCookie,body:{}})).status,404);
- assert.equal((await api(root+'/agents')).body.agents[0].name,body.name);
+ assert.equal((await api(root+'/agents')).body.agents.find(agent=>agent.id===id).name,body.name);
 });
 test('password/session revocation, user disable, reset invitation and last administrator',async()=>{
  const another=await login('member@example.invalid');assert.equal(another.status,200);

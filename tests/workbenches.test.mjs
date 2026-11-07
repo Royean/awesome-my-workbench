@@ -4,6 +4,7 @@ import {spawn} from 'node:child_process';
 import {mkdtemp,rm} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import {DatabaseSync} from 'node:sqlite';
 let remote=process.env.WORKBENCH_TEST_URL,base=remote,cwd=path.resolve(import.meta.dirname,'..');
 import {startServer,stopProcess} from './helpers.mjs';
 if(remote&&(!/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(base)||base.endsWith(":3100")))throw Error('Only isolated loopback preview allowed');
@@ -36,4 +37,25 @@ test('non-health restrictions, unknown registry IDs and scoped settings/referenc
  for(const route of ['/api/state','/api/export','/api/workbenches'])assert.equal((await api(route,{workbench:crypto.randomUUID()})).status,404);
  await api('/api/settings',{workbench:'finance',method:'PUT',body:{name:'虚构金融称呼',focus:'只记备忘'}});assert.equal((await api('/api/state',{workbench:'finance'})).body.settings.name,'虚构金融称呼');assert.equal((await api('/api/state')).body.settings.name,'虚构金融称呼');
  const f=await api('/api/upload',{method:'POST',body:{name:'fictional.txt',date,content:Buffer.from('fictional workbench bytes').toString('base64')}});assert.equal(f.status,201);assert.equal((await api('/api/files/'+f.body.id,{workbench:'finance'})).status,404);assert.equal((await api('/api/files/'+f.body.id,{workbench:custom.id})).status,404);const v=await add('visit','health',{status:'已完成'});assert.equal((await add('task','finance',{visitId:v.body.id})).status,400);
+});
+test('web deletion metadata uses the stored twelve-second deadline; expired undo still has thirty-day recovery',async()=>{
+ if(remote)return;
+ for(const [workbench,kind] of [['health','task'],[custom.id,'note']]){
+  const original=(await add(kind,workbench,{note:'虚构期限测试'})).body;
+  const removed=await api('/api/items/'+original.id,{method:'DELETE',workbench});
+  assert.equal(removed.status,200);assert.deepEqual(removed.body.deleted,original);
+  const db=new DatabaseSync(path.join(dir,'health.sqlite'));
+  try{
+   const tombstone=db.prepare('SELECT expires_at FROM deleted_items WHERE id=?').get(original.id);
+   const trash=db.prepare('SELECT deleted_at,expires_at FROM trash_items WHERE id=?').get(original.id);
+   assert.equal(removed.body.undoExpiresAt,tombstone.expires_at);
+   assert.equal(removed.body.undoExpiresAt-trash.deleted_at,12000);
+   assert.ok(removed.body.serverNow>=trash.deleted_at&&removed.body.serverNow<removed.body.undoExpiresAt);
+   assert.equal(trash.expires_at-trash.deleted_at,30*86400000);
+   db.prepare('UPDATE deleted_items SET expires_at=0 WHERE id=?').run(original.id);
+  }finally{db.close();}
+  assert.equal((await api('/api/restore',{method:'POST',workbench,body:{id:original.id}})).status,404);
+  assert.equal((await api('/api/trash/restore',{method:'POST',workbench,body:{id:original.id}})).status,200);
+  assert.deepEqual((await api('/api/state',{workbench})).body.items.find(x=>x.id===original.id),original);
+ }
 });

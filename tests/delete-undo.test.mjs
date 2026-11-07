@@ -69,11 +69,25 @@ test('clearing the source also invalidates a late response after switching away 
  assert.equal(f.messages.length,0);assert.equal(f.events.includes('refresh'),false);
 });
 
+test('a newer ordinary message suppresses late restore feedback while still refreshing its successful mutation',async()=>{
+ const f=fixture();await f.undo.remove('a','健康');const pending=deferred();f.request=()=>pending.promise;
+ const restoring=f.undo.restore();f.undo.dismiss();pending.resolve({});await restoring;
+ assert.equal(f.messages.length,1,'the newer message keeps its place');
+ assert.equal(f.events.filter(x=>x==='refresh').length,2,'delete and restore both synchronize the same source');
+});
+
 test('new deletion supersedes earlier pending response; dismiss cannot resurrect its action',async()=>{
  const f=fixture(),first=deferred();f.request=async url=>url.endsWith('/a')?first.promise:response('b');
  const removing=f.undo.remove('a','健康');await f.undo.remove('b','健康');first.resolve(response('a'));await removing;
  assert.equal(f.messages.length,1);f.undo.dismiss();await assert.rejects(f.undo.restore());
  assert.equal(f.calls.length,2);
+});
+
+test('a newer ordinary message dismisses even a deletion whose response is still pending',async()=>{
+ const f=fixture(),pending=deferred();f.request=()=>pending.promise;
+ const removing=f.undo.remove('a','健康');f.undo.dismiss();pending.resolve(response('a'));await removing;
+ assert.equal(f.messages.length,0);assert.equal(f.events.filter(x=>x==='refresh').length,1,'successful same-source deletion still refreshes');
+ await assert.rejects(f.undo.restore());assert.equal(f.calls.length,1);
 });
 
 test('restore is single use, reports current failures, and suppresses results after source invalidation',async()=>{

@@ -2065,7 +2065,7 @@ export const hospitalLogoMappings = [
   {
     "id": "ahospital-87fec1a590c3763db060",
     "catalogHospitalId": "ahospital-87fec1a590c3763db060",
-    "name": "潍坊市口腔医院",
+    "name": "潍坊口腔医院",
     "aliases": [
       "潍坊市南关牙科医院",
       "潍坊市口腔医院"

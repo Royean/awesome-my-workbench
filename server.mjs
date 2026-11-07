@@ -722,7 +722,7 @@ const server=http.createServer(async(req,res)=>{try{
    if(!current)return json(res,404,{error:'记录不存在'});
    return json(res,200,put(space,old.kind,{...JSON.parse(current.body),...body},id));
   }
-  if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
+  if(req.method==='DELETE'){const deleted=softDelete(space,id,'web'),undoExpiresAt=db.prepare('SELECT expires_at FROM deleted_items WHERE id=? AND space=?').get(id,space)?.expires_at;return json(res,200,{deleted,undoExpiresAt,serverNow:Date.now()})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
   const {id}=await readBody(req);const deleted=db.prepare('SELECT * FROM deleted_items WHERE id=? AND space=? AND expires_at>?').get(String(id||''),space,Date.now());

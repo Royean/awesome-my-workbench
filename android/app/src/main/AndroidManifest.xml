@@ -8,6 +8,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules" android:supportsRtl="true">
         <meta-data android:name="android.webkit.WebView.MetricsOptOut" android:value="true" />
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop"
+            android:enableOnBackInvokedCallback="true"
             android:configChanges="orientation|screenSize|keyboardHidden" android:windowSoftInputMode="adjustResize">
             <intent-filter><action android:name="android.intent.action.MAIN" /><category android:name="android.intent.category.LAUNCHER" /></intent-filter>
             <intent-filter android:autoVerify="true">

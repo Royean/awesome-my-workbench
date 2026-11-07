@@ -76,6 +76,20 @@ test('invitation expiry, one-time acceptance and isolated accounts/workbenches/f
  assert.equal(demoOverview.body.workbenches.find(w=>w.id===custom.body.id).pendingCount,0);
  await api('/api/items/'+note.body.id,{method:'DELETE',body:{}});assert.equal((await api('/api/restore',{method:'POST',cookie:userCookie,body:{id:note.body.id}})).status,404);
 });
+test('global hub routes require the expected account and isolate Agent configuration',async()=>{
+ const root='/api/developer-hub';
+ assert.equal((await api(root+'/roles',{cookie:null})).status,401);
+ assert.equal((await api(root+'/roles',{cookie:userCookie,headers:{'X-Workbench-Owner':adminId}})).status,409);
+ const catalog=await api(root+'/roles',{cookie:userCookie});
+ assert.equal(catalog.status,200);assert.equal(catalog.body.owner,userId);assert.equal(catalog.body.roles.length,11);
+ const id='0c021261-1457-42de-a91c-676f750ce2da';
+ const body={name:'Private Agent',roleId:'developer',environment:'Codex',skills:[],mcp:[]};
+ assert.equal((await api(root+'/agents/'+id,{method:'PUT',origin:'https://attacker.invalid',body})).status,403);
+ assert.equal((await api(root+'/agents/'+id,{method:'PUT',body})).status,200);
+ assert.deepEqual((await api(root+'/agents',{cookie:userCookie})).body.agents,[]);
+ assert.equal((await api(root+'/agents/'+id,{method:'DELETE',cookie:userCookie,body:{}})).status,404);
+ assert.equal((await api(root+'/agents')).body.agents[0].name,body.name);
+});
 test('password/session revocation, user disable, reset invitation and last administrator',async()=>{
  const another=await login('member@example.invalid');assert.equal(another.status,200);
  assert.equal((await api('/api/auth/password',{method:'POST',cookie:userCookie,body:{currentPassword:password,newPassword:'Next-fictional-password-29'}})).status,200);

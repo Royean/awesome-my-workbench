@@ -13,7 +13,7 @@ export const COMPONENT_CATALOG={
   reading_entry:numeric('阅读记录',['reading'],{minutes:{label:'阅读时长',unit:'分钟'}},'次'),reading_book:countOnly('书籍',['reading']),
   travel_trip:countOnly('旅行',['travel']),travel_stop:countOnly('旅行地点',['travel']),travel_booking:countOnly('预订',['travel']),travel_check:countOnly('准备清单',['travel']),
   asset_account:countOnly('资产账户',['finance']),asset_holding:countOnly('资产持仓',['finance']),asset_liability:countOnly('负债',['finance']),asset_transaction:countOnly('流水',['finance']),asset_snapshot:countOnly('估值快照',['finance'])
- },metrics:{weight:{title:'体重',unit:'kg'},pressure:{title:'血压',unit:'mmHg'},sleep:{title:'睡眠',unit:'小时'},glucose:{title:'血糖',unit:'mmol/L'},heart:{title:'静息心率',unit:'次/分'}}
+ },metrics:{weight:{title:'体重',unit:'kg'},pressure:{title:'血压',unit:'mmHg'},sleep:{title:'睡眠',unit:'小时'},glucose:{title:'血糖',unit:'mmol/L'},heart:{title:'静息心率',unit:'次/分'},steps:{title:'步数',unit:'步'}}
 };
 export const COMPONENT_TEMPLATES=[
  {id:'exercise-summary',title:'运动汇总',description:'近7天运动时长、次数和每日柱状图',workbenchTypes:['health'],sourceType:'health'},

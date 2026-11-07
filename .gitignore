@@ -15,3 +15,6 @@ backups/
 *.sqlite-wal
 public/assets/*.br
 public/assets/*.gz
+
+# Android local build state
+android/.kotlin/

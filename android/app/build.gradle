@@ -6,8 +6,9 @@ android {
         applicationId 'dev.awesome.myworkbench'
         minSdk 26
         targetSdk 36
-        versionCode 703
-        versionName '0.7.3'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        versionCode 704
+        versionName '0.7.4'
     }
     signingConfigs {
         release {
@@ -27,4 +28,13 @@ android {
         debug { applicationIdSuffix '.debug' }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+
+dependencies {
+    implementation "androidx.health.connect:connect-client:1.1.0"
+    implementation "androidx.activity:activity-ktx:1.10.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
+    androidTestImplementation "androidx.test:runner:1.6.2"
+    androidTestImplementation "androidx.test.ext:junit:1.2.1"
+    testImplementation "junit:junit:4.13.2"
 }

@@ -730,7 +730,7 @@ const server=http.createServer(async(req,res)=>{try{
   if(body.fileCategory==='药品图片')validateMedicationImage(body.mime,bytes,'content');
   validateTravelReferences(space,'file',body);
   validateReadingReferences(space,'file',body);
-  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
+  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在',body.fileCategory==='药品图片'?'visitId':undefined);
   const attemptId=b.uploadAttemptId;
   let fingerprint;
   if(attemptId!==undefined){

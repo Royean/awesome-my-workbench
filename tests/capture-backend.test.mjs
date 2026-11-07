@@ -148,7 +148,7 @@ test('step batch validation is atomic and strict for future dates/times, invalid
  for(const [date,steps,observedAt] of [
   ['2026-11-06',0,'2026-11-05T03:00:00Z'],['2026-02-30',0,'2026-11-05T03:00:00Z'],
   ['2026-11-03',-1,'2026-11-05T03:00:00Z'],['2026-11-03',200001,'2026-11-05T03:00:00Z'],['2026-11-03',1.5,'2026-11-05T03:00:00Z'],['2026-11-03','100','2026-11-05T03:00:00Z'],
-  ['2026-11-03',0,'2026-11-05T04:00:00.001Z'],['2026-11-03',0,'2026-11-05T03:00:00'],['2026-11-03',0,'2026-11-02T15:59:59Z'],
+  ['2026-11-03',0,'2026-11-05T04:00:30.001Z'],['2026-11-03',0,'2026-11-05T03:00:00'],['2026-11-03',0,'2026-11-02T15:59:59Z'],
  ])assert.equal((await sync(records(date,steps,observedAt))).status,400);
  assert.equal((await sync([])).status,400);assert.equal((await sync(records('2026-11-03',10),{source:'unknown'})).status,400);
  const invalid=await sync([{date:'2026-11-03',steps:100,observedAt:'2026-11-05T03:00:00Z'},{date:'2026-11-03',steps:-1,observedAt:'2026-11-05T03:00:00Z'}]);assert.equal(invalid.status,400);
@@ -241,7 +241,7 @@ test('Health Connect measurement time follows the winning weight and resting hea
 test('additional health batches reject unsupported types, invalid units/ranges/times, and roll back the whole batch',async()=>{
  const badRecords=[
   healthRecord('glucose',{value:5}),healthRecord('weight',{value:0}),healthRecord('weight',{value:1001}),healthRecord('weight',{value:64,unit:'lb'}),healthRecord('sleep',{value:25}),healthRecord('sleep',{value:'7'}),healthRecord('resting_heart_rate',{value:19}),healthRecord('resting_heart_rate',{value:58.5}),
-  healthRecord('weight',{value:64,date:'2026-11-06'}),healthRecord('weight',{value:64,observedAt:'2026-11-05T04:00:00.001Z'}),healthRecord('weight',{value:64,sourceId:''}),
+  healthRecord('weight',{value:64,date:'2026-11-06'}),healthRecord('weight',{value:64,observedAt:'2026-11-05T04:00:30.001Z'}),healthRecord('weight',{value:64,sourceId:''}),
   healthRecord('weight',{value:64,time:'24:00'}),healthRecord('weight',{value:64,time:'8:30'}),healthRecord('resting_heart_rate',{value:58,time:'08:60'}),healthRecord('resting_heart_rate',{value:58,time:null}),
   sessionRecord({durationMinutes:0}),sessionRecord({durationMinutes:50}),sessionRecord({distanceKm:0}),sessionRecord({distanceKm:1001}),sessionRecord({exerciseType:1}),sessionRecord({endAt:'2026-11-03T09:59:00+08:00'}),sessionRecord({startAt:undefined}),
  ];
@@ -307,4 +307,31 @@ test('a past Health Connect workout becomes a reusable favorite without sync ide
  assert.equal(current.date,date);
  assert.equal(current.source,'health-connect');
  assert.equal(current.sourceId,sourceId);
+});
+
+test('steps and Health Connect measurements preserve observed time within 30 seconds of clock skew',async()=>{
+ const date='2026-11-05';
+ const observedAt='2026-11-05T04:00:30.000Z';
+ const weight=healthRecord('weight',{date,observedAt,value:63,sourceId:'clock-skew-weight'});
+ const checks=[
+  {submit:time=>sync(records(date,1379,time)),list:'steps'},
+  {submit:time=>syncHealth([{...weight,observedAt:time}]),list:'healthRecords'},
+ ];
+ for(const {submit,list} of checks){
+  const first=await submit(observedAt);
+  assert.equal(first.status,200,JSON.stringify(first.body));
+  assert.equal(first.body.updated,1);
+  const {id}=first.body.results[0];
+  assert.equal(first.body[list].find(item=>item.id===id).observedAt,observedAt);
+
+  const replay=await submit(observedAt);
+  assert.equal(replay.status,200,JSON.stringify(replay.body));
+  assert.equal(replay.body.updated,0);
+  assert.equal(replay.body.results[0].id,id);
+  assert.equal(replay.body[list].find(item=>item.id===id).observedAt,observedAt);
+
+  const outside=await submit('2026-11-05T04:00:30.001Z');
+  assert.equal(outside.status,400);
+  assert.equal(outside.body.code,'future_date');
+ }
 });

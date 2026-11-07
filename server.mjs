@@ -1,3 +1,4 @@
+import { buildOverview } from './lib/overview.mjs';
 import {createPersonalSettings} from './lib/personal-settings.mjs';
 import {createLayouts} from './lib/layouts.mjs';
 import {createComponents} from './lib/components.mjs';
@@ -603,6 +604,12 @@ const server=http.createServer(async(req,res)=>{try{
  const space=authEnabled&&user?db.prepare('SELECT space FROM data_scopes WHERE user_id=? AND workbench_id=? AND base_space=?').get(user.id,workbenchId,baseSpace)?.space:(workbenchId==='health'?baseSpace:`${baseSpace}::${workbenchId}`);
  const readSettings=()=>personalSettings.read(space);
  if(isBootstrap)return json(res,200,bootstrapPayload(user,url));
+ if(url.pathname==='/api/overview'){
+  if(req.method!=='GET')return json(res,405,{error:'方法不支持'});
+  const registry=new Map(workbenches.map(w=>[w.id,w]));
+  const scopes=userScopes(user,baseSpace).map(scope=>({...registry.get(scope.id),...scope}));
+  return json(res,200,{owner:user?.id??null,space:baseSpace,...buildOverview(scopes,getAll,today())});
+ }
  // 「最近删除」 covers every workbench of the current base space (personal or demo).
  if(url.pathname==='/api/trash'&&req.method==='GET'){const out=[];for(const w of userScopes(user,baseSpace))for(const x of listTrash(w.space))out.push({...x,workbench:w.id,workbenchName:w.name});out.sort((a,b)=>b.deletedAt.localeCompare(a.deletedAt));return json(res,200,{items:out.map(({storageName,...x})=>x)});}
  if(url.pathname==='/api/trash/restore'&&req.method==='POST'){const b=await readBody(req);const scopes=userScopes(user,baseSpace);const row=db.prepare('SELECT space FROM trash_items WHERE id=?').get(String(b.id||''));const w=row&&scopes.find(x=>x.space===row.space);if(!w)return json(res,404,{error:'最近删除里没有这条记录，可能已超过 30 天或已恢复',code:'not_found'});if(ASSET_KINDS.includes(db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind)||['travel','reading'].includes(w.id)||db.prepare('SELECT kind FROM trash_items WHERE id=? AND space=?').get(String(b.id||''),w.space)?.kind==='file')requireExpectedOwner();const r=restoreFromTrash(w.space,b.id,{withParent:b.withParent===true});const {storageName,...pub}=r;return json(res,200,{...pub,workbench:w.id,workbenchName:w.name});}

@@ -30,6 +30,10 @@ const db=new DatabaseSync(path.join(dataDir,'health.sqlite'));
 fs.chmodSync(path.join(dataDir,'health.sqlite'),0o600);
 migrateAccounts(db);
 db.exec('PRAGMA journal_mode=WAL; CREATE TABLE IF NOT EXISTS items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL); CREATE TABLE IF NOT EXISTS settings(space TEXT PRIMARY KEY, body TEXT NOT NULL);');
+db.exec(`CREATE TABLE IF NOT EXISTS medication_upload_attempts (
+ space TEXT NOT NULL, attempt_id TEXT NOT NULL, fingerprint TEXT NOT NULL, file_id TEXT NOT NULL,
+ PRIMARY KEY(space, attempt_id)
+)`);
 db.exec('CREATE TABLE IF NOT EXISTS deleted_items(id TEXT PRIMARY KEY, space TEXT NOT NULL, kind TEXT NOT NULL, body TEXT NOT NULL, expires_at INTEGER NOT NULL)');
 db.exec('CREATE TABLE IF NOT EXISTS workbenches(id TEXT PRIMARY KEY, name TEXT NOT NULL, type TEXT NOT NULL); CREATE INDEX IF NOT EXISTS items_space ON items(space); CREATE INDEX IF NOT EXISTS items_scope_kind ON items(space,kind); CREATE INDEX IF NOT EXISTS deleted_items_space_expiry ON deleted_items(space,expires_at)');
 if(!db.prepare('PRAGMA table_info(workbenches)').all().some(c=>c.name==='themeColor'))db.exec('ALTER TABLE workbenches ADD COLUMN themeColor TEXT');
@@ -170,6 +174,28 @@ function validateReadingReferences(space,kind,body,id){
   if(kind==='reading_entry'){assertReadingPage(body,JSON.parse(row.body),bad);if(body.fileId&&!getAll(space).some(x=>x.kind==='file'&&x.id===body.fileId&&x.bookId===body.bookId))throw bad('笔记原件不存在或未关联此材料','fileId');}
  }
 }
+function validateReportOriginal(space,kind,body,id,{original={},restoring=false}={}){
+ if(kind!=='report'&&kind!=='file')return;
+ const visitId=body.visitId||'';
+ if(kind==='file'&&!restoring&&(!visitId||original.visitId===visitId))return;
+ if(kind==='report'&&(!body.fileId||original.fileId===body.fileId&&(original.visitId||'')===visitId))return;
+
+ const fileId=kind==='file'?id:body.fileId;
+ if(kind==='report'){
+  const row=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space);
+  if(!row&&!restoring)throw bad('关联原件不存在或不在当前空间','fileId');
+  const fileVisitId=row&&JSON.parse(row.body).visitId;
+  if(fileVisitId&&fileVisitId!==visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料','fileId');
+ }
+ const visits=db.prepare(`SELECT DISTINCT json_extract(body,'$.visitId') AS visitId FROM items
+  WHERE space=? AND kind='report' AND id<>? AND json_extract(body,'$.fileId')=?
+  AND json_extract(body,'$.visitId')<>'' LIMIT 2`).all(space,id,fileId);
+ if(kind==='file'&&!visitId){
+  if(visits.length>1)throw bad('原件关联了不同就诊的报告，请先调整报告关联再恢复','visitId');
+ }else if(visits.some(row=>row.visitId!==visitId)){
+  throw bad('原件已被其他就诊的报告关联，请先调整报告关联',kind==='report'?'fileId':'visitId');
+ }
+}
 // Provenance markers are never read from a request body (validate() drops them); they are carried over from the stored record
 // on every write, so a web edit keeps the history. The MCP path passes via='mcp' (create sets createdVia/aiCreatedAt, every MCP write sets lastAiEditAt).
 const PROVENANCE=['createdVia','aiCreatedAt','lastAiEditAt'];
@@ -187,12 +213,11 @@ function put(space,kind,body,id=randomUUID(),via){
  for(const k of PROVENANCE)if(old&&original[k]!==undefined)clean[k]=original[k];
  if(via==='mcp'){const now=new Date().toISOString();if(!old){clean.createdVia='mcp';clean.aiCreatedAt=now;}clean.lastAiEditAt=now;}
  if(clean.visitId){const visit=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='visit'").get(clean.visitId,space);if(!visit&&original.visitId!==clean.visitId)throw bad('关联就诊不存在或不在当前空间');}
- if(kind==='file'&&clean.visitId){const conflict=getAll(space).find(x=>x.kind==='report'&&x.fileId===id&&x.visitId!==clean.visitId);if(conflict)throw bad('原件已被其他就诊的报告关联，请先调整报告关联');}
- if(kind==='report'&&clean.fileId){const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.fileId,space);if(!f){if(original.fileId!==clean.fileId)throw bad('关联原件不存在或不在当前空间')}else{const file=JSON.parse(f.body);if(file.visitId&&file.visitId!==clean.visitId)throw bad('原件属于另一次就诊，请选择同次就诊的资料');}}
- if(kind==='medication'&&clean.imageFileId){
+ validateReportOriginal(space,kind,clean,id,{original});
+ if(kind==='medication'&&clean.imageFileId&&clean.imageFileId!==original.imageFileId){
   const f=db.prepare("SELECT body FROM items WHERE id=? AND space=? AND kind='file'").get(clean.imageFileId,space);
-  if(!f){if(original.imageFileId!==clean.imageFileId)throw bad('药品图片不存在或不在当前空间','imageFileId');}
-  else if(!['image/png','image/jpeg','image/webp'].includes(JSON.parse(f.body).mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP','imageFileId');
+  if(!f)throw bad('药品图片不存在或不在当前空间','imageFileId');
+  validateStoredMedicationImage(JSON.parse(f.body));
  }
  if(kind==='meal')for(const fileId of clean.attachmentIds){if(!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='file'").get(fileId,space)&&!(original.attachmentIds||[]).includes(fileId))throw bad('餐食附件不存在或不在当前空间');}
  if(kind==='dose'){
@@ -288,7 +313,9 @@ function restoreFromTrash(space,id,opts={}){
  const t=db.prepare('SELECT * FROM trash_items WHERE id=? AND space=?').get(String(id||''),space);if(!t)throw bad('最近删除里没有这条记录，可能已超过 30 天或已恢复','id','not_found');
  if(db.prepare('SELECT id FROM items WHERE id=?').get(t.id))throw bad('这条记录已经恢复过了');
  if(t.kind==='travel_trip')return restoreTravelTrip(space,t);
- const body=JSON.parse(t.body);const parent=parentOf(t.kind,body);let parentRestored=null;
+ const body=JSON.parse(t.body);
+ validateReportOriginal(space,t.kind,body,t.id,{restoring:true});
+ const parent=parentOf(t.kind,body);let parentRestored=null;
  if([...ASSET_KINDS,...TRAVEL_KINDS].includes(t.kind)&&body.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,t.kind,body.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});
  if(parent&&!db.prepare('SELECT id FROM items WHERE id=? AND space=? AND kind=?').get(parent.id,space,parent.kind)){
   const inTrash=db.prepare('SELECT id FROM trash_items WHERE id=? AND space=?').get(parent.id,space);
@@ -322,6 +349,100 @@ const json=(res,status,body)=>{res.writeHead(status,{'Content-Type':'application
 async function readBody(req,maxBytes=15*1024*1024){let chunks=[],size=0;for await(const c of req){size+=c.length;if(size>maxBytes){const e=Object.assign(new Error('上传内容超过限制'),{status:413,expose:true});throw e;}chunks.push(c)}if(req.authSnapshot){const current=accounts.session(req);if(!current||current.session_id!==req.authSnapshot.session_id||current.id!==req.authSnapshot.id||current.role!==req.authSnapshot.role){const error=Object.assign(new Error('登录状态已失效，请重新登录'),{status:401,expose:true});throw error;}}let parsed;try{parsed=JSON.parse(Buffer.concat(chunks).toString()||'{}')}catch{throw bad('请求格式无效')}if(!parsed||typeof parsed!=='object'||Array.isArray(parsed))throw bad('请求格式无效');return parsed;}
 const mime={'.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp','.mjs':'text/javascript; charset=utf-8','.wasm':'application/wasm','.bcmap':'application/octet-stream','.ttf':'font/ttf','.pfb':'application/octet-stream','.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const allowedFiles={'.pdf':'application/pdf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.txt':'text/plain','.webp':'image/webp','.webm':'audio/webm','.m4a':'audio/mp4','.ogg':'audio/ogg','.mp3':'audio/mpeg'};
+const medicationImageTypes=['image/png','image/jpeg','image/webp'];
+const maxMedicationImageBytes=10*1024*1024;
+const pngHeader=Buffer.from('89504e470d0a1a0a0000000d49484452','hex');
+const jpegEnd=Buffer.from([0xff,0xd9]);
+const webpImageChunkMinimum={'VP8 ':10,VP8L:5};
+// Check container boundaries without decoding compressed pixels.
+function completePng(bytes){
+ if(bytes.length<33||!bytes.subarray(0,pngHeader.length).equals(pngHeader)||!bytes.readUInt32BE(16)||!bytes.readUInt32BE(20))return false;
+ let hasImageData=false;
+ for(let offset=33;offset+12<=bytes.length;){
+  const size=bytes.readUInt32BE(offset);
+  const chunk=bytes.toString('latin1',offset+4,offset+8);
+  offset+=size+12;
+  if(offset>bytes.length)return false;
+  if(chunk==='IDAT'&&size>0)hasImageData=true;
+  if(chunk==='IEND')return hasImageData&&size===0&&offset===bytes.length;
+ }
+ return false;
+}
+function completeJpeg(bytes){
+ if(bytes[0]!==0xff||bytes[1]!==0xd8)return false;
+ // Camera JPEGs may carry padding or other data after EOI.
+ const end=bytes.lastIndexOf(jpegEnd);
+ let hasFrame=false;
+ for(let offset=2;offset+3<end;){
+  if(bytes[offset++]!==0xff)return false;
+  while(bytes[offset]===0xff)offset++;
+  const marker=bytes[offset++];
+  if(marker===0x01)continue; // TEM has no segment length.
+  if(!marker||offset+2>=end)return false;
+  const size=bytes.readUInt16BE(offset);
+  if(size<2||offset+size>=end)return false;
+  if(marker===0xda)return hasFrame&&size>=6; // SOS must leave room for scan data before EOI.
+  // SOF markers define the dimensions and component table. C4/C8/CC are not frame markers.
+  if(marker>=0xc0&&marker<=0xcf&&![0xc4,0xc8,0xcc].includes(marker)){
+   if(size<11||!bytes.readUInt16BE(offset+5)||!bytes[offset+7]||size!==8+3*bytes[offset+7])return false;
+   hasFrame=true;
+  }
+  offset+=size;
+ }
+ return false;
+}
+function completeWebpChunks(bytes,start,end,animated=false){
+ let hasImage=false,hasAnimationHeader=false;
+ for(let offset=start;offset<end;){
+  if(offset+8>end)return false;
+  const chunk=bytes.toString('latin1',offset,offset+4);
+  const size=bytes.readUInt32LE(offset+4);
+  const data=offset+8;
+  offset=data+size+(size%2);
+  if(offset>end)return false;
+  const minimum=webpImageChunkMinimum[chunk];
+  if(minimum!==undefined){
+   if(animated||size<minimum)return false;
+   hasImage=true;
+  }
+  if(chunk==='ANIM')hasAnimationHeader=size===6;
+  if(chunk==='ANMF'){
+   if(!animated||!hasAnimationHeader||size<16||!completeWebpChunks(bytes,data+16,data+size))return false;
+   hasImage=true;
+  }
+ }
+ return hasImage;
+}
+function completeWebp(bytes){
+ if(bytes.length<20||bytes.toString('latin1',0,4)!=='RIFF'||bytes.toString('latin1',8,12)!=='WEBP'||bytes.readUInt32LE(4)!==bytes.length-8)return false;
+ const first=bytes.toString('latin1',12,16);
+ if(first==='VP8X'){
+  if(bytes.length<30||bytes.readUInt32LE(16)!==10)return false;
+  return completeWebpChunks(bytes,30,bytes.length,(bytes[20]&0x02)!==0);
+ }
+ return webpImageChunkMinimum[first]!==undefined&&completeWebpChunks(bytes,12,bytes.length);
+}
+function validateMedicationImage(type,bytes,field){
+ if(!medicationImageTypes.includes(type))throw bad('药品图片仅支持 PNG、JPG 和 WEBP',field);
+ const matches=type==='image/png'?completePng(bytes):type==='image/jpeg'?completeJpeg(bytes):completeWebp(bytes);
+ if(!matches)throw bad('药品图片内容与文件格式不符，请选择有效的 PNG、JPG 或 WEBP',field);
+}
+function validateStoredMedicationImage(file){
+ const field='imageFileId';
+ if(!file.storageName)throw bad('文件内容缺失',field);
+ const name=path.basename(file.storageName);
+ // Downloads derive their MIME from the stored extension. Require it to agree with the record.
+ if(allowedFiles[path.extname(name).toLowerCase()]!==file.mime)throw bad('药品图片内容与文件格式不符，请重新上传',field);
+ let fd;
+ try{fd=fs.openSync(path.join(dataDir,'uploads',name),'r');}
+ catch(error){if(error.code==='ENOENT')throw bad('文件内容缺失',field);throw error;}
+ try{
+  const stat=fs.fstatSync(fd);
+  if(!stat.isFile())throw bad('文件内容缺失',field);
+  if(stat.size>maxMedicationImageBytes)throw bad('药品图片不能超过 10MB',field);
+  validateMedicationImage(file.mime,fs.readFileSync(fd),field);
+ }finally{fs.closeSync(fd);}
+}
 // Text responses only; images/PDF/audio are already compressed. Hashed assets use build-time .br/.gz siblings
 // (verified against the source hash) or are compressed once and kept in memory; mutable files are compressed per request.
 const compressible=type=>/^(text\/|application\/(javascript|json|manifest\+json)|image\/svg\+xml)/.test(type);
@@ -415,10 +536,12 @@ function attachMedicationImage(space,{medicationId,fileId}){
  const medication=getAll(space).find(x=>x.id===medicationId&&x.kind==='medication');
  const file=getAll(space).find(x=>x.id===fileId&&x.kind==='file');
  if(!medication||!file)throw bad('没有找到用药方案或图片，请重新查询');
- if(!['image/png','image/jpeg','image/webp'].includes(file.mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP');
  if(medication.imageFileId&&medication.imageFileId!==fileId)throw bad('用药已有其他图片，请到网页核对后调整');
- if(!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw bad('文件内容缺失');
- if(medication.imageFileId===fileId)return medication;
+ if(medication.imageFileId===fileId){
+  if(!medicationImageTypes.includes(file.mime))throw bad('药品图片仅支持 PNG、JPG 和 WEBP');
+  if(!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw bad('文件内容缺失');
+  return medication;
+ }
  return put(space,'medication',{...medication,imageFileId:fileId},medicationId,'mcp');
 }
 const mcp=createMcp({components,layouts,db,put,getAll,today,validDate,nowHM,softDelete,listTrash,restoreFromTrash,readSettings:space=>personalSettings.read(space),writeSettings,validateWorkbench,assertUniqueWorkbenchName,uploadAttachment,listAttachments,attachReportFile,attachMedicationImage});
@@ -555,7 +678,15 @@ const server=http.createServer(async(req,res)=>{try{
 
  if(url.pathname==='/api/items'&&req.method==='POST'){const {kind,...body}=await readBody(req);if(ASSET_KINDS.includes(kind)||['travel','reading'].includes(workbench.type))requireExpectedOwner();checkKind(kind);if(kind==='file')throw bad('请通过上传入口添加资料');return json(res,201,put(space,kind,body))}
  if(url.pathname.startsWith('/api/items/')){const id=url.pathname.split('/').pop();const old=db.prepare('SELECT * FROM items WHERE id=? AND space=?').get(id,space);if(!old)return json(res,404,{error:'记录不存在'});if(['PUT','DELETE'].includes(req.method)&&(ASSET_KINDS.includes(old.kind)||['travel','reading'].includes(workbench.type)||old.kind==='file'))requireExpectedOwner();
-  if(req.method==='PUT'){checkKind(old.kind);const body=await readBody(req);if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId','bookId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}return json(res,200,put(space,old.kind,{...JSON.parse(old.body),...body},id))}
+  if(req.method==='PUT'){
+   checkKind(old.kind);
+   const body=await readBody(req);
+   if(old.kind==='file'){validateFileScope(space,body);const existing=JSON.parse(old.body);for(const key of ['title','date','note','visitId','tripId','bookId'])if(body[key]!==undefined)existing[key]=body[key];return json(res,200,put(space,old.kind,existing,id))}
+   // MCP can associate an image while the PUT body is still arriving.
+   const current=old.kind==='medication'?db.prepare('SELECT body FROM items WHERE id=? AND space=? AND kind=?').get(id,space,old.kind):old;
+   if(!current)return json(res,404,{error:'记录不存在'});
+   return json(res,200,put(space,old.kind,{...JSON.parse(current.body),...body},id));
+  }
   if(req.method==='DELETE'){return json(res,200,{deleted:softDelete(space,id,'web')})}
  }
  if(url.pathname==='/api/restore'&&req.method==='POST'){
@@ -564,7 +695,7 @@ const server=http.createServer(async(req,res)=>{try{
   if(db.prepare('SELECT id FROM items WHERE id=?').get(id))throw bad('该记录已存在');
   if(ASSET_KINDS.includes(deleted.kind)||['travel','reading'].includes(workbench.type)||deleted.kind==='file')requireExpectedOwner();
   if(['travel','reading'].includes(workbench.type))return json(res,200,restoreFromTrash(space,id));
-  const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
+  const deletedBody=JSON.parse(deleted.body);if(ASSET_KINDS.includes(deleted.kind)&&deletedBody.externalId&&db.prepare("SELECT id FROM items WHERE space=? AND kind=? AND json_extract(body,'$.externalId')=?").get(space,deleted.kind,deletedBody.externalId))throw Object.assign(bad('该来源记录已存在，不能重复恢复','externalId','duplicate_external_id'),{status:409});const clean=validate(deleted.kind,deletedBody,{original:deletedBody});validateReportOriginal(space,deleted.kind,clean,id,{restoring:true});for(const k of PROVENANCE)if(deletedBody[k]!==undefined)clean[k]=deletedBody[k];if(deleted.kind==='dose'&&clean.scheduledTime&&getAll(space).some(x=>x.kind==='dose'&&x.medicationId===clean.medicationId&&x.date===clean.date&&x.scheduledTime===clean.scheduledTime))throw bad('该时段已有服用结果，不能撤销为重复记录');db.prepare('INSERT INTO items VALUES(?,?,?,?)').run(id,space,deleted.kind,JSON.stringify(clean));const restored={id,kind:deleted.kind,...clean};db.prepare('DELETE FROM deleted_items WHERE id=?').run(id);db.prepare('DELETE FROM trash_items WHERE id=?').run(id);return json(res,200,restored);
  }
  if(url.pathname==='/api/capture-meal'&&req.method==='POST'){
   const b=await readBody(req);const attachments=b.attachments||[];const existing=b.mealId?getAll(space).find(x=>x.id===b.mealId&&x.kind==='meal'):null;if(b.mealId&&!existing)return json(res,404,{error:'餐食记录不存在'});const keep=b.keepAttachmentIds===undefined?(existing?.attachmentIds||[]):b.keepAttachmentIds;if(!Array.isArray(keep)||keep.some(id=>!existing?.attachmentIds?.includes(id)))throw bad('保留附件无效');
@@ -596,14 +727,39 @@ const server=http.createServer(async(req,res)=>{try{
   if(workbench.type!=='health'&&!['.pdf','.png','.jpg','.jpeg','.webp','.txt'].includes(ext))throw bad('一般资料上传仅支持PDF、图片和TXT');
   const bytes=Buffer.from(String(b.content||''),'base64');if(!bytes.length||bytes.length>10*1024*1024)throw bad('文件需大于 0 且不超过 10MB');
   const storageName=randomUUID()+ext;const body=validate('file',{...b,title:b.title||name,date:b.date||today(),name,mime:allowedFiles[ext],size:bytes.length,storageName});
+  if(body.fileCategory==='药品图片')validateMedicationImage(body.mime,bytes,'content');
   validateTravelReferences(space,'file',body);
- validateReadingReferences(space,'file',body);
-  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在');
+  validateReadingReferences(space,'file',body);
+  if(body.visitId&&!db.prepare("SELECT id FROM items WHERE id=? AND space=? AND kind='visit'").get(body.visitId,space))throw bad('关联就诊记录不存在',body.fileCategory==='药品图片'?'visitId':undefined);
+  const attemptId=b.uploadAttemptId;
+  let fingerprint;
+  if(attemptId!==undefined){
+   if(typeof attemptId!=='string'||!/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(attemptId))throw bad('药品图片上传标识无效','uploadAttemptId');
+   if(body.fileCategory!=='药品图片'||!['image/png','image/jpeg','image/webp'].includes(body.mime)||b.importReading===true)throw bad('上传标识仅用于药品图片','uploadAttemptId');
+   const {storageName:unused,...metadata}=body;
+   fingerprint=createHash('sha256').update(JSON.stringify({...metadata,date:b.date?body.date:null})).update(bytes).digest('hex');
+  }
   const destination=path.join(dataDir,'uploads',storageName);
-  db.exec('BEGIN');try{
-   if(workbench.type==='reading'&&b.importReading===true&&!body.bookId){const book=put(space,'reading_book',{title:body.title,date:body.date,materialType:b.materialType||'book',status:'wish'});body.bookId=book.id;}
-   fs.writeFileSync(destination,bytes,{mode:0o600});const result=put(space,'file',body);db.exec('COMMIT');return json(res,201,result);
-  }catch(error){db.exec('ROLLBACK');fs.rmSync(destination,{force:true});throw error;}
+  let result,status=201,written=false;
+  // Serialize lookup and creation across writers. The original row and its receipt commit together.
+  db.exec(attemptId?'BEGIN IMMEDIATE':'BEGIN');try{
+   const prior=attemptId&&db.prepare('SELECT fingerprint,file_id FROM medication_upload_attempts WHERE space=? AND attempt_id=?').get(space,attemptId);
+   if(prior){
+    if(prior.fingerprint!==fingerprint)throw Object.assign(bad('此上传标识已用于另一次药品图片上传，请重新选择图片',undefined,'upload_attempt_conflict'),{status:409});
+    const row=db.prepare("SELECT body FROM items WHERE space=? AND kind='file' AND id=?").get(space,prior.file_id);
+    const file=row&&JSON.parse(row.body);
+    if(!file||(file.visitId||'')!==(body.visitId||'')||!fs.existsSync(path.join(dataDir,'uploads',path.basename(file.storageName))))throw Object.assign(bad('此前上传的图片已不可用，请重新选择图片',undefined,'upload_attempt_unavailable'),{status:409});
+    result={id:prior.file_id,kind:'file',...file};status=200;
+   }else{
+    if(workbench.type==='reading'&&b.importReading===true&&!body.bookId){const book=put(space,'reading_book',{title:body.title,date:body.date,materialType:b.materialType||'book',status:'wish'});body.bookId=book.id;}
+    const fd=fs.openSync(destination,'wx',0o600);written=true;
+    try{fs.writeFileSync(fd,bytes);}finally{fs.closeSync(fd);}
+    result=put(space,'file',body);
+    if(attemptId)db.prepare('INSERT INTO medication_upload_attempts VALUES(?,?,?,?)').run(space,attemptId,fingerprint,result.id);
+   }
+   db.exec('COMMIT');
+  }catch(error){if(db.isTransaction)db.exec('ROLLBACK');if(written)fs.rmSync(destination,{force:true});throw error;}
+  return json(res,status,result);
  }
  if(url.pathname.startsWith('/api/files/')&&req.method==='GET'){
   const file=getAll(space).find(x=>x.kind==='file'&&x.id===url.pathname.split('/').pop());if(!file)return json(res,404,{error:'文件不存在'});

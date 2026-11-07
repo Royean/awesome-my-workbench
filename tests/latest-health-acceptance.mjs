@@ -4,13 +4,18 @@ import assert from 'node:assert/strict';
 import {mkdtemp,rm,readFile,writeFile} from 'node:fs/promises';
 import os from 'node:os';import path from 'node:path';import {pathToFileURL} from 'node:url';import {createHash} from 'node:crypto';
 import {startServer,stopProcess,waitFor,repoRoot} from './helpers.mjs';
+import {originalPNG} from './originals-fixtures.mjs';
 const {chromium}=await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE||path.join(os.homedir(),'.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs')));
 const data=await mkdtemp(path.join(os.tmpdir(),'latest-health-data-')),evidence=await mkdtemp(path.join(os.tmpdir(),'latest-health-evidence-'));
 let server,browser;const checks=[];const ok=s=>{checks.push(s);console.log('PASS '+s)};
 async function boot(now){server=await startServer({env:{HEALTH_DATA_DIR:data,NODE_ENV:'test',AUTH_REQUIRED:'0',HOST:'127.0.0.1',ZH_TEST_NOW:now}})}
 async function api(route,method='GET',body){const r=await fetch(server.base+route+'?space=personal&workbench=health',{method,headers:{'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});assert.ok(r.ok,`${method} ${route}: ${r.status} ${await r.clone().text()}`);return r.json()}
 const add=(kind,title,date,time='',extra={})=>api('/api/items','POST',{kind,title,date,time,...extra});
-const upload=(title,date,time,category='一般资料')=>api('/api/upload','POST',{title,name:title+'.txt',date,time,fileCategory:category,content:Buffer.from('Fictional original evidence: '+title).toString('base64')});
+const upload=(title,date,time,category='一般资料')=>{
+ const isMedicationImage=category==='药品图片';
+ const bytes=isMedicationImage?originalPNG():Buffer.from('Fictional original evidence: '+title);
+ return api('/api/upload','POST',{title,name:title+(isMedicationImage?'.png':'.txt'),date,time,fileCategory:category,content:bytes.toString('base64')});
+};
 try{
  await boot('2027-01-02T04:00:00Z');browser=await chromium.launch({channel:'chrome',headless:true});
  const ctx=await browser.newContext({viewport:{width:1440,height:1100},timezoneId:'Asia/Shanghai'});await ctx.addInitScript(()=>{localStorage.setItem('health-space','personal');localStorage.setItem('active-workbench','health')});

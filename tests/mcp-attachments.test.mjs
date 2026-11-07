@@ -51,3 +51,25 @@ test('list defaults to 50 and caps at 200 when more than 200 originals exist',as
 
 
 test('missing historical bytes remain listable with safe explicit metadata and cannot be linked',async()=>{const args=upload('missing-history.txt',Buffer.from('fictional missing bytes'),{date:'2026-10-21'}),file=(await ok('upload_attachment',args)).uploaded;const stored=(await state()).find(x=>x.id===file.id);await rm(path.join(dir,'uploads',stored.storageName));const result=await ok('list_attachments',{limit:200}),missing=result.files.find(x=>x.id===file.id);assert.ok(missing);assert.equal(missing.sha256,null);assert.equal(missing.missing,true);safe(missing);const r=await report(await visit());await err('attach_report_file',{reportId:r.id,fileId:file.id});assert.ok(!JSON.parse(row(r.id).body).fileId);const retry=await ok('upload_attachment',args);assert.equal(retry.reused,false);assert.notEqual(retry.uploaded.id,file.id);assert.equal(retry.uploaded.sha256,args.sha256);});
+
+test('MCP uses active report ownership for attach and restore',async()=>{
+ const a=await visit(),b=await visit(),other=await report(b);
+ const file=(await ok('upload_attachment',upload('visit-ownership.txt',Buffer.from('fictional visit ownership')))).uploaded;
+ const webReport=async visitId=>{
+  const r=await req('/api/items',{method:'POST',headers:web(),body:{kind:'report',title:'虚构网页报告',date,visitId,fileId:file.id}});
+  assert.equal(r.status,201);
+  return r.body;
+ };
+ const first=await webReport(a.id);
+ assert.match((await err('attach_report_file',{reportId:other.id,fileId:file.id})).message,/其他就诊/);
+ assert.ok(!JSON.parse(row(file.id).body).visitId);
+ assert.ok(!JSON.parse(row(other.id).body).fileId);
+ await ok('delete_record',{id:first.id});
+ await ok('delete_record',{id:a.id});
+ const linked=await ok('attach_report_file',{reportId:other.id,fileId:file.id});
+ assert.equal(linked.updated.id,other.id);
+ assert.equal(JSON.parse(row(file.id).body).visitId,b.id);
+ assert.match((await err('restore_record',{id:first.id,withParent:true})).message,/另一次就诊/);
+ assert.equal(row(a.id),undefined);
+ assert.equal(row(first.id),undefined);
+});

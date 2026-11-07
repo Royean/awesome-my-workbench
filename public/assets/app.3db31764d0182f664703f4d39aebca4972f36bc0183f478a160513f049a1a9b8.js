@@ -164,10 +164,725 @@ return { normalizeHealthRoute };
 })();
 
 const __workbenchModule3 = (() => {
-// institutions.js
+// hospital-logo-map.js
 
-// Public institution directory. Logos are official assets; empty logo uses a neutral placeholder.
-const institutions = [
+// Generated from the reviewed hospital catalog. Run scripts/export-hospital-logo-map.mjs.
+const hospitalLogoMappings = [
+  {
+    "id": "beijing-union",
+    "catalogHospitalId": "ahospital-05bb57c0a967b204af2f",
+    "name": "北京协和医院",
+    "aliases": [
+      "协和医院",
+      "中国医学科学院北京协和医院",
+      "北京協和醫院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-5718522e07d50b8bac45024c528c6599e9026e88b3c3c610f22c572fa26c3fab.png",
+    "website": "https://www.pumch.cn/",
+    "sourceUrl": "https://www.pumch.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/beijing-union.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "leshan-people",
+    "catalogHospitalId": "ahospital-05d275b74b24aac42afe",
+    "name": "乐山市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "乐山",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-3897da8321a4923077b8947ed46c1a968b63aa881380030259e495fc5a516490.png",
+    "website": "https://leshan-hospital.com.cn/",
+    "sourceUrl": "https://www.leshan-hospital.com.cn/aspx/index.html",
+    "logoSourceUrl": "https://www.leshan-hospital.com.cn/aspx/img/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-0fdc9b9c16409e20b61d",
+    "catalogHospitalId": "ahospital-0fdc9b9c16409e20b61d",
+    "name": "首都医科大学附属复兴医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-45968896b43c13f886562637c6ba56752123ccbe19251e681de0028c317e7e75.jpg",
+    "website": "https://www.bj-fxh.com.cn/",
+    "sourceUrl": "https://www.bj-fxh.com.cn/",
+    "logoSourceUrl": "https://www.bj-fxh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "nanjing-gulou",
+    "catalogHospitalId": "ahospital-19eb6ebd3f30af32360d",
+    "name": "南京鼓楼医院",
+    "aliases": [
+      "鼓楼医院",
+      "南京大学医学院附属鼓楼医院"
+    ],
+    "kind": "hospital",
+    "city": "南京",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-45f6ccaa3a915eba0e16bb6c9e9de5b80a364d4f123fb4dcb794061ac10f8389.png",
+    "website": "https://www.njglyy.com/",
+    "sourceUrl": "https://www.njglyy.com/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/nanjing-gulou.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-237ff1bce8629f101f52",
+    "catalogHospitalId": "ahospital-237ff1bce8629f101f52",
+    "name": "北京大学第六医院",
+    "aliases": [
+      "北医六院",
+      "北大六院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-fb0f174c4867812d6f0138dfe4e6fbcf2091e45e53c453fc7303fe3782321805.jpg",
+    "website": "https://www.pkuh6.cn/Html/Index.html",
+    "sourceUrl": "https://www.pkuh6.cn/Html/Index.html",
+    "logoSourceUrl": "https://www.pkuh6.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-first",
+    "catalogHospitalId": "ahospital-2c3abb0ce4f79bce1022",
+    "name": "北京大学第一医院",
+    "aliases": [
+      "北大医院",
+      "北大一院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-f4dd30fcec2168752b0b0abc7de14af9b7d38ffb5cd966028f043cf4edf11b94.jpg",
+    "website": "https://www.pkufh.com/",
+    "sourceUrl": "https://www.pkufh.com/",
+    "logoSourceUrl": "https://www.pkufh.com/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-33b9cad0b0e230408d81",
+    "catalogHospitalId": "ahospital-33b9cad0b0e230408d81",
+    "name": "吉林大学第一医院",
+    "aliases": [
+      "吉林大学白求恩第一医院",
+      "吉大一院"
+    ],
+    "kind": "hospital",
+    "city": "长春",
+    "province": "吉林省",
+    "logo": "/provider-logos/hospital-1167b8109f5d9f13f95ff2e7bc44e5c7df59c93b9df2dd5d68f45abbae702d72.png",
+    "website": "https://www.jdyy.cn/",
+    "sourceUrl": "https://www.jdyy.cn/",
+    "logoSourceUrl": "https://www.jdyy.cn/template/pc/skin/index/img/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-3d93e2ddf11039cb599e",
+    "catalogHospitalId": "ahospital-3d93e2ddf11039cb599e",
+    "name": "首都医科大学附属北京朝阳医院",
+    "aliases": [
+      "朝阳医院",
+      "北京朝阳医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-a51827d1f3b0667d42be73464679b9abd7d57ed8f547aaf4e602db8ba613be75.jpg",
+    "website": "https://www.bjcyh.com.cn/",
+    "sourceUrl": "https://www.bjcyh.com.cn/",
+    "logoSourceUrl": "https://www.bjcyh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-3db10866722bfd13743c",
+    "catalogHospitalId": "ahospital-3db10866722bfd13743c",
+    "name": "山东省立医院",
+    "aliases": [
+      "山东第一医科大学附属省立医院"
+    ],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-c3e90679707ea3913e9b249456a6972333b9b7f586ab2deb334c9751f667f7f2.jpg",
+    "website": "https://www.sph.com.cn/",
+    "sourceUrl": "https://www.sph.com.cn/",
+    "logoSourceUrl": "https://www.sph.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "shandong-qilu-second",
+    "catalogHospitalId": "ahospital-3edef4a7305db5152337",
+    "name": "山东大学齐鲁第二医院",
+    "aliases": [
+      "山东大学第二医院"
+    ],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-330c5851b8fc4e76955dbb478637fd55a89e08b86f8a026a3a98d66e111bdae7.png",
+    "website": "https://www.sdey.net/",
+    "sourceUrl": "https://www.sdey.net/",
+    "logoSourceUrl": "https://www.sdey.net/statics/sdey_new/img/nav_logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "zju-first",
+    "catalogHospitalId": "ahospital-4ce07952d12023fe99b5",
+    "name": "浙江大学医学院附属第一医院",
+    "aliases": [
+      "浙江省第一医院",
+      "浙大一院",
+      "浙大一附院",
+      "浙一医院"
+    ],
+    "kind": "hospital",
+    "city": "杭州",
+    "province": "浙江省",
+    "logo": "/provider-logos/hospital-4225c4116cb2d2d77dbd893dddb258370370938d59f2f9385932f7a6048c3eed.png",
+    "website": "https://www.zy91.com/",
+    "sourceUrl": "https://www.zy91.com/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/zju-first.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "wuhan-tongji",
+    "catalogHospitalId": "ahospital-542cee44119209bea1ea",
+    "name": "华中科技大学同济医学院附属同济医院",
+    "aliases": [
+      "华中科技大学同济医学院附属同济医院",
+      "武汉同济医院"
+    ],
+    "kind": "hospital",
+    "city": "武汉",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-80164fcceeb33b9dbcd0362bc632d73060da3acadbb3ac2dd2c44473963e77d8.png",
+    "website": "https://www.tjh.com.cn/",
+    "sourceUrl": "https://www.tjh.com.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-tongji.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "zigong-first",
+    "catalogHospitalId": "ahospital-664068814af5bc5be595",
+    "name": "自贡市第一人民医院",
+    "aliases": [
+      "自贡市仁济医学中心",
+      "自贡市一医院"
+    ],
+    "kind": "hospital",
+    "city": "自贡",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-8583d928102f6ba0f26222dee030acf5f8a6af2b1ba30e33250d6c45446a1290.png",
+    "website": "https://zgno1hos.com.cn/",
+    "sourceUrl": "https://www.zgno1hos.com.cn/",
+    "logoSourceUrl": "https://www.zgno1hos.com.cn/Template/Pc/images/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-6cd908ac222ccb130799",
+    "catalogHospitalId": "ahospital-6cd908ac222ccb130799",
+    "name": "楚雄州人民医院",
+    "aliases": [
+      "楚雄彝族自治州人民医院"
+    ],
+    "kind": "hospital",
+    "city": "楚雄",
+    "province": "云南省",
+    "logo": "/provider-logos/hospital-eb4decb6cb0a978fc22dc94f4c62d13938708412d5d917eb7ee5ab993082232c.png",
+    "website": "https://www.cxzrmyy.com/",
+    "sourceUrl": "https://www.cxzrmyy.com/",
+    "logoSourceUrl": "https://www.cxzrmyy.com/images/250805cx_rmyy_logo2.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "jinan-third",
+    "catalogHospitalId": "ahospital-7b5c39c7efb09e1d1e6e",
+    "name": "济南市第三人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-6fbf322f2b5a162c9ae4a92fb80b06085e9fb3b4525e498c42f2d4c2c14e66bb.png",
+    "website": "https://www.jnslsy.cn/index.htm",
+    "sourceUrl": "https://www.jnslsy.cn/index.htm",
+    "logoSourceUrl": "https://www.jnslsy.cn/images/f-logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-87366aa0de2962c2b8cb",
+    "catalogHospitalId": "ahospital-87366aa0de2962c2b8cb",
+    "name": "海南省人民医院",
+    "aliases": [
+      "海南医科大学附属海南医院"
+    ],
+    "kind": "hospital",
+    "city": "海口",
+    "province": "海南省",
+    "logo": "/provider-logos/hospital-cc97a9caec70f566fdb3351c912b7e1fbf64d88bf08925fd007844eae32fc9d7.png",
+    "website": "https://www.phhp.com.cn/",
+    "sourceUrl": "https://www.phhp.com.cn/",
+    "logoSourceUrl": "https://www.phhp.com.cn/new/images/logoa1.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-people",
+    "catalogHospitalId": "ahospital-a0f2fa02a98d9d20d73e",
+    "name": "北京大学人民医院",
+    "aliases": [
+      "北大人民医",
+      "北大人民医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-1d5b6c9788eb02b6a318d3cb08c7be500baa6780cf617f4341dd46a9a2a999a0.png",
+    "website": "https://www.pkuph.cn/",
+    "sourceUrl": "https://www.pkuph.cn/",
+    "logoSourceUrl": "https://www.pkuph.cn/Uploads/Picture/2025/09/02/s68b63d5fcbed0.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "beijing-tiantan",
+    "catalogHospitalId": "ahospital-a62441df522f47158f17",
+    "name": "首都医科大学附属北京天坛医院",
+    "aliases": [
+      "北京天坛医院",
+      "天坛医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-656fa2c8885b0410890c73d8d82d8da362dd3f74ff98b6d6233cf1fd3b841ea8.jpg",
+    "website": "https://www.bjtth.cn/",
+    "sourceUrl": "https://www.bjtth.cn/Home/",
+    "logoSourceUrl": "https://www.bjtth.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-third",
+    "catalogHospitalId": "ahospital-b576c87aa353eb9f1eda",
+    "name": "北京大学第三医院",
+    "aliases": [
+      "北医三院",
+      "北大三院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-fbbb1048f6eefe8e9f91bd353c373e84258b6994d71892de8caa1bf432e8cf16.jpg",
+    "website": "https://www.puh3.net.cn/",
+    "sourceUrl": "https://www.puh3.net.cn/info/2641/100461.htm",
+    "logoSourceUrl": "https://www.puh3.net.cn/__local/6/05/26/CBEBFAF1256AF3D62FAD11FBC81_DE3B2B45_10D91.jpg?e=.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "west-china-dental",
+    "catalogHospitalId": "ahospital-b89776fe42fea8e3b91e",
+    "name": "四川大学华西口腔医院",
+    "aliases": [
+      "华西口腔医院",
+      "华西口腔"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-2835c6238f873aa0a99902423e058a9a7bc1d38fc2182c2d25b8e09e95a93617.jpg",
+    "website": "https://www.hxkq.org/",
+    "sourceUrl": "https://www.hxkq.org/",
+    "logoSourceUrl": "https://www.hxkq.org/Sites/Uploaded/UserUpLoad/20210108/20210108102002.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "sichuan-people",
+    "catalogHospitalId": "ahospital-bd493e5d3528c4138233",
+    "name": "四川省人民医院",
+    "aliases": [
+      "四川省医学科学院·四川省人民医院"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-886d7bcdb3ed64ebff33a3f735eb9b11633e747bbb4384382799339fea5423c9.png",
+    "website": "https://www.samsph.cn/",
+    "sourceUrl": "https://www.samsph.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/sichuan-people.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "shenzhen-people",
+    "catalogHospitalId": "ahospital-c3d047eadbed6571d88a",
+    "name": "深圳市人民医院",
+    "aliases": [
+      "深圳市人民医院（留医部）"
+    ],
+    "kind": "hospital",
+    "city": "深圳",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-e32809320c483d11bb68533d6db4b5ff8b79c3a0ddf04196df52d42fdabe8901.png",
+    "website": "https://www.szhospital.com/",
+    "sourceUrl": "https://www.szhospital.com/",
+    "logoSourceUrl": "https://www.szhospital.com/asset/images/nww/logo.png?ver=2024",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "qidong-people",
+    "catalogHospitalId": "ahospital-d3c13939b5f49e2c8bd4",
+    "name": "启东市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "启东",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-65d56239fc3d6980e849514147a2512f95ee77afeaa6fd2c4b08c8ab57db0ec6.png",
+    "website": "https://www.qdsrmyy.com/",
+    "sourceUrl": "https://www.qdsrmyy.com/",
+    "logoSourceUrl": "https://www.qdsrmyy.com/imgs/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "fudan-huashan",
+    "catalogHospitalId": "ahospital-e21ab155a4b76f4ec89a",
+    "name": "复旦大学附属华山医院",
+    "aliases": [
+      "华山医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-a536f1e336ea09e280b544357284302c26f90c26ec7cbadef183e97214b4eee9.png",
+    "website": "https://www.huashan.org.cn/",
+    "sourceUrl": "https://www.huashan.org.cn/",
+    "logoSourceUrl": "https://www.huashan.org.cn/images/logo114.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "fudan-zhongshan",
+    "catalogHospitalId": "ahospital-f20521e51cc2d0df1ac5",
+    "name": "复旦大学附属中山医院",
+    "aliases": [
+      "上海中山医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-a1ff5860166c96432229a97f41faac67ad41931c59df7cbad7ca420000655ab6.png",
+    "website": "https://www.zs-hospital.sh.cn/",
+    "sourceUrl": "https://www.zs-hospital.sh.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/fudan-zhongshan.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "west-china",
+    "catalogHospitalId": "ahospital-f9e10479da0c47e1fec1",
+    "name": "四川大学华西医院",
+    "aliases": [
+      "四川大学华西临床医学院",
+      "华西医院"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-7bb38d414abc61175d76804a1a759a663c1325528c8d060792b9ff234f1ba700.png",
+    "website": "https://www.wchscu.cn/",
+    "sourceUrl": "https://www.wchscu.cn/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/west-china.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-faa3abe07d21b6cd41fa",
+    "catalogHospitalId": "ahospital-faa3abe07d21b6cd41fa",
+    "name": "上海东方医院",
+    "aliases": [
+      "同济大学附属东方医院",
+      "上海市东方医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-4994370138c965f09033dbf105a6132f73bfa967efb460a4d621a2f6b99ce6e0.png",
+    "website": "https://www.easthospital.cn/",
+    "sourceUrl": "https://www.easthospital.cn/",
+    "logoSourceUrl": "https://www.easthospital.cn/static/mobile/images/yindaologo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "wuhan-union",
+    "catalogHospitalId": "ahospital-fc1f8495fcd0bd0ae1ee",
+    "name": "华中科技大学同济医学院附属协和医院",
+    "aliases": [
+      "华中科技大学同济医学院附属协和医院",
+      "武汉协和医院"
+    ],
+    "kind": "hospital",
+    "city": "武汉",
+    "province": "湖北省",
+    "logo": "/provider-logos/hospital-05218ca86dbf8269d652d81b6e6c13daa0d403e48f2b1094e476ba65875d06e0.png",
+    "website": "https://www.whuh.com/",
+    "sourceUrl": "https://www.whuh.com/",
+    "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-union.png",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-fede6c32ead377c78972",
+    "catalogHospitalId": "ahospital-fede6c32ead377c78972",
+    "name": "北京中医药大学东方医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-28c2bf5a62cd33ae68fee3e6801bdfb253210b3d1362fddc5e14f6207579201d.jpg",
+    "website": "https://www.dongfangyy.com.cn/",
+    "sourceUrl": "https://www.dongfangyy.com.cn/",
+    "logoSourceUrl": "https://www.dongfangyy.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental",
+    "catalogHospitalId": "supplement-xinqiao-dental",
+    "name": "新桥口腔",
+    "aliases": [
+      "新桥口腔医院",
+      "成都新桥口腔医院"
+    ],
+    "kind": "hospital",
+    "city": "",
+    "scope": "brand",
+    "cities": [
+      "成都",
+      "西宁",
+      "德阳",
+      "自贡"
+    ],
+    "province": "多省市品牌",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-gaoxin",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-gaoxin",
+    "name": "成都高新新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（高新院区）",
+      "新桥口腔（高新分院）",
+      "成都新桥口腔高新院区",
+      "新桥口腔（高新旗舰店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-guanghua",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-guanghua",
+    "name": "新桥口腔（光华院区）",
+    "aliases": [
+      "新桥口腔（光华品牌店）",
+      "新桥口腔（光华院区）",
+      "成都新桥瑞联路口腔门诊部",
+      "成都维乐口腔医院管理有限公司新桥瑞联路口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-qionglai",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-qionglai",
+    "name": "成都邛崃新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（邛崃院区）",
+      "新桥口腔（邛崃店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-rennan",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-rennan",
+    "name": "成都人南新桥口腔医院",
+    "aliases": [
+      "新桥口腔成都总院",
+      "新桥口腔（人南院区）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-shuhan",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-shuhan",
+    "name": "成都金牛蜀汉新迪新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（蜀汉品牌店）",
+      "新桥口腔（蜀汉院区）",
+      "新桥口腔（蜀汉分院）",
+      "成都新桥口腔蜀汉院区"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-wuhou-fujin",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-wuhou-fujin",
+    "name": "成都武侯新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（武侯店）",
+      "新桥口腔（武侯院区）",
+      "成都新桥口腔武侯院区",
+      "新桥口腔（武侯品牌店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-yiguanmiao",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-yiguanmiao",
+    "name": "成都新桥口腔医院（衣冠庙院区）",
+    "aliases": [
+      "新桥口腔（衣冠庙店）",
+      "新桥口腔（衣冠庙院区）",
+      "成都新桥口腔衣冠庙院区"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-yushuang",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-yushuang",
+    "name": "新桥口腔（玉双院区）",
+    "aliases": [
+      "新桥口腔（玉双品牌店）",
+      "新桥口腔（玉双院区）",
+      "成都新桥玉双路口腔门诊部",
+      "成都维乐口腔医院管理有限公司新桥玉双路口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-deyang",
+    "catalogHospitalId": "supplement-xinqiao-dental-deyang",
+    "name": "德阳维乐新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（德阳院区）",
+      "德阳新桥口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "德阳",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-xining",
+    "catalogHospitalId": "supplement-xinqiao-dental-xining",
+    "name": "西宁新桥口腔医院",
+    "aliases": [
+      "新桥口腔（西宁院区）",
+      "西宁市新桥口腔医院有限公司"
+    ],
+    "kind": "hospital",
+    "city": "西宁",
+    "brandId": "xinqiao-dental",
+    "province": "青海省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-zigong",
+    "catalogHospitalId": "supplement-xinqiao-dental-zigong",
+    "name": "自贡维乐新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（自贡院区）",
+      "自贡新桥口腔"
+    ],
+    "kind": "hospital",
+    "city": "自贡",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  }
+];
+return { hospitalLogoMappings };
+})();
+
+const __workbenchModule4 = (() => {
+// institutions.js
+const { hospitalLogoMappings } = __workbenchModule3;
+// Reviewed catalog mappings extend the legacy directory while retaining existing stable IDs.
+const curatedInstitutions = [
   {
     "id": "sichuan-people",
     "name": "四川省人民医院",
@@ -535,23 +1250,56 @@ const institutions = [
     "verifiedAt": "2026-11-01"
   }
 ];
+const institutions = [...curatedInstitutions.filter(p=>!hospitalLogoMappings.some(m=>m.id===p.id)),...hospitalLogoMappings];
 return { institutions };
 })();
 
-const __workbenchModule4 = (() => {
+const __workbenchModule5 = (() => {
 // provider-ui.js
-const { institutions } = __workbenchModule3;
+const { institutions } = __workbenchModule4;
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
 const names=p=>[p.name,...(p.aliases||[])];
+const matchesName=(p,hospital)=>names(p).some(name=>normalize(name)===hospital);
+function brandBranchLabel(brand,hospital){
+ const parts=/^(.+)\(([^()]{1,50})\)$/.exec(hospital);
+ if(!parts||!matchesName(brand,parts[1]))return '';
+ return parts[2].replace(/分院$/,'院区');
+}
+
+function reviewedBranches(brand,hospital,label=brandBranchLabel(brand,hospital)){
+ const branches=institutions.filter(p=>p.brandId===brand.id);
+ const exact=branches.filter(p=>matchesName(p,hospital));
+ if(exact.length||!label)return exact;
+ return branches.filter(p=>names(p).some(name=>brandBranchLabel(brand,normalize(name))===label));
+}
+
 const hospitalBuildingIcon=()=>`<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#668371" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M7 10H4a1 1 0 0 0-1 1v10m14-11h3a1 1 0 0 1 1 1v10M2 21h20M10 21v-4h4v4M12 6v4m-2-2h4M10 13h.01M14 13h.01M4.5 14h.01M4.5 17h.01M19.5 14h.01M19.5 17h.01"/></svg>`;
+const cityKey=value=>normalize(value).replace(/市$/,'');
+const matchesCity=(p,city)=>!city||(p.scope==='brand'?(p.cities||[]).some(c=>cityKey(c)===city):!p.city||cityKey(p.city)===city);
+
 function resolveInstitution(visit){
- if(visit.hospitalId)return institutions.find(p=>p.id===visit.hospitalId)||null;
- const hospital=normalize(visit.hospital);if(!hospital)return null;
- const city=normalize(visit.city).replace(/市$/,'');
+ const city=cityKey(visit.city),hospital=normalize(visit.hospital);
+ if(visit.hospitalId){
+  const selected=institutions.find(p=>p.id===visit.hospitalId)||null;
+  if((selected?.brandId||selected?.scope==='brand')&&!matchesCity(selected,city))return null;
+  const brand=selected?.brandId?institutions.find(p=>p.id===selected.brandId):selected?.scope==='brand'?selected:null;
+  if(brand&&hospital){
+   const branches=reviewedBranches(brand,hospital);
+   if(branches.length&&!branches.some(p=>selected.brandId?p.id===selected.id:matchesCity(p,city)))return null;
+  }
+  return selected;
+ }
+ if(!hospital)return null;
  const ambiguous=new Set(['省医院','省人民医院','人民医院','协和医院','中山医院','同济医院','鼓楼医院']);
- const matches=institutions.filter(p=>names(p).some(name=>normalize(name)===hospital));
- const candidates=city?matches.filter(p=>!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
  if(!city&&ambiguous.has(hospital))return null;
+ const exactMatches=institutions.filter(p=>matchesName(p,hospital));
+ const matches=exactMatches.length?exactMatches:institutions.filter(p=>p.scope==='brand').flatMap(brand=>{
+  const label=brandBranchLabel(brand,hospital);
+  if(!label)return [];
+  const branches=reviewedBranches(brand,hospital,label);
+  return branches.length?branches:[brand];
+ });
+ const candidates=matches.filter(p=>matchesCity(p,city));
  return candidates.length===1?candidates[0]:null;
 }
 function institutionMark(visit,{esc,icon}){const p=resolveInstitution(visit);const crest=['sichuan-people','shanghai-ruijin','wuhan-tongji','wuhan-union','zju-first','nanjing-gulou','chongqing-xinqiao','rich-healthcare'].includes(p?.id);const dark=['west-china','wuhan-union','zju-first'].includes(p?.id);return `<span class="institution-mark${p?.logo?' has-logo':''}${p?.logo&&crest?' logo-crest':''}${p?.logo&&dark?' logo-dark':''}" aria-label="${esc(p?p.name:'机构待补充')}">${p?.logo?`<img src="${esc(p.logo)}" alt="${esc(p.name)}标识" loading="lazy" data-institution-logo><span hidden>${hospitalBuildingIcon()}</span>`:hospitalBuildingIcon()}</span>`;}
@@ -569,7 +1317,7 @@ if(typeof document!=='undefined')document.addEventListener('error',event=>{if(ev
 return { resolveInstitution, institutionMark, institutionFields, bindInstitutionPicker };
 })();
 
-const __workbenchModule5 = (() => {
+const __workbenchModule6 = (() => {
 // request.js
 
 // JSON API calls never populate the browser cache or automatically retry writes.
@@ -642,7 +1390,7 @@ function aiTag(item) {
 return { fetchJSON, showFieldError, aiWhen, aiTagInfo, aiTag };
 })();
 
-const __workbenchModule6 = (() => {
+const __workbenchModule7 = (() => {
 // asset-lifecycle.js
 
 // Pure read adapters shared by the server and browser. Never mutate stored records.
@@ -703,11 +1451,10 @@ function assetDeadline(item,today){
 return { enrichAssetHolding, assetGroup, assetDeadline };
 })();
 
-const __workbenchModule7 = (() => {
-// assets.js
-const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule6;
-const ASSET_CATEGORIES={cash:'现金',fund:'基金 / ETF',stock:'股票',server:'服务器',domain:'域名',property:'房产',vehicle:'车辆',equipment:'设备',subscription:'服务 / 订阅',other:'其他资产'};
-const ASSET_PAGES={dashboard:'资产总览',accounts:'账户',financial:'金融资产',fixed:'固定资产',renewals:'到期与续费',holdings:'全部资产',transactions:'流水',liabilities:'负债',history:'历史快照',documents:'资料',tasks:'待办',notes:'备忘',mine:'我的'};
+const __workbenchModule8 = (() => {
+// asset-accounting.js
+
+// Shared read-only valuation rules for asset lists and the overview.
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 function assetValue(item){if(finite(item.value))return item.value;if(finite(item.quantity)&&finite(item.unitPrice))return item.quantity*item.unitPrice;return null;}
 // Account balance is opt-in. Imported account totals must not be added to their holdings twice.
@@ -715,9 +1462,140 @@ function assetProfit(item){const value=assetValue(item);return finite(item.cost)
 function calculateAssetTotals(items){const currencies=new Map();const group=c=>{const code=String(c||'CNY');if(!currencies.has(code))currencies.set(code,{currency:code,assets:0,liabilities:0,unknown:0,unknownLiabilities:0,pendingCount:0,pendingValue:0,pendingUnvalued:0,categories:{},dates:[]});return currencies.get(code);};
  for(const x of items){if(x.status==='closed')continue;if(x.status==='pending'&&x.kind==='asset_holding'){const g=group(x.currency),value=assetValue(x);g.pendingCount++;if(value===null)g.pendingUnvalued++;else g.pendingValue+=value;continue;}if(x.kind==='asset_holding'){const g=group(x.currency),v=assetValue(x);if(v===null){g.unknown++;continue;}g.assets+=v;g.categories[x.category||'other']=(g.categories[x.category||'other']||0)+v;if(x.valuationDate||x.sourceDate||x.date)g.dates.push(x.valuationDate||x.sourceDate||x.date);}else if(x.kind==='asset_account'&&x.includeInTotal===true){const g=group(x.currency);if(finite(x.balance))g.assets+=x.balance;else g.unknown++;if(x.balanceAsOf||x.date)g.dates.push(x.balanceAsOf||x.date);}else if(x.kind==='asset_liability'){const g=group(x.currency);if(finite(x.balance)&&x.status!=='pending')g.liabilities+=x.balance;else{g.unknown++;g.unknownLiabilities++;}if(x.asOfDate||x.date)g.dates.push(x.asOfDate||x.date);}}
  return [...currencies.values()].map(g=>({...g,net:g.unknownLiabilities?null:g.assets-g.liabilities,dates:[...new Set(g.dates)].sort()}));}
+return { assetValue, assetProfit, calculateAssetTotals };
+})();
+
+const __workbenchModule9 = (() => {
+// asset-overview.js
+const { assetValue, calculateAssetTotals } = __workbenchModule8;
+const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule7;
+const finite=v=>typeof v==='number'&&Number.isFinite(v);
+const code=x=>x.currency||'CNY';
+const snapshotAmount=new Intl.NumberFormat('en-US',{useGrouping:false,minimumFractionDigits:2,maximumFractionDigits:2});
+const sameAmount=(a,b)=>snapshotAmount.format(a)===snapshotAmount.format(b);
+const labels={cash:'现金与存款',fund:'基金 / ETF',stock:'股票',other:'其他金融资产'};
+const validDate=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(value+'T00:00:00Z'))&&new Date(value+'T00:00:00Z').toISOString().slice(0,10)===value;
+
+// Never convert currencies or count account totals unless explicitly opted in.
+function buildFinanceOverview(items,today,selectedCurrency=''){
+ const totals=calculateAssetTotals(items),contributions=[],missing=[];
+ const active=items.filter(x=>x.status!=='closed');
+ for(const raw of active){
+  const x=raw.kind==='asset_holding'?enrichAssetHolding(raw):raw;
+  if(x.kind==='asset_holding'&&x.status!=='pending'){
+   const value=assetValue(x),group=assetGroup(x);
+   if(value===null)missing.push(x);else contributions.push({id:x.id,currency:code(x),value,group,category:x.category||'other',accountId:x.accountId||''});
+  }else if(x.kind==='asset_account'&&x.includeInTotal===true){
+   if(!finite(x.balance))missing.push(x);else contributions.push({id:x.id,currency:code(x),value:x.balance,group:'financial',category:'cash',accountId:x.id});
+  }
+ }
+ const currencies=[...new Set([...totals.map(x=>x.currency),...active.filter(x=>x.kind==='asset_snapshot').map(code)])].sort((a,b)=>a==='CNY'?-1:b==='CNY'?1:a.localeCompare(b));
+ const currency=currencies.includes(selectedCurrency)?selectedCurrency:currencies[0]||'CNY';
+ const total=totals.find(x=>x.currency===currency)||{currency,assets:0,liabilities:0,unknown:0,unknownLiabilities:0,pendingCount:0,pendingValue:0,pendingUnvalued:0,dates:[]};
+ const valued=contributions.filter(x=>x.currency===currency),hasValue=valued.length>0;
+ const liabilities=active.filter(x=>x.kind==='asset_liability'&&code(x)===currency);
+ const unknownDebt=active.filter(x=>x.kind==='asset_liability'&&(!finite(x.balance)||x.status==='pending'));
+ const pending=active.filter(x=>x.kind==='asset_holding'&&x.status==='pending');
+ const due=active.filter(x=>x.kind==='asset_holding'&&['overdue','soon'].includes(assetDeadline(enrichAssetHolding(x),today).status));
+ const debtDue=active.filter(x=>x.kind==='asset_liability'&&validDate(x.dueDate)&&x.dueDate<=new Date(Date.parse(today+'T00:00:00Z')+30*86400000).toISOString().slice(0,10));
+ const tasks=active.filter(x=>x.kind==='task'&&!x.done);
+ const segments=['financial','fixed','other'].map(group=>({group,value:valued.filter(x=>x.group===group).reduce((sum,x)=>sum+x.value,0),valued:valued.filter(x=>x.group===group).length,unknown:missing.filter(x=>code(x)===currency&&(x.kind==='asset_account'?'financial':assetGroup(x))===group).length,count:active.filter(x=>x.kind==='asset_holding'&&code(x)===currency&&assetGroup(enrichAssetHolding(x))===group).length}));
+ return {currency,currencies,total,contributions,valued,hasValue,assets:hasValue?total.assets:null,net:hasValue&&!total.unknownLiabilities?total.net:null,segments,missing,unknownDebt,pending,due,debtDue,tasks,liabilities,accounts:items.filter(x=>x.kind==='asset_account')};
+}
+
+function financeDistribution(model,dimension='category'){
+ const financial=model.contributions.filter(x=>x.group==='financial'&&(dimension==='currency'||x.currency===model.currency));
+ const groups=new Map();
+ for(const x of financial){const key=dimension==='currency'?x.currency:dimension==='account'?x.accountId:x.category;groups.set(key,(groups.get(key)||0)+x.value);}
+ const total=financial.reduce((sum,x)=>sum+x.value,0);
+ return [...groups].map(([key,value])=>({key,value,currency:dimension==='currency'?key:model.currency,label:dimension==='currency'?key:dimension==='account'?(model.accounts.find(x=>x.id===key)?.title||'未关联账户'):(labels[key]||'其他金融资产'),percent:dimension==='currency'||!total?null:value/total*100})).sort((a,b)=>dimension==='currency'?a.currency.localeCompare(b.currency):b.value-a.value||a.label.localeCompare(b.label));
+}
+
+function financeSnapshots(items,currency,today,months=6){
+ const end=new Date(today+'T00:00:00Z');
+ const since=new Date(Date.UTC(end.getUTCFullYear(),end.getUTCMonth()-months+1,1)).toISOString().slice(0,10);
+ const grouped=new Map();let invalid=0;
+ for(const x of items){
+  if(x.kind!=='asset_snapshot'||code(x)!==currency||!validDate(x.date)||x.date>today||x.date<since||['pending','closed'].includes(x.status))continue;
+  const derived=finite(x.assetValue)&&finite(x.liabilityValue)?x.assetValue-x.liabilityValue:null;
+  const value=finite(x.totalValue)?x.totalValue:derived;
+  if(value===null){invalid++;continue;}
+  if(derived!==null&&finite(x.totalValue)&&!sameAmount(x.totalValue,derived)){invalid++;continue;}
+  if(!grouped.has(x.date))grouped.set(x.date,[]);
+  grouped.get(x.date).push(value);
+ }
+ const points=[];let conflicts=0;
+ for(const [date,values] of grouped){if(values.some(x=>!sameAmount(x,values[0]))){conflicts++;continue;}points.push({date,value:values[0]});}
+ points.sort((a,b)=>a.date.localeCompare(b.date));
+ return {points,invalid,conflicts,since,delta:points.length>1?points.at(-1).value-points.at(-2).value:null};
+}
+
+function createAssetOverview(ctx){
+ const {esc,icon,btn}=ctx;let selectedCurrency='',dimension='category',months=6,scope='';
+ const money=(value,currency)=>finite(value)?new Intl.NumberFormat('zh-CN',{style:'currency',currency:/^[A-Z]{3}$/.test(currency)?currency:'CNY',maximumFractionDigits:2}).format(value):'—';
+ const compact=value=>new Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(value);
+ const key=()=>[ctx.account?.user?.id||'',ctx.workbench,ctx.space].join(':');
+ const clean=()=>{selectedCurrency='';dimension='category';months=6;scope='';};
+ function ensure(){if(scope!==key()){clean();scope=key();}}
+ function switcher(action,choices,current,label){return `<div class="finance-segmented" role="group" aria-label="${label}">${choices.map(([value,title])=>`<button type="button" data-action="${action}:${value}" aria-pressed="${String(value===current)}">${title}</button>`).join('')}</div>`;}
+ function state(text,action,label){return `<div class="finance-empty"><span>${icon('activity',22)}</span><p>${text}</p>${action?btn(label,action,'text-btn'):''}</div>`;}
+ function chart(history,currency){
+  if(history.points.length<2)return state(history.points.length?'已有 1 次净额快照，再记录一次即可查看变化。':'还没有可比较的净额快照，记录后再看变化。','asset-add:asset_snapshot','记录历史快照');
+  const points=history.points,width=660,height=215,left=90,right=42,top=26,bottom=34;
+  const values=points.map(x=>x.value),low=Math.min(...values),high=Math.max(...values),padding=Math.max((high-low)*.18,Math.abs(high)*.03,1),min=low-padding,max=high+padding;
+  const first=Date.parse(points[0].date),last=Date.parse(points.at(-1).date);
+  const coords=points.map(p=>({x:left+(Date.parse(p.date)-first)/(last-first)*(width-left-right),y:top+(max-p.value)/(max-min)*(height-top-bottom),...p}));
+  const path=coords.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
+  const ticks=Array.from({length:4},(_,i)=>{const value=min+(max-min)*i/3,y=top+(max-value)/(max-min)*(height-top-bottom);return `<line x1="${left}" x2="${width-right}" y1="${y}" y2="${y}" class="finance-gridline"/><text x="${left-12}" y="${y+4}" text-anchor="end">${esc(compact(value,currency))}</text>`;}).join('');
+  const xlabels=[0,...(coords.length>2?[Math.floor((coords.length-1)/2)]:[]),coords.length-1].map(i=>`<text x="${coords[i].x}" y="${height-7}" text-anchor="middle">${points[i].date.slice(5).replace('-','/')}</text>`).join('');
+  return `<svg class="finance-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(currency+'净额历史变化，'+points.length+'次快照；最新'+money(points.at(-1).value,currency))}">${ticks}<path d="${path}" class="finance-chart-line"/>${coords.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4"><title>${esc(p.date+' · '+money(p.value,currency))}</title></circle>`).join('')}${xlabels}</svg><details class="finance-chart-data"><summary>查看快照数据（${points.length} 次）</summary><div class="finance-data-scroll"><table><caption>${esc(currency)} 净额历史快照</caption><thead><tr><th scope="col">日期</th><th scope="col">已记录净额</th></tr></thead><tbody>${points.map(p=>`<tr><td>${esc(p.date)}</td><td>${money(p.value,currency)}</td></tr>`).join('')}</tbody></table></div></details>`;
+ }
+ function render(){
+  ensure();const m=buildFinanceOverview(ctx.items,ctx.today,selectedCurrency);selectedCurrency=m.currency;
+  const {currency,total}=m,history=financeSnapshots(ctx.items,currency,ctx.today,months),allHistory=financeSnapshots(ctx.items,currency,ctx.today,1200),rows=financeDistribution(m,dimension);
+  const financial=m.segments[0],fixed=m.segments[1];
+  const selectedUnknown=m.missing.filter(x=>code(x)===currency).length;
+  const groups=total.dates.length?`${total.dates[0]}${total.dates.length>1?' 至 '+total.dates.at(-1):''}`:'估值日期待补';
+  const heroLabel=total.unknownLiabilities?'已知资产估值':'已估值净额';
+  const pendingValue=total.pendingCount?` · ${total.pendingCount} 项待核对估值 ${money(total.pendingValue,currency)}，未计入`:'';
+  const totalNotice=`${selectedUnknown?`${selectedUnknown} 项资产未估值，未计入`:'按已记录资产与负债统计'}${pendingValue}`;
+  const delta=allHistory.delta,deltaText=delta===null?'—':`${delta>0?'+':''}${money(delta,currency)}`;
+  const deltaDates=delta===null?'待补可比快照':`${allHistory.points.at(-2).date} → ${allHistory.points.at(-1).date}`;
+  const originalAmounts=m.currencies.filter(c=>c!==currency).map(c=>{const model=buildFinanceOverview(ctx.items,ctx.today,c);return `<button data-action="asset-overview-currency:${esc(c)}">${esc(c)} <strong>${money(model.assets,c)}</strong></button>`;}).join('');
+  const distribution=rows.length?`<div class="finance-distribution-rows">${rows.map((r,i)=>`<div class="finance-distribution-row"><span class="finance-category"><i class="finance-dot finance-color-${i%4}"></i>${esc(r.label)}</span><strong>${money(r.value,r.currency)}</strong>${r.percent===null?`<span class="finance-share">${esc(r.currency)}</span>`:`<div class="finance-bar"><i class="finance-color-${i%4}" style="width:${Math.max(0,Math.min(100,r.percent)).toFixed(2)}%"></i></div><span class="finance-share">${r.percent.toFixed(1)}%</span>`}</div>`).join('')}</div>`:state('有已确认估值的金融资产后，将在这里展示分布。','nav:financial','查看金融资产');
+  const warnings=[...(m.missing.length?[{text:`${m.missing.length} 项估值待补`,route:'holdings'}]:[]),...(m.unknownDebt.length?[{text:`${m.unknownDebt.length} 项负债待核实`,route:'liabilities'}]:[]),...(m.pending.length?[{text:`${m.pending.length} 项资产待核对`,route:'holdings'}]:[]),...(m.due.length?[{text:`${m.due.length} 项近期到期与续费`,route:'renewals'}]:[]),...(m.debtDue.length?[{text:`${m.debtDue.length} 项还款安排`,route:'renewals'}]:[]),...(m.tasks.length?[{text:`${m.tasks.length} 项待办`,route:'tasks'}]:[])];
+  const attention=`<section class="finance-attention" aria-label="当前空间需要关注"><strong><i></i>${warnings.length?'需要关注':'近期事项'}</strong><div>${warnings.length?warnings.map(w=>`<button data-action="nav:${w.route}">${w.text}</button>`).join(''):'暂无已记录的近期事项'}</div>${btn('查看事项 →','nav:renewals','text-btn')}</section>`;
+  const historyWarning=history.conflicts+history.invalid?`<p class="finance-history-warning">${history.conflicts?`${history.conflicts} 个日期的快照净额冲突，已暂不绘制。`:''}${history.invalid?`${history.invalid} 条快照缺少完整净额或金额口径不一致。`:''}${btn('核对快照','nav:history','text-btn')}</p>`:'';
+  const financeRows=financeDistribution(m,'category');
+  const stacked=financial.value>0?`<div class="finance-stacked" aria-hidden="true">${financeRows.map((r,i)=>`<i class="finance-color-${i%4}" style="width:${Math.max(0,r.percent||0)}%"></i>`).join('')}</div>`:'';
+  const other=m.segments[2];
+  return `<div class="finance-overview" data-currency="${esc(currency)}"><header class="finance-overview-heading"><div><h1>资产总览</h1><p>一眼看清家底与变化</p></div><div class="finance-overview-tools"><label class="finance-currency-label"><span>展示币种</span><select id="finance-overview-currency" aria-label="展示币种">${(m.currencies.length?m.currencies:['CNY']).map(c=>`<option value="${esc(c)}" ${c===currency?'selected':''}>${esc(c)}${({CNY:' 人民币',USD:' 美元',HKD:' 港币',EUR:' 欧元',JPY:' 日元',GBP:' 英镑'})[c]||''}</option>`).join('')}</select></label>${ctx.space==='demo'?'<span class="finance-demo-tag">示例数据</span>':''}${btn('记录','shell-capture','primary','plus')}</div></header><section class="finance-summary" aria-label="所选币种财务汇总"><div class="finance-summary-metrics"><div class="finance-hero"><span>${esc(currency)} · ${heroLabel}</span><strong>${money(total.unknownLiabilities?m.assets:m.net,currency)}</strong><small>${total.unknownLiabilities?'净额待核实，待补负债信息':'仅含已记录且有估值的资产与负债'}</small></div><div><span>已估值资产</span><strong>${money(m.assets,currency)}</strong><small>金融与固定资产分别维护</small></div><div><span>已记录负债</span><strong>${total.unknownLiabilities?'待核实（'+total.unknownLiabilities+'项）':m.liabilities.length?money(total.liabilities,currency):'—'}</strong><small>${total.unknownLiabilities?(m.liabilities.some(x=>finite(x.balance)&&x.status!=='pending')?'已确认部分 '+money(total.liabilities,currency):'尚无已确认余额'):m.liabilities.length?'以已记录未偿余额为准':'暂无负债记录'}</small></div><div><span>快照变化</span><strong class="${delta!==null&&delta>0?'finance-positive':''}">${deltaText}</strong><small>${deltaDates}</small></div></div><div class="finance-summary-note"><span>${esc(totalNotice)}</span><span>估值日期 ${esc(groups)}</span></div></section>${originalAmounts?`<div class="finance-other-currencies"><span>其他币种已估值资产</span>${originalAmounts}<small>原币分别统计，不自动换汇</small></div>`:''}<div class="finance-analytics"><section class="finance-panel finance-distribution"><div class="finance-panel-heading"><h2>金融资产分布</h2>${switcher('asset-overview-dimension',[['category','按类别'],['account','按账户'],['currency','按币种']],dimension,'资产分布维度')}</div>${distribution}<p class="finance-panel-footnote">${dimension==='currency'?'各币种分别列示原币金额，不计算跨币种占比。':`占 ${esc(currency)} 已估值金融资产比例，含明确计入的账户余额。`}</p></section><section class="finance-panel finance-trend"><div class="finance-panel-heading"><div><h2>净额变化</h2><p>按历史快照 · 不等同投资收益</p></div>${switcher('asset-overview-range',[['6','近6个月'],['12','近一年']],String(months),'快照时间范围')}</div>${chart(history,currency)}${historyWarning}</section></div>${attention}<div class="finance-management"><section class="finance-panel finance-financial-summary"><div class="finance-panel-heading"><h2>金融资产</h2><small>${financial.count} 项持仓</small></div><strong class="finance-module-amount">${money(financial.valued?financial.value:null,currency)}</strong><p>现金与存款 / 基金 / 股票</p>${stacked}<div class="finance-module-note">${financial.unknown?`${financial.unknown} 项未估值 · `:''}含明确计入的账户余额</div><div class="finance-module-links">${btn('查看持仓 →','nav:financial','text-btn')}${btn('账户管理','nav:accounts','text-btn')}</div></section><section class="finance-panel finance-fixed-summary"><div class="finance-panel-heading"><h2>固定资产</h2><small>${fixed.count} 项</small></div><strong class="finance-module-amount">${money(fixed.valued?fixed.value:null,currency)}</strong><p>实物资产 · 设备与数字服务</p><div class="finance-fixed-facts"><span>${icon('building',17)}已估值 ${fixed.valued} 项</span><span>${icon('file',17)}未估值 ${fixed.unknown} 项</span></div><div class="finance-module-note">续费参考费用不作为资产估值</div><div class="finance-module-links">${btn('查看资产 →','nav:fixed','text-btn')}${btn('维护与续费','nav:renewals','text-btn')}</div></section></div>${other.count?`<div class="finance-unclassified">另有 ${other.count} 项其他分区资产${other.valued?'，已估值 '+money(other.value,currency):''}。${btn('查看并整理','nav:holdings','text-btn')}</div>`:''}<footer class="finance-overview-footer"><span>按币种分别统计，不自动换汇 · 金额与估值日期以原记录为准</span><div>${btn('历史记录','nav:history','text-btn')}${btn('全部资产明细','nav:holdings','text-btn')}</div></footer></div>`;
+ }
+ function repaint(focusAction){const box=document.querySelector('.finance-overview');if(!box)return;box.outerHTML=render();bind();if(focusAction)document.querySelector(`[data-action="${focusAction}"]`)?.focus({preventScroll:true});}
+ function bind(){const select=document.querySelector('#finance-overview-currency');if(select)select.onchange=e=>{selectedCurrency=e.target.value;repaint();document.querySelector('#finance-overview-currency')?.focus({preventScroll:true});};}
+ function handle(action,arg){ensure();if(action==='asset-overview-currency'&&/^[A-Z]{3}$/.test(arg))selectedCurrency=arg;else if(action==='asset-overview-dimension'&&['category','account','currency'].includes(arg))dimension=arg;else if(action==='asset-overview-range'&&['6','12'].includes(arg))months=Number(arg);else return;repaint(action+':'+arg);}
+ return {render,bind,handle,cleanup:clean};
+}
+return { buildFinanceOverview, financeDistribution, financeSnapshots, createAssetOverview };
+})();
+
+const __workbenchModule10 = (() => {
+// assets.js
+const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule7;
+const { assetValue: valueOf, assetProfit: profitOf, calculateAssetTotals: totalsOf } = __workbenchModule8;
+const { createAssetOverview } = __workbenchModule9;
+const ASSET_CATEGORIES={cash:'现金',fund:'基金 / ETF',stock:'股票',server:'服务器',domain:'域名',property:'房产',vehicle:'车辆',equipment:'设备',subscription:'服务 / 订阅',other:'其他资产'};
+const ASSET_PAGES={dashboard:'资产总览',accounts:'账户',financial:'金融资产',fixed:'固定资产',renewals:'到期与续费',holdings:'全部资产',transactions:'流水',liabilities:'负债',history:'历史快照',documents:'资料',tasks:'待办',notes:'备忘',mine:'我的'};
+
+
+const finite=v=>typeof v==='number'&&Number.isFinite(v);
+function assetValue(item){return valueOf(item);}
+function assetProfit(item){return profitOf(item);}
+function calculateAssetTotals(items){return totalsOf(items);}
 function assetRenewalCost(item){if(!finite(item.renewalAmount))return '未知 / 未核实';return typeof item.renewalCurrency==='string'&&/^[A-Z]{3}$/.test(item.renewalCurrency)?new Intl.NumberFormat('zh-CN',{style:'currency',currency:item.renewalCurrency,maximumFractionDigits:2}).format(item.renewalAmount):String(item.renewalAmount)+' · 币种待补';}
 function assetRowsForPage(items,page){const rows=items.filter(x=>x.kind==='asset_holding').map(enrichAssetHolding);return page==='financial'?rows.filter(x=>assetGroup(x)==='financial'):page==='fixed'?rows.filter(x=>assetGroup(x)==='fixed'):rows;}
 function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',category='all',account='all',deadlineFilter='all',location='',pendingDelete=null;
+ const overviewUI=createAssetOverview(ctx);
  const all=kind=>ctx.items.filter(x=>x.kind===kind).map(x=>kind==='asset_holding'?enrichAssetHolding(x):x),find=id=>{const x=ctx.items.find(x=>x.id===id);return x?.kind==='asset_holding'?enrichAssetHolding(x):x;},page=()=>ASSET_PAGES[ctx.page]?ctx.page:'dashboard';
  const currency=x=>String(x.currency||'CNY');const money=(v,c='CNY')=>finite(v)?new Intl.NumberFormat('zh-CN',{style:'currency',currency:/^[A-Z]{3}$/.test(c)?c:'CNY',maximumFractionDigits:2}).format(v):'未填写';
  const amount=x=>x.kind==='asset_liability'&&!finite(x.balance)?'待核实':money(x.kind==='asset_holding'?assetValue(x):x.kind==='asset_snapshot'?x.totalValue:x.kind==='asset_transaction'?x.amount:x.balance,currency(x));
@@ -727,7 +1605,7 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  const sourceLine=x=>`${x.valuationDate||x.balanceAsOf||x.asOfDate||x.sourceDate||x.date||'日期待补'}${x.source?' · '+esc(x.source):''}`;
  const accountName=x=>find(x.accountId)?.title||x.accountId||'未指定账户';
  const options=()=>[['','不关联账户'],...all('asset_account').map(x=>[x.id,x.title])];
- function cleanup(){search='';category='all';account='all';deadlineFilter='all';location='';pendingDelete=null;}
+ function cleanup(){overviewUI.cleanup();search='';category='all';account='all';deadlineFilter='all';location='';pendingDelete=null;}
  function filtered(list){return list.filter(x=>(!search||`${x.title} ${x.note||''} ${x.externalId||''} ${x.source||''} ${x.provider||''} ${x.identifier||''}`.toLowerCase().includes(search.toLowerCase()))&&(category==='all'||x.category===category)&&(account==='all'||x.accountId===account));}
  function categoryChoices(){const p=page(),base=p==='fixed'?['server','domain','property','vehicle','equipment','subscription','other']:p==='financial'?['cash','fund','stock','other']:Object.keys(ASSET_CATEGORIES);const present=assetRowsForPage(ctx.items,p).map(x=>x.category);return Object.entries(ASSET_CATEGORIES).filter(([key])=>base.includes(key)||present.includes(key));}
  function tools(holdings=false,deadlines=false){return `<div class="asset-toolbar"><label class="asset-search">${icon('search',17)}<input id="asset-search" aria-label="搜索资产记录" value="${esc(search)}" placeholder="搜索名称、代码或备注…"></label>${holdings?`<select id="asset-category-filter" aria-label="按资产类别筛选"><option value="all">全部类别</option>${categoryChoices().map(([v,l])=>`<option value="${v}" ${category===v?'selected':''}>${l}</option>`).join('')}</select><select id="asset-account" aria-label="按账户筛选"><option value="all">全部账户</option>${all('asset_account').map(x=>`<option value="${esc(x.id)}" ${account===x.id?'selected':''}>${esc(x.title)}</option>`).join('')}</select>`:''}${deadlines?`<select id="asset-deadline-filter" aria-label="按到期状态筛选">${[['all','全部期限'],['overdue','日期已过'],['soon','30天内'],['unknown','未填日期']].map(([v,l])=>`<option value="${v}" ${deadlineFilter===v?'selected':''}>${l}</option>`).join('')}</select>`:''}</div>`;}
@@ -735,28 +1613,25 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  function lifecycleLine(x){if(x.kind!=='asset_holding')return '';const d=assetDeadline(x,ctx.today),parts=[x.provider,x.identifier].filter(Boolean);return `${parts.length?`<small>${parts.map(esc).join(' · ')}</small>`:''}${d.eligible?`<small class="asset-deadline asset-deadline-${esc(d.status)}">${esc(deadlineText(x))}</small>`:''}`;}
  function row(x){const type=x.kind==='asset_holding'?ASSET_CATEGORIES[x.category]||'其他资产':kindName(x.kind);return `<article class="asset-record"><button class="asset-record-main" data-action="asset-detail:${esc(x.id)}"><span class="asset-record-icon">${icon(x.kind==='asset_liability'?'task':x.kind==='asset_account'?'grid':x.category==='server'?'building':x.category==='domain'?'compass':'activity',20)}</span><span class="asset-record-copy"><strong>${esc(x.title)}</strong><small>${esc(type)}${x.accountId?' · '+esc(accountName(x)):''}${status(x)?' · '+esc(status(x)):''}</small>${lifecycleLine(x)}<small>${sourceLine(x)}</small></span><span class="asset-record-amount">${esc(amount(x))}<small>${currency(x)}${x.kind==='asset_holding'&&assetGroup(x)==='fixed'?'<br>资产估值':x.kind==='asset_holding'&&assetProfit(x)!==null?'<br>'+esc(money(assetProfit(x),currency(x))):x.kind==='asset_holding'?'<br>成本待核实':''}${x.kind==='asset_holding'&&finite(x.renewalAmount)?'<br>续费参考 '+esc(assetRenewalCost(x)):''}</small></span>${icon('arrow',15)}</button></article>`;}
  function renewalItems(){return all('asset_holding').filter(x=>{const d=assetDeadline(x,ctx.today);return d.eligible&&d.status!=='closed';}).sort((a,b)=>(assetDeadline(a,ctx.today).date||'9999-99-99').localeCompare(assetDeadline(b,ctx.today).date||'9999-99-99')||String(a.title).localeCompare(String(b.title)));}
- function sectionCards(){const holdings=all('asset_holding');return `<div class="asset-section-grid"><button data-action="nav:financial"><span>${icon('activity',23)}</span><strong>金融资产</strong><small>现金、基金与股票 · ${holdings.filter(x=>assetGroup(x)==='financial').length} 项</small></button><button data-action="nav:fixed"><span>${icon('building',23)}</span><strong>固定资产</strong><small>服务器、域名、房产与设备 · ${holdings.filter(x=>assetGroup(x)==='fixed').length} 项</small></button><button data-action="nav:renewals"><span>${icon('calendar',23)}</span><strong>事项</strong><small>${pendingCount()?(tasks.length+debts.length)+' 项安排':'查看到期、续费与待办'}</small></button></div>`;}
  function pendingCount(){const soon=new Date(Date.parse(ctx.today+'T00:00:00Z')+30*86400000).toISOString().slice(0,10);return all('task').filter(x=>!x.done).length+renewalItems().filter(x=>['overdue','soon'].includes(assetDeadline(x,ctx.today).status)).length+all('asset_liability').filter(x=>x.status!=='closed'&&x.dueDate&&x.dueDate<=soon).length;}
  function liabilitySchedule(){const list=all('asset_liability').filter(x=>x.status!=='closed'&&x.dueDate).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));return list.length?`<section class="card asset-task-card"><div class="card-head"><h2 class="card-title">还款安排</h2>${btn('管理负债','nav:liabilities')}</div>${list.map(x=>`<p class="asset-pad asset-muted">到期日 ${esc(x.dueDate)}${x.dueDate<ctx.today?' · 日期已过':''}</p>${row(x)}`).join('')}</section>`:'';}
- function renewalSummary(){const list=renewalItems().filter(x=>['overdue','soon'].includes(assetDeadline(x,ctx.today).status)).slice(0,4);return list.length?`<section class="card asset-renewal-summary"><div class="card-head"><h2 class="card-title">近期到期与续费</h2>${btn('查看全部','nav:renewals')}</div>${list.map(row).join('')}</section>`:'';}
  function empty(text,kind){return `<div class="asset-empty">${icon('grid',28)}<h3>${text}</h3><p>先留下一条记录，来源和日期可以一起保存。</p>${kind?btn('添加'+kindName(kind),'asset-add:'+kind,'primary','plus'):''}</div>`;}
- function overview(){
-  const totals=calculateAssetTotals(ctx.items),unknown=totals.reduce((n,g)=>n+g.unknown,0),holdings=all('asset_holding'),accounts=all('asset_account');
-  const active=holdings.filter(x=>x.status!=='closed'),financial=active.filter(x=>assetGroup(x)==='financial'),fixed=active.filter(x=>assetGroup(x)==='fixed');
-  const renewals=renewalItems().filter(x=>['overdue','soon'].includes(assetDeadline(x,ctx.today).status)),tasks=all('task').filter(x=>!x.done),debts=all('asset_liability').filter(x=>x.status!=='closed'&&x.dueDate).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
-  const compactEmpty=(text,action,label)=>`<div class="domain-empty"><span>${icon('grid',23)}</span><p>${esc(text)}</p>${action?btn(label,action,'text-btn'):''}</div>`;
-  const head=(title,action,label,extra='')=>`<div class="card-head"><h2 class="card-title">${title}${extra?` <span class="subtitle">${extra}</span>`:''}</h2>${action?btn(label,action,'text-btn'):''}</div>`;
-  const totalCards=totals.length?totals.map(g=>`<section class="card asset-total domain-total"><div class="asset-total-head"><span>${esc(g.currency)} · ${g.unknownLiabilities?'已知资产估值':'已估值净额'}</span>${icon('grid',19)}</div><strong>${money(g.unknownLiabilities?g.assets:g.net,g.currency)}</strong><dl><div><dt>已记录资产</dt><dd>${money(g.assets,g.currency)}</dd></div><div><dt>已记录负债</dt><dd>${g.unknownLiabilities?'待核实（'+g.unknownLiabilities+'项）':money(g.liabilities,g.currency)}</dd></div></dl><small>${g.dates.length?`${g.dates[0]}${g.dates.length>1?' 至 '+g.dates.at(-1):''} · 来源快照，非实时估值`:'估值日期待补'}${g.unknown-g.unknownLiabilities?` · ${g.unknown-g.unknownLiabilities} 项资产未估值，未计入`:''}${g.pendingCount?` · 待核对估值 ${money(g.pendingValue,g.currency)}（${g.pendingCount}项，未计入）${g.pendingUnvalued?'，其中'+g.pendingUnvalued+'项金额未知':''}`:''}</small></section>`).join(''):`<section class="card asset-total domain-total"><div class="asset-total-head"><span>我的资产</span>${icon('grid',19)}</div><strong>尚无估值</strong><p>没有填写金额的资产会保留，不会当作零元。</p>${btn('添加第一笔资产','asset-add:asset_holding','primary','plus')}</section>`;
-  const allocation=totals.filter(g=>g.assets>0).map(g=>{const categories=[...Object.entries(g.categories)];const includedAccounts=accounts.filter(x=>currency(x)===g.currency&&x.status!=='closed'&&x.includeInTotal===true&&finite(x.balance)).reduce((n,x)=>n+x.balance,0);if(includedAccounts)categories.push(['account',includedAccounts]);return `<div class="domain-allocation-group"><h3>${esc(g.currency)} <span>按已记录资产估值</span></h3>${categories.map(([k,v])=>`<div class="asset-allocation-row"><span><i class="domain-allocation-dot"></i>${esc(k==='account'?'计入的账户余额':ASSET_CATEGORIES[k]||k)}</span><strong>${money(v,g.currency)}</strong><div><i style="width:${Math.max(0,Math.min(100,v/g.assets*100)).toFixed(2)}%"></i></div></div>`).join('')}</div>`;}).join('');
-  return `<div class="studio-domain-dashboard studio-assets-dashboard"><div class="domain-main"><section class="domain-board"><div class="domain-board-head"><div><span class="domain-kicker">ASSETS OVERVIEW</span><h2>资产总览</h2></div><div class="domain-head-actions">${btn('添加资产','asset-add:asset_holding','','plus')}${btn('记录流水','asset-add:asset_transaction','primary','file')}</div></div><div class="domain-section-nav">${[['financial','金融资产',financial.length],['fixed','固定资产',fixed.length],['renewals','到期与续费',renewals.length]].map(([page,label,count])=>`<button data-action="nav:${page}">${label}<span>${count}</span>${icon('arrow',13)}</button>`).join('')}</div><div class="domain-asset-bento"><div class="domain-total-stack">${totalCards}</div><section class="card domain-allocation">${head('资产构成','nav:holdings','全部资产')}<div class="asset-allocation">${allocation||compactEmpty('有可靠估值后，将在这里展示资产构成。')}</div></section></div><section class="card domain-financial">${head('金融资产','nav:financial','查看全部',financial.length+' 项')}${financial.slice(0,3).map(row).join('')||compactEmpty('还没有金融资产记录','asset-add:asset_holding','添加资产')}</section><p class="asset-accounting-note domain-accounting-note">按币种分别统计，不自动换汇；账户余额仅明确勾选计入时加总。流水仅留档，不重复改变持仓。${unknown?'尚有未估值或待核对项目。':''}</p></section><section class="card domain-transactions">${head('最近流水','nav:transactions','全部流水')}${all('asset_transaction').sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,3).map(row).join('')||compactEmpty('还没有流水记录','asset-add:asset_transaction','记一笔流水')}</section></div><aside class="domain-aside"><section class="card domain-renewals">${head('近期到期与续费','nav:renewals','查看全部')}${renewals.slice(0,3).map(row).join('')||compactEmpty('近 30 天暂无已记录的到期与续费安排。')}</section><section class="card domain-pending">${head('待办与还款','nav:tasks','全部事项',(tasks.length+debts.length)+' 项安排')}${tasks.slice(0,3).map(x=>`<button class="domain-task-row" data-action="nav:tasks">${icon('task',18)}<span><strong>${esc(x.title)}</strong><small>${esc(x.date||'日期待补')}</small></span>${icon('arrow',13)}</button>`).join('')}${debts.slice(0,2).map(x=>`<div class="domain-debt"><small>还款日 ${esc(x.dueDate)}${x.dueDate<ctx.today?' · 日期已过':''}</small>${row(x)}</div>`).join('')||(!tasks.length?compactEmpty('暂无已记录的待办与还款安排。'):'')}</section><section class="card domain-fixed">${head('固定资产','nav:fixed','查看全部',fixed.length+' 项')}${fixed.slice(0,3).map(row).join('')||compactEmpty('服务器、域名与设备可保留为未估值。','asset-add:asset_holding','添加资产')}</section><section class="card domain-accounts">${head('账户与资料','nav:accounts','账户管理',accounts.length+' 个账户')}<div class="domain-account-preview">${accounts.slice(0,2).map(row).join('')||compactEmpty('还没有账户记录','asset-add:asset_account','添加账户')}</div><div class="domain-resource-links">${[['accounts','账户','grid'],['documents','资产资料','file'],['history','历史快照','calendar'],['liabilities','负债','task']].map(([page,label,ic])=>`<button data-action="nav:${page}">${icon(ic,20)}<span>${label}</span></button>`).join('')}</div></section></aside></div>`;
- }
+ function overview(){return overviewUI.render();}
+
  function documents(){if(ctx.originals)return ctx.originals.render();const files=filtered(all('file'));return `${tools()}<section class="card"><div class="card-head"><h2 class="card-title">资料原件 <span class="subtitle">${files.length} 份</span></h2>${btn('上传资料','asset-upload','primary','plus')}</div><p class="asset-pad asset-muted">保存账单、证明和导入原始文件。点击缩略图或名称查看原件。</p>${files.map(f=>`<article class="asset-document">${ctx.previews?.thumb(f,'asset-preview:'+f.id)||icon('file',24)}<div><button class="link-title" data-action="asset-preview:${esc(f.id)}">${esc(f.title)}</button><small>${esc(f.date)} · ${Math.ceil((f.size||0)/1024)}KB</small>${f.note?`<p>${esc(f.note)}</p>`:''}</div><button class="icon-btn" data-action="asset-delete:${esc(f.id)}" aria-label="删除${esc(f.title)}">${icon('trash',16)}</button></article>`).join('')||empty('还没有资料原件')}</section>`;}
  function listFor(p){const kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[p];let list=['financial','fixed','holdings'].includes(p)?assetRowsForPage(ctx.items,p):p==='renewals'?renewalItems():all(kind);if(p==='renewals'&&deadlineFilter!=='all')list=list.filter(x=>assetDeadline(x,ctx.today).status===deadlineFilter);return filtered(list);}
  function records(p){const kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[p],list=listFor(p).sort((a,b)=>p==='renewals'?(assetDeadline(a,ctx.today).date||'9999-99-99').localeCompare(assetDeadline(b,ctx.today).date||'9999-99-99'):b.date.localeCompare(a.date));return `${tools(['holdings','financial','fixed'].includes(p),p==='renewals')}${p==='fixed'?`<div class="asset-section-links">${btn('到期与续费','nav:renewals')}</div>`+'<p class="asset-accounting-note">固定资产与数字服务单独管理。续费参考费用不作为资产估值。</p>':p==='renewals'?'<p class="asset-accounting-note">仅按已记录日期提醒；续费日与到期日分别保留。不会自动付款或推定服务状态。</p>':''}<section class="card"><div class="card-head"><h2 class="card-title">${ASSET_PAGES[p]} <span class="subtitle" id="asset-list-count">${list.length} 条</span></h2>${btn(p==='fixed'?'添加固定资产':p==='financial'?'添加金融资产':p==='renewals'?'添加服务器 / 域名':'添加'+kindName(kind),'asset-add:'+kind,'primary','plus')}</div>${p==='history'?'<p class="asset-pad asset-muted">历史快照单独保存，不计入当前资产总额。</p>':''}<div id="asset-record-list">${list.map(row).join('')||empty(p==='renewals'?'暂无匹配的到期安排':'还没有'+ASSET_PAGES[p],kind)}</div></section>`;}
  function render(){const key=[ctx.workbench,ctx.space,ctx.account?.user?.id||'',ctx.page].join(':');if(location!==key){cleanup();location=key;}return `<div class="assets-content">${ctx.space==='demo'?'<div class="asset-demo">示例空间 · 所有数据均为虚构，与个人资产分别保存。</div>':''}${page()==='dashboard'?overview():page()==='documents'?documents():records(page())}</div>`;}
- function bind(){if(page()==='documents'&&ctx.originals){ctx.originals.bind();return;}const input=document.querySelector('#asset-search');if(input)input.oninput=e=>{search=e.target.value;repaintList();};const cat=document.querySelector('#asset-category-filter');if(cat)cat.onchange=e=>{category=e.target.value;repaintList();};const ac=document.querySelector('#asset-account');if(ac)ac.onchange=e=>{account=e.target.value;repaintList();};const due=document.querySelector('#asset-deadline-filter');if(due)due.onchange=e=>{deadlineFilter=e.target.value;repaintList();};}
+ function bind(){if(page()==='dashboard'){overviewUI.bind();return;}if(page()==='documents'&&ctx.originals){ctx.originals.bind();return;}const input=document.querySelector('#asset-search');if(input)input.oninput=e=>{search=e.target.value;repaintList();};const cat=document.querySelector('#asset-category-filter');if(cat)cat.onchange=e=>{category=e.target.value;repaintList();};const ac=document.querySelector('#asset-account');if(ac)ac.onchange=e=>{account=e.target.value;repaintList();};const due=document.querySelector('#asset-deadline-filter');if(due)due.onchange=e=>{deadlineFilter=e.target.value;repaintList();};}
  function repaintList(){const list=document.querySelector('#asset-record-list'),kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[page()];if(list){const rows=listFor(page());const count=document.querySelector('#asset-list-count');if(count)count.textContent=rows.length+' 条';list.innerHTML=rows.map(row).join('')||empty('没有匹配的记录',kind);}else if(page()==='documents'){const box=document.querySelector('.assets-content');ctx.previews?.cleanupThumbs();if(box)box.innerHTML=documents();bind();ctx.previews?.mount();}}
- function fields(kind,x){const num=(l,n,signed=false)=>field(l,n,x[n]??'','number',(signed?'':'min="0" ')+'step="any"');const cur=select('币种','currency',[['CNY','CNY 人民币'],['USD','USD 美元'],['HKD','HKD 港币'],['EUR','EUR 欧元'],['JPY','JPY 日元'],['GBP','GBP 英镑']],x.currency||'CNY');let html=cur;
+ function fields(kind,x){
+  const num=(l,n,signed=false)=>field(l,n,x[n]??'','number',(signed?'':'min="0" ')+'step="any"');
+  const currentCurrency=x.currency||'CNY';
+  const currencies=[['CNY','CNY 人民币'],['USD','USD 美元'],['HKD','HKD 港币'],['EUR','EUR 欧元'],['JPY','JPY 日元'],['GBP','GBP 英镑']];
+  if(typeof currentCurrency==='string'&&/^[A-Z]{3}$/.test(currentCurrency)&&!currencies.some(([code])=>code===currentCurrency)){
+   currencies.push([currentCurrency,currentCurrency]);
+  }
+  let html=select('币种','currency',currencies,currentCurrency);
   if(kind==='asset_account')html+=field('账户类型','accountType',x.accountType||'','text','maxlength="80" placeholder="银行 / 券商 / 支付账户"')+field('机构','institution',x.institution||'','text','maxlength="250"')+num('账户余额（可留空）','balance')+field('余额日期','balanceAsOf',x.balanceAsOf||x.date||ctx.today,'date')+`<label class="asset-check"><input type="checkbox" name="includeInTotal" ${x.includeInTotal?'checked':''}><span>将账户余额计入资产总额<small>只用于独立现金余额；若余额已包含下方持仓，请不要勾选。</small></span></label>`;
   if(kind==='asset_holding')html+=select('资产分区','assetGroup',[['financial','金融资产'],['fixed','固定资产'],['other','其他资产']],assetGroup({...x,kind:'asset_holding'}))+select('资产类别','category',Object.entries(ASSET_CATEGORIES),x.category||'other')+select('所属账户','accountId',options(),x.accountId||'')+`<div class="form-grid">${num('数量 / 份额（选填）','quantity')}${num('单价 / 净值（选填）','unitPrice')}</div>`+num('当前估值（选填）','value')+num('账本总成本（选填）','cost')+field('估值日期','valuationDate',x.valuationDate||x.date||ctx.today,'date')+select('状态','status',[['active','在用 / 持有'],['closed','已结束'],['pending','待核对']],x.status||'active')+`<details class="asset-lifecycle-fields" ${assetGroup({...x,kind:'asset_holding'})==='fixed'?'open':''}><summary>期限与续费信息（选填）</summary>${field('服务商 / 注册商','provider',x.provider||'','text','maxlength="250"')}${field('资产标识 / 域名','identifier',x.identifier||'','text','maxlength="250"')}<div class="form-grid">${field('到期日期','expiresOn',x.expiresOn||'','date')}${field('续费安排日期','renewalOn',x.renewalOn||'','date')}</div><div class="form-grid">${num('续费参考费用（未知留空）','renewalAmount')}${field('续费币种','renewalCurrency',Object.hasOwn(x,'renewalCurrency')?(x.renewalCurrency??''):(x.currency||''),'text','maxlength="3" pattern="[A-Z]{3}"')}</div>${select('平台自动续费状态','renewalMode',[['unknown','未知 / 未核实'],['manual','未开启自动续费'],['automatic','已开启自动续费']],x.renewalMode||'unknown')}<p class="asset-muted">到期日期与续费安排分别记录；续费费用不计入资产估值。</p></details>`+'<p class="asset-muted">估值留空时，仅在数量和单价都已知时计算；没有可靠价格的固定资产保留为未估值。</p>';
   if(kind==='asset_liability')html+=num('未偿余额（未核实时留空）','balance')+select('关联账户','accountId',options(),x.accountId||'')+field('余额确认日期','asOfDate',x.asOfDate||x.date||ctx.today,'date')+field('到期日（选填）','dueDate',x.dueDate||'','date')+select('状态','status',[['active','尚未结清'],['closed','已结清'],['pending','待核对']],x.status||'active');
@@ -768,13 +1643,13 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  function detail(id){const x=find(id);if(!x)return;const facts=[...(x.kind==='asset_holding'?[['资产分区',({financial:'金融资产',fixed:'固定资产',other:'其他资产'})[assetGroup(x)]],['服务商 / 注册商',x.provider||'未注明'],['资产标识',x.identifier||'未注明'],['到期日期',x.expiresOn||'未填写'],['续费安排日期',x.renewalOn||'未填写'],['日期提醒',deadlineText(x)||'无须填写期限'],['续费参考费用',assetRenewalCost(x)],['平台自动续费',({unknown:'未知 / 未核实',manual:'未开启',automatic:'已开启'})[x.renewalMode]||'未知 / 未核实']]:[]),['金额 / 估值',amount(x)],['币种',currency(x)],['状态',status(x)||'按原记录'],['类别',ASSET_CATEGORIES[x.category]||x.accountType||x.transactionType||kindName(x.kind)],['账户',x.accountId?accountName(x):'未关联'],['记录日期',x.date],['估值 / 确认日期',x.valuationDate||x.balanceAsOf||x.asOfDate||x.sourceDate||'未注明'],['数量 / 份额',finite(x.quantity)?String(x.quantity):'未注明'],['单价 / 净值',finite(x.unitPrice)?String(x.unitPrice):'未注明'],['账本成本',finite(x.cost)?money(x.cost,currency(x)):'待核实'],['来源',x.source||'手工记录'],['外部编号',x.externalId||'未注明']];ctx.openDrawer(`<dl class="asset-detail-grid">${facts.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${x.note?`<h3 class="clinical-label">备注与来源说明</h3><div class="report-text">${esc(x.note)}</div>`:''}${x.referenceUrl&&/^https:\/\//.test(x.referenceUrl)?`<a class="btn" href="${esc(x.referenceUrl)}" target="_blank" rel="noopener noreferrer">打开来源页面</a>`:''}`,esc(x.title),kindName(x.kind),`${btn('删除','asset-delete:'+id)}${btn('编辑','asset-edit:'+id,'primary','edit')}`);}
  function remove(id){const x=find(id);if(!x)return;pendingDelete={id,space:ctx.space,workbench:ctx.workbench,owner:ctx.account?.user?.id};ctx.openDrawer(`<p class="asset-delete-summary">删除「${esc(x.title)}」${x.kind!=='file'?' · '+esc(amount(x)):''}？</p><p class="section-desc">记录将放入最近删除，30 天内可以恢复。</p>`,'删除'+kindName(x.kind),'仅删除当前工作台中的这条记录',`${btn('取消','close')}${btn('确认删除','asset-confirm-delete:'+id,'primary')}`);}
  function upload(){const sourceSpace=ctx.space,sourceWorkbench=ctx.workbench,owner=ctx.account?.user?.id;ctx.openDrawer(`<form id="asset-upload-form">${field('资料名称（选填）','title','','text','maxlength="120"')}${field('资料日期','date',ctx.today,'date','required')}<label class="asset-file-picker">${icon('file',25)}<span>选择账单或证明原件</span><input name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" required><small>PDF、图片、TXT · 单份最大10MB</small></label><div class="field"><label for="asset-upload-note">备注与来源</label><textarea id="asset-upload-note" name="note" maxlength="5000"></textarea></div><div id="asset-upload-error" role="alert"></div></form>`,'上传资产资料','文件保存在当前资产空间，不会自动改动余额',`${btn('取消','close')}<button class="btn primary" form="asset-upload-form" type="submit">上传原件</button>`);const form=document.querySelector('#asset-upload-form');form.onsubmit=async e=>{e.preventDefault();if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench||ctx.account?.user?.id!==owner){ctx.toast('空间或账号已变化，请重新打开表单');return;}const button=document.querySelector('[form="asset-upload-form"]');button.disabled=true;try{const file=form.elements.file.files[0];if(!file||file.size>10*1024*1024)throw Error('请选择不超过10MB的文件');const content=await new Promise((r,j)=>{const reader=new FileReader();reader.onload=()=>r(String(reader.result).split(',')[1]);reader.onerror=()=>j(Error('文件读取失败'));reader.readAsDataURL(file)});await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:form.elements.title.value||file.name,date:form.elements.date.value,note:form.elements.note.value,content})},sourceSpace,sourceWorkbench);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast('资产资料已保存');}catch(error){if(form.isConnected)document.querySelector('#asset-upload-error').innerHTML=`<div class="form-error">${esc(error.message)}</div>`;}finally{button.disabled=false;}};}
- async function handle(action,id){if(action==='asset-add')edit(id);else if(action==='asset-edit'){const x=find(id);if(x)edit(x.kind,id);}else if(action==='asset-detail')detail(id);else if(action==='asset-delete')remove(id);else if(action==='asset-confirm-delete'){const p=pendingDelete;if(!p||p.id!==id||p.space!==ctx.space||p.workbench!==ctx.workbench||p.owner!==ctx.account?.user?.id){ctx.toast('空间已变化，请重新操作');return;}await ctx.api('/api/items/'+id,{method:'DELETE'},p.space,p.workbench);ctx.closeDrawer();await ctx.load();ctx.toast('已移入最近删除');pendingDelete=null;}else if(action==='asset-preview'){const f=find(id);if(f?.kind==='file')await ctx.previews.open(f);}else if(action==='asset-upload'){if(ctx.originals)await ctx.originals.handle('original-upload');else upload();}}
+ async function handle(action,id){if(action.startsWith('asset-overview-')){overviewUI.handle(action,id);return;}if(action==='asset-add')edit(id);else if(action==='asset-edit'){const x=find(id);if(x)edit(x.kind,id);}else if(action==='asset-detail')detail(id);else if(action==='asset-delete')remove(id);else if(action==='asset-confirm-delete'){const p=pendingDelete;if(!p||p.id!==id||p.space!==ctx.space||p.workbench!==ctx.workbench||p.owner!==ctx.account?.user?.id){ctx.toast('空间已变化，请重新操作');return;}await ctx.api('/api/items/'+id,{method:'DELETE'},p.space,p.workbench);ctx.closeDrawer();await ctx.load();ctx.toast('已移入最近删除');pendingDelete=null;}else if(action==='asset-preview'){const f=find(id);if(f?.kind==='file')await ctx.previews.open(f);}else if(action==='asset-upload'){if(ctx.originals)await ctx.originals.handle('original-upload');else upload();}}
  return {render,bind,handle,cleanup,pendingCount,liabilitySchedule,titles:ASSET_PAGES};
 }
 return { assetValue, assetProfit, calculateAssetTotals, assetRenewalCost, assetRowsForPage, createAssetsUI };
 })();
 
-const __workbenchModule8 = (() => {
+const __workbenchModule11 = (() => {
 // travel-map.js
 
 // Local Leaflet code; third-party tiles are requested only after an explicit UI action.
@@ -835,9 +1710,9 @@ function mountTravelMap(container,{points=[],onPick}={}){
 return { travelMapPoints, mountTravelMap };
 })();
 
-const __workbenchModule9 = (() => {
+const __workbenchModule12 = (() => {
 // travel.js
-const { mountTravelMap } = __workbenchModule8;
+const { mountTravelMap } = __workbenchModule11;
 const TRAVEL_PAGES={dashboard:'我的旅行',trip:'每日行程',places:'地点地图',bookings:'预订',checklist:'出发准备',documents:'票据资料',mine:'我的'};
 const TRIP_STATUS={planned:'计划中',active:'旅行中',completed:'已结束',cancelled:'已取消'};
 const STOP_CATEGORIES={attraction:'景点',food:'餐饮',stay:'住宿',transport:'交通',other:'其他'};
@@ -846,6 +1721,12 @@ function travelMapUrl(item){const query=new URLSearchParams({keyword:[item.title
 function travelSafeUrl(value){try{const url=new URL(value);return ['https:','http:'].includes(url.protocol)?url.href:'';}catch{return '';}}
 function travelDays(start,end){const out=[];let day=new Date(start+'T12:00:00Z'),last=new Date(end+'T12:00:00Z');if(!Number.isFinite(+day)||!Number.isFinite(+last))return out;for(let i=0;i<367&&day<=last;i++,day.setUTCDate(day.getUTCDate()+1))out.push(day.toISOString().slice(0,10));return out;}
 function travelSorted(rows){return [...rows].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'99:99').localeCompare(b.time||'99:99')||(a.position||0)-(b.position||0)||(a.title||'').localeCompare(b.title||''));}
+function dailyItinerary(stops, bookings, day) {
+  return travelSorted([
+    ...stops.filter(stop => stop.date === day),
+    ...bookings.filter(booking => booking.date === day && booking.status !== 'cancelled'),
+  ]);
+}
 function createTravel(ctx){
  const {esc,icon,btn,field}=ctx;
  let selectedTrip='',scopeKey='',query='',statusFilter='all',pendingDelete=null,mapCleanup=null,mapObserver=null;
@@ -868,7 +1749,7 @@ function createTravel(ctx){
  function dashboard(){
   const t=trip(),rows=trips().filter(t=>(statusFilter==='all'||t.status===statusFilter)&&(!query||`${t.title} ${t.destination||''} ${t.note||''}`.toLowerCase().includes(query.toLowerCase())));
   const checks=children('travel_check'),done=checks.filter(x=>x.done).length,stops=children('travel_stop'),reservations=travelSorted(children('travel_booking')),days=t?travelDays(t.startDate||t.date,t.endDate||t.date):[];
-  const focusDay=days.find(day=>day>=ctx.today)||days.at(-1),dayIndex=days.indexOf(focusDay),dayRows=travelSorted([...stops,...reservations].filter(x=>x.date===focusDay));
+  const focusDay=days.find(day=>day>=ctx.today)||days.at(-1),dayIndex=days.indexOf(focusDay),dayRows=dailyItinerary(stops,reservations,focusDay);
   const until=t?Math.round((Date.parse((t.startDate||t.date)+'T00:00:00Z')-Date.parse(ctx.today+'T00:00:00Z'))/86400000):null;
   const head=(title,action,label)=>`<div class="card-head"><h2 class="card-title">${title}</h2>${action?btn(label,action,'text-btn'):''}</div>`;
   const compactEmpty=(text,action,label)=>`<div class="domain-empty"><span>${icon('compass',23)}</span><p>${esc(text)}</p>${action?btn(label,action,'text-btn'):''}</div>`;
@@ -877,7 +1758,7 @@ function createTravel(ctx){
  function rowActions(x,{toggle=false}={}){return `<div class="travel-row-actions">${toggle?`<button class="check ${x.done?'checked':''}" data-action="travel-toggle:${esc(x.id)}" aria-label="${x.done?'取消完成':'完成'}${esc(x.title)}" aria-pressed="${!!x.done}">${x.done?icon('check',13):''}</button>`:''}<button class="icon-btn" data-action="travel-edit:${esc(x.id)}" aria-label="编辑${esc(x.title)}">${icon('edit',16)}</button><button class="icon-btn" data-action="travel-delete:${esc(x.id)}" aria-label="删除${esc(x.title)}">${icon('trash',16)}</button></div>`;}
  function stopRow(x){return `<article class="travel-place-row"><div class="travel-time">${esc(x.time||'未定')}<small>${esc(STOP_CATEGORIES[x.category]||'地点')}</small></div><div class="travel-row-copy"><strong class="${x.done?'completed':''}">${esc(x.title)}</strong>${x.address?`<p>${esc(x.address)}</p>`:''}${x.note?`<p class="travel-muted">${esc(x.note)}</p>`:''}<a href="${esc(travelMapUrl(x))}" target="_blank" rel="noopener noreferrer" class="travel-nav-link">高德地图搜索 ${icon('arrow',12)}</a>${finite(x.lat)&&finite(x.lng)?'<small>已标记地图位置</small>':'<small>未标注坐标</small>'}</div>${rowActions(x,{toggle:true})}</article>`;}
  function bookingRow(x){const link=travelSafeUrl(x.referenceUrl);return `<article class="travel-booking-row"><span class="travel-booking-symbol">${icon(x.bookingType==='hotel'?'building':'ticket',21)}</span><div class="travel-row-copy"><div class="travel-row-title"><strong>${esc(x.title)}</strong><span class="travel-status ${esc(x.status)}">${esc({planned:'待确认',confirmed:'已确认',cancelled:'已取消'}[x.status]||'待确认')}</span></div><small>${esc(BOOKING_TYPES[x.bookingType]||'预订')} · ${esc(x.date)}${x.time?' '+esc(x.time):''}${x.endDate?' 至 '+esc(x.endDate):''}</small>${x.location?`<p>${esc(x.location)}</p>`:''}${x.confirmationCode?`<p>确认号：<span class="travel-confirmation">${esc(x.confirmationCode)}</span></p>`:''}${x.note?`<p class="travel-muted">${esc(x.note)}</p>`:''}${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" class="travel-nav-link">打开预订链接 ${icon('arrow',12)}</a>`:''}${money(x)?`<small>预订金额 ${esc(money(x))} · 仅供留档</small>`:''}</div>${rowActions(x)}</article>`;}
- function itinerary(){const t=trip(),stops=children('travel_stop'),bookings=children('travel_booking');const used=travelDays(t.startDate||t.date,t.endDate||t.date);return `<div class="travel-section-head"><p>日期与时间按目的地当地时间记录。</p><div>${btn('添加地点','travel-add:travel_stop','primary','plus')}${btn('添加预订','travel-add:travel_booking','','ticket')}</div></div>${used.map((day,i)=>{const rows=travelSorted([...stops.filter(x=>x.date===day),...bookings.filter(x=>x.date===day)]);return `<section class="card travel-day"><header class="travel-day-head"><span>DAY ${i+1}</span><h2>${day}</h2><button class="text-btn" data-action="travel-add-day:${day}">${icon('plus',14)}地点</button></header>${rows.length?rows.map(x=>x.kind==='travel_stop'?stopRow(x):bookingRow(x)).join(''):'<p class="travel-day-empty">这一天还没有安排，留一点自由时间。</p>'}</section>`;}).join('')}`;}
+ function itinerary(){const t=trip(),stops=children('travel_stop'),bookings=children('travel_booking');const used=travelDays(t.startDate||t.date,t.endDate||t.date);return `<div class="travel-section-head"><p>日期与时间按目的地当地时间记录。</p><div>${btn('添加地点','travel-add:travel_stop','primary','plus')}${btn('添加预订','travel-add:travel_booking','','ticket')}</div></div>${used.map((day,i)=>{const rows=dailyItinerary(stops,bookings,day);return `<section class="card travel-day"><header class="travel-day-head"><span>DAY ${i+1}</span><h2>${day}</h2><button class="text-btn" data-action="travel-add-day:${day}">${icon('plus',14)}地点</button></header>${rows.length?rows.map(x=>x.kind==='travel_stop'?stopRow(x):bookingRow(x)).join(''):'<p class="travel-day-empty">这一天还没有安排，留一点自由时间。</p>'}</section>`;}).join('')}`;}
  function mapPanel(){const located=children('travel_stop').filter(x=>finite(x.lat)&&finite(x.lng));return `<section class="card travel-map-section"><div class="card-head"><h2 class="card-title">地点地图 <span class="subtitle">${located.length} 个位置</span></h2></div><div class="travel-map" id="travel-map"><div class="travel-map-placeholder">${icon('map',35)}<h3>在地图上看看这一程</h3><p>点击后加载 OpenStreetMap。地图服务将收到瓦片请求；不读取手机定位。</p>${btn('加载地图','travel-map','','map')}</div></div><p class="travel-map-note">坐标使用 WGS84。地图不可用时，下方地点和高德搜索仍可使用。</p></section>`;}
  function places(){const rows=travelSorted(children('travel_stop'));return `<div class="travel-section-head"><p>先记下地点；有坐标时会显示在地图上。</p>${btn('添加地点','travel-add:travel_stop','primary','plus')}</div>${mapPanel()}<section class="card"><div class="card-head"><h2 class="card-title">地点清单 <span class="subtitle">${rows.length} 个</span></h2></div>${rows.map(stopRow).join('')||empty('还没有地点','travel_stop','写下名字或地址就能保存，坐标可以稍后补。')}</section>`;}
  function bookings(){const rows=travelSorted(children('travel_booking'));return `<div class="travel-section-head"><p>交通、住宿与门票统一留档，不进行下单或付款。</p>${btn('添加预订','travel-add:travel_booking','primary','plus')}</div><section class="card">${rows.map(bookingRow).join('')||empty('还没有预订记录','travel_booking','保留时间、地点、确认号，出门时随手可查。')}</section>`;}
@@ -920,7 +1801,7 @@ function createTravel(ctx){
 return { TRAVEL_PAGES, TRIP_STATUS, STOP_CATEGORIES, BOOKING_TYPES, travelMapUrl, travelSafeUrl, travelDays, travelSorted, createTravel };
 })();
 
-const __workbenchModule10 = (() => {
+const __workbenchModule13 = (() => {
 // reading.js
 
 const READING_TYPES={book:'书本',paper:'论文',article:'文章',report:'报告',other:'其他'};
@@ -952,12 +1833,14 @@ function createReading(ctx){
   const total=days.reduce((sum,d)=>sum+d.minutes,0),maximum=Math.max(1,...days.map(d=>d.minutes));
   return `<div class="studio-reading-overview"><section class="card studio-reading-continue"><div class="card-head"><h2 class="card-title">继续阅读</h2><span class="reading-muted">${all.filter(b=>b.status==='reading').length} 本在读</span></div><div class="studio-reading-feature">${active?`${cover(active)}<div><h3>${esc(active.title)}</h3><p>${esc(active.author||'作者未填写')}</p>${progress(active)}${btn('继续阅读','reading-read:'+active.id,'primary','arrow')}</div>`:`<div class="studio-reading-start">${icon('file',32)}<h3>从想读的那一页开始</h3><p>导入材料，或从下方书架选择一本书。</p>${btn('导入材料','original-upload','primary','plus')}</div>`}</div></section><section class="card studio-reading-week"><div class="card-head"><h2 class="card-title">本周阅读</h2><span class="reading-muted">近7天</span></div><div class="studio-reading-minutes"><strong>${total}</strong><span>分钟 · 已记录</span></div><div class="studio-reading-bars" aria-label="近7天已记录阅读时长">${days.map(d=>`<div title="${d.date} · ${d.minutes}分钟"><small>${d.minutes||'—'}</small><span class="studio-reading-bar-track"><i style="--bar-height:${d.minutes/maximum*100}%"></i></span><span>周${d.label}</span></div>`).join('')}</div></section><aside class="studio-reading-side"><section class="card"><div class="card-head"><h2 class="card-title">最近笔记</h2>${btn('全部','nav:entries','text-btn','arrow')}</div><div class="studio-reading-notes">${notes.map(e=>`<button data-action="reading-edit:${esc(e.id)}"><span class="reading-badge">${e.quote?'摘录':'想法'}</span><p>${esc(e.quote||e.note)}</p><small>${esc(find(e.bookId)?.title||e.date)}</small></button>`).join('')||'<p class="studio-card-empty">读到喜欢的段落，留下一句话。</p>'}</div></section><section class="card"><div class="card-head"><h2 class="card-title">阅读计划</h2>${btn('添加','shell-add:task','text-btn','plus')}</div><div class="studio-reading-plans">${plans.map(t=>`<button data-action="shell-edit:${esc(t.id)}"><span>${icon('calendar',16)}</span><div><strong>${esc(t.title)}</strong><small>${esc(t.date)}</small></div>${icon('arrow',14)}</button>`).join('')||'<p class="studio-card-empty">给下一次阅读留一点时间。</p>'}</div></section></aside></div>`;
  }
- function shelf(){return `${shelfOverview()}<section id="reading-dropzone" class="reading-dropzone" aria-label="拖入PDF论文导入书架"><p class="reading-drop-hint">${icon('file',18)} 拖入一份 PDF 论文到这里，确认后加入书架 · 最大 10MB</p><div class="reading-toolbar"><label class="reading-search">${icon('search',17)}<input id="reading-search" aria-label="搜索书名或作者" placeholder="搜索书名、作者或备注…" value="${esc(query)}"></label><select id="reading-type-filter" aria-label="材料类型"><option value="all">全部类型</option>${Object.entries(READING_TYPES).map(([v,t])=>`<option value="${v}" ${materialType===v?'selected':''}>${t}</option>`).join('')}</select><select id="reading-status-filter" aria-label="阅读状态"><option value="all">全部状态</option>${Object.entries(READING_STATUS).map(([v,t])=>`<option value="${v}" ${status===v?'selected':''}>${t}</option>`).join('')}</select>${btn('导入材料','original-upload','primary','plus')}${btn('添加书目','reading-add:reading_book','','plus')}</div><div id="reading-shelf">${shelfRows()}</div></section>`;}
+ function shelf(){return `${shelfOverview()}<section id="reading-dropzone" class="reading-dropzone" aria-label="导入阅读材料"><p class="reading-drop-hint">${icon('file',18)} <span class="reading-drop-desktop">拖入一份 PDF 论文到这里，确认后加入书架 · 最大 10MB</span><span class="reading-drop-mobile">通过「导入材料」选择文件，确认后加入书架 · 最大 10MB</span></p><div class="reading-toolbar"><label class="reading-search">${icon('search',17)}<input id="reading-search" aria-label="搜索书名或作者" placeholder="搜索书名、作者或备注…" value="${esc(query)}"></label><select id="reading-type-filter" aria-label="材料类型"><option value="all">全部类型</option>${Object.entries(READING_TYPES).map(([v,t])=>`<option value="${v}" ${materialType===v?'selected':''}>${t}</option>`).join('')}</select><select id="reading-status-filter" aria-label="阅读状态"><option value="all">全部状态</option>${Object.entries(READING_STATUS).map(([v,t])=>`<option value="${v}" ${status===v?'selected':''}>${t}</option>`).join('')}</select>${btn('导入材料','original-upload','primary','plus')}${btn('添加书目','reading-add:reading_book','','plus')}</div><div id="reading-shelf">${shelfRows()}</div></section>`;}
  function records(){const rows=entries().filter(x=>(bookFilter==='all'||x.bookId===bookFilter)&&(!entryQuery||[x.title,x.quote,x.note,find(x.bookId)?.title].join(' ').toLocaleLowerCase().includes(entryQuery.toLocaleLowerCase())));return `<div class="reading-toolbar"><label class="reading-search">${icon('search',17)}<input id="reading-entry-search" aria-label="搜索阅读记录和摘录" placeholder="搜索书名、摘录或想法…" value="${esc(entryQuery)}"></label><select id="reading-book-filter" aria-label="按书籍筛选记录"><option value="all">全部书籍</option>${books().map(b=>`<option value="${esc(b.id)}" ${bookFilter===b.id?'selected':''}>${esc(b.title)}</option>`).join('')}</select>${btn('写笔记','reading-add:reading_entry','primary','plus')}${btn('记摘录','reading-excerpt')}</div><section class="card">${rows.map(entryRow).join('')||empty('还没有笔记','阅读时的摘录、想法和问答都保存在这里。',books().length?'reading-add:reading_entry':'reading-add:reading_book',books().length?'添加记录':'先添加一本书')}</section>`;}
  function render(){ensure();return `<div class="reading-content">${ctx.space==='demo'?'<p class="reading-demo">示例空间 · 体验记录与个人阅读分别保存</p>':''}${ctx.page==='entries'?records():ctx.page==='documents'?`<div class="reading-section-head">${btn('返回书架','nav:books','text-btn','arrow')}</div>`+ctx.originals.render({title:'导入与管理阅读文件'}):shelf()}</div>`;}
  function bind(){const dropzone=document.querySelector('#reading-dropzone'),boundScope=snapshot();if(dropzone){dropzone.ondragover=e=>{e.preventDefault();if(current(boundScope)){dropzone.classList.add('dragover');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';}};dropzone.ondragleave=e=>{if(!dropzone.contains(e.relatedTarget))dropzone.classList.remove('dragover');};dropzone.ondrop=e=>{e.preventDefault();dropzone.classList.remove('dragover');if(!current(boundScope)||!dropzone.isConnected)return ctx.toast('工作台或账号已变化，请重新打开');ctx.originals.importFiles(e.dataTransfer?.files);};}const typeFilter=document.querySelector('#reading-type-filter');if(typeFilter)typeFilter.onchange=e=>{materialType=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const entrySearch=document.querySelector('#reading-entry-search');if(entrySearch)entrySearch.oninput=e=>{entryQuery=e.target.value;const start=e.target.selectionStart;ctx.render();const fresh=document.querySelector('#reading-entry-search');fresh?.focus({preventScroll:true});fresh?.setSelectionRange(start,start);};const search=document.querySelector('#reading-search');if(search)search.oninput=e=>{query=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const filter=document.querySelector('#reading-status-filter');if(filter)filter.onchange=e=>{status=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const book=document.querySelector('#reading-book-filter');if(book)book.onchange=e=>{bookFilter=e.target.value;ctx.render();};if(ctx.page==='documents')ctx.originals.bind();ctx.previews?.mount();}
  function detail(id){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id);ctx.openDrawer(`<div class="reading-detail-top">${cover(b)}<div><span class="reading-badge">${READING_STATUS[b.status]}</span><span class="reading-badge">${READING_TYPES[b.materialType||'book']}</span><h2>${esc(b.title)}</h2><p>${esc(b.author||'作者未填写')}</p></div></div>${progress(b)}${b.note?`<p class="reading-detail-note">${esc(b.note)}</p>`:''}<div class="reading-detail-actions">${btn('记阅读','reading-session:'+id,'','calendar')}${btn('记摘录','reading-excerpt:'+id,'','file')}${btn('编辑材料','reading-edit:'+id,'','edit')}</div><h3>阅读记录与摘录</h3><section class="reading-detail-entries">${entries().filter(x=>x.bookId===id).slice(0,10).map(entryRow).join('')||'<p class="reading-muted">还没有记录，读到哪里都可以记下来。</p>'}</section><h3>关联原件 <small>${files.length} 份</small></h3><p class="reading-muted">在阅读资料中上传原件并选择所属书籍。</p>${files.map(f=>`<div class="reading-file">${ctx.previews.thumb(f,'original-preview:'+f.id)}<button data-action="original-preview:${esc(f.id)}">${esc(f.title||f.name)}</button></div>`).join('')}${btn('管理阅读资料','reading-documents','','file')}${btn('删除书籍','reading-delete:'+id,'text-btn','trash')}`,'书籍详情','阅读工作台',`${btn('关闭','close')}${btn('更新进度','reading-progress:'+id,'primary','edit')}`);ctx.previews?.mount();}
- async function read(id,annotation=null){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id).sort((a,b)=>a.id.localeCompare(b.id)),file=files.find(x=>x.id===annotation?.fileId)||files.find(x=>x.id===b.readerFileId)||files[0];if(annotation&&!files.some(x=>x.id===annotation.fileId)){ctx.toast('这条笔记关联的原文件已移除，请先恢复原文件');return;}if(!file){detail(id);ctx.toast('请先导入并关联这本书的文件');return;}const s=snapshot();let saves=Promise.resolve();await ctx.previews.open(file,{initialPage:annotation?.fileId===file.id?annotation.page:!b.readerFileId||file.id===b.readerFileId?b.currentPage||1:1,initialAnnotation:annotation,annotations:ctx.items.filter(x=>x.kind==='reading_entry'&&x.bookId===id&&x.fileId===file.id&&x.annotationType),onAnnotate:async annotation=>{if(!current(s))throw Error('工作台或账号已变化，请重新打开');const {quote='',page,startOffset,endOffset,color='yellow',annotationType='highlight',note=''}=annotation;const body={kind:'reading_entry',bookId:id,fileId:file.id,title:annotationType==='highlight'?'阅读划线':'阅读批注',date:ctx.today,entryType:'excerpt',quote,note,page,startOffset,endOffset,color,annotationType};const response=await ctx.api('/api/items',{method:'POST',headers:headers(s),body:JSON.stringify(body)},s.space,s.workbench);const record=response.item||response;if(current(s)&&record.id)ctx.items.push(record);return record;},onPage:(page,totalPages)=>{saves=saves.catch(()=>{}).then(async()=>{if(!current(s))return;const update={currentPage:page,totalPages,status:'reading',readerFileId:file.id};await ctx.api('/api/items/'+encodeURIComponent(id),{method:'PUT',headers:headers(s),body:JSON.stringify({kind:'reading_book',...update})},s.space,s.workbench);if(current(s))Object.assign(b,update);}).catch(error=>{if(current(s))ctx.toast('阅读位置保存失败：'+error.message);});return saves;}});}
+ async function read(id,annotation=null){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id).sort((a,b)=>a.id.localeCompare(b.id)),file=files.find(x=>x.id===annotation?.fileId)||files.find(x=>x.id===b.readerFileId)||files[0];if(annotation&&!files.some(x=>x.id===annotation.fileId)){ctx.toast('这条笔记关联的原文件已移除，请先恢复原文件');return;}if(!file){detail(id);ctx.toast('请先导入并关联这本书的文件');return;}const s=snapshot();let saves=Promise.resolve();await ctx.previews.open(file,{initialPage:annotation?.fileId===file.id?annotation.page:!b.readerFileId||file.id===b.readerFileId?b.currentPage||1:1,initialAnnotation:annotation,annotations:ctx.items.filter(x=>x.kind==='reading_entry'&&x.bookId===id&&x.fileId===file.id&&x.annotationType),onAnnotate:async annotation=>{if(!current(s))throw Error('工作台或账号已变化，请重新打开');const {quote='',page,startOffset,endOffset,color='yellow',annotationType='highlight',note=''}=annotation;const body={kind:'reading_entry',bookId:id,fileId:file.id,title:annotationType==='highlight'?'阅读划线':'阅读批注',date:ctx.today,entryType:'excerpt',quote,note,page,startOffset,endOffset,color,annotationType};const response=await ctx.api('/api/items',{method:'POST',headers:headers(s),body:JSON.stringify(body)},s.space,s.workbench);const record=response.item||response;if(current(s)&&record.id)ctx.items.push(record);return record;},
+  // Browsing from a note keeps its anchor separate from the shelf's resume position.
+  onPage:annotation?undefined:(page,totalPages)=>{saves=saves.catch(()=>{}).then(async()=>{if(!current(s))return;const update={currentPage:page,totalPages,status:'reading',readerFileId:file.id};await ctx.api('/api/items/'+encodeURIComponent(id),{method:'PUT',headers:headers(s),body:JSON.stringify({kind:'reading_book',...update})},s.space,s.workbench);if(current(s))Object.assign(b,update);}).catch(error=>{if(current(s))ctx.toast('阅读位置保存失败：'+error.message);});return saves;}});}
  function form(kind,id,defaults={},progressOnly=false){ensure();const old=id?find(id):null;if(id&&!old)return;const x=old||defaults,s=snapshot();if(kind==='reading_entry'&&!books().length){ctx.toast('请先添加一本书');form('reading_book');return;}let fields='';
  if(kind==='reading_book'){if(!progressOnly)fields=select('材料类型','materialType',Object.entries(READING_TYPES),x.materialType||'book')+field('材料名称','title',x.title||'','text','required maxlength="120"')+field('作者（选填）','author',x.author||'','text','maxlength="200"')+field('加入日期','date',x.date||ctx.today,'date','required');else fields=`<p class="reading-form-book">${esc(x.title)}</p>`;
  fields+=select('阅读状态','status',Object.entries(READING_STATUS),x.status||'wish')+`<div class="form-grid">${field('总页数（选填）','totalPages',x.totalPages??'','number','min="1" max="1000000" step="1"')}${field('当前读到第几页（选填）','currentPage',x.currentPage??'','number','min="0" max="1000000" step="1"')}</div><p class="reading-muted">没有页码的书可以只记录状态；完成状态由你选择。</p>`;if(!progressOnly)fields+=text('备注（选填）','note',x.note||'');
@@ -972,9 +1855,9 @@ function createReading(ctx){
 return { READING_TYPES, READING_STATUS, READING_PAGES, readingProgress, readingBooks, createReading };
 })();
 
-const __workbenchModule11 = (() => {
+const __workbenchModule14 = (() => {
 // originals.js
-const { aiTag } = __workbenchModule5;
+const { aiTag } = __workbenchModule6;
 // One metadata browser for every workbench. Original bytes stay in the existing same-origin viewer.
 function originalType(file){const mime=String(file?.mime||'');return mime==='application/pdf'?'pdf':mime.startsWith('image/')?'image':mime==='text/plain'?'text':mime.startsWith('audio/')?'audio':'other';}
 function filterOriginals(files,{query='',fileType='all',from='',to='',relation='all',status='all'}={},relations={}){const q=query.trim().toLocaleLowerCase();return files.filter(f=>{const r=relations[f.id]||{};return (!q||[f.title,f.name,f.note,r.title].filter(Boolean).join(' ').toLocaleLowerCase().includes(q))&&(fileType==='all'||originalType(f)===fileType)&&(!from||f.date>=from)&&(!to||f.date<=to)&&(relation==='all'||(relation==='unassigned'?!r.id:r.id===relation))&&(status==='all'||(status==='linked')===!!r.linked);}).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.time||'').localeCompare(a.time||'')||b.id.localeCompare(a.id));}
@@ -1009,12 +1892,12 @@ function createOriginals(ctx){
 return { originalType, filterOriginals, createOriginals };
 })();
 
-const __workbenchModule12 = (() => {
+const __workbenchModule15 = (() => {
 // shell.js
-const { createAssetsUI } = __workbenchModule7;
-const { createTravel } = __workbenchModule9;
-const { createReading } = __workbenchModule10;
-const { createOriginals } = __workbenchModule11;
+const { createAssetsUI } = __workbenchModule10;
+const { createTravel } = __workbenchModule12;
+const { createReading } = __workbenchModule13;
+const { createOriginals } = __workbenchModule14;
 function workbenchTheme(value,type='health'){const color=/^#[0-9a-f]{6}$/i.test(value||'')?value:(type==='finance'?'#A65343':type==='travel'?'#356A98':type==='reading'?'#74634F':'#2C6B51');const rgb=[1,3,5].map(i=>parseInt(color.slice(i,i+2),16));const mix=(weight)=>'#'+rgb.map(v=>Math.round(v*(1-weight)+255*weight).toString(16).padStart(2,'0')).join('');const light=rgb.reduce((n,v,i)=>n+[.2126,.7152,.0722][i]*(v/255<=.04045?v/255/12.92:((v/255+.055)/1.055)**2.4),0);return {'--theme-accent':color,'--theme-soft':mix(.92),'--theme-border':mix(.72),'--theme-ink':light>.15?'#30332F':color,'--theme-on-accent':light>.179?'#000000':'#FFFFFF','--theme-chart':light>.25?'#'+rgb.map(v=>Math.round(v*.55).toString(16).padStart(2,'0')).join(''):color,'--shell-accent':light>.15?'#30332F':color,'--shell-soft':mix(.92),'--shell-line':mix(.72),'--green':light>.15?'#30332F':color};}
 
 
@@ -1033,7 +1916,7 @@ function createShell(ctx){
  function switcher(){const w=current();ctx.openDrawer(`<div class="shell-context">工作台和示例/个人空间分别管理</div><div class="workbench-options">${ctx.workbenches.map(x=>`<button class="workbench-option ${x.id===ctx.workbench?'selected':''}" data-action="shell-switch:${esc(x.id)}"><span class="workbench-symbol ${x.type}">${icon(x.type==='health'?'heart':x.type==='finance'?'activity':x.type==='travel'?'compass':x.type==='reading'?'file':'grid',21)}</span><span><strong>${esc(x.name)}</strong><small>${description(x)}</small></span>${x.id===ctx.workbench?icon('check',18):icon('arrow',15)}</button>`).join('')}</div><button class="new-workbench" data-action="shell-create">${icon('plus',18)}创建其他工作台</button><p class="shell-fine">切换后显示该工作台的记录。现有健康资料保留在健康工作台。</p>`,'切换工作台',`当前：${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}`);}
  function bottom(){const health=ctx.workbench==='health';const p=ctx.page;const finance=ctx.workbench==='finance',isTravel=ctx.workbench==='travel';const entries=health?[['dashboard','今天','grid',p==='dashboard'],['library','档案','file',['library','visit','meal','exercise','metric','file','task'].includes(p)],['capture','记录','plus',false],['day','回顾','calendar',p==='day'],['mine','我的','settings',['mine','settings'].includes(p)]]:finance?[['dashboard','总览','grid',['dashboard','history','holdings'].includes(p)],['financial','金融','activity',['financial','accounts','liabilities'].includes(p)],['fixed','固定','building',p==='fixed'],['renewals','事项','calendar',['renewals','tasks'].includes(p)],['mine','我的','settings',p==='mine']]:isTravel?[['dashboard','旅行','compass',p==='dashboard'],['trip','行程','calendar',['trip','places','bookings','documents'].includes(p)],['capture','添加','plus',false],['checklist','准备','task',p==='checklist'],['mine','我的','settings',['mine','notes','tasks'].includes(p)]]:ctx.workbench==='reading'?[['books','书架','file',['books','dashboard','documents'].includes(p)],['entries','笔记','file',p==='entries']]:[['dashboard','今天','grid',p==='dashboard'],['notes','备忘','file',p==='notes'],['capture','记录','plus',false],['tasks','待办','task',p==='tasks'],['mine','我的','settings',p==='mine']];return `<nav class="bottom-tabs" style="--tab-count:${entries.length}" aria-label="底部导航">${entries.map(([route,label,ic,selected])=>`<button class="bottom-tab ${selected?'active':''} ${route==='capture'?'capture-tab':''}" data-action="${route==='capture'?'shell-capture':'nav:'+route}" ${selected?'aria-current="page"':''}><span>${icon(ic,22)}</span><small>${label}</small></button>`).join('')}</nav>`;}
  function decorate(){const w=current();applyTheme(w);document.body.dataset.workbench=w.type;document.body.classList.toggle('mobile-workbench',true);const workspace=document.querySelector('.workspace');if(!workspace)return;
- const mobileHeader=`<header class="phone-topbar"><button class="phone-workbench-picker" data-action="shell-picker" aria-label="切换工作台，当前${esc(w.name)}"><span class="workbench-symbol ${w.type}">${icon(w.type==='health'?'heart':w.type==='finance'?'activity':w.type==='travel'?'compass':w.type==='reading'?'file':'grid',18)}</span><span class="phone-workbench-name"><small>我的工作台</small><strong>${esc(w.name)}</strong></span><span class="picker-chevron">⌄</span></button><div class="phone-top-actions"><button class="space-chip ${ctx.space}" data-action="shell-spaces">${ctx.space==='demo'?'示例 · 虚构':'个人'}</button><button class="phone-profile" data-action="nav:mine" aria-label="我的与工作台设置">${esc((ctx.settings.name||'Captain').slice(0,1))}</button></div></header>`;
+ const mobileHeader=`<header class="phone-topbar"><button class="phone-workbench-picker" data-action="shell-picker" aria-label="切换工作台，当前${esc(w.name)}"><span class="workbench-symbol ${w.type}">${icon(w.type==='health'?'heart':w.type==='finance'?'activity':w.type==='travel'?'compass':w.type==='reading'?'file':'grid',18)}</span><span class="phone-workbench-name"><small>我的工作台</small><strong>${esc(w.name)}</strong></span><span class="picker-chevron">⌄</span></button><div class="phone-top-actions"><button class="space-chip ${ctx.space}" data-action="shell-spaces">${ctx.space==='demo'?'示例 · 虚构':'个人'}</button><button class="phone-profile" data-action="nav:mine" aria-label="个人设置">${esc((ctx.settings.name||'Captain').slice(0,1))}</button></div></header>`;
  workspace.insertAdjacentHTML('afterbegin',mobileHeader);studioFrame(workspace,w);document.querySelector('#app').insertAdjacentHTML('beforeend',bottom());
  const sidebar=document.querySelector('.sidebar');if(sidebar&&!sidebar.querySelector('.desktop-workbench-picker'))sidebar.querySelector('.brand')?.insertAdjacentHTML('afterend',`<button class="desktop-workbench-picker" data-action="shell-picker">${icon(w.type==='health'?'heart':'grid',16)}${esc(w.name)}工作台<span>⌄</span></button>`);
  if(ctx.account?.enabled){const badge=document.querySelector('.local-badge');if(badge)badge.textContent='已登录 · 私有空间';const bottom=document.querySelector('.sidebar .sidebar-bottom');if(bottom&&!bottom.querySelector('[data-desktop-account]'))bottom.insertAdjacentHTML('afterbegin',`<button class="nav-btn" data-action="account-desktop" data-desktop-account>${icon('shield',18)}账号与安全</button>`);const footer=document.querySelector('.footer');if(footer)footer.innerHTML='<span>我的工作台</span><span>'+ (ctx.space==='demo'?'示例空间 · 与个人记录分开保存':'个人空间 · 仅当前账号可访问')+'</span>';}
@@ -1042,16 +1925,18 @@ function createShell(ctx){
  function studioFrame(workspace,w){
   const name=ctx.settings.name||'Captain';
   const date=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'long',day:'numeric',weekday:'long'}).format(new Date(ctx.today+'T12:00:00+08:00'));
-  workspace.insertAdjacentHTML('beforebegin',`<header class="studio-header"><button class="studio-brand" data-action="shell-picker" aria-label="切换工作台"><img class="studio-brand-icon" src="/app-icon.svg" alt="" width="42" height="42"><strong>我的工作台</strong></button><nav class="studio-workbenches" aria-label="工作台">${ctx.workbenches.map(x=>`<button data-action="shell-switch:${esc(x.id)}" class="${x.id===w.id?'active':''}" ${x.id===w.id?'aria-current="page"':''}>${esc(x.name)}</button>`).join('')}</nav><div class="studio-utilities"><button class="icon-btn" data-action="shell-theme" aria-label="工作台主题色">${icon('settings',20)}</button><button class="studio-user" data-action="nav:mine"><span class="avatar">${esc(name.slice(0,1))}</span><span>${esc(name)}</span>${icon('arrow',14)}</button></div></header>`);
+  workspace.insertAdjacentHTML('beforebegin',`<header class="studio-header"><button class="studio-brand" data-action="shell-picker" aria-label="切换工作台"><img class="studio-brand-icon" src="/app-icon.svg" alt="" width="42" height="42"><strong>我的工作台</strong></button><nav class="studio-workbenches" aria-label="工作台">${ctx.workbenches.map(x=>`<button data-action="shell-switch:${esc(x.id)}" class="${x.id===w.id?'active':''}" ${x.id===w.id?'aria-current="page"':''}>${esc(x.name)}</button>`).join('')}</nav><div class="studio-utilities"><button class="icon-btn" data-action="component-library" aria-label="AI组件库">${icon('grid',20)}</button><button class="studio-user" data-action="nav:mine"><span class="avatar">${esc(name.slice(0,1))}</span><span>${esc(name)}</span>${icon('arrow',14)}</button></div></header>`);
   const topbar=workspace.querySelector('.topbar');
   if(topbar){const label=topbar.querySelector('.breadcrumb,.workspace-label');if(label)label.innerHTML=`<div class="studio-date">${icon('calendar',18)}<span>${date}</span></div><div class="studio-greeting">你好，${esc(name)}</div>`;}
   const sidebar=document.querySelector('.sidebar');
   const routes=sidebar?[...sidebar.querySelectorAll('.nav-btn[data-action^="nav:"]')].filter(b=>b.dataset.action!=='nav:mine'):[];
   const main=workspace.querySelector('.main');
-  if(main){main.dataset.page=ctx.page;if(['dashboard','books'].includes(ctx.page))main.insertAdjacentHTML('afterbegin',`<div class="phone-context"><span>${date}</span><button data-action="shell-theme" aria-label="自定义当前工作台主题色">${icon('grid',14)}工作台外观</button></div>`);main.insertAdjacentHTML('afterbegin',`<nav class="studio-modules" aria-label="${esc(w.name)}模块">${routes.map(b=>`<button class="${b.classList.contains('active')?'active':''}" data-action="${esc(b.dataset.action)}" ${b.classList.contains('active')?'aria-current="page"':''}>${b.innerHTML}</button>`).join('')}<button class="studio-module-settings ${ctx.page==='mine'?'active':''}" data-action="nav:mine">${icon('settings',16)}我的</button></nav>`);}
+  if(main){main.dataset.page=ctx.page;if(['dashboard','books'].includes(ctx.page))main.insertAdjacentHTML('afterbegin',`<div class="phone-context"><span>${date}</span><div class="phone-context-actions"><button data-action="component-library" aria-label="AI组件库">${icon('grid',14)}组件库</button><button data-action="shell-workbench-settings" aria-label="工作台设置">${icon('settings',14)}设置</button></div></div>`);main.insertAdjacentHTML('afterbegin',`<nav class="studio-modules" aria-label="${esc(w.name)}模块">${routes.map(b=>`<button class="${b.classList.contains('active')?'active':''}" data-action="${esc(b.dataset.action)}" ${b.classList.contains('active')?'aria-current="page"':''}>${b.innerHTML}</button>`).join('')}<button class="studio-module-settings" data-action="shell-workbench-settings">${icon('settings',16)}工作台设置</button></nav>`);}
  }
  function library(){const modules=[['visit','就诊管理','就诊、用药、报告与资料','visit'],['exercise','运动与锻炼','训练、收藏与身体感受','exercise'],['meal','饮食记录','餐食、照片与饮水','meal'],['metric','健康监测','测量数值与变化趋势','metric'],['file','资料原件','缩略图、原件查询与下载','file']];return `<div class="phone-section-intro">健康档案<span>所有健康模块都在这里</span></div><div class="module-directory">${modules.map(([p,title,sub,ic])=>`<button data-action="nav:${p}" class="directory-item"><span class="directory-icon">${icon(ic,22)}</span><span><strong>${title}</strong><small>${sub}</small></span>${icon('arrow',16)}</button>`).join('')}</div>`;}
- function mine(){const w=current();return `<section class="shell-profile"><span class="profile-orbit">${esc((ctx.settings.name||'C').slice(0,1))}</span><h2>${esc(ctx.settings.name||'Captain')}</h2><p>${esc(w.name)}工作台 · ${ctx.space==='demo'?'示例空间，数据为虚构':'个人空间'}</p></section><div class="shell-menu"><button data-action="shell-picker">${icon('grid',19)}<span>我的工作台<small>切换健康、资产、旅行、阅读或其他空间</small></span>${icon('arrow',16)}</button><button data-action="shell-spaces">${icon('shield',19)}<span>数据空间<small>${ctx.space==='demo'?'示例空间 · 虚构数据':'个人空间 · 我的记录'}</small></span>${icon('arrow',16)}</button>${ctx.workbench==='health'?`<button data-action="nav:settings">${icon('settings',19)}<span>个人设置<small>称呼、关注目标与连接状态</small></span>${icon('arrow',16)}</button>`:`<button data-action="shell-profile">${icon('settings',19)}<span>个人设置<small>设置当前工作台的称呼</small></span>${icon('arrow',16)}</button>`}<button data-action="nav:${ctx.workbench==='health'?'file':'documents'}">${icon('file',19)}<span>资料原件<small>查找、预览和下载当前工作台的资料</small></span>${icon('arrow',16)}</button><button data-action="shell-theme">${icon('grid',19)}<span>工作台外观<small>自定义当前工作台的主题色</small></span>${icon('arrow',16)}</button>${ctx.account?.enabled?`<button data-action="account-open">${icon('shield',19)}<span>账号与安全<small>${esc(ctx.account.user?.email||'')} · 密码与登录管理</small></span>${icon('arrow',16)}</button>`:''}<button data-action="trash-open">${icon('trash',19)}<span>最近删除<small>30 天内删除的记录可恢复</small></span><span class="trash-count" id="trash-count" hidden></span>${icon('arrow',16)}</button>${ctx.workbench==='reading'?`<button data-action="nav:tasks">${icon('task',19)}<span>阅读计划<small>安排下一次阅读</small></span>${icon('arrow',16)}</button>`:''}${ctx.workbench==='travel'?`<button data-action="nav:notes">${icon('file',19)}<span>旅行备忘<small>留存想法与补充信息</small></span>${icon('arrow',16)}</button><button data-action="nav:tasks">${icon('task',19)}<span>通用待办<small>未关联某次旅行的事项</small></span>${icon('arrow',16)}</button>`:''}<button data-action="shell-install">${icon('download',19)}<span>添加到主屏幕<small>像应用一样打开工作台</small></span>${icon('arrow',16)}</button><button data-action="export">${icon('file',19)}<span>导出当前工作台<small>导出当前空间的记录JSON</small></span>${icon('arrow',16)}</button></div><p class="shell-fine">${ctx.workbench==='health'?'健康资料与其他工作台分别保存。':ctx.workbench==='finance'?'资产按来源日期归档，不进行转账、交易或自动换汇。':ctx.workbench==='travel'?'旅行按天安排，时间以目的地当地时间填写；预订仅作留档。':'备忘和待办保存在当前工作台。'}<br>添加到主屏幕后仍需联网读取和保存记录。</p>`;}
+ function mine(){return `<section class="shell-profile"><span class="profile-orbit">${esc((ctx.settings.name||'C').slice(0,1))}</span><h2>${esc(ctx.settings.name||'Captain')}</h2><p>个人设置 · 所有工作台共用</p></section><div class="shell-menu"><button data-action="shell-profile">${icon('settings',19)}<span>个人设置<small>统一管理称呼、关注目标与饮水目标</small></span>${icon('arrow',16)}</button>${ctx.account?.enabled?`<button data-action="account-open">${icon('shield',19)}<span>账号与安全<small>${esc(ctx.account.user?.email||'')} · 密码与登录管理</small></span>${icon('arrow',16)}</button>`:''}<button data-action="shell-install">${icon('download',19)}<span>添加到主屏幕<small>像应用一样打开工作台</small></span>${icon('arrow',16)}</button></div>`;}
+ function workbenchSettings(){const w=current();ctx.openDrawer(`<div class="shell-menu"><button data-action="shell-spaces">${icon('shield',19)}<span>数据空间<small>${ctx.space==='demo'?'示例空间 · 虚构数据':'个人空间 · 我的记录'}</small></span>${icon('arrow',16)}</button><button data-action="shell-theme">${icon('grid',19)}<span>工作台外观<small>自定义${esc(w.name)}工作台的主题色</small></span>${icon('arrow',16)}</button>${ctx.workbench==='health'?`<button data-action="nav:settings">${icon('activity',19)}<span>健康连接与数据<small>管理血糖设备、连接状态与数据</small></span>${icon('arrow',16)}</button>`:''}<button data-action="nav:${ctx.workbench==='health'?'file':'documents'}">${icon('file',19)}<span>资料原件<small>当前工作台的资料</small></span>${icon('arrow',16)}</button><button data-action="trash-open">${icon('trash',19)}<span>最近删除<small>查看并恢复删除的记录</small></span>${icon('arrow',16)}</button><button data-action="export">${icon('download',19)}<span>导出当前工作台<small>导出当前空间的记录JSON</small></span>${icon('arrow',16)}</button>${ctx.workbench==='reading'?`<button data-action="nav:tasks">${icon('task',19)}<span>阅读计划</span>${icon('arrow',16)}</button>`:''}${ctx.workbench==='travel'?`<button data-action="nav:notes">${icon('file',19)}<span>旅行备忘</span>${icon('arrow',16)}</button><button data-action="nav:tasks">${icon('task',19)}<span>通用待办</span>${icon('arrow',16)}</button>`:''}</div>`,'工作台设置',`${esc(w.name)}工作台 · ${ctx.space==='demo'?'示例空间':'个人空间'}`);}
+
  function capture(){const w=current();if(ctx.workbench==='reading'){ctx.openDrawer(`<div class="phone-record-grid"><button data-action="reading-add:reading_book">${icon('file',25)}<strong>添加书籍</strong></button><button data-action="reading-add:reading_entry">${icon('calendar',25)}<strong>记阅读</strong></button><button data-action="reading-excerpt">${icon('file',25)}<strong>记摘录</strong></button><button data-action="shell-add:task">${icon('task',25)}<strong>阅读计划</strong></button></div><button class="sheet-secondary" data-action="original-upload">${icon('file',17)}上传阅读原件</button>`,'留下阅读的痕迹','保存在当前阅读工作台');return;}if(ctx.workbench==='travel'){ctx.openDrawer(`<div class="record-destination">记录到 <b>${esc(w.name)}工作台</b><span>${ctx.space==='demo'?'示例空间 · 虚构':'个人空间'}</span></div><div class="phone-record-grid">${[['travel_trip','新建旅行','compass'],['travel_stop','添加地点','map'],['travel_booking','添加预订','ticket'],['travel_check','准备事项','task']].map(([kind,label,ic])=>`<button data-action="travel-add:${kind}"><span>${icon(ic,25)}</span><strong>${label}</strong></button>`).join('')}</div><button class="sheet-secondary" data-action="travel-upload">${icon('file',17)}上传票据资料</button>`,'添加旅行记录','先选旅行，再安排这一程');return;}if(ctx.workbench==='finance'){ctx.openDrawer(`<div class="record-destination">记录到 <b>${esc(w.name)}工作台</b><span>${ctx.space==='demo'?'示例空间 · 虚构':'个人空间'}</span></div><div class="phone-record-grid">${[['asset_account','添加账户','grid'],['asset_holding','添加资产','activity'],['asset_transaction','记流水','file'],['asset_liability','记录负债','task']].map(([kind,label,ic])=>`<button data-action="asset-add:${kind}"><span>${icon(ic,25)}</span><strong>${label}</strong></button>`).join('')}</div><button class="sheet-secondary" data-action="asset-upload">${icon('file',17)}上传资料</button><button class="sheet-secondary" data-action="shell-add:note">写一条备忘</button><button class="sheet-secondary" data-action="shell-add:task">添加待办</button>`,'记一笔','只记录，不执行交易');return;}if(ctx.workbench==='health'){ctx.openDrawer(`<div class="record-destination">记录到 <b>健康工作台</b><span>${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间'}</span></div><div class="phone-record-grid">${[['meal','记一餐','照片或一句话','meal'],['exercise','记运动','常用项目与训练明细','exercise'],['metric','记数值','测量值直接输入','metric'],['file','传报告','先存原件，稍后整理','file']].map(([type,title,sub,ic])=>`<button data-action="qc-open:${type}"><span>${icon(ic,28)}</span><strong>${title}</strong><small>${sub}</small></button>`).join('')}</div><button class="sheet-secondary" data-action="daily-water">${icon('plus',17)}记一次饮水</button>`,'记一笔','选择你想留下的记录');return;}
  ctx.openDrawer(`<div class="record-destination">记录到 <b>${esc(w.name)}工作台</b><span>${ctx.space==='demo'?'示例空间':'个人空间'}</span></div><div class="phone-record-grid"><button data-action="shell-add:note"><span>${icon('file',28)}</span><strong>写备忘</strong><small>留下信息或想法</small></button><button data-action="shell-add:task"><span>${icon('task',28)}</span><strong>加待办</strong><small>安排下一件事</small></button></div><button class="sheet-secondary" data-action="original-upload">${icon('file',17)}上传资料原件</button>`,'记一笔','资料、备忘与待办都保存在当前空间');}
  function otherRows(list){return list.map(item=>`<article class="generic-record">${item.kind==='task'?`<button class="check ${item.done?'checked':''}" data-action="shell-toggle:${esc(item.id)}" aria-label="${item.done?'取消完成':'完成'}${esc(item.title)}">${item.done?icon('check',13):''}</button>`:`<span class="generic-note-icon">${icon('file',18)}</span>`}<button class="generic-record-content" data-action="shell-edit:${esc(item.id)}"><strong class="${item.done?'completed':''}">${esc(item.title)}</strong>${item.note?`<p>${esc(item.note)}</p>`:''}<small>${item.date}${item.time?' · '+esc(item.time):''}${item.kind==='task'?' · '+(item.done?'已完成':'待完成'):''}</small></button><button class="icon-btn" data-action="delete:${esc(item.id)}" aria-label="删除${esc(item.title)}">${icon('trash',15)}</button></article>`).join('');}
@@ -1068,31 +1953,33 @@ function createShell(ctx){
  const parent=({accounts:'financial',liabilities:'financial',holdings:'dashboard',history:'dashboard',tasks:'renewals',notes:'documents'})[p]||p;
  const sections=parent==='financial'?[['financial','持仓'],['accounts','账户'],['liabilities','负债']]:parent==='documents'?[['documents','原件'],['notes','备忘']]:parent==='renewals'?[['renewals','到期与待办'],['tasks','全部待办']]:parent==='dashboard'?[['dashboard','总览'],['history','历史记录'],['holdings','资产明细']]:[];
  const subnav=sections.length?`<nav class="asset-section-links asset-subnav" aria-label="页内导航">${sections.map(([id,label])=>`<button class="btn ${p===id?'active':''}" data-action="nav:${id}" ${p===id?'aria-current="page"':''}>${label}</button>`).join('')}</nav>`:'';
- content=subnav+content;
+ content=(p==='dashboard'?'':subnav)+content;
  const entries=[['dashboard','总览','grid'],['financial','金融资产','activity'],['fixed','固定资产','building'],['transactions','流水','file'],['renewals','事项','calendar'],['documents','资料','file']];
  const navButton=(id,label,ic)=>`<button class="nav-btn ${parent===id?'active':''}" data-action="nav:${id}" ${parent===id?'aria-current="page"':''}>${icon(ic,18)}${label}${id==='renewals'&&assets.pendingCount()?`<span class="asset-nav-count">${assets.pendingCount()}</span>`:''}</button>`;
- document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('grid',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>navButton(id,label,ic)).join('')}<div class="sidebar-bottom">${navButton('mine','我的','settings')}<div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人资产工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main"><div class="heading asset-page-heading"><div><h1>${esc(p==='dashboard'?w.name+'工作台':p==='renewals'?'事项':assets.titles[p])}</h1><p>${description(w)}</p></div><div class="asset-heading-actions">${btn('记录','shell-capture','primary','plus')}${btn('导出记录','export','','download')}</div></div><nav class="asset-mobile-sections" aria-label="资产模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${parent===id?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;
+ document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('grid',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>navButton(id,label,ic)).join('')}<div class="sidebar-bottom">${navButton('mine','我的','settings')}<div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人资产工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main">${p==='dashboard'?'':`<div class="heading asset-page-heading"><div><h1>${esc(p==='dashboard'?w.name+'工作台':p==='renewals'?'事项':assets.titles[p])}</h1><p>${description(w)}</p></div><div class="asset-heading-actions">${btn('记录','shell-capture','primary','plus')}${btn('导出记录','export','','download')}</div></div>`}<nav class="asset-mobile-sections" aria-label="资产模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${parent===id?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;
  document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();assets.bind();
  }
 
- function renderTravel(){const w=current(),p=['notes','tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(travel.titles,ctx.page)?ctx.page:'dashboard';travel.cleanupMap();const entries=[['dashboard','我的旅行','compass'],['trip','每日行程','calendar'],['places','地点地图','map'],['bookings','预订','ticket'],['checklist','出发准备','task'],['documents','票据资料','file'],['mine','我的','settings']];const title=travel.titles[p]||({notes:'旅行备忘',tasks:'通用待办'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:travel.render();
+ function renderTravel(){const w=current(),p=['notes','tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(travel.titles,ctx.page)?ctx.page:'dashboard';travel.cleanupMap();const entries=[['dashboard','我的旅行','compass'],['trip','每日行程','calendar'],['places','地点地图','map'],['bookings','预订','ticket'],['checklist','出发准备','task'],['documents','票据资料','file'],['mine','我的','settings']];const title=travel.titles[p]||({notes:'旅行备忘',tasks:'通用待办',mine:'个人设置'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:travel.render();
  document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('compass',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>`<button class="nav-btn ${p===id?'active':''}" data-action="nav:${id}">${icon(ic,18)}${label}</button>`).join('')}<div class="sidebar-bottom"><div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人旅行工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main"><div class="heading travel-page-heading"><div><h1>${esc(title)}</h1><p>${description(w)}</p></div></div><nav class="travel-module-nav" aria-label="旅行模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${p===id?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();if(!['mine','notes','tasks'].includes(p))travel.bind();
  }
- function renderReading(){const w=current(),p=['tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(reading.titles,ctx.page)?ctx.page:'dashboard';const entries=[['books','书架','file'],['entries','笔记','file']];const title=reading.titles[p]||({tasks:'阅读计划'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:reading.render();
+ function renderReading(){const w=current(),p=['tasks','mine'].includes(ctx.page)?ctx.page:Object.hasOwn(reading.titles,ctx.page)?ctx.page:'dashboard';const entries=[['books','书架','file'],['entries','笔记','file']];const title=reading.titles[p]||({tasks:'阅读计划',mine:'个人设置'})[p];let content=p==='mine'?mine():p==='notes'||p==='tasks'?`<section class="card"><div class="card-head"><h2 class="card-title">${title}</h2>${btn(p==='notes'?'写备忘':'加待办','shell-add:'+(p==='notes'?'note':'task'),'primary','plus')}</div>${otherRows(ctx.items.filter(x=>x.kind===(p==='notes'?'note':'task')))||'<div class="generic-empty">还没有记录。</div>'}</section>`:reading.render();
  document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('file',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>`<button class="nav-btn ${(p===id||id==='books'&&['dashboard','documents'].includes(p))?'active':''}" data-action="nav:${id}">${icon(ic,18)}${label}</button>`).join('')}<div class="sidebar-bottom"><div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人阅读工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main"><div class="heading reading-page-heading"><div><h1>${esc(title)}</h1><p>${description(w)}</p></div></div><nav class="reading-module-nav" aria-label="阅读模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${(p===id||id==='books'&&['dashboard','documents'].includes(p))?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();if(!['mine','notes','tasks'].includes(p))reading.bind();
  }
  function applyTheme(w){const theme=workbenchTheme(w.themeColor,w.type);const root=document.body.style;for(const [k,v] of Object.entries(theme))root.setProperty(k,v);}
 
  function theme(){const w=current(),targetWorkbench=ctx.workbench,owner=ctx.account?.user?.id,currentColor=/^#[0-9a-f]{6}$/i.test(w.themeColor||'')?w.themeColor:(w.type==='finance'?'#A65343':w.type==='travel'?'#356A98':w.type==='reading'?'#74634F':'#2C6B51'),palette=['#77BC32','#2C6B51','#A65343','#356A98','#72559A','#74634F','#3B757C','#D9A63C'];ctx.openDrawer(`<form id="workbench-theme-form"><p class="section-desc">仅修改「${esc(w.name)}」的主题色，其他工作台分别保存。</p><div class="theme-palette">${palette.map(c=>`<button type="button" class="theme-swatch ${c.toLowerCase()===currentColor.toLowerCase()?'selected':''}" data-color="${c}" aria-pressed="${c.toLowerCase()===currentColor.toLowerCase()}" style="background:${c}" aria-label="选择颜色 ${c}"></button>`).join('')}</div><div class="theme-controls"><div class="field"><label for="theme-picker">选色</label><input id="theme-picker" type="color" value="${currentColor}"></div>${field('自定义颜色','themeColor',currentColor,'text','required pattern="#[0-9a-fA-F]{6}" maxlength="7"')}</div><div class="theme-preview"><strong>你的工作台，你的颜色</strong><span>按钮、导航与重点信息会使用这个颜色。</span></div><div id="theme-error" role="alert"></div></form>`,'工作台主题色',esc(w.name)+'工作台',`${btn('取消','close')}<button class="btn primary" form="workbench-theme-form" type="submit">保存主题色</button>`);const form=document.querySelector('#workbench-theme-form'),picker=form.querySelector('#theme-picker'),input=form.elements.themeColor;const preview=()=>{if(/^#[0-9a-f]{6}$/i.test(input.value)){picker.value=input.value;const box=form.querySelector('.theme-preview');for(const [key,value] of Object.entries(workbenchTheme(input.value,w.type)))box.style.setProperty(key,value);box.innerHTML=`<strong>你的工作台，你的颜色</strong><span>仅应用于「${esc(w.name)}」的按钮、导航与重点信息。</span><span class="btn primary">主要操作</span>`;for(const sw of form.querySelectorAll('[data-color]')){const selected=sw.dataset.color.toLowerCase()===input.value.toLowerCase();sw.classList.toggle('selected',selected);sw.setAttribute('aria-pressed',String(selected));}}};picker.oninput=()=>{input.value=picker.value;preview();};input.oninput=preview;preview();for(const sw of form.querySelectorAll('[data-color]'))sw.onclick=()=>{input.value=sw.dataset.color;preview();};form.onsubmit=async e=>{e.preventDefault();if(ctx.workbench!==targetWorkbench||ctx.account?.user?.id!==owner){ctx.toast('工作台或账号已变化，请重新打开');return;}const button=document.querySelector('[form="workbench-theme-form"]');button.disabled=true;try{const result=await ctx.api('/api/workbenches/'+encodeURIComponent(targetWorkbench),{method:'PATCH',body:JSON.stringify({themeColor:input.value})});const updated=result.workbench||result;Object.assign(w,updated);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast('主题色已保存');}catch(error){if(form.isConnected)form.querySelector('#theme-error').innerHTML=`<div class="form-error">${esc(error.message)}</div>`;}finally{button.disabled=false;}};
  }
- function addRecord(kind,id){const old=ctx.items.find(x=>x.id===id);const targetSpace=ctx.space,targetWorkbench=ctx.workbench,targetName=current().name,targetOwner=ctx.account?.user?.id;const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date());ctx.openDrawer(`<form id="shell-record-form"><div class="shell-context">${esc(current().name)}工作台 · ${ctx.space==='demo'?'示例空间':'个人空间'}</div>${field(kind==='task'?'待办事项':'标题','title',old?.title||'','text','required maxlength="120"')}<div class="form-grid">${field(kind==='task'?'安排日期':'日期','date',old?.date||ctx.today,'date','required')}${field('时间（选填）','time',old?.time||time,'time')}</div><div class="field"><label for="shell-record-note">${kind==='task'?'补充说明':'备忘内容'}</label><textarea id="shell-record-note" name="note" maxlength="5000" placeholder="写下需要留存的信息…">${esc(old?.note||'')}</textarea></div><div id="shell-record-error" role="alert"></div></form>`,`${old?'编辑':kind==='task'?'添加':'写一条'}${kind==='task'?'待办':'备忘'}`,`保存到${esc(current().name)}工作台`,`${btn('取消','close')}<button form="shell-record-form" type="submit" class="btn primary">保存</button>`);const form=document.querySelector('#shell-record-form');form.onsubmit=async e=>{e.preventDefault();if(ctx.space!==targetSpace||ctx.workbench!==targetWorkbench||ctx.account?.user?.id!==targetOwner||!form.isConnected){ctx.toast('工作台或账号已变化，请重新打开');return;}const button=document.querySelector('[form="shell-record-form"][type=submit]');button.disabled=true;try{const data=Object.fromEntries(new FormData(form));await ctx.api(old?'/api/items/'+id:'/api/items',{method:old?'PUT':'POST',body:JSON.stringify({...data,kind,...(kind==='task'?{done:old?.done||false,category:'日常'}:{})})},targetSpace,targetWorkbench);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast(`已保存到${targetName}工作台`);}catch(err){if(form.isConnected)document.querySelector('#shell-record-error').innerHTML=`<div class="form-error">${esc(err.message)}</div>`;else ctx.toast(err.message);}finally{button.disabled=false}};}
+ function addRecord(kind,id){const old=ctx.items.find(x=>x.id===id);const targetSpace=ctx.space,targetWorkbench=ctx.workbench,targetName=current().name,targetOwner=ctx.account?.user?.id;const time=old?(old.time??''):new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date());ctx.openDrawer(`<form id="shell-record-form"><div class="shell-context">${esc(current().name)}工作台 · ${ctx.space==='demo'?'示例空间':'个人空间'}</div>${field(kind==='task'?'待办事项':'标题','title',old?.title||'','text','required maxlength="120"')}<div class="form-grid">${field(kind==='task'?'安排日期':'日期','date',old?.date||ctx.today,'date','required')}${field('时间（选填）','time',time,'time')}</div><div class="field"><label for="shell-record-note">${kind==='task'?'补充说明':'备忘内容'}</label><textarea id="shell-record-note" name="note" maxlength="5000" placeholder="写下需要留存的信息…">${esc(old?.note||'')}</textarea></div><div id="shell-record-error" role="alert"></div></form>`,`${old?'编辑':kind==='task'?'添加':'写一条'}${kind==='task'?'待办':'备忘'}`,`保存到${esc(current().name)}工作台`,`${btn('取消','close')}<button form="shell-record-form" type="submit" class="btn primary">保存</button>`);const form=document.querySelector('#shell-record-form');form.onsubmit=async e=>{e.preventDefault();if(ctx.space!==targetSpace||ctx.workbench!==targetWorkbench||ctx.account?.user?.id!==targetOwner||!form.isConnected){ctx.toast('工作台或账号已变化，请重新打开');return;}const button=document.querySelector('[form="shell-record-form"][type=submit]');button.disabled=true;try{const data=Object.fromEntries(new FormData(form));await ctx.api(old?'/api/items/'+id:'/api/items',{method:old?'PUT':'POST',body:JSON.stringify({...data,kind,...(kind==='task'?{done:old?.done||false,category:'日常'}:{})})},targetSpace,targetWorkbench);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast(`已保存到${targetName}工作台`);}catch(err){if(form.isConnected)document.querySelector('#shell-record-error').innerHTML=`<div class="form-error">${esc(err.message)}</div>`;else ctx.toast(err.message);}finally{button.disabled=false}};}
  function createWorkbench(){ctx.openDrawer(`<form id="workbench-create"><div class="helper">新工作台可保存资料、备忘与待办。健康记录会留在原工作台。</div>${field('工作台名称','name','','text','required maxlength="24" placeholder="例如：工作、学习或家庭"')}<div id="workbench-error" role="alert"></div></form>`,'创建工作台','独立管理一类事情',`${btn('取消','close')}<button class="btn primary" form="workbench-create" type="submit">创建并进入</button>`);const form=document.querySelector('#workbench-create');form.onsubmit=async e=>{e.preventDefault();const button=document.querySelector('[form="workbench-create"]');button.disabled=true;try{const data=await ctx.api('/api/workbenches',{method:'POST',body:JSON.stringify({name:form.elements.name.value,type:'other'})});const created=data.workbench||data;await ctx.refreshRegistry(created);if(!form.isConnected){await ctx.load();ctx.toast('工作台已创建，可从切换列表进入');return;}ctx.closeDrawer();await ctx.switchWorkbench(created.id);}catch(err){if(form.isConnected)document.querySelector('#workbench-error').innerHTML=`<div class="form-error">${esc(err.message)}</div>`;else ctx.toast(err.message);}finally{button.disabled=false}};}
  async function handle(action,arg){if(action==='shell-picker')switcher();else if(action==='shell-switch'){ctx.closeDrawer();await ctx.switchWorkbench(arg)}else if(action==='shell-create')createWorkbench();else if(action==='shell-capture')capture();else if(action==='shell-add')addRecord(arg);else if(action==='shell-edit'){const item=ctx.items.find(x=>x.id===arg);if(item)addRecord(item.kind,arg)}else if(action==='shell-toggle'){const item=ctx.items.find(x=>x.id===arg);if(item){await ctx.api('/api/items/'+item.id,{method:'PUT',body:JSON.stringify({done:!item.done})});await ctx.load()}}
  else if(action==='shell-spaces')ctx.openDrawer(`<div class="workbench-options"><button class="workbench-option" data-action="shell-space:personal"><span>${icon('shield',21)}</span><span><strong>个人空间</strong><small>记录你自己的资料</small></span>${ctx.space==='personal'?icon('check',18):''}</button><button class="workbench-option" data-action="shell-space:demo"><span>${icon('grid',21)}</span><span><strong>示例空间</strong><small>虚构数据，用于体验，不写入个人档案</small></span>${ctx.space==='demo'?icon('check',18):''}</button></div>`,'选择数据空间',`${esc(current().name)}工作台内的两类数据分别保存`);
  else if(action==='shell-space'){ctx.closeDrawer();await ctx.setSpace(arg)}
  else if(action==='shell-install'){if(installPrompt){await installPrompt.prompt();installPrompt=null;}else ctx.openDrawer(`<div class="install-steps"><span class="workbench-symbol">${icon('grid',30)}</span><h3>把工作台放到主屏幕</h3><p>在手机浏览器中打开本站，使用浏览器菜单或分享菜单中的「添加到主屏幕」。</p><p>如果当前内置浏览器没有这个选项，请在系统浏览器中打开。</p><small>支持添加主屏入口；读取和保存记录仍需联网。</small></div>`,'添加到主屏幕','工作台可以像应用一样打开');}
+ else if(action==='shell-workbench-settings')workbenchSettings();
  else if(action==='shell-theme')theme();
- else if(action==='shell-profile'){ctx.openDrawer(`<form id="shell-profile-form">${field('怎么称呼你','name',ctx.settings.name||'Captain','text','required maxlength="40"')}</form>`,'个人设置',esc(current().name)+'工作台',`${btn('取消','close')}<button class="btn primary" form="shell-profile-form" type="submit">保存</button>`);const form=document.querySelector('#shell-profile-form');form.onsubmit=async e=>{e.preventDefault();await ctx.api('/api/settings',{method:'PUT',body:JSON.stringify({name:form.elements.name.value,focus:ctx.settings.focus||''})});ctx.closeDrawer();await ctx.load();ctx.toast('已保存设置')};}
+ else if(action==='shell-profile'){const owner=ctx.account?.user?.id;ctx.openDrawer(`<form id="shell-profile-form"><p class="section-desc">修改后对所有工作台及示例、个人空间一并生效。</p>${field('怎么称呼你','name',ctx.settings.name||'Captain','text','required maxlength="80"')}<div class="field"><label for="profile-focus">当前关注目标</label><textarea id="profile-focus" name="focus" maxlength="180">${esc(ctx.settings.focus||'')}</textarea></div>${field('每日饮水目标（ml）','waterGoalMl',ctx.settings.waterGoalMl||2000,'number','required min="100" max="10000" step="1"')}<div id="profile-error" role="alert"></div></form>`,'个人设置','所有工作台共用',`${btn('取消','close')}<button class="btn primary" form="shell-profile-form" type="submit">保存</button>`);const form=document.querySelector('#shell-profile-form');form.onsubmit=async e=>{e.preventDefault();if(!form.isConnected||ctx.account?.user?.id!==owner)return;const button=document.querySelector('[form="shell-profile-form"]');button.disabled=true;try{await ctx.api('/api/settings',{method:'PUT',body:JSON.stringify(Object.fromEntries(new FormData(form)))});if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast('个人设置已对所有工作台生效');}catch(error){if(form.isConnected)form.querySelector('#profile-error').textContent=error.message;}finally{button.disabled=false;}};}
+
  }
  if(window.visualViewport){const viewport=window.visualViewport;const resize=()=>{const keyboard=window.innerHeight-viewport.height>150;document.body.classList.toggle('keyboard-visible',keyboard);document.documentElement.style.setProperty('--phone-visual-height',viewport.height+'px');document.documentElement.style.setProperty('--phone-visual-top',viewport.offsetTop+'px');};viewport.addEventListener('resize',resize);viewport.addEventListener('scroll',resize);}
  if('serviceWorker' in navigator&&window.isSecureContext)navigator.serviceWorker.register('/service-worker.js').catch(()=>{});
@@ -1101,12 +1988,661 @@ function createShell(ctx){
 return { workbenchTheme, createShell };
 })();
 
-const __workbenchModule13 = (() => {
+const __workbenchModule16 = (() => {
+// layout-config.js
+
+// Shared, declarative health-dashboard contract. No DOM or arbitrary executable styles.
+const LAYOUT_WIDGETS = [
+ {id:'trend',title:'监测趋势',description:'体重、血压、睡眠、血糖或静息心率趋势',sizes:{desktop:['medium','large'],mobile:['medium','large']},defaultSize:{desktop:'medium',mobile:'large'}},
+ {id:'bodyMetrics',title:'最近身体指标',description:'最近体重、睡眠和静息心率',sizes:{desktop:['small','medium','large'],mobile:['medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'water',title:'今日饮水',description:'当天饮水记录与个人记录目标',sizes:{desktop:['small','medium','large'],mobile:['medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'tasks',title:'近期待办',description:'未完成待办与复查安排',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'exercise',title:'运动记录',description:'近七天运动与最近一次运动',sizes:{desktop:['medium','large'],mobile:['medium','large']},defaultSize:{desktop:'medium',mobile:'large'}},
+ {id:'meals',title:'最近饮食',description:'最近一次餐食记录',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'visits',title:'最近就诊',description:'最近保存的就诊记录',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'reports',title:'最近报告与资料',description:'最近报告或上传的原件',sizes:{desktop:['small','medium','large'],mobile:['small','medium','large']},defaultSize:{desktop:'small',mobile:'large'}},
+ {id:'medications',title:'今日用药',description:'现有用药方案与服用记录入口',sizes:{desktop:['large'],mobile:['large']},defaultSize:{desktop:'large',mobile:'large'}}
+];
+function defaultLayoutConfig(){
+ const device=name=>({mode:'default',widgets:LAYOUT_WIDGETS.map(w=>({id:w.id,visible:true,size:w.defaultSize[name],...(w.id==='trend'?{options:{metric:'weight',range:14}}:w.id==='tasks'?{options:{limit:5}}:{})}))});
+ return {schemaVersion:1,desktop:device('desktop'),mobile:device('mobile')};
+}
+function layoutValidationError(message,field){return Object.assign(new Error(message),{status:400,expose:true,code:'validation_failed',...(field?{field}:{})});}
+function plain(value,label){if(!value||typeof value!=='object'||Array.isArray(value)||![Object.prototype,null].includes(Object.getPrototypeOf(value)))throw layoutValidationError(`${label}格式无效`);}
+function keys(value,allowed,label){plain(value,label);if(Object.keys(value).some(k=>!allowed.includes(k)))throw layoutValidationError(`${label}包含不支持的选项`);}
+function options(id,value){
+ const allowed=id==='trend'?['metric','range']:id==='tasks'?['limit']:[];
+ keys(value,allowed,'卡片展示设置');
+ if(value.metric!==undefined&&!['weight','pressure','sleep','glucose','heart'].includes(value.metric))throw layoutValidationError('请选择有效的监测项目','metric');
+ if(value.range!==undefined&&![7,14,30].includes(value.range))throw layoutValidationError('趋势范围只能选择7、14或30天','range');
+ if(value.limit!==undefined&&(!Number.isInteger(value.limit)||value.limit<1||value.limit>8))throw layoutValidationError('待办显示数量需在1至8项之间','limit');
+ return {...value};
+}
+function validateLayoutConfig(config){
+ keys(config,['schemaVersion','desktop','mobile'],'布局');
+ if(config.schemaVersion!==1)throw layoutValidationError('布局版本不支持');
+ for(const device of ['desktop','mobile']){
+  const view=config[device];keys(view,['mode','widgets'],'设备布局');
+  if(!['default','custom'].includes(view.mode)||!Array.isArray(view.widgets)||view.widgets.length!==LAYOUT_WIDGETS.length)throw layoutValidationError('设备布局不完整');
+  const seen=new Set();
+  for(const widget of view.widgets){keys(widget,['id','visible','size','options'],'卡片');const def=LAYOUT_WIDGETS.find(w=>w.id===widget.id);
+   if(!def||seen.has(widget.id))throw layoutValidationError('卡片无效或重复');seen.add(widget.id);
+   if(typeof widget.visible!=='boolean'||!def.sizes[device].includes(widget.size))throw layoutValidationError('请选择该设备支持的卡片大小与显示状态');
+   if(widget.options!==undefined)options(widget.id,widget.options);
+  }
+ }
+ return structuredClone(config);
+}
+function applyLayoutChanges(config,currentTheme,changes){
+ keys(changes,['themeColor','desktop','mobile'],'布局改动');
+ if(!Object.keys(changes).length)throw layoutValidationError('没有需要修改的布局内容');
+ const next=validateLayoutConfig(config),summary=[];let themeColor=currentTheme;
+ if(changes.themeColor!==undefined){if(typeof changes.themeColor!=='string'||!/^#[0-9a-f]{6}$/i.test(changes.themeColor))throw layoutValidationError('主题色需为六位十六进制颜色','themeColor');themeColor=changes.themeColor.toUpperCase();summary.push('调整工作台主题色');}
+ for(const device of ['desktop','mobile']){
+  if(changes[device]===undefined)continue;
+  const patch=changes[device],deviceName=device==='desktop'?'电脑':'手机';keys(patch,['order','widgets','reset'],'设备改动');
+  if(!Object.keys(patch).length)throw layoutValidationError('设备布局改动不能为空');
+  if(patch.reset!==undefined&&patch.reset!==true)throw layoutValidationError('恢复默认选项无效');
+  if(patch.reset){if(Object.keys(patch).length!==1)throw layoutValidationError('恢复默认不能同时调整其他卡片');next[device]=defaultLayoutConfig()[device];summary.push(`恢复${deviceName}默认布局`);continue;}
+  const view=next[device];view.mode='custom';
+  if(patch.order!==undefined){if(!Array.isArray(patch.order)||patch.order.length>LAYOUT_WIDGETS.length||patch.order.some(id=>typeof id!=='string'||!LAYOUT_WIDGETS.some(w=>w.id===id))||new Set(patch.order).size!==patch.order.length)throw layoutValidationError('卡片顺序包含无效或重复卡片');const byId=new Map(view.widgets.map(w=>[w.id,w]));view.widgets=[...patch.order.map(id=>byId.get(id)),...view.widgets.filter(w=>!patch.order.includes(w.id))];}
+  if(patch.widgets!==undefined){if(!Array.isArray(patch.widgets)||patch.widgets.length>LAYOUT_WIDGETS.length)throw layoutValidationError('卡片改动格式无效');const seen=new Set();
+   for(const widget of patch.widgets){keys(widget,['id','visible','size','options'],'卡片改动');const target=view.widgets.find(w=>w.id===widget.id),def=LAYOUT_WIDGETS.find(w=>w.id===widget.id);
+    if(!target||seen.has(widget.id))throw layoutValidationError('卡片改动包含无效或重复卡片');seen.add(widget.id);
+    if(Object.keys(widget).length===1)throw layoutValidationError('卡片改动不能为空');
+    if(widget.visible!==undefined){if(typeof widget.visible!=='boolean')throw layoutValidationError('卡片显示状态无效');target.visible=widget.visible;}
+    if(widget.size!==undefined){if(!def.sizes[device].includes(widget.size))throw layoutValidationError('请选择该设备支持的卡片大小','size');target.size=widget.size;}
+    if(widget.options!==undefined)target.options={...(target.options||{}),...options(widget.id,widget.options)};
+   }
+  }
+  summary.push(`调整${deviceName}卡片布局`);
+ }
+ return {config:validateLayoutConfig(next),themeColor,summary};
+}
+return { LAYOUT_WIDGETS, defaultLayoutConfig, layoutValidationError, validateLayoutConfig, applyLayoutChanges };
+})();
+
+const __workbenchModule17 = (() => {
+// layout-editor.js
+const { LAYOUT_WIDGETS, defaultLayoutConfig, applyLayoutChanges } = __workbenchModule16;
+const clone=value=>structuredClone(value);
+const selectors={trend:'.health-trend',bodyMetrics:'.health-body-metrics',water:'.health-water',tasks:'.health-tasks',exercise:'.health-exercise',meals:'.health-meals',visits:'.health-visits',reports:'.health-reports',medications:'.health-medication-summary'};
+const validPreview=value=>typeof value==='string'&&/^[a-f0-9-]{36}$/i.test(value);
+const initialQuery=new URLSearchParams(location.search);
+
+function createLayoutUI(ctx){
+ const {esc,icon}=ctx, media=matchMedia('(max-width:900px)');
+ let snapshot=null,editor=null,preview=null,returnDraft=null,previewError='',pendingPreview=initialQuery.get('layoutPreview'),generation=0,operation=0,busyOwner=0,busy=false,pendingKind='',previewLoading=false,trendKey='',savedTrend=null,refreshing=false;
+ const defaultTrends={mobile:{metric:'weight',range:14},desktop:{metric:'weight',range:14}};
+ const isFrame=window.self!==window.top&&initialQuery.get('layoutFrame')==='1'&&validPreview(initialQuery.get('layoutPreview'));
+ if(isFrame)document.body.classList.add('layout-preview-frame-page');
+ const device=()=>media.matches?'mobile':'desktop';
+ const owner=()=>ctx.userId||null;
+ let trendOwner=owner();
+ const context=()=>`${generation}:${owner()||'local'}:${ctx.workbench}:${ctx.route}`;
+ const active=key=>ctx.ready&&ctx.workbench==='health'&&key===context();
+ const view=()=>preview||snapshot;
+ const config=()=>view()?.config||defaultLayoutConfig();
+ const options=id=>{const selected=config()[device()];return selected.mode==='custom'?selected.widgets.find(w=>w.id===id)?.options||{}:{};};
+ const api=(path,options={})=>ctx.api(path,{...options,headers:{...options.headers,'X-Workbench-Owner':owner()||''}},ctx.space,'health');
+ const lock=(kind,token)=>{busyOwner=token;busy=true;pendingKind=kind;};
+ const unlock=token=>{if(busyOwner!==token)return false;busyOwner=0;busy=false;pendingKind='';return true;};
+ const button=(label,action,primary=false,disabled=false)=>`<button type="button" class="btn ${primary?'primary':''}" data-action="${action}" ${disabled?'disabled':''}>${label}</button>`;
+ const comparable=d=>JSON.stringify({config:d.config,themeColor:d.themeColor.toUpperCase()});
+ const changed=()=>editor&&comparable(editor.draft)!==comparable(editor.base);
+ const stale=()=>preview&&(preview.baseRevision??preview.revision)!==snapshot?.revision;
+ const expired=()=>preview&&Date.parse(preview.expiresAt)<=Date.now();
+ const clearURL=()=>{const url=new URL(location.href);for(const key of ['layoutPreview','layoutFrame','layoutDevice'])url.searchParams.delete(key);history.replaceState(null,'',url.pathname+url.search+url.hash);};
+ const setURL=(id,target)=>{const url=new URL(location.href);url.searchParams.set('layoutPreview',id);url.searchParams.set('layoutDevice',target);url.hash='dashboard';history.replaceState(null,'',url.pathname+url.search+url.hash);};
+ function clearPreview(){operation++;previewLoading=false;if(savedTrend)ctx.setTrend(savedTrend.metric,savedTrend.range);savedTrend=null;preview=null;previewError='';pendingPreview=null;returnDraft=null;trendKey='';clearURL();}
+ function cleanup({keepLink=false,resetSnapshot=true}={}){generation++;operation++;editor=null;busy=false;busyOwner=0;pendingKind='';previewLoading=false;if(savedTrend)ctx.setTrend(savedTrend.metric,savedTrend.range);savedTrend=null;preview=null;returnDraft=null;previewError='';trendKey='';if(keepLink)pendingPreview=new URLSearchParams(location.search).get('layoutPreview');else{pendingPreview=null;clearURL();}if(resetSnapshot)snapshot=null;}
+ function setSnapshot(next){if(trendOwner!==owner()){trendOwner=owner();defaultTrends.mobile={metric:'weight',range:14};defaultTrends.desktop={metric:'weight',range:14};trendKey='';}snapshot=next?.workbench==='health'&&next.owner===owner()?next:null;}
+ function beforeRender(){
+  if(ctx.workbench!=='health'||ctx.route!=='dashboard')return;
+  const prefs=options('trend'),key=JSON.stringify([snapshot?.owner,snapshot?.revision,preview?.previewId,device(),prefs]);
+  if(key!==trendKey){trendKey=key;const selected=config()[device()].mode==='custom'?prefs:defaultTrends[device()];ctx.setTrend(selected.metric,selected.range);}
+ }
+ function mount(){
+  if(ctx.workbench!=='health'||ctx.route!=='dashboard')return;
+  const root=document.querySelector('.health-overview');if(!root)return;
+  const heading=root.querySelector('.health-overview-heading'),title=heading?.querySelector('h1');
+  if(title){const line=document.createElement('div');line.className='layout-overview-title';title.before(line);line.append(title);line.insertAdjacentHTML('beforeend',`<button class="btn layout-edit-entry" data-action="layout-edit">${icon('grid',15)}编辑布局</button>`);}
+  if(preview)ctx.previewTheme(preview.themeColor);
+  const selected=config()[device()];
+  if(selected.mode==='custom'){
+   const nodes=new Map(LAYOUT_WIDGETS.map(w=>[w.id,root.querySelector(selectors[w.id])]));
+   const canvas=document.createElement('div');canvas.className='layout-canvas';canvas.dataset.device=device();canvas.setAttribute('aria-label','自定义健康首页布局');
+   for(const w of selected.widgets){const node=nodes.get(w.id);if(!node||!w.visible)continue;node.dataset.layoutWidget=w.id;node.dataset.layoutSize=w.size;node.classList.add('layout-widget');canvas.append(node);}
+   root.querySelector('.health-bento')?.remove();root.querySelector('.health-medication-summary')?.remove();root.append(canvas);
+   if(!canvas.children.length)canvas.innerHTML=`<div class="layout-empty"><h2>首页卡片已全部隐藏</h2><p>记录仍保存在各模块中，可以随时重新显示卡片。</p>${button('编辑布局','layout-edit',true)}</div>`;
+  }
+  if((preview||previewError||previewLoading)&&!isFrame){
+   const banner=document.createElement('section');banner.className='layout-preview-banner';banner.setAttribute('aria-label','布局预览状态');
+   const invalid=stale()||expired(),target=preview?.device||device();
+   banner.innerHTML=`<div><strong>${previewLoading?'正在打开布局预览…':previewError?'布局预览需要处理':`${target==='mobile'?'手机':'电脑'}布局预览 · 尚未应用`}</strong><p>${esc(previewError||(invalid?'当前布局已更新或预览已过期，可继续编辑或退出预览。':'正在查看实际卡片，应用后才会保存到你的工作台。'))}</p></div><div class="layout-preview-actions">${preview?button('继续编辑','layout-preview-edit',false,busy):''}${preview?button(busy?'正在应用…':'应用布局','layout-preview-apply',true,invalid||busy):''}${button('退出预览','layout-preview-exit',false,busy&&pendingKind==='save')}</div>`;
+   root.before(banner);
+   if(preview&&target!==device()){
+    root.hidden=true;
+    const width=target==='mobile'?390:1440,height=target==='mobile'?844:1000,url=new URL(location.href);url.searchParams.set('layoutPreview',preview.previewId);url.searchParams.set('layoutFrame','1');url.searchParams.delete('layoutDevice');
+    const wrapper=document.createElement('div');wrapper.className='layout-device-frame';wrapper.setAttribute('aria-label',target==='mobile'?'手机尺寸预览':'电脑尺寸预览');root.before(wrapper);
+    const available=wrapper.clientWidth||document.querySelector('main').clientWidth,scale=Math.min(1,available/width);wrapper.style.height=`${height*scale}px`;
+    const frame=document.createElement('iframe');frame.title=target==='mobile'?'手机布局预览':'电脑布局预览';frame.src=url.pathname+url.search+'#dashboard';frame.width=String(width);frame.height=String(height);frame.style.width=`${width}px`;frame.style.height=`${height}px`;frame.style.transform=`scale(${scale})`;wrapper.append(frame);
+   }
+  }
+ }
+ async function initializePreview(){
+  if(!pendingPreview||ctx.workbench!=='health'||!ctx.ready)return;
+  const id=pendingPreview;pendingPreview=null;const key=context();previewLoading=true;ctx.render();
+  if(!validPreview(id)){previewLoading=false;previewError='预览链接无效，可以退出后编辑当前布局。';ctx.render();return;}
+  try{const data=await api('/api/layout/preview/'+encodeURIComponent(id));if(!active(key)||!previewLoading)return;if(data.owner!==owner())return;const target=initialQuery.get('layoutDevice'),inferred=data.affectedDevices?.length===1?data.affectedDevices[0]:device();savedTrend=ctx.getTrend();preview={...data,device:isFrame?device():['mobile','desktop'].includes(target)?target:inferred};}
+  catch(error){if(active(key)&&previewLoading)previewError=error.message;}
+  finally{if(active(key)&&previewLoading){previewLoading=false;ctx.render();}}
+ }
+ function changes(){
+  const out={};if(editor.draft.themeColor.toUpperCase()!==editor.base.themeColor.toUpperCase())out.themeColor=editor.draft.themeColor;
+  for(const d of ['desktop','mobile'])if(JSON.stringify(editor.draft.config[d])!==JSON.stringify(editor.base.config[d])){
+   const view=editor.draft.config[d],base=editor.base.config[d];
+   if(view.mode==='default'){out[d]={reset:true};continue;}
+   const patch={},ids=view.widgets.map(w=>w.id);
+   if(base.mode!==view.mode||JSON.stringify(ids)!==JSON.stringify(base.widgets.map(w=>w.id)))patch.order=ids;
+   const widgets=[];
+   for(const w of view.widgets){const before=base.widgets.find(x=>x.id===w.id),delta={id:w.id};for(const field of ['size','visible'])if(w[field]!==before[field])delta[field]=w[field];
+    const options={};for(const [field,value]of Object.entries(w.options||{}))if(value!==before.options?.[field])options[field]=value;if(Object.keys(options).length)delta.options=options;if(Object.keys(delta).length>1)widgets.push(delta);}
+   if(widgets.length)patch.widgets=widgets;if(Object.keys(patch).length)out[d]=patch;
+  }
+  return out;
+ }
+ function errorText(error){const box=document.querySelector('#layout-editor-error');if(box){box.textContent=error.message;box.hidden=false;if(error.code==='layout_conflict')box.insertAdjacentHTML('beforeend',button('读取最新并保留我的调整','layout-reload'));}else ctx.toast(error.message);}
+ function editorBody(){
+  const d=editor.device,selected=editor.draft.config[d],canRestore=editor.base.history?.some(h=>h.revision<editor.base.revision);
+  const sizeLabels=d==='mobile'?{small:'半宽',medium:'标准',large:'舒展'}:{small:'紧凑',medium:'半宽',large:'通栏'};
+  return `<form id="layout-editor-form" data-discard-guard><input type="hidden" name="layout-draft" value="${esc(comparable(editor.base))}"><div class="layout-device-tabs" role="group" aria-label="编辑哪种设备">${['mobile','desktop'].map(name=>`<button type="button" data-action="layout-device:${name}" aria-pressed="${d===name}">${icon(name==='mobile'?'grid':'building',17)}${name==='mobile'?'手机':'电脑'}布局</button>`).join('')}</div><p class="layout-editor-intro">${d==='mobile'?'只调整手机的卡片排列。半宽卡片可并排，舒展卡片增加留白。':'只调整电脑的卡片排列。紧凑、半宽和通栏分别使用不同宽度。'}个人与示例空间共用布局。</p><div class="layout-editor-toolbar"><span>${selected.mode==='default'?'默认排列':'自定义排列'} · ${selected.widgets.filter(w=>w.visible).length} 张可见卡片</span>${button('恢复此设备默认','layout-reset')}</div><div class="layout-widget-list">${selected.widgets.map((w,index)=>{const def=LAYOUT_WIDGETS.find(x=>x.id===w.id);return `<section class="layout-widget-row ${w.visible?'':'is-hidden'}" data-widget-row="${w.id}"><div class="layout-widget-row-head"><label><input type="checkbox" data-layout-visible="${w.id}" ${w.visible?'checked':''}><strong>${esc(def.title)}</strong></label><div class="layout-order-buttons"><button type="button" class="icon-btn" data-action="layout-up:${w.id}" aria-label="上移${esc(def.title)}" ${index===0?'disabled':''}>↑</button><button type="button" class="icon-btn" data-action="layout-down:${w.id}" aria-label="下移${esc(def.title)}" ${index===selected.widgets.length-1?'disabled':''}>↓</button></div></div><div class="layout-widget-settings"><label>大小<select data-layout-size="${w.id}" aria-label="${esc(def.title)}卡片大小">${def.sizes[d].map(size=>`<option value="${size}" ${size===w.size?'selected':''}>${sizeLabels[size]}</option>`).join('')}</select></label>${w.id==='trend'?`<label>监测项目<select data-layout-option="trend:metric" aria-label="趋势监测项目">${Object.entries({weight:'体重',pressure:'血压',sleep:'睡眠',glucose:'血糖',heart:'静息心率'}).map(([value,title])=>`<option value="${value}" ${(w.options?.metric||'weight')===value?'selected':''}>${title}</option>`).join('')}</select></label><label>时间范围<select data-layout-option="trend:range" aria-label="趋势时间范围">${[7,14,30].map(value=>`<option value="${value}" ${(w.options?.range||14)===value?'selected':''}>近${value}天</option>`).join('')}</select></label>`:w.id==='tasks'?`<label>显示数量<select data-layout-option="tasks:limit" aria-label="待办显示数量">${[1,2,3,4,5,6,7,8].map(value=>`<option value="${value}" ${(w.options?.limit||5)===value?'selected':''}>${value}项</option>`).join('')}</select></label>`:''}</div></section>`;}).join('')}</div><div class="layout-theme-field"><label for="layout-theme">健康工作台主题色</label><div><input id="layout-theme" type="color" value="${esc(editor.draft.themeColor)}"><span>${esc(editor.draft.themeColor)}</span></div><small>电脑、手机与健康模块共用；预览时不会保存。</small></div><details class="layout-history"><summary>历史版本 · 当前版本 ${editor.base.revision}</summary><p>恢复版本会同时恢复当时的双端布局和主题色。</p><div class="layout-history-actions"><select id="layout-history-revision" aria-label="选择历史布局版本" ${canRestore?'':'disabled'}>${(editor.base.history||[]).filter(h=>h.revision<editor.base.revision).map(h=>`<option value="${h.revision}">版本 ${h.revision} · ${esc((h.summary||[]).join('、'))}</option>`).join('')||'<option>还没有历史版本</option>'}</select>${button('恢复所选版本','layout-restore',false,!canRestore)}</div></details><details class="layout-ai-help"><summary>让 AI 帮我调整</summary><p>向已连接知衡的 AI 描述需求，例如：把手机的饮水卡片放最前，隐藏运动，电脑保持原样。</p><p>AI 可读取组件与布局，创建预览、应用修改或恢复版本；新工具需要连接端刷新工具列表。</p></details><div id="layout-editor-error" class="form-error" role="alert" hidden></div></form>`;
+ }
+ function drawEditor({scrollTop,focus}={}){
+  ctx.openDrawer(editorBody(),'编辑健康首页','分别管理手机和电脑的布局',`${button('取消','close')}${button('预览','layout-preview',false,!changed())}${button('应用布局','layout-save',true,!changed())}`);
+  const form=document.querySelector('#layout-editor-form');form.elements['layout-draft'].value=comparable(editor.draft);form.onsubmit=e=>e.preventDefault();
+  form.onchange=e=>{
+   try{
+    const input=e.target;let patch;
+    if(input.dataset.layoutVisible)patch={widgets:[{id:input.dataset.layoutVisible,visible:input.checked}]};
+    if(input.dataset.layoutSize)patch={widgets:[{id:input.dataset.layoutSize,size:input.value}]};
+    if(input.dataset.layoutOption){const [id,name]=input.dataset.layoutOption.split(':');patch={widgets:[{id,options:{[name]:name==='metric'?input.value:Number(input.value)}}]};}
+    if(input.id==='layout-theme')changeDraft({themeColor:input.value});
+    else if(patch)changeDraft({[editor.device]:patch});
+   }catch(error){errorText(error);}
+  };
+  if(scrollTop!==undefined)document.querySelector('.drawer-content').scrollTop=scrollTop;
+  if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+ }
+ function focusSelector(){const node=document.activeElement;if(!node)return null;if(node.id)return '#'+CSS.escape(node.id);for(const name of ['data-layout-visible','data-layout-size','data-layout-option','data-action'])if(node.hasAttribute(name))return `[${name}="${CSS.escape(node.getAttribute(name))}"]`;return null;}
+ function changeDraft(patch){const next=applyLayoutChanges(editor.draft.config,editor.draft.themeColor,patch);editor.draft={...editor.draft,config:next.config,themeColor:next.themeColor};const scrollTop=document.querySelector('.drawer-content')?.scrollTop||0,focus=focusSelector();drawEditor({scrollTop,focus});}
+ async function open(){
+  if(ctx.workbench!=='health')return;const key=context(),data=await api('/api/layout');if(!active(key)||data.owner!==owner())return;snapshot=data;editor={base:clone(data),draft:clone(data),device:device()};drawEditor();
+ }
+ async function applied(data,key){if(!active(key))return;clearPreview();editor=null;snapshot=data;ctx.closeDrawer();ctx.invalidateCache();await ctx.load();if(active(key))ctx.toast('布局已应用，可在历史版本中恢复');}
+ async function write(path,body){
+  if(busy)return;const key=context(),token=++operation,form=document.querySelector('#layout-editor-form'),previewId=preview?.previewId;lock('save',token);
+  document.querySelectorAll('#layout-editor-form input,#layout-editor-form select,#layout-editor-form button,.drawer-foot button,.layout-preview-actions button').forEach(b=>b.disabled=true);
+  try{const data=await api(path,{method:'POST',body:JSON.stringify(body)});if(!active(key))return;
+   if(operation!==token||(form&&!form.isConnected)||(!form&&preview?.previewId!==previewId)){ctx.invalidateCache();ctx.toast('布局已保存，刷新后可查看');return;}
+   unlock(token);await applied(data,key);
+  }
+  catch(error){if(active(key)&&operation===token){errorText(error);if(preview){previewError=error.message;if(error.code==='layout_conflict'){try{const latest=await api('/api/layout');if(active(key)&&operation===token)snapshot=latest;}catch{}}if(active(key)&&operation===token)ctx.render();}}}
+  finally{if(unlock(token)){if(active(key)&&form?.isConnected){document.querySelectorAll('#layout-editor-form input,#layout-editor-form select,#layout-editor-form button,.drawer-foot button').forEach(b=>b.disabled=false);if(editor){const top=document.querySelector('.drawer-content')?.scrollTop||0;const message=document.querySelector('#layout-editor-error')?.textContent,conflict=Boolean(document.querySelector('[data-action="layout-reload"]'));drawEditor({scrollTop:top});if(message)errorText(Object.assign(new Error(message.replace('读取最新并保留我的调整','')),{code:conflict?'layout_conflict':undefined}));}}if(active(key)&&preview)ctx.render();}}
+ }
+ async function handle(action,arg){
+  if(isFrame)return;
+  if(action==='layout-edit'){if(preview)return handle('layout-preview-edit');return open();}
+  if(action==='layout-preview-exit'){if(busy&&pendingKind==='save')return;clearPreview();ctx.render();await ctx.load({retainOnError:true});return;}
+  if(action==='layout-preview-edit'){
+   if(!preview||busy)return;
+   const draft=returnDraft||{base:clone(snapshot),draft:clone(preview),device:preview.device||device()};clearPreview();ctx.render();editor=draft;drawEditor();if(draft.base.revision!==snapshot?.revision)errorText(Object.assign(new Error('当前布局已更新，你的草稿仍保留。请读取最新布局再应用。'),{code:'layout_conflict'}));return;
+  }
+  if(action==='layout-preview-apply'){if(preview&&!stale()&&!expired())await write('/api/layout',{expectedRevision:preview.baseRevision??preview.revision,previewId:preview.previewId});return;}
+  if(!editor||!document.querySelector('#layout-editor-form')||busy)return;
+  if(action==='layout-device'){if(['mobile','desktop'].includes(arg)){editor.device=arg;drawEditor({focus:`[data-action="layout-device:${arg}"]`});}return;}
+  if(action==='layout-reload'){
+   const key=context(),patch=changes(),target=editor.device,form=document.querySelector('#layout-editor-form'),token=++operation;const data=await api('/api/layout');if(!active(key)||!form?.isConnected||token!==operation)return;
+   const next=Object.keys(patch).length?applyLayoutChanges(data.config,data.themeColor,patch):{config:data.config,themeColor:data.themeColor};snapshot=data;editor={base:clone(data),draft:{...clone(data),config:next.config,themeColor:next.themeColor},device:target};drawEditor();const note=document.querySelector('#layout-editor-error');note.textContent='已读取最新布局并保留你的调整，请检查后预览或应用。';note.hidden=false;return;
+  }
+  if(action==='layout-reset'){changeDraft({[editor.device]:{reset:true}});return;}
+  if(action==='layout-up'||action==='layout-down'){
+   const list=editor.draft.config[editor.device].widgets.map(w=>w.id),i=list.indexOf(arg),j=i+(action==='layout-up'?-1:1);if(i<0||j<0||j>=list.length)return;[list[i],list[j]]=[list[j],list[i]];changeDraft({[editor.device]:{order:list}});return;
+  }
+  if(action==='layout-save'){if(changed())await write('/api/layout',{expectedRevision:editor.base.revision,changes:changes()});return;}
+  if(action==='layout-restore'){
+   if(changed()){errorText(new Error('请先应用当前修改，或取消后重新打开，再恢复历史版本。'));return;}
+   const revision=Number(document.querySelector('#layout-history-revision')?.value);if(Number.isSafeInteger(revision))await write('/api/layout/restore',{expectedRevision:editor.base.revision,revision});return;
+  }
+  if(action==='layout-preview'&&changed()){
+   const key=context(),draft=editor,form=document.querySelector('#layout-editor-form'),token=++operation;lock('preview',token);document.querySelectorAll('.drawer-foot button').forEach(b=>b.disabled=true);
+   try{const result=await api('/api/layout/preview',{method:'POST',body:JSON.stringify({expectedRevision:editor.base.revision,changes:changes()})});if(!active(key)||token!==operation||!form?.isConnected)return;unlock(token);ctx.closeDrawer();returnDraft=draft;savedTrend=ctx.getTrend();preview={...result,device:draft.device};setURL(result.previewId,draft.device);ctx.enterDashboard();ctx.render();}
+   catch(error){if(active(key)&&token===operation&&form?.isConnected)errorText(error);}
+   finally{if(unlock(token)&&form?.isConnected)document.querySelectorAll('.drawer-foot button').forEach(b=>b.disabled=false);}
+  }
+ }
+ async function refresh(){
+  if(refreshing||!ctx.ready||ctx.workbench!=='health'||ctx.route!=='dashboard'||document.hidden||document.querySelector('.drawer')||preview||previewError||busy)return;
+  const key=context();refreshing=true;try{const data=await api('/api/layout');if(active(key)&&data.owner===owner()&&(data.revision!==snapshot?.revision||data.themeColor!==snapshot?.themeColor)){ctx.invalidateCache();await ctx.load({retainOnError:true});}}catch{}finally{refreshing=false;}
+ }
+ media.addEventListener('change',()=>{if(ctx.ready&&ctx.workbench==='health'&&ctx.route==='dashboard')ctx.render();});
+ window.addEventListener('focus',refresh);document.addEventListener('visibilitychange',refresh);setInterval(refresh,30000);
+ const guardClose=()=>{if(busy&&pendingKind==='save'){ctx.toast('正在保存布局，请稍候');return true;}return false;};
+ const rememberTrend=(metric,range)=>{if(!preview&&config()[device()].mode==='default')defaultTrends[device()]={metric,range};};
+ return {setSnapshot,beforeRender,mount,options,handle,cleanup,initializePreview,rememberTrend,guardClose,isBusy:()=>busy,isFrame:()=>isFrame,isPreview:()=>Boolean(preview||previewError||previewLoading||pendingPreview),onDrawerClose:()=>{operation++;if(pendingKind==='preview')unlock(busyOwner);editor=null;},refresh};
+}
+return { createLayoutUI };
+})();
+
+const __workbenchModule18 = (() => {
+// component-schema.js
+
+// Shared component vocabulary. Definitions contain data, never executable markup or queries.
+const common=['health','finance','travel','reading','other'];
+const countOnly=(title,types)=>({title,workbenchTypes:types,fields:{},aggregations:['count','dailyCount','list'],countUnit:'项'});
+const numeric=(title,types,fields,countUnit='次')=>({title,workbenchTypes:types,fields,aggregations:['count','sum','latest','dailySum','dailyAvg','dailyCount','list'],countUnit});
+const COMPONENT_CATALOG={
+ schemaVersion:1,blockTypes:['stat','chart','list','progress'],layouts:['stack','grid'],days:[7,14,30,90],maxBlocks:8,maxComponents:50,maxPlacementsPerDevice:12,
+ kinds:{
+  exercise:numeric('运动记录',['health'],{duration:{label:'运动时长',unit:'分钟'},distance:{label:'运动距离',unit:'公里'}}),
+  water:numeric('饮水记录',['health'],{volume:{label:'饮水量',unit:'ml'}}),
+  metric:{title:'身体指标',workbenchTypes:['health'],fields:{value:{label:'指标数值',unit:'metric'},secondary:{label:'舒张压',unit:'mmHg'}},aggregations:['count','latest','dailyAvg','dailyCount','list'],countUnit:'次'},
+  meal:countOnly('饮食记录',['health']),visit:countOnly('就诊记录',['health']),
+  task:countOnly('待办',common),note:countOnly('备忘',common),
+  reading_entry:numeric('阅读记录',['reading'],{minutes:{label:'阅读时长',unit:'分钟'}},'次'),reading_book:countOnly('书籍',['reading']),
+  travel_trip:countOnly('旅行',['travel']),travel_stop:countOnly('旅行地点',['travel']),travel_booking:countOnly('预订',['travel']),travel_check:countOnly('准备清单',['travel']),
+  asset_account:countOnly('资产账户',['finance']),asset_holding:countOnly('资产持仓',['finance']),asset_liability:countOnly('负债',['finance']),asset_transaction:countOnly('流水',['finance']),asset_snapshot:countOnly('估值快照',['finance'])
+ },metrics:{weight:{title:'体重',unit:'kg'},pressure:{title:'血压',unit:'mmHg'},sleep:{title:'睡眠',unit:'小时'},glucose:{title:'血糖',unit:'mmol/L'},heart:{title:'静息心率',unit:'次/分'}}
+};
+const COMPONENT_TEMPLATES=[
+ {id:'exercise-summary',title:'运动汇总',description:'近7天运动时长、次数和每日柱状图',workbenchTypes:['health'],sourceType:'health'},
+ {id:'metric-trend',title:'身体指标趋势',description:'最近体重与近14天每日平均趋势',workbenchTypes:['health'],sourceType:'health'},
+ {id:'water-progress',title:'今日饮水进度',description:'当天饮水量与已有饮水记录目标',workbenchTypes:['health'],sourceType:'health'},
+ {id:'pending-tasks',title:'待办清单',description:'所有未完成待办数量和最近事项',workbenchTypes:common,sourceType:'current'},
+ {id:'reading-summary',title:'阅读汇总',description:'近7天阅读分钟数、次数和每日柱状图',workbenchTypes:['reading'],sourceType:'reading'},
+ {id:'notes-list',title:'最近备忘',description:'展示最近保存的备忘',workbenchTypes:common,sourceType:'current'}
+];
+const binding=(kind,aggregation,extra={})=>({kind,aggregation,days:null,...extra});
+function createComponentDefinition(templateId='exercise-summary',sourceWorkbench='health'){
+ const base={schemaVersion:1,title:'我的组件',description:'',sourceWorkbench,layout:'grid',appearance:{accent:null,tone:'neutral',density:'comfortable'},blocks:[]};
+ if(templateId==='exercise-summary')Object.assign(base,{title:'近7天运动',blocks:[{id:'duration',type:'stat',label:'运动时长',binding:binding('exercise','sum',{field:'duration',days:7})},{id:'count',type:'stat',label:'运动次数',binding:binding('exercise','count',{days:7})},{id:'daily',type:'chart',label:'每日运动时长',chart:'bar',binding:binding('exercise','dailySum',{field:'duration',days:7})}]});
+ else if(templateId==='metric-trend')Object.assign(base,{title:'体重趋势',blocks:[{id:'latest',type:'stat',label:'最近体重',binding:binding('metric','latest',{field:'value',metric:'weight'})},{id:'daily',type:'chart',label:'每日平均体重',chart:'line',binding:binding('metric','dailyAvg',{field:'value',metric:'weight',days:14})}]});
+ else if(templateId==='water-progress')Object.assign(base,{title:'今日饮水',blocks:[{id:'water',type:'progress',label:'今日记录进度',target:{mode:'waterGoalMl'},binding:binding('water','sum',{field:'volume',days:7,todayOnly:true})}]});
+ else if(templateId==='pending-tasks')Object.assign(base,{title:'接下来要做的事',blocks:[{id:'count',type:'stat',label:'未完成待办',binding:binding('task','count',{onlyPending:true})},{id:'tasks',type:'list',label:'近期待办',binding:binding('task','list',{onlyPending:true,limit:5})}]});
+ else if(templateId==='reading-summary')Object.assign(base,{title:'近7天阅读',blocks:[{id:'minutes',type:'stat',label:'阅读时长',binding:binding('reading_entry','sum',{field:'minutes',days:7})},{id:'count',type:'stat',label:'阅读次数',binding:binding('reading_entry','count',{days:7})},{id:'daily',type:'chart',label:'每日阅读时长',chart:'bar',binding:binding('reading_entry','dailySum',{field:'minutes',days:7})}]});
+ else if(templateId==='notes-list')Object.assign(base,{title:'最近备忘',layout:'stack',blocks:[{id:'notes',type:'list',label:'最近保存',binding:binding('note','list',{limit:5})}]});
+ else throw componentValidationError('组件模板不存在');
+ return validateComponentDefinition(base);
+}
+const componentValidationError=(message,field)=>Object.assign(new Error(message),{status:400,expose:true,code:'validation_failed',...(field?{field}:{})});
+const plain=(v,label)=>{if(!v||typeof v!=='object'||Array.isArray(v)||![Object.prototype,null].includes(Object.getPrototypeOf(v)))throw componentValidationError(label+'格式无效');};
+const exact=(v,allowed,label)=>{plain(v,label);if(Object.keys(v).some(k=>!allowed.includes(k)))throw componentValidationError(label+'包含不支持的选项');};
+const text=(v,min,max,label)=>{if(typeof v!=='string'||v.trim().length<min||v.length>max)throw componentValidationError(label+'长度无效');return v.trim();};
+function validateComponentDefinition(input){
+ exact(input,['schemaVersion','title','description','sourceWorkbench','layout','appearance','blocks'],'组件定义');
+ if(input.schemaVersion!==1)throw componentValidationError('组件版本不支持');
+ const out={schemaVersion:1,title:text(input.title,1,40,'组件名称'),description:text(input.description??'',0,240,'组件说明'),sourceWorkbench:text(input.sourceWorkbench,1,100,'来源工作台'),layout:input.layout,appearance:input.appearance,blocks:input.blocks};
+ if(!COMPONENT_CATALOG.layouts.includes(out.layout))throw componentValidationError('请选择有效排列方式');
+ exact(out.appearance,['accent','tone','density'],'组件外观');
+ if(out.appearance.accent!==null&&(typeof out.appearance.accent!=='string'||!/^#[a-f0-9]{6}$/i.test(out.appearance.accent)))throw componentValidationError('组件颜色需为六位十六进制颜色或跟随工作台');
+ if(!['neutral','tinted'].includes(out.appearance.tone)||!['compact','comfortable'].includes(out.appearance.density))throw componentValidationError('组件外观选项无效');
+ if(!Array.isArray(out.blocks)||out.blocks.length<1||out.blocks.length>8)throw componentValidationError('组件需包含1至8个区块');
+ const ids=new Set();
+ for(const block of out.blocks){
+  exact(block,['id','type','label','binding','chart','target'],'组件区块');
+  if(typeof block.id!=='string'||!/^[-a-zA-Z0-9_]{1,40}$/.test(block.id)||ids.has(block.id))throw componentValidationError('区块编号无效或重复');ids.add(block.id);
+  text(block.label,1,40,'区块标题');if(!COMPONENT_CATALOG.blockTypes.includes(block.type))throw componentValidationError('区块类型无效');
+  const q=block.binding;exact(q,['kind','aggregation','field','metric','days','limit','onlyPending','todayOnly'],'数据绑定');const kind=Object.hasOwn(COMPONENT_CATALOG.kinds,q.kind)?COMPONENT_CATALOG.kinds[q.kind]:null;
+  if(!kind||!kind.aggregations.includes(q.aggregation))throw componentValidationError('此数据类型不支持所选计算');
+  if(q.days!==null&&!COMPONENT_CATALOG.days.includes(q.days))throw componentValidationError('请选择全部时间或7、14、30、90天');
+  if(q.todayOnly!==undefined&&typeof q.todayOnly!=='boolean')throw componentValidationError('当天筛选无效');
+  if(q.todayOnly&&q.days===null)throw componentValidationError('当天筛选需使用有限时间范围');
+  if(q.onlyPending!==undefined&&(typeof q.onlyPending!=='boolean'||!['task','travel_check'].includes(q.kind)))throw componentValidationError('此数据类型不支持未完成筛选');
+  if(q.kind==='metric'){if(!Object.hasOwn(COMPONENT_CATALOG.metrics,q.metric))throw componentValidationError('请选择监测项目');}else if(q.metric!==undefined)throw componentValidationError('仅身体指标可选择监测项目');
+  const numericOps=['sum','latest','dailySum','dailyAvg'];
+  if(numericOps.includes(q.aggregation)){if(!Object.hasOwn(kind.fields,q.field))throw componentValidationError('请选择支持的数值字段');if(q.field==='secondary'&&q.metric!=='pressure')throw componentValidationError('舒张压仅适用于血压');}
+  else if(q.field!==undefined)throw componentValidationError('此计算不需要数值字段');
+  if(q.limit!==undefined&&(!Number.isInteger(q.limit)||q.limit<1||q.limit>8||q.aggregation!=='list'))throw componentValidationError('列表数量需在1至8项之间');
+  const allowed=block.type==='stat'?['count','sum','latest']:block.type==='chart'?['dailyCount','dailySum','dailyAvg']:block.type==='list'?['list']:['count','sum'];
+  if(!allowed.includes(q.aggregation))throw componentValidationError('区块展示与计算方式不匹配');
+  if(block.type==='chart'){if(!['bar','line'].includes(block.chart)||q.days===null)throw componentValidationError('图表需选择类型和有限时间范围');}else if(block.chart!==undefined)throw componentValidationError('此区块不支持图表类型');
+  if(block.type==='progress'){
+   if(!['water','exercise','task','reading_entry','travel_check'].includes(q.kind))throw componentValidationError('此数据类型不支持进度目标');
+   exact(block.target,['mode','value'],'进度目标');if(block.target.mode==='fixed'){if(typeof block.target.value!=='number'||!Number.isFinite(block.target.value)||block.target.value<=0||block.target.value>1000000)throw componentValidationError('进度目标需为有效正数');}
+   else if(block.target.mode==='waterGoalMl'){if(Object.keys(block.target).length!==1||q.kind!=='water'||q.field!=='volume'||q.aggregation!=='sum')throw componentValidationError('饮水目标仅适用于饮水量');}
+   else throw componentValidationError('进度目标类型无效');
+  }else if(block.target!==undefined)throw componentValidationError('此区块不支持进度目标');
+ }
+ return structuredClone(out);
+}
+const STR=(max,min=0)=>({type:'string',minLength:min,maxLength:max});
+const bindingSchema={type:'object',additionalProperties:false,required:['kind','aggregation','days'],properties:{kind:{type:'string',enum:Object.keys(COMPONENT_CATALOG.kinds)},aggregation:{type:'string',enum:['count','sum','latest','dailySum','dailyCount','dailyAvg','list']},field:STR(30,1),metric:{type:'string',enum:Object.keys(COMPONENT_CATALOG.metrics)},days:{anyOf:[{type:'integer',enum:COMPONENT_CATALOG.days},{type:'null'}]},limit:{type:'integer',minimum:1,maximum:8},onlyPending:{type:'boolean'},todayOnly:{type:'boolean'}}};
+const COMPONENT_DEFINITION_SCHEMA={
+ type:'object',additionalProperties:false,required:['schemaVersion','title','sourceWorkbench','layout','appearance','blocks'],
+ properties:{
+  schemaVersion:{type:'integer',enum:[1]},title:STR(40,1),description:STR(240),sourceWorkbench:STR(100,1),layout:{type:'string',enum:COMPONENT_CATALOG.layouts},
+  appearance:{type:'object',additionalProperties:false,required:['accent','tone','density'],properties:{accent:{anyOf:[{type:'string',pattern:'^#[a-fA-F0-9]{6}$'},{type:'null'}]},tone:{type:'string',enum:['neutral','tinted']},density:{type:'string',enum:['compact','comfortable']}}},
+  blocks:{type:'array',minItems:1,maxItems:8,items:{
+   type:'object',additionalProperties:false,required:['id','type','label','binding'],properties:{
+    id:{type:'string',pattern:'^[-a-zA-Z0-9_]{1,40}$'},type:{type:'string',enum:COMPONENT_CATALOG.blockTypes},label:STR(40,1),binding:bindingSchema,chart:{type:'string',enum:['bar','line']},
+    target:{type:'object',additionalProperties:false,required:['mode'],properties:{mode:{type:'string',enum:['fixed','waterGoalMl']},value:{type:'number',exclusiveMinimum:0,maximum:1000000}}}
+   }
+  }}
+ }
+};
+return { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, componentValidationError, validateComponentDefinition, COMPONENT_DEFINITION_SCHEMA };
+})();
+
+const __workbenchModule19 = (() => {
+// component-card.js
+
+// Render only the evaluated component model. Definitions and data queries never
+// become markup, executable styles, URLs, or event handlers here.
+const escapeText=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const finite=value=>typeof value==='number'&&Number.isFinite(value);
+const numberFormatter=new Intl.NumberFormat('zh-CN',{maximumFractionDigits:8});
+const number=value=>value===0?'0':Math.abs(value)<1e-7?String(value):numberFormatter.format(value);
+const display=value=>finite(value)?number(value):typeof value==='string'&&value.trim()?value:'—';
+const coordinate=value=>Number.isFinite(value)?Number(value.toFixed(3)):0;
+const array=value=>Array.isArray(value)?value:[];
+const present=value=>value!==undefined&&value!==null&&value!=='';
+const uuid=value=>typeof value==='string'&&/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
+
+function chart(block,esc){
+ const points=array(block.points).slice(0,90).map(point=>({date:String(point?.date??''),label:String(point?.label??point?.date??''),value:finite(point?.value)?point.value:null}));
+ const values=points.filter(point=>point.value!==null).map(point=>point.value);
+ if(!values.length)return '<p class="component-card-empty">这段时间还没有可展示的数据。</p>';
+ const minimum=Math.min(0,...values),maximum=Math.max(0,...values),magnitude=Math.max(1,...values.map(value=>Math.abs(value)));
+ const low=minimum/magnitude,high=maximum/magnitude;
+ const extent=high-low||1;
+ const width=320,height=174,left=10,right=10,top=12,bottom=14,plotWidth=width-left-right,plotHeight=height-top-bottom;
+ const y=value=>coordinate(top+(high-value/magnitude)/extent*plotHeight);
+ // All-zero data has a zero baseline at the bottom and no phantom positive bar.
+ const allZero=values.every(value=>value===0),zero=allZero?height-bottom:y(0);
+ const valueY=value=>allZero?zero:y(value);
+ const x=index=>coordinate(block.chart==='line'?(points.length===1?width/2:left+index/(points.length-1)*plotWidth):left+(index+.5)/points.length*plotWidth);
+ const barWidth=coordinate(Math.min(34,plotWidth/points.length*.66));
+ const unit=String(block.unit??'');
+ const pointTitle=point=>esc(`${point.label||point.date}：${point.value===null?'暂无数据':display(point.value)+(unit?' '+unit:'')}`);
+ const grid=[top,top+plotHeight/2,height-bottom].map(row=>`<line class="component-chart-grid" x1="${left}" y1="${coordinate(row)}" x2="${width-right}" y2="${coordinate(row)}"/>`).join('');
+ let drawing='';
+ if(block.chart==='line'){
+  const segments=[];let current=[];
+  for(let i=0;i<points.length;i++){const point=points[i];if(point.value===null){if(current.length)segments.push(current);current=[];continue;}current.push({x:x(i),y:valueY(point.value)});}
+  if(current.length)segments.push(current);
+  drawing=segments.map(segment=>`<path class="component-chart-line" d="${segment.map((p,i)=>(i?'L':'M')+p.x+' '+p.y).join(' ')}"/>`).join('');
+  drawing+=points.map((point,index)=>point.value===null?'':`<circle class="component-chart-point" cx="${x(index)}" cy="${valueY(point.value)}" r="2.7"><title>${pointTitle(point)}</title></circle>`).join('');
+ }else{
+  drawing=points.map((point,index)=>{
+   if(point.value===null)return '';
+   const endpoint=valueY(point.value),barY=coordinate(Math.min(zero,endpoint)),barHeight=coordinate(Math.abs(zero-endpoint));
+   return `<rect class="component-chart-bar ${point.value<0?'is-negative':''}" x="${coordinate(x(index)-barWidth/2)}" y="${barY}" width="${barWidth}" height="${barHeight}" rx="${Math.min(3,barWidth/3)}"><title>${pointTitle(point)}</title></rect>`;
+  }).join('');
+ }
+ const labelIndices=[...new Set(Array.from({length:Math.min(5,points.length)},(_,i)=>Math.round(i*(points.length-1)/Math.max(1,Math.min(5,points.length)-1))))];
+ const labels=labelIndices.map((index,i)=>`<span class="${i&&i<labelIndices.length-1?'is-intermediate':''}">${esc(points[index].label||points[index].date)}</span>`).join('');
+ const description=`${block.label||'图表'}，${points.map(point=>(point.label||point.date)+' '+(point.value===null?'暂无数据':display(point.value)+' '+unit)).join('，')}`;
+ return `<div class="component-chart"><div class="component-chart-scale"><span>${esc(display(minimum))} – ${esc(display(maximum))}${unit?' '+esc(unit):''}</span><span>${block.chart==='line'?'折线':'柱状'}</span></div><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(description)}" preserveAspectRatio="none">${grid}<line class="component-chart-zero" x1="${left}" y1="${zero}" x2="${width-right}" y2="${zero}"/>${drawing}</svg><div class="component-chart-axis">${labels}</div><details class="component-chart-values"><summary>查看数值</summary><dl>${points.map(point=>`<div><dt>${esc(point.label||point.date)}</dt><dd>${point.value===null?'暂无数据':esc(display(point.value))+(unit?' '+esc(unit):'')}</dd></div>`).join('')}</dl></details></div>`;
+}
+
+function blockContent(block,esc){
+ if(block.type==='stat')return `<div class="component-stat-value">${esc(display(block.value))}${present(block.unit)?`<small>${esc(block.unit)}</small>`:''}</div>${present(block.detail)?`<p class="component-stat-detail">${esc(block.detail)}</p>`:(!present(block.value)||typeof block.value==='number'&&!finite(block.value))?'<p class="component-stat-detail">尚未记录</p>':''}`;
+ if(block.type==='chart')return chart(block,esc)+(present(block.detail)?`<p class="component-stat-detail">${esc(block.detail)}</p>`:'');
+ if(block.type==='list'){
+  const items=array(block.items).slice(0,8).filter(item=>item&&typeof item==='object');
+  return items.length?`<ul class="component-data-list">${items.map(item=>`<li><strong>${esc(item.title||'未命名记录')}</strong>${present(item.date)?`<time>${esc(item.date)}</time>`:''}${present(item.detail)?`<p>${esc(item.detail)}</p>`:''}</li>`).join('')}</ul>`:'<p class="component-card-empty">暂无符合条件的记录。</p>';
+ }
+ if(block.type==='progress'){
+  const hasValue=finite(block.value),hasTarget=finite(block.target)&&block.target>0;
+  const percent=hasValue&&hasTarget?Math.min(100,Math.max(0,block.value/block.target*100)):0;
+  const text=hasValue?display(block.value):'—',unit=present(block.unit)?' '+String(block.unit):'';
+  const label=hasTarget?`${text}${unit}，目标 ${display(block.target)}${unit}`:`${text}${unit}，目标未设置`;
+  return `<div class="component-progress-values"><strong>${esc(text)}${unit?`<small>${esc(unit)}</small>`:''}</strong><span>${hasTarget?'目标 '+esc(display(block.target))+esc(unit):'目标未设置'}</span></div><div class="component-progress-track" ${hasTarget&&hasValue?`role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${coordinate(percent)}"`:'role="img"'} aria-label="${esc(label)}"><span style="width:${coordinate(percent)}%"></span></div><p class="component-progress-detail">${!hasValue?'尚未记录':hasTarget?`${Math.round(percent)}%`:'设置目标后显示进度'}</p>${present(block.detail)?`<p class="component-stat-detail">${esc(block.detail)}</p>`:''}`;
+ }
+ return '';
+}
+
+function renderComponentCard(model,options={}){
+ model=model&&typeof model==='object'?model:{};
+ const esc=typeof options.esc==='function'?options.esc:escapeText;
+ const appearance=model.appearance||{},tone=appearance.tone==='tinted'?'tinted':'neutral',density=appearance.density==='compact'?'compact':'comfortable',layout=model.layout==='grid'?'grid':'stack';
+ const accent=typeof appearance.accent==='string'&&/^#[a-f0-9]{6}$/i.test(appearance.accent)?appearance.accent:null;
+ const rgb=accent?[1,3,5].map(i=>parseInt(accent.slice(i,i+2),16)):null;
+ const luminance=rgb?.reduce((sum,value,i)=>sum+[.2126,.7152,.0722][i]*(value/255<=.04045?value/255/12.92:((value/255+.055)/1.055)**2.4),0);
+ const dataInk=accent&&(luminance>.25?'#'+rgb.map(value=>Math.round(value*.55).toString(16).padStart(2,'0')).join(''):accent);
+ const source=typeof model.source?.name==='string'&&model.source.name?`来自${model.source.name}工作台`:'';
+ const showManage=options.showManage===true&&!options.readOnly&&uuid(options.componentId);
+ const blocks=array(model.blocks).slice(0,8).filter(block=>block&&typeof block==='object'&&['stat','chart','list','progress'].includes(block.type));
+ return `<article class="component-card component-card-tone-${tone} component-card-density-${density}" ${accent?`style="--component-accent:${accent};--component-data-ink:${dataInk}"`:''}><header class="component-card-head"><div><h3>${esc(model.title||'未命名组件')}</h3>${present(model.description)?`<p>${esc(model.description)}</p>`:''}</div>${showManage?`<button type="button" class="component-manage-button" data-action="component-open:${esc(options.componentId)}" aria-label="管理${esc(model.title||'组件')}">管理</button>`:''}</header>${source?`<div class="component-source-badge">${esc(source)}${model.space==='demo'?'<span>示例 · 虚构</span>':''}</div>`:''}<div class="component-card-blocks" data-component-layout="${layout}">${blocks.map(block=>`<section class="component-block component-block-${block.type}"><h4>${esc(block.label||({stat:'指标',chart:'趋势',list:'记录',progress:'进度'})[block.type])}</h4>${blockContent(block,esc)}</section>`).join('')||'<p class="component-card-empty">还没有可展示的组件内容。</p>'}</div></article>`;
+}
+return { renderComponentCard };
+})();
+
+const __workbenchModule20 = (() => {
+// component-draft.js
+
+// Merge deliberate draft edits onto a freshly read definition after a conflict.
+// Unchanged fields retain concurrent edits; stable block ids preserve their identity.
+const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const copy=value=>structuredClone(value);
+function mergeObject(base,draft,fresh){
+ const out=copy(fresh||{});
+ for(const key of new Set([...Object.keys(base||{}),...Object.keys(draft||{})])){
+  if(same(base?.[key],draft?.[key]))continue;
+  if(draft?.[key]===undefined)delete out[key];
+  else if(key==='binding'||key==='appearance')out[key]=mergeObject(base?.[key]||{},draft[key],fresh?.[key]||{});
+  else out[key]=copy(draft[key]);
+ }
+ return out;
+}
+function mergeComponentDraft(base,draft,fresh){
+ const result=mergeObject({...base,blocks:undefined},{...draft,blocks:undefined},{...fresh,blocks:undefined});
+ if(same(base.blocks,draft.blocks)){result.blocks=copy(fresh.blocks);return result;}
+ const original=new Map(base.blocks.map(b=>[b.id,b])),local=new Map(draft.blocks.map(b=>[b.id,b])),latest=new Map(fresh.blocks.map(b=>[b.id,b]));
+ for(const [id,b]of original)if(!local.has(id))latest.delete(id);
+ for(const [id,b]of local){if(!original.has(id))latest.set(id,copy(b));else if(!same(original.get(id),b))latest.set(id,mergeObject(original.get(id),b,latest.get(id)||original.get(id)));}
+ const localOrder=draft.blocks.map(b=>b.id),baseOrder=base.blocks.map(b=>b.id);
+ const order=same(localOrder,baseOrder)?fresh.blocks.map(b=>b.id):localOrder;
+ result.blocks=[...order.filter(id=>latest.has(id)).map(id=>latest.get(id)),...[...latest].filter(([id])=>!order.includes(id)).map(([,b])=>b)];
+ return result;
+}
+return { mergeComponentDraft };
+})();
+
+const __workbenchModule21 = (() => {
+// components.js
+const { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, validateComponentDefinition } = __workbenchModule18;
+const { renderComponentCard } = __workbenchModule19;
+const { mergeComponentDraft } = __workbenchModule20;
+const clone=value=>structuredClone(value),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+const initialQuery=new URLSearchParams(location.search);
+const uuid=value=>typeof value==='string'&&/^[a-f0-9-]{36}$/i.test(value);
+const TYPES={stat:'指标',chart:'图表',list:'列表',progress:'进度'};
+const OPS={count:'记录数量',sum:'合计',latest:'最近一次',dailySum:'每日合计',dailyCount:'每日次数',dailyAvg:'每日平均',list:'最近记录'};
+const HISTORY={create:'创建草稿',update:'编辑草稿',duplicate:'复制',publish:'发布',archive:'归档',unarchive:'恢复归档',restore:'恢复为草稿','save-preview':'保存预览'};
+const allowedOps=type=>type==='stat'?['count','sum','latest']:type==='chart'?['dailyCount','dailySum','dailyAvg']:type==='list'?['list']:['count','sum'];
+const progressKinds=['water','exercise','task','reading_entry','travel_check'];
+
+function createComponentUI(ctx){
+ const {esc,icon}=ctx,media=matchMedia('(max-width:900px)');
+ let view=null,library=null,editor=null,slots=null,preview=null,returnEditor=null,pending=initialQuery.get('componentPreview'),previewError='',loadingPreview=false,previewWidth='mobile';
+ let generation=0,operation=0,busyOwner=0,busyKind='',filter='all',refreshing=false;
+ const owner=()=>ctx.userId||null,device=()=>media.matches?'mobile':'desktop';
+ const key=()=>`${generation}:${owner()||'local'}:${ctx.workbench}:${ctx.space}:${ctx.route}`;
+ const active=value=>ctx.ready&&value===key();
+ const busy=()=>Boolean(busyOwner),readonly=()=>Boolean(preview||previewError||loadingPreview||pending);
+ const eligible=()=>ctx.workbench==='reading'?['dashboard','books'].includes(ctx.page):ctx.route==='dashboard';
+ const wbs=()=>library?.workbenches||ctx.workbenches;
+ const sourceType=definition=>wbs().find(w=>w.id===definition.sourceWorkbench)?.type||'other';
+ const api=(path,options={},target=ctx.workbench)=>ctx.api(path,{...options,headers:{...options.headers,'X-Workbench-Owner':owner()||''}},ctx.space,target);
+ const button=(label,action,primary=false,disabled=false)=>`<button type="button" class="btn ${primary?'primary':''}" data-action="${action}" ${disabled?'disabled':''}>${label}</button>`;
+ const input=(label,id,value,extra='')=>`<label class="component-field">${label}<input id="${id}" value="${esc(value)}" ${extra}></label>`;
+ const select=(label,attributes,values,value)=>`<label class="component-field">${label}<select ${attributes}>${values.map(([v,t])=>`<option value="${esc(v)}" ${String(v)===String(value)?'selected':''}>${esc(t)}</option>`).join('')}</select></label>`;
+ const dirty=()=>editor&&!same(editor.original,editor.draft);
+ const slotDirty=()=>slots&&(!same(slots.base.desktop,slots.draft.desktop)||!same(slots.base.mobile,slots.draft.mobile));
+ const currentForm=()=>document.querySelector('#component-editor-form,#component-placement-form');
+ function lock(kind,token){busyOwner=token;busyKind=kind;for(const node of document.querySelectorAll('.drawer input,.drawer select,.drawer textarea,.drawer button,.component-preview-actions button')){if(node.matches('input[type=hidden]')||(kind==='preview'&&node.matches('[data-action="close"]')))continue;node.dataset.componentDisabled=String(node.disabled);node.disabled=true;}}
+ function unlock(token){if(busyOwner!==token)return false;busyOwner=0;busyKind='';for(const node of document.querySelectorAll('[data-component-disabled]')){node.disabled=node.dataset.componentDisabled==='true';delete node.dataset.componentDisabled;}return true;}
+ function cleanURL(){const url=new URL(location.href);url.searchParams.delete('componentPreview');history.replaceState(null,'',url.pathname+url.search+url.hash);}
+ function clearPreview(){operation++;preview=null;previewError='';loadingPreview=false;pending=null;returnEditor=null;document.body.classList.remove('component-preview-active');cleanURL();}
+ function cleanup({keepLink=false,resetView=true}={}){generation++;operation++;unlock(busyOwner);editor=null;slots=null;if(resetView)view=null;library=null;preview=null;returnEditor=null;previewError='';loadingPreview=false;pending=keepLink?new URLSearchParams(location.search).get('componentPreview'):null;document.body.classList.remove('component-preview-active');if(!keepLink)cleanURL();}
+ function onDrawerClose(){operation++;if(busyKind==='preview')unlock(busyOwner);editor=null;slots=null;}
+ function guardClose(){if(busy()&&busyKind!=='preview'){ctx.toast('正在保存组件操作，请稍候');return true;}return false;}
+ function showError(error){const box=document.querySelector('#component-editor-error,#component-placement-error,#component-library-error');if(box){box.hidden=false;box.textContent=error.message;if(error.code==='component_conflict'&&editor)box.insertAdjacentHTML('beforeend',button('读取最新并保留我的调整','component-reload'));if(error.code==='component_placement_conflict'&&slots)box.insertAdjacentHTML('beforeend',button('重新读取页面放置','component-slots-reload'));}else{if(readonly()){previewError=error.message;ctx.render();}ctx.toast(error.message);}}
+ async function transact(kind,request,finish){
+  if(busy())return;const at=key(),token=++operation,drawer=document.querySelector('.drawer');lock(kind,token);
+  try{const result=await request();if(!active(at))return;if(token!==operation||(drawer&&!drawer.isConnected)){ctx.invalidateCache();ctx.toast('组件操作已完成，可重新打开查看');return;}unlock(token);await finish(result);}
+  catch(error){if(active(at)&&token===operation)showError(error);}
+  finally{if(unlock(token)&&readonly())ctx.render();}
+ }
+ const status=component=>component.archived?'已归档':component.publishedRevision?(component.hasDraftChanges?'有未发布修改':'已发布'):'草稿';
+ async function ensureLibrary(){const data=await api('/api/components');if(data.owner!==owner())throw new Error('登录账号已变化，请重新打开');library=data;return data;}
+ async function openLibrary(){const at=key(),token=++operation,drawer=document.querySelector('.drawer'),data=await api('/api/components');if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer||data.owner!==owner())return;library=data;editor=null;slots=null;drawLibrary();}
+ function drawLibrary(){
+  const list=(library.components||[]).filter(c=>filter==='all'||filter==='archived'?filter==='all'||c.archived:filter==='draft'? !c.archived&&(!c.publishedRevision||c.hasDraftChanges):!c.archived&&Boolean(c.publishedRevision));
+  const body=`<div class="component-library-tabs">${button('组件库','component-library',true)}${button('本页放置','component-slots')}</div><div class="component-library-toolbar">${button('从模板创建','component-new',true)}${button('让 AI 生成','component-ai')}<label><span class="sr-only">组件筛选</span><select id="component-filter">${[['all','全部组件'],['draft','草稿与未发布修改'],['published','已发布'],['archived','已归档']].map(([v,t])=>`<option value="${v}" ${filter===v?'selected':''}>${t}</option>`).join('')}</select></label></div><p class="component-help">组件库属于你的账号，可跨工作台复用。编辑先保存为草稿，发布后才会更新页面上的卡片。</p><div class="component-library-list">${list.map(c=>`<article class="component-library-item"><div><h3>${esc(c.title)}</h3><span class="component-status ${c.archived?'is-archived':''}">${status(c)}</span><p>来源：${esc(c.sourceName)} · 版本 ${c.revision}${c.usage?.length?` · 已放置于${c.usage.length}个工作台`:''}</p></div><div class="component-item-actions">${button('查看 / 编辑','component-open:'+c.id)}${button('复制','component-copy:'+c.id)}${button(c.archived?'恢复归档':'归档','component-archive:'+c.id)}</div></article>`).join('')||'<div class="component-library-empty"><h3>从一张适合自己的卡片开始</h3><p>选择运动汇总、指标趋势、待办等模板，或让已连接知衡的AI生成组件草稿。</p></div>'}</div><div id="component-library-error" class="form-error" role="alert" hidden></div>`;
+  ctx.openDrawer(body,'AI 组件库','生成、编辑和管理可复用的工作台卡片');
+  document.querySelector('#component-filter').onchange=e=>{filter=e.target.value;drawLibrary();};
+ }
+ async function templates(){const at=key(),token=++operation,drawer=document.querySelector('.drawer');if(!library)await ensureLibrary();if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer)return;const body=`<p class="component-help">模板会打开未保存的组件草稿。你可以修改内容、数据来源和外观，预览后再保存。</p><div class="component-template-list">${COMPONENT_TEMPLATES.map(t=>`<button class="component-template" data-action="component-template:${t.id}"><span>${icon(t.id.includes('trend')?'activity':t.id.includes('task')?'task':'grid',22)}</span><div><strong>${esc(t.title)}</strong><p>${esc(t.description)}</p></div>${icon('arrow',15)}</button>`).join('')}</div>${button('返回组件库','component-library')}`;ctx.openDrawer(body,'创建组件','用模板组合指标、图表、列表和进度');}
+ async function aiHelp(){const prompt='请使用知衡组件工具，生成一张展示近7天运动时长、次数和每日柱状图的组件。先创建草稿并给我预览，再按我的要求发布和放置。';ctx.openDrawer(`<p class="component-help">在已连接知衡的AI对话里描述组件需求。AI会读取支持的数据字段，生成可编辑组件草稿；当前页面不包含内置模型服务。</p><label class="component-field">示例指令<textarea id="component-ai-prompt" rows="5">${esc(prompt)}</textarea></label>${button('复制指令','component-ai-copy',true)}<div id="component-library-error" role="status"></div><p class="component-help">新工具需要AI连接端刷新工具列表。可以说明标题、数据来源、指标、图表和放置位置。</p>${button('从模板创建','component-new')}`,'让 AI 生成组件','文字描述 → 组件草稿 → 预览 → 发布');}
+ async function openComponent(id){const at=key(),token=++operation,drawer=document.querySelector('.drawer');if(!library){await ensureLibrary();if(!active(at)||token!==operation)return;}const data=await api('/api/components/'+encodeURIComponent(id));if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer||data.owner!==owner())return;editor={base:data,original:clone(data.definition),draft:clone(data.definition)};slots=null;drawEditor();}
+ function createFromTemplate(id){const template=COMPONENT_TEMPLATES.find(t=>t.id===id);if(!template)return;const current=wbs().find(w=>w.id===ctx.workbench),source=template.sourceType==='current'?current:wbs().find(w=>w.type===template.sourceType);if(!source)throw new Error('没有可用于此模板的来源工作台');const definition=createComponentDefinition(id,source.id);editor={base:null,original:clone(definition),draft:definition};slots=null;drawEditor();}
+ function kindsFor(type){const source=sourceType(editor.draft);return Object.entries(COMPONENT_CATALOG.kinds).filter(([kind,c])=>c.workbenchTypes.includes(source)&&c.aggregations.some(op=>allowedOps(type).includes(op))&&(type!=='progress'||progressKinds.includes(kind)));}
+ function normalizeBlock(block){
+  const available=kindsFor(block.type);if(!available.length)throw new Error('这个来源没有可用的数据类型');
+  if(!available.some(([kind])=>kind===block.binding.kind))block.binding={kind:available[0][0],aggregation:'count',days:null};
+  const data=COMPONENT_CATALOG.kinds[block.binding.kind],ops=data.aggregations.filter(op=>allowedOps(block.type).includes(op));if(!ops.includes(block.binding.aggregation))block.binding.aggregation=ops[0];
+  if(['sum','latest','dailySum','dailyAvg'].includes(block.binding.aggregation)){if(!Object.hasOwn(data.fields,block.binding.field))block.binding.field=Object.keys(data.fields)[0];}else delete block.binding.field;
+  if(block.binding.kind==='metric'){block.binding.metric||='weight';if(block.binding.field==='secondary'&&block.binding.metric!=='pressure')block.binding.field='value';}else delete block.binding.metric;
+  if(!['task','travel_check'].includes(block.binding.kind))delete block.binding.onlyPending;
+  if(block.type==='list')block.binding.limit||=5;else delete block.binding.limit;
+  if(block.type==='chart'){block.chart||='bar';block.binding.days||=7;}else delete block.chart;
+  if(block.binding.days===undefined)block.binding.days=null;if(block.binding.days===null)delete block.binding.todayOnly;
+  if(block.type==='progress'){if(block.target?.mode==='waterGoalMl'&&(block.binding.kind!=='water'||block.binding.field!=='volume'||block.binding.aggregation!=='sum'))block.target={mode:'fixed',value:10};block.target||={mode:'fixed',value:10};}else delete block.target;
+  return block;
+ }
+ function focusSelector(){const node=document.activeElement;if(node?.id)return '#'+CSS.escape(node.id);for(const name of ['data-component-label','data-component-binding','data-component-block-field','data-component-placement','data-action'])if(node?.hasAttribute(name))return `[${name}="${CSS.escape(node.getAttribute(name))}"]`;return null;}
+ function rebuildEditor(){const top=document.querySelector('.drawer-content')?.scrollTop||0,focus=focusSelector();drawEditor({scrollTop:top,focus});}
+ function syncDraft(){const form=document.querySelector('#component-editor-form');if(form)form.elements['component-draft'].value=JSON.stringify(editor.draft);for(const b of document.querySelectorAll('[data-action="component-save"]'))b.disabled=Boolean(editor.base)&&!dirty();for(const b of document.querySelectorAll('[data-action="component-publish"]'))b.disabled=!editor.base||dirty()||editor.base.archived||!editor.base.hasDraftChanges;}
+ function blockEditor(block,index){
+  const q=block.binding,kind=COMPONENT_CATALOG.kinds[q.kind],ops=kind.aggregations.filter(op=>allowedOps(block.type).includes(op));
+  return `<section class="component-block-editor" data-component-block="${block.id}"><div class="component-block-editor-head"><strong>${TYPES[block.type]} ${index+1}</strong><div>${button('↑','component-block-up:'+block.id,false,index===0)}${button('↓','component-block-down:'+block.id,false,index===editor.draft.blocks.length-1)}${button('移除','component-block-remove:'+block.id,false,editor.draft.blocks.length===1)}</div></div><label class="component-field">区块标题<input data-component-label="${block.id}" value="${esc(block.label)}" maxlength="40"></label><div class="component-field-grid">${select('数据类型',`data-component-binding="${block.id}:kind"`,kindsFor(block.type).map(([id,c])=>[id,c.title]),q.kind)}${select('展示计算',`data-component-binding="${block.id}:aggregation"`,ops.map(op=>[op,OPS[op]]),q.aggregation)}${q.field!==undefined?select('数值字段',`data-component-binding="${block.id}:field"`,Object.entries(kind.fields).filter(([name])=>name!=='secondary'||q.metric==='pressure').map(([id,f])=>[id,f.label]),q.field):''}${q.kind==='metric'?select('监测项目',`data-component-binding="${block.id}:metric"`,Object.entries(COMPONENT_CATALOG.metrics).map(([id,m])=>[id,m.title]),q.metric):''}${select('时间范围',`data-component-binding="${block.id}:days"`,[...(block.type==='chart'?[]:[['all','全部时间']]),...[7,14,30,90].map(n=>[n,'近'+n+'天'])],q.days??'all')}${q.days!==null?`<label class="component-checkbox"><input type="checkbox" data-component-binding="${block.id}:todayOnly" ${q.todayOnly?'checked':''}>仅今天</label>`:''}${['task','travel_check'].includes(q.kind)?`<label class="component-checkbox"><input type="checkbox" data-component-binding="${block.id}:onlyPending" ${q.onlyPending?'checked':''}>仅未完成</label>`:''}${block.type==='chart'?select('图表样式',`data-component-block-field="${block.id}:chart"`,[['bar','柱状图'],['line','折线图']],block.chart):''}${block.type==='list'?select('记录数量',`data-component-binding="${block.id}:limit"`,[1,2,3,4,5,6,7,8].map(n=>[n,n+'项']),q.limit):''}${block.type==='progress'?select('目标方式',`data-component-block-field="${block.id}:targetMode"`,[['fixed','指定记录目标'],...(q.kind==='water'&&q.field==='volume'&&q.aggregation==='sum'?[['waterGoalMl','已有饮水目标']]:[])],block.target.mode):''}${block.type==='progress'&&block.target.mode==='fixed'?`<label class="component-field">目标数值<input type="number" inputmode="decimal" min="0.01" max="1000000" step="any" data-component-block-field="${block.id}:targetValue" value="${esc(block.target.value)}"></label>`:''}</div></section>`;
+ }
+ function drawEditor({scrollTop,focus}={}){
+  if(!editor)return;const d=editor.draft,b=editor.base,saved=Boolean(b)&&!dirty(),canPublish=saved&&!b.archived&&b.hasDraftChanges;
+  const body=`<form id="component-editor-form" data-discard-guard><input type="hidden" name="component-draft" value="${esc(JSON.stringify(editor.original))}"><div class="component-editor-state"><span class="component-status">${b?status(b):'未保存草稿'}</span><span>${b?'版本 '+b.revision:'预览不会创建组件'}</span>${b?.publishedRevision?button('放置到工作台','component-place:'+b.id,false,!saved||b.archived):''}</div>${input('组件名称','component-title',d.title,'maxlength="40" required')}<label class="component-field">说明<textarea id="component-description" maxlength="240" rows="2">${esc(d.description)}</textarea></label><div class="component-field-grid">${select('数据来源工作台','id="component-source"',wbs().map(w=>[w.id,w.name]),d.sourceWorkbench)}${select('区块排列','id="component-layout"',[['grid','指标并排'],['stack','纵向排列']],d.layout)}</div><p class="component-help">数据按当前个人 / 示例空间读取。跨工作台放置时保留这里的来源，不会改变原始记录。</p><div class="component-field-grid">${select('背景','id="component-tone"',[['neutral','灰白'],['tinted','浅主题色']],d.appearance.tone)}${select('留白','id="component-density"',[['comfortable','舒展'],['compact','紧凑']],d.appearance.density)}</div><div class="component-color-field"><label class="component-checkbox"><input id="component-follow-color" type="checkbox" ${d.appearance.accent===null?'checked':''}>跟随所在工作台主题色</label><input id="component-accent" aria-label="组件自定义颜色" type="color" value="${esc(d.appearance.accent||'#2C6B51')}" ${d.appearance.accent===null?'disabled':''}></div><div class="component-section-heading"><h3>区块结构</h3><span>${d.blocks.length} / 8</span></div><div class="component-block-editors">${d.blocks.map(blockEditor).join('')}</div><div class="component-add-blocks">${Object.entries(TYPES).map(([id,title])=>button('＋ '+title,'component-add-block:'+id,false,d.blocks.length>=8)).join('')}</div>${b?`<details class="component-version-history"><summary>组件版本与管理</summary><p class="component-help">恢复历史会创建新草稿，已发布版本继续显示，直到你再次发布。</p><div class="component-history-row"><select id="component-history" aria-label="组件历史版本">${(b.history||[]).filter(h=>h.revision<b.revision).map(h=>`<option value="${h.revision}">版本 ${h.revision} · ${esc(HISTORY[h.action]||h.action)}</option>`).join('')||'<option value="">暂无更早版本</option>'}</select>${button('恢复为草稿','component-restore',false,!saved||!(b.history||[]).some(h=>h.revision<b.revision))}</div><div class="component-admin-actions">${button('复制组件','component-copy:'+b.id,false,!saved)}${button(b.archived?'恢复归档':'归档组件','component-archive:'+b.id,false,!saved)}</div></details>`:''}<div id="component-editor-error" class="form-error" role="alert" hidden></div></form>`;
+  ctx.openDrawer(body,'编辑组件','修改保存在草稿，发布后才更新页面',`${button('返回组件库','component-back')}${button('预览','component-preview')}${button('保存草稿','component-save',true,Boolean(b)&&!dirty())}${button('发布','component-publish',false,!canPublish)}`);
+  const form=document.querySelector('#component-editor-form');form.elements['component-draft'].value=JSON.stringify(d);form.onsubmit=e=>e.preventDefault();
+  form.oninput=e=>{const node=e.target;if(node.id==='component-title')d.title=node.value;else if(node.id==='component-description')d.description=node.value;else if(node.dataset.componentLabel){const block=d.blocks.find(x=>x.id===node.dataset.componentLabel);if(block)block.label=node.value;}else if(node.dataset.componentBlockField?.endsWith(':targetValue')){const block=d.blocks.find(x=>x.id===node.dataset.componentBlockField.split(':')[0]);if(block)block.target.value=Number(node.value);}else return;syncDraft();};
+  form.onchange=e=>{try{changeControl(e.target);}catch(error){showError(error);}};
+  if(scrollTop!==undefined)document.querySelector('.drawer-content').scrollTop=scrollTop;if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+ }
+ function changeControl(node){
+  const d=editor.draft;
+  if(node.id==='component-title'||node.id==='component-description'||node.dataset.componentLabel||node.dataset.componentBlockField?.endsWith(':targetValue')){syncDraft();return;}
+  if(node.id==='component-source'){d.sourceWorkbench=node.value;for(const block of d.blocks)normalizeBlock(block);}
+  else if(node.id==='component-layout')d.layout=node.value;
+  else if(node.id==='component-tone')d.appearance.tone=node.value;
+  else if(node.id==='component-density')d.appearance.density=node.value;
+  else if(node.id==='component-follow-color')d.appearance.accent=node.checked?null:document.querySelector('#component-accent').value;
+  else if(node.id==='component-accent')d.appearance.accent=node.value;
+  else if(node.dataset.componentBinding){const [id,field]=node.dataset.componentBinding.split(':'),block=d.blocks.find(x=>x.id===id);if(!block)return;block.binding[field]=['onlyPending','todayOnly'].includes(field)?node.checked:field==='days'?(node.value==='all'?null:Number(node.value)):field==='limit'?Number(node.value):node.value;normalizeBlock(block);}
+  else if(node.dataset.componentBlockField){const [id,field]=node.dataset.componentBlockField.split(':'),block=d.blocks.find(x=>x.id===id);if(!block)return;if(field==='chart')block.chart=node.value;else if(field==='targetMode')block.target=node.value==='waterGoalMl'?{mode:'waterGoalMl'}:{mode:'fixed',value:10};normalizeBlock(block);}
+  else return;rebuildEditor();
+ }
+ async function acceptedComponent(data,message='组件草稿已保存'){if(library){const {definition,publishedDefinition,history,...metadata}=data;library.components=[metadata,...(library.components||[]).filter(c=>c.id!==data.id)];}editor={base:data,original:clone(data.definition),draft:clone(data.definition)};slots=null;ctx.invalidateCache();drawEditor();await ctx.load({retainOnError:true});ctx.toast(message);}
+ async function saveEditor(){const definition=validateComponentDefinition(editor.draft),b=editor.base;await transact('save',()=>api(b?'/api/components/'+b.id:'/api/components',{method:b?'PUT':'POST',body:JSON.stringify({...b?{expectedRevision:b.revision}:{},definition})}),data=>acceptedComponent(data));}
+ async function previewEditor(){
+  const definition=validateComponentDefinition(editor.draft),b=editor.base,stash=clone(editor),at=key(),form=currentForm(),token=++operation;lock('preview',token);
+  try{const data=await api('/api/components/preview',{method:'POST',body:JSON.stringify({definition,...b?{componentId:b.id,expectedRevision:b.revision}:{}})});if(!active(at)||operation!==token||!form?.isConnected)return;unlock(token);ctx.closeDrawer();returnEditor=stash;preview=data;previewError='';previewWidth=device();const url=new URL(location.href);url.searchParams.set('componentPreview',data.previewId);url.searchParams.set('space',data.space||ctx.space);history.replaceState(null,'',url.pathname+url.search+url.hash);ctx.clearLayoutPreview();ctx.enterDashboard();ctx.render();}
+  catch(error){if(active(at)&&operation===token&&form?.isConnected)showError(error);}finally{if(unlock(token)&&readonly())ctx.render();}
+ }
+ function setView(data){view=data&&data.owner===owner()&&data.workbench===ctx.workbench&&data.space===ctx.space?data:null;}
+ function renderZone(items,zone){const relevant=items.filter(x=>x.visible&&x.zone===zone);if(!relevant.length)return '';return `<section class="component-canvas-zone" data-component-zone="${zone}" aria-label="我的组件${zone==='top'?'顶部':'底部'}"><div class="component-zone-heading"><span>我的组件</span><button class="text-btn" data-action="component-slots">管理放置</button></div><div class="component-instance-grid">${relevant.map(item=>`<div class="component-instance" data-component-instance="${item.instanceId}" data-component-size="${item.size}">${item.model?renderComponentCard(item.model,{esc,icon,componentId:item.componentId,showManage:true,readOnly:ctx.layoutReadOnly()}):`<article class="component-card component-unavailable"><h3>${esc(item.component?.title||'组件')}</h3><p>${esc(item.unavailable||'组件暂时不可用')}</p>${button('打开组件','component-open:'+item.componentId)}</article>`}</div>`).join('')}</div></section>`;}
+ function mount(){
+  document.body.classList.toggle('component-preview-active',readonly());const main=document.querySelector('#app main');if(!main)return;
+  if(readonly()){mountPreview(main);return;}
+  if(!eligible()||!view)return;const list=view[device()]||[],top=renderZone(list,'top'),bottom=renderZone(list,'bottom');
+  const anchor=main.querySelector('.health-overview,.studio-domain-dashboard,.reading-content,.studio-other-toolbar,.studio-other-grid')||main.querySelector('.heading');
+  if(top&&main.querySelector('.health-overview-heading'))main.querySelector('.health-overview-heading').insertAdjacentHTML('afterend',top);else if(top&&anchor)anchor.insertAdjacentHTML('beforebegin',top);else if(top)main.insertAdjacentHTML('afterbegin',top);
+  const footer=main.querySelector('.footer');if(bottom&&footer)footer.insertAdjacentHTML('beforebegin',bottom);else if(bottom)main.insertAdjacentHTML('beforeend',bottom);
+ }
+ function mountPreview(main){
+  const expired=preview&&Date.parse(preview.expiresAt)<=Date.now(),stage=document.createElement('section');stage.className='component-preview-stage';stage.setAttribute('aria-label','组件预览');
+  stage.innerHTML=`<div class="component-preview-bar"><div><strong>${loadingPreview?'正在加载组件预览…':previewError?'组件预览需要处理':'组件预览'}</strong><p>${esc(previewError||(expired?'预览已过期，仍可继续编辑并生成新预览。':'这里只预览组件，不会自动保存、发布或改变原始记录。'))}</p></div><div class="component-preview-actions">${preview?button('继续编辑','component-preview-edit',false,busy()):''}${preview?button('保存为草稿','component-preview-save',true,busy()||expired):''}${button('退出预览','component-preview-exit',false,busy()&&busyKind!=='preview')}</div></div>${preview?`<div class="component-preview-widths" role="group" aria-label="组件预览宽度">${[['mobile','手机'],['medium','标准卡片'],['desktop','宽屏']].map(([v,t])=>`<button data-action="component-preview-width:${v}" aria-pressed="${previewWidth===v}">${t}</button>`).join('')}</div><div class="component-preview-card" data-preview-width="${previewWidth}">${renderComponentCard(preview.model,{esc,icon,readOnly:true})}</div>`:''}`;main.append(stage);
+ }
+ async function initializePreview(){
+  if(!pending||!ctx.ready)return;const id=pending,at=key();pending=null;loadingPreview=true;ctx.render();if(!uuid(id)){loadingPreview=false;previewError='组件预览链接无效';ctx.render();return;}
+  try{const data=await api('/api/components/previews/'+encodeURIComponent(id));if(!active(at)||!loadingPreview)return;if(data.owner!==owner())return;preview=data;previewWidth=device();}
+  catch(error){if(active(at)&&loadingPreview)previewError=error.message;}finally{if(active(at)&&loadingPreview){loadingPreview=false;ctx.render();}}
+ }
+ async function previewEdit(){
+  const candidate=preview;if(!candidate)return;const old=returnEditor;
+  if(old){clearPreview();ctx.render();editor=old;drawEditor();return;}
+  const at=key();if(!library)await ensureLibrary();if(!active(at))return;
+  let base=null;if(candidate.componentId){base=await api('/api/components/'+candidate.componentId);if(!active(at))return;base={...base,revision:candidate.baseRevision};}
+  clearPreview();ctx.render();editor={base,original:clone(base?.definition||candidate.definition),draft:clone(candidate.definition)};drawEditor();
+ }
+ async function openSlots(){const at=key(),token=++operation,drawer=document.querySelector('.drawer');const [data,freshLibrary]=await Promise.all([api('/api/components/placements'),api('/api/components')]);if(!active(at)||token!==operation||document.querySelector('.drawer')!==drawer||data.owner!==owner()||freshLibrary.owner!==owner())return;library=freshLibrary;slots={base:data,draft:clone(data),device:device()};editor=null;drawSlots();}
+ function drawSlots({scrollTop,focus}={}){
+  const d=slots.device,list=slots.draft[d],names=new Map((library.components||[]).map(c=>[c.id,c])),published=(library.components||[]).filter(c=>c.publishedRevision&&!c.archived);
+  const body=`<form id="component-placement-form" data-discard-guard><input type="hidden" name="component-placements" value="${esc(JSON.stringify({desktop:slots.base.desktop,mobile:slots.base.mobile}))}"><div class="component-library-tabs">${button('组件库','component-back')}${button('本页放置','component-slots',true)}</div><div class="component-device-tabs" role="group" aria-label="放置设备">${['mobile','desktop'].map(v=>`<button data-action="component-slots-device:${v}" type="button" aria-pressed="${v===d}">${v==='mobile'?'手机':'电脑'}</button>`).join('')}</div><p class="component-help">管理「${esc(wbs().find(w=>w.id===ctx.workbench)?.name||'当前工作台')}」首页的额外组件。手机和电脑独立，个人 / 示例空间共用排列。删除实例不删除组件或原始记录。</p><div class="component-placement-add"><select id="component-placement-add" aria-label="选择已发布组件">${published.map(c=>`<option value="${c.id}">${esc(c.title)} · ${esc(c.sourceName)}</option>`).join('')||'<option value="">请先创建并发布组件</option>'}</select>${button('添加实例','component-slots-add',true,!published.length||list.length>=12)}</div><div class="component-placement-list">${list.map((p,i)=>`<section class="component-placement-row"><div class="component-placement-row-head"><label><input type="checkbox" data-component-placement="${p.instanceId}:visible" ${p.visible?'checked':''}>${esc(names.get(p.componentId)?.title||'组件')}</label><div>${button('↑','component-slot-up:'+p.instanceId,false,i===0)}${button('↓','component-slot-down:'+p.instanceId,false,i===list.length-1)}${button('移除','component-slot-remove:'+p.instanceId)}</div></div><div class="component-field-grid">${select('位置',`data-component-placement="${p.instanceId}:zone"`,[['top','原首页内容之前'],['bottom','原首页内容之后']],p.zone)}${select('大小',`data-component-placement="${p.instanceId}:size"`,[['small','紧凑'],['medium','标准'],['large','通栏']],p.size)}</div>${names.get(p.componentId)?.archived?'<p class="component-help">此组件已归档，页面会保留可恢复的占位。</p>':''}</section>`).join('')||'<p class="component-help">这个设备还没有放置额外组件。</p>'}</div><details class="component-version-history"><summary>页面组件排列历史</summary><div class="component-history-row"><select id="component-placement-history" aria-label="页面组件历史">${(slots.base.history||[]).filter(h=>h.revision<slots.base.revision).map(h=>`<option value="${h.revision}">版本 ${h.revision}</option>`).join('')||'<option value="">暂无历史版本</option>'}</select>${button('恢复排列','component-slots-restore',false,slotDirty()||!(slots.base.history||[]).some(h=>h.revision<slots.base.revision))}</div></details><div id="component-placement-error" class="form-error" role="alert" hidden></div></form>`;
+  ctx.openDrawer(body,'本页组件放置','按设备管理可复用卡片',`${button('取消','close')}${button('保存放置','component-slots-save',true,!slotDirty())}`);
+  const form=document.querySelector('#component-placement-form');form.elements['component-placements'].value=JSON.stringify({desktop:slots.draft.desktop,mobile:slots.draft.mobile});form.onsubmit=e=>e.preventDefault();form.onchange=e=>{const node=e.target;if(!node.dataset.componentPlacement)return;const [id,field]=node.dataset.componentPlacement.split(':'),p=slots.draft[slots.device].find(x=>x.instanceId===id);if(p){p[field]=field==='visible'?node.checked:node.value;const top=document.querySelector('.drawer-content')?.scrollTop,focus=focusSelector();drawSlots({scrollTop:top,focus});}};if(scrollTop!==undefined)document.querySelector('.drawer-content').scrollTop=scrollTop;if(focus)document.querySelector(focus)?.focus({preventScroll:true});
+ }
+ async function placeComponent(id){if(!editor?.base||dirty())return;const at=key(),token=++operation,form=currentForm(),[data,freshLibrary]=await Promise.all([api('/api/components/placements'),api('/api/components')]);if(!active(at)||token!==operation||!form?.isConnected||dirty()||freshLibrary.owner!==owner())return;library=freshLibrary;const target={base:data,draft:clone(data),device:device()};if(target.draft[target.device].length>=12)throw new Error('此设备最多放置12个组件');target.draft[target.device].push({instanceId:crypto.randomUUID(),componentId:id,zone:'top',size:'medium',visible:true});slots=target;editor=null;drawSlots();}
+ async function acceptedSlots(data){slots={base:data,draft:clone(data),device:slots?.device||device()};ctx.invalidateCache();drawSlots();await ctx.load({retainOnError:true});ctx.toast('页面组件放置已保存');}
+ async function handle(action,arg){
+  if(ctx.layoutReadOnly())return;
+  if(action==='component-preview-exit'){if(guardClose())return;clearPreview();ctx.render();await ctx.load({retainOnError:true});return;}
+  if(action==='component-preview-width'){if(['mobile','medium','desktop'].includes(arg)){previewWidth=arg;ctx.render();}return;}
+  if(action==='component-preview-edit'){if(!busy())await previewEdit();return;}
+  if(action==='component-preview-save'){if(preview&&!busy()){const p=preview;await transact('save',()=>api('/api/components/previews/'+p.previewId+'/save',{method:'POST',body:JSON.stringify(p.componentId?{expectedRevision:p.baseRevision}:{})}),async data=>{clearPreview();ctx.render();await acceptedComponent(data,'预览已保存为草稿，发布后可放置');});}return;}
+  if(busy())return;
+  if(action==='component-library')return openLibrary();
+  if(action==='component-new')return templates();
+  if(action==='component-ai')return aiHelp();
+  if(action==='component-ai-copy'){await navigator.clipboard.writeText(document.querySelector('#component-ai-prompt').value);ctx.toast('已复制，可粘贴给已连接知衡的AI');return;}
+  if(action==='component-template'){createFromTemplate(arg);return;}
+  if(action==='component-open')return openComponent(arg);
+  if(action==='component-back'){ctx.requestClose(()=>openLibrary());return;}
+  if(action==='component-slots'){if(slots&&document.querySelector('#component-placement-form'))return;return openSlots();}
+  if(action==='component-place')return placeComponent(arg);
+  if(action==='component-copy'||action==='component-archive'){
+   const c=editor?.base?.id===arg?editor.base:library?.components?.find(x=>x.id===arg);if(!c)return;if(editor&&dirty())throw new Error('请先保存当前草稿');
+   if(action==='component-copy')return transact('save',()=>api('/api/components/'+arg+'/duplicate',{method:'POST',body:JSON.stringify({expectedRevision:c.revision})}),data=>acceptedComponent(data,'已复制为独立草稿'));
+   return transact('save',()=>api('/api/components/'+arg+'/archive',{method:'POST',body:JSON.stringify({expectedRevision:c.revision,archived:!c.archived})}),async data=>{if(editor)await acceptedComponent(data,data.archived?'组件已归档，页面实例保留占位':'组件已恢复');else{ctx.invalidateCache();await ensureLibrary();drawLibrary();await ctx.load({retainOnError:true});ctx.toast(data.archived?'组件已归档':'组件已恢复');}});
+  }
+  if(action==='component-save'&&editor)return saveEditor();
+  if(action==='component-preview'&&editor)return previewEditor();
+  if(action==='component-publish'&&editor?.base&&!dirty()){const c=editor.base;return transact('save',()=>api('/api/components/'+c.id+'/publish',{method:'POST',body:JSON.stringify({expectedRevision:c.revision})}),data=>acceptedComponent(data,'组件已发布，所有实例使用此版本'));}
+  if(action==='component-reload'&&editor?.base){const at=key(),token=++operation,form=currentForm(),old=clone(editor),data=await api('/api/components/'+editor.base.id);if(!active(at)||token!==operation||!form?.isConnected)return;editor={base:data,original:clone(data.definition),draft:mergeComponentDraft(old.original,old.draft,data.definition)};drawEditor();showError(new Error('已读取最新草稿并保留你的修改，请预览检查后保存。'));return;}
+  if(action==='component-restore'&&editor?.base&&!dirty()){const revision=Number(document.querySelector('#component-history').value);if(Number.isSafeInteger(revision))return transact('save',()=>api('/api/components/'+editor.base.id+'/restore',{method:'POST',body:JSON.stringify({expectedRevision:editor.base.revision,revision})}),data=>acceptedComponent(data,'历史版本已恢复为新草稿，尚未发布'));}
+  if(editor&&action==='component-add-block'){if(editor.draft.blocks.length>=8)return;const block={id:'block-'+crypto.randomUUID().slice(0,8),type:arg,label:TYPES[arg],binding:{kind:'task',aggregation:'count',days:null}};editor.draft.blocks.push(normalizeBlock(block));rebuildEditor();return;}
+  if(editor&&action.startsWith('component-block-')){const list=editor.draft.blocks,i=list.findIndex(b=>b.id===arg);if(i<0)return;if(action==='component-block-remove'){if(list.length>1)list.splice(i,1);}else{const j=i+(action==='component-block-up'?-1:1);if(j>=0&&j<list.length)[list[i],list[j]]=[list[j],list[i]];}rebuildEditor();return;}
+  if(!slots)return;
+  if(action==='component-slots-device'){if(['mobile','desktop'].includes(arg)){slots.device=arg;drawSlots();}return;}
+  if(action==='component-slots-add'){const id=document.querySelector('#component-placement-add').value,list=slots.draft[slots.device];if(id&&list.length<12)list.push({instanceId:crypto.randomUUID(),componentId:id,zone:'bottom',size:'medium',visible:true});drawSlots();return;}
+  if(action==='component-slot-remove'){slots.draft[slots.device]=slots.draft[slots.device].filter(p=>p.instanceId!==arg);drawSlots();return;}
+  if(action==='component-slot-up'||action==='component-slot-down'){const list=slots.draft[slots.device],i=list.findIndex(p=>p.instanceId===arg),j=i+(action==='component-slot-up'?-1:1);if(i>=0&&j>=0&&j<list.length)[list[i],list[j]]=[list[j],list[i]];drawSlots();return;}
+  if(action==='component-slots-save'&&slotDirty()){const body={expectedRevision:slots.base.revision};for(const d of ['desktop','mobile'])if(!same(slots.base[d],slots.draft[d]))body[d]=slots.draft[d];return transact('save',()=>api('/api/components/placements',{method:'PUT',body:JSON.stringify(body)}),acceptedSlots);}
+  if(action==='component-slots-reload'){ctx.requestClose(()=>openSlots());return;}
+  if(action==='component-slots-restore'&&!slotDirty()){const revision=Number(document.querySelector('#component-placement-history').value);if(Number.isSafeInteger(revision))return transact('save',()=>api('/api/components/placements/restore',{method:'POST',body:JSON.stringify({expectedRevision:slots.base.revision,revision})}),acceptedSlots);}
+ }
+ async function refresh(force=false){if(refreshing||!ctx.ready||!eligible()||readonly()||ctx.layoutReadOnly()||document.hidden||document.querySelector('.drawer'))return;const at=key();refreshing=true;try{const data=await api('/api/components/placements');if(active(at)&&data.owner===owner()&&(force||data.revision!==view?.revision||data.libraryRevision!==view?.libraryRevision)){ctx.invalidateCache();await ctx.load({retainOnError:true});}}catch{}finally{refreshing=false;}}
+ media.addEventListener('change',()=>{if(ctx.ready&&(eligible()||readonly()))ctx.render();});window.addEventListener('focus',()=>refresh(true));document.addEventListener('visibilitychange',()=>refresh(true));setInterval(refresh,30000);
+ return {setView,mount,handle,cleanup,onDrawerClose,guardClose,initializePreview,isPreview:readonly,isBusy:busy,allowsPreviewAction:action=>['component-preview-edit','component-preview-save','component-preview-exit','component-preview-width'].includes(action),refresh};
+}
+return { createComponentUI };
+})();
+
+const __workbenchModule22 = (() => {
 // account.js
-const { fetchJSON } = __workbenchModule5;
+const { fetchJSON } = __workbenchModule6;
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 
-function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized, loginQuery = () => ''} = {}) {
+function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticated, onUnauthorized, onProfileChanged, loginQuery = () => ''} = {}) {
   let pendingReveal = null;
   const revealing = () => !!(pendingReveal && document.querySelector('.account-token-reveal'));
   addEventListener('popstate', () => { if (!revealing()) return; history.pushState({tokenReveal:true}, '', location.href); pendingReveal(); });
@@ -1214,7 +2750,7 @@ function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticat
     if (!enabled || !user) return;
     openDrawer(`<div class="account-panel"><div class="account-identity"><span class="account-avatar">${esc((user.name || user.email || 'A').slice(0,1).toUpperCase())}</span><div><strong>${esc(user.name || '我的账号')}</strong><p>${esc(user.email)}</p><span class="account-tag">${user.role === 'admin' ? '管理员' : '成员'}</span></div></div>${section('个人资料', `<form id="account-profile">${field('昵称','name','text',`value="${esc(user.name)}" autocomplete="nickname" required maxlength="80"`)}${error}${submit('保存昵称')}</form>`)}${section('修改密码', `<form id="account-password">${field('当前密码','currentPassword','password','autocomplete="current-password" required maxlength="128"')}${field('新密码','newPassword','password','autocomplete="new-password" required minlength="12" maxlength="128"')}<p class="account-muted account-hint">使用 12–128 个字符。修改后，其他设备需要重新登录。</p>${error}${submit('更新密码')}</form>`)}${section('登录会话','<div id="account-sessions" aria-live="polite"><p class="account-muted">正在读取会话…</p></div>')}${section('个人访问令牌', `<p class="account-muted">给 AI 助手（Codex、Claude 等）连接知衡用，不再使用请立即吊销</p><form id="account-token">${field('名称','name','text','maxlength="40" placeholder="例如：Codex" autocomplete="off" aria-describedby="account-token-name-error"')}<p class="account-error account-field-error" id="account-token-name-error" role="alert"></p>${error}${submit('生成令牌')}</form><div id="account-token-result" aria-live="polite"></div><div id="account-tokens" aria-live="polite"><p class="account-muted">正在读取令牌…</p></div>`)}${user.role === 'admin' ? section('成员管理', `<p class="account-muted">通过邀请为成员建立独立账号。禁用将撤销登录；重置邀请会使现有登录和旧邀请链接失效。</p><form id="account-invite">${field('受邀邮箱','email','email','required autocomplete="email" inputmode="email" maxlength="254"')}${field('昵称（选填）','name','text','maxlength="80"')}${error}${submit('生成邀请链接')}</form><div id="account-invite-result" aria-live="polite"></div><div id="account-users" aria-live="polite"><p class="account-muted">正在读取成员…</p></div>`) : ''}<button class="account-button account-danger account-full" id="account-logout" type="button">退出登录</button><p class="account-error" id="account-action-error" role="alert"></p></div>`, '账号与安全', '管理个人资料、密码和登录设备');
     const panel = document.querySelector('.account-panel');
-    bindForm(panel.querySelector('#account-profile'), async data => { const result = await write('/profile', data, 'PATCH'); user = result.user || {...user,...data}; panel.querySelector('.account-identity strong').textContent = user.name; panel.querySelector('.account-avatar').textContent = (user.name || user.email).slice(0,1).toUpperCase(); toast('昵称已保存'); });
+    bindForm(panel.querySelector('#account-profile'), async data => { const result = await write('/profile', data, 'PATCH'); user = result.user || {...user,...data}; panel.querySelector('.account-identity strong').textContent = user.name; panel.querySelector('.account-avatar').textContent = (user.name || user.email).slice(0,1).toUpperCase(); await onProfileChanged?.(); toast('昵称已对所有工作台生效'); });
     bindForm(panel.querySelector('#account-password'), async (data, form) => { await write('/password', data); form.reset(); toast('密码已更新'); await sessions(panel); });
     const tokenForm = panel.querySelector('#account-token'), nameInput = tokenForm.querySelector('[name=name]'), nameError = tokenForm.querySelector('#account-token-name-error');
     nameInput.addEventListener('input', () => { nameError.textContent = ''; nameInput.removeAttribute('aria-invalid'); });
@@ -1292,14 +2828,14 @@ function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticat
       for (const button of target.querySelectorAll('[data-toggle-user],[data-reset-user]')) button.addEventListener('click', async () => { button.disabled = true; try { if (button.dataset.toggleUser) { const member = list.find(m => String(m.id) === button.dataset.toggleUser); await write('/users/' + encodeURIComponent(member.id), {disabled:!member.disabled}, 'PATCH'); toast(member.disabled ? '成员已启用' : '成员已禁用'); } else { showInvite(panel, await write('/users/' + encodeURIComponent(button.dataset.resetUser) + '/reset-invitation', {})); toast('新的邀请链接已生成'); panel.querySelector('#account-invite-result').scrollIntoView({block:'nearest',behavior:'smooth'}); } await users(panel); } catch (err) { panel.querySelector('#account-action-error').textContent = err.message; button.disabled = false; } });
     } catch (err) { if (target.isConnected) retry(target, err.message, () => users(panel)); }
   }
-  return {initialize, open, handleUnauthorized, guardClose, get enabled() {return enabled;}, get user() {return user;}};
+  return {initialize, open, handleUnauthorized, guardClose, syncName(name) {if(user)user={...user,name};}, get enabled() {return enabled;}, get user() {return user;}};
 }
 return { createAccount };
 })();
 
-const __workbenchModule14 = (() => {
+const __workbenchModule23 = (() => {
 // daily.js
-const { showFieldError, aiTag } = __workbenchModule5;
+const { showFieldError, aiTag } = __workbenchModule6;
 function createDaily(ctx){
  const {esc,icon,field,btn}=ctx;
  let reviewDate='',reviewSpace=ctx.space;
@@ -1331,7 +2867,7 @@ function createDaily(ctx){
 return { createDaily };
 })();
 
-const __workbenchModule15 = (() => {
+const __workbenchModule24 = (() => {
 // quick-defaults.js
 
 // Pure defaults for the quick-capture sheets (unit-tested in tests/quick-defaults.test.mjs).
@@ -1349,10 +2885,10 @@ function systolicComplete(value){const v=String(value??'').trim();if(!/^\d+$/.te
 return { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete };
 })();
 
-const __workbenchModule16 = (() => {
+const __workbenchModule25 = (() => {
 // quick.js
-const { showFieldError } = __workbenchModule5;
-const { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete } = __workbenchModule15;
+const { showFieldError } = __workbenchModule6;
+const { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete } = __workbenchModule24;
 function createQuick(ctx){
  const {icon,esc,btn,field}=ctx;
  const metricNames={weight:'体重',pressure:'血压',glucose:'血糖',sleep:'睡眠',heart:'静息心率'};
@@ -1424,7 +2960,7 @@ function createQuick(ctx){
 return { createQuick };
 })();
 
-const __workbenchModule17 = (() => {
+const __workbenchModule26 = (() => {
 // report-data.js
 
 // Escape every source value. Empty reference/flag means unrecorded, never 'normal'.
@@ -1435,11 +2971,11 @@ function renderReportObservations(rows,esc){
 return { renderReportObservations };
 })();
 
-const __workbenchModule18 = (() => {
+const __workbenchModule27 = (() => {
 // medical.js
-const { renderReportObservations } = __workbenchModule17;
-const { institutionMark } = __workbenchModule4;
-const { showFieldError, aiTag } = __workbenchModule5;
+const { renderReportObservations } = __workbenchModule26;
+const { institutionMark } = __workbenchModule5;
+const { showFieldError, aiTag } = __workbenchModule6;
 function createMedical(ctx){
  const {icon,esc,field,select,btn,previews}=ctx;
  let view='visits',section='overview',search='',status='all',doseDate='',fileDate='',activeId=null;
@@ -1470,8 +3006,24 @@ function createMedical(ctx){
  function medicationCard(m){const date=doseDate||ctx.today,logs=sort(all('dose').filter(d=>d.medicationId===m.id)),active=m.status==='进行中'&&m.date<=date&&(!m.endDate||m.endDate>=date),canLog=date<=ctx.today;const times=m.scheduleMode==='asNeeded'?[]:m.times||[];return `<section class="card medication-card"><div class="medication-head">${medicationImage(m)}<div><h3>${esc(m.title)}</h3>${aiTag(m)}<p>${esc(m.prescriber||'处方来源待补充')} · ${m.date} 至 ${m.endDate||'未指定结束日期'}</p>${visitLink(m.visitId)}</div>${badge(m.status,m.status==='进行中'?'':'neutral')}${actions(m,m.status==='进行中'?`<button class="btn" data-action="med-status:${m.id}">停用方案</button>`:'')}</div><div class="medication-facts"><div><small>单次用量（按原处方）</small><strong>${esc(m.dosage)}</strong></div><div><small>用药途径</small><strong>${esc(m.route)}</strong></div><div><small>频次 / 用法</small><strong>${esc(m.frequency)}</strong></div><div><small>服用安排</small><strong>${m.scheduleMode==='asNeeded'?'按需记录':times.map(esc).join(' / ')}</strong></div></div>${m.note?`<div class="medication-note">${esc(m.note)}</div>`:''}<div class="dose-area"><div class="dose-heading"><strong>${date} · 服用记录</strong>${btn('补记一次服用','med-dose:'+m.id,'','plus')}</div>${active&&times.length?times.map(time=>{const d=logs.find(d=>d.date===date&&d.scheduledTime===time);return `<div class="dose-row"><span class="dose-time">${time}</span><span class="dose-outcome ${d?.outcome==='已服用'?'taken':''}">${d?esc(d.outcome)+(d.time?' · 实际 '+esc(d.time):''):'待记录'}</span>${d?aiTag(d):''}${d?`<button class="text-btn" data-action="med-edit:${d.id}">更正记录 ${icon('edit',12)}</button>`:canLog?`<div class="dose-actions"><button class="btn" data-action="med-take:${m.id}" data-time="${time}">记录服用</button><button class="text-btn" data-action="med-skip:${m.id}" data-time="${time}">跳过</button></div>`:''}</div>`}).join(''):`<p class="muted dose-explanation">${m.scheduleMode==='asNeeded'?'按需用药不预设次数，实际使用后记录。':m.status!=='进行中'?'方案已结束或停用，不再生成待服事项，历史记录仍保留。':'所选日期不在方案起止范围内。'}</p>`}</div><details class="dose-history"><summary>全部服用历史 <span>${logs.length} 条</span></summary>${logs.length?logs.map(d=>`<div class="dose-row"><div><strong>${d.date} ${esc(d.scheduledTime||'补记')}</strong>${aiTag(d)}<small>${esc(d.outcome)}${d.time?' · 实际 '+esc(d.time):''}${d.note?' · '+esc(d.note):''}</small></div>${actions(d)}</div>`).join(''):'<p class="muted">尚无服用记录。</p>'}</details></section>`;}
  function bind(){const date=document.querySelector('#medical-file-date');if(date)date.onchange=e=>{fileDate=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount();};const input=document.querySelector('#medical-search');if(input)input.oninput=e=>{search=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};const statusEl=document.querySelector('#medical-status');if(statusEl)statusEl.onchange=e=>{status=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};for(const input of document.querySelectorAll('#med-dose-date,#field-doseDate'))input.onchange=e=>{doseDate=e.target.value||ctx.today;ctx.render()};}
  function medicationImageFields(m){const files=all('file').filter(f=>['image/png','image/jpeg','image/webp'].includes(f.mime));const existing=find(m.imageFileId);return `<div class="medication-image-editor"><h3>药品图片（可选）</h3><div id="med-image-current">${existing?previews.thumb(existing,''):'<p class="muted">暂无药品图片</p>'}</div>${select('选择已保存的图片','imageFileId',[['','不关联图片'],...files.map(f=>[f.id,`${f.title} · ${f.date}`]),...(m.imageFileId&&!existing?[[m.imageFileId,'原图片已删除（保留原关联）']]:[])],m.imageFileId||'')}<label class="upload-box">${icon('file',22)}<p>拍摄药盒或选择图片</p><input type="file" id="medication-image-upload" accept="image/png,image/jpeg,image/webp" aria-label="拍摄药盒或上传药品图片"><small>PNG、JPG、WEBP · 最大 10MB</small></label><button type="button" class="btn" id="med-image-remove">移除图片关联</button><p class="section-desc">使用你上传的真实图片，点图片可查看原图。</p><div id="medication-upload-state" role="status" aria-live="polite"></div></div>`;}
- function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old?.visitId||visitId||x.visitId||activeId||'';let body='';
- if(kind==='report'){const files=all('file').filter(f=>!f.visitId||f.visitId===x.visitId);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+select('关联已有原件（可选）','fileId',[['','暂不关联'],...files.map(f=>[f.id,f.title])],x.fileId||'')+`<label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
+ function reportOriginalChoices(visitId,selected,old){
+  const otherVisitFiles=new Set(all('report').filter(r=>r.id!==old?.id&&r.visitId&&r.visitId!==visitId).map(r=>r.fileId));
+  const files=all('file').filter(f=>(!f.visitId||f.visitId===visitId)&&!otherVisitFiles.has(f.id));
+  const choices=[['','暂不关联'],...files.map(f=>[f.id,f.title])];
+  const historicalId=(old?.visitId||'')===visitId?old?.fileId:'';
+  if(historicalId&&!files.some(f=>f.id===historicalId)){
+   const file=find(historicalId);
+   choices.push([historicalId,file?`${file.title}（保留原关联）`:'原件已删除（保留原关联）']);
+  }
+  const blocked=Boolean(selected&&!choices.some(([value])=>value===selected));
+  if(blocked)choices.push([selected,`${find(selected)?.title||'原件已删除'}（此就诊不可用）`,true]);
+  const notice=blocked?'此就诊无法使用已选原件。请换选原件、上传新原件或选择「暂不关联」。'
+   :selected&&selected===historicalId&&!files.some(f=>f.id===selected)?'此报告可以保留原件的历史关联，也可以更换或解除关联。':'';
+  const options=choices.map(([value,label,disabled])=>`<option value="${esc(value)}"${value===selected?' selected':''}${disabled?' disabled':''}>${esc(label)}</option>`).join('');
+  return {options,notice,blocked};
+ }
+ function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old&&kind==='report'?(old.visitId||''):(old?.visitId||visitId||x.visitId||activeId||'');let body='';
+ if(kind==='report'){const originals=reportOriginalChoices(x.visitId,x.fileId||'',old);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+`<div class="field"><label for="field-fileId">关联已有原件（可选）</label><select id="field-fileId" name="fileId" aria-describedby="report-original-notice">${originals.options}</select><small id="report-original-notice" role="status">${originals.notice}</small></div><label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
  if(kind==='medication')body=`<div class="helper">请按原始处方或医生交代填写。此处只记录方案，不推算用量。</div>`+medicationImageFields(x)+field('单次用量（含单位）','dosage',x.dosage||'','text','required maxlength="250" placeholder="按处方原文填写"')+`<div class="form-grid">${field('用药途径','route',x.route||'','text','required maxlength="250" placeholder="按处方填写"')}${field('频次 / 用法','frequency',x.frequency||'','text','required maxlength="250" placeholder="按处方填写"')}</div>`+field('处方医生 / 来源','prescriber',x.prescriber||'','text','maxlength="250"')+select('记录方式','scheduleMode',[['scheduled','按指定时间记录'],['asNeeded','按需使用，不设次数']],x.scheduleMode)+`<div id="med-time-field" ${x.scheduleMode==='asNeeded'?'hidden':''}>${field('每日服用时间','times',(x.times||[]).join(', '),'text','placeholder="例如 08:00, 20:00"')}<p class="section-desc">时间以逗号分隔，最多 12 个；只用于应用内记录，不发送系统提醒。</p></div>`+field('结束日期（可选）','endDate',x.endDate||'','date')+select('方案状态','status',['进行中','已停用','已完成'],x.status);
  if(kind==='dose'){const med=find(x.medicationId);if(!med){ctx.toast('找不到用药方案');return}body=`<div class="helper"><b>${esc(med.title)}</b><br>${esc(med.dosage)} · ${esc(med.frequency)}<br>${x.scheduledTime?'对应计划时段 '+esc(x.scheduledTime):'补记一次实际使用，不额外生成计划次数。'}</div><input type="hidden" name="medicationId" value="${med.id}"><input type="hidden" name="scheduledTime" value="${esc(x.scheduledTime||'')}">`+select('服用结果','outcome',['已服用','跳过'],x.outcome||'已服用')+field('实际服用时间（跳过时可留空）','time',x.time||new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date()),'time');}
  const label={report:'就诊报告',medication:'用药方案',dose:'服用记录'}[kind];
@@ -1479,13 +3031,37 @@ function createMedical(ctx){
  ctx.openDrawer(`<form id="medical-form"><div class="helper">${ctx.space==='demo'?'示例空间 · 虚构示例，不构成处方':'个人空间 · 按原始记录填写'}</div>${kind==='dose'?'':select('关联就诊','visitId',visitOptions(x.visitId),x.visitId)}${field(kind==='medication'?'药物名称':kind==='report'?'报告标题':'记录名称','title',x.title||'','text','required maxlength="120"')}${field(kind==='medication'?'开始日期':'记录日期','date',x.date,'date',kind==='dose'?`required max="${ctx.today}"`:'required')}${body}${textarea(kind==='dose'?'备注 / 跳过原因（跳过必填）':'补充备注','note',x.note||'')}<div id="medical-error" role="alert"></div></form>`,`${id?'编辑':'添加'}${label}`,`${ctx.space==='demo'?'示例空间':'个人空间'} · 保存后回到当前页面`,`${btn('取消','close')}<button type="submit" form="medical-form" class="btn primary">${icon('check',14)}保存${label}</button>`);
  document.querySelector('#field-scheduleMode')?.addEventListener('change',e=>{document.querySelector('#med-time-field').hidden=e.target.value==='asNeeded'});
  if(kind==='dose'){const outcome=document.querySelector('#field-outcome');const timeField=document.querySelector('#field-time').closest('.field');timeField.hidden=outcome.value==='跳过';outcome.onchange=()=>{timeField.hidden=outcome.value==='跳过'};}
- let uploaded=null;
- document.querySelector('#medical-form').onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const imageControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:[];const data=Object.fromEntries(new FormData(e.target));imageControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
- if(kind==='medication'){const file=e.target.querySelector('#medication-image-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');const state=e.target.querySelector('#medication-upload-state');try{state.textContent='正在读取并上传药品图片…';if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content})},sourceSpace,sourceWorkbench);}data.imageFileId=uploaded.id;state.textContent='图片上传成功，正在保存用药方案…';}catch(error){state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';throw error;}}}
- if(kind==='report'){const file=document.querySelector('#report-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);document.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
- await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;imageControls.forEach(el=>el.disabled=false)}};
- if(kind==='medication'){const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};upload.onchange=()=>{uploaded=null;const file=upload.files[0];state.textContent=file?'待上传：'+file.name+'（保存用药方案时上传）':'';};choice.onchange=()=>{upload.value='';uploaded=null;state.textContent='';update();};form.querySelector('#med-image-remove').onclick=()=>{choice.value='';upload.value='';uploaded=null;state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};previews.mount();}
- if(kind==='report')document.querySelector('#report-upload').onchange=()=>{uploaded=null;document.querySelector('#report-upload-state').innerHTML=''};
+ const form=document.querySelector('#medical-form');
+ const reportChoice=kind==='report'?form.elements.fileId:null;
+ const reportVisit=kind==='report'?form.elements.visitId:null;
+ const reportUpload=kind==='report'?form.querySelector('#report-upload'):null;
+ let uploaded=null,initialMedicationImage,removeMedicationImage=false;
+ form.onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const attachmentControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:kind==='report'?[reportVisit,reportChoice,reportUpload]:[];const data=Object.fromEntries(new FormData(e.target));attachmentControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
+ if(kind==='medication'){
+ // The select starts with the image seen when the drawer opened. An unchanged
+ // value must not replace a newer association created while the drawer was open.
+ if(id&&!removeMedicationImage&&data.imageFileId===initialMedicationImage)delete data.imageFileId;
+ const file=e.target.querySelector('#medication-image-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');const state=e.target.querySelector('#medication-upload-state');try{state.textContent='正在读取并上传药品图片…';if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content})},sourceSpace,sourceWorkbench);}data.imageFileId=uploaded.id;state.textContent='图片上传成功，正在保存用药方案…';}catch(error){state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';throw error;}}}
+ if(kind==='report'){
+  const file=reportUpload.files[0];
+  const selected=reportOriginalChoices(data.visitId,reportChoice.value,old);
+  if(!file&&selected.blocked)throw Error(selected.notice);
+  if(uploaded&&uploaded.visitId!==data.visitId)throw Error('已上传的原件属于之前选择的就诊，请重新选择文件或已有原件。');
+  data.fileId=reportChoice.value;
+  if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);e.target.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
+ await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;attachmentControls.forEach(el=>el.disabled=false)}};
+ if(kind==='medication'){const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');initialMedicationImage=choice.value;const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};upload.onchange=()=>{uploaded=null;const file=upload.files[0];state.textContent=file?'待上传：'+file.name+'（保存用药方案时上传）':'';};choice.onchange=()=>{removeMedicationImage=false;upload.value='';uploaded=null;state.textContent='';update();};form.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';upload.value='';uploaded=null;state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};previews.mount();}
+ if(kind==='report'){
+  const notice=form.querySelector('#report-original-notice'),state=form.querySelector('#report-upload-state');
+  const updateChoices=()=>{
+   const options=reportOriginalChoices(reportVisit.value,reportChoice.value,old);
+   reportChoice.innerHTML=options.options;
+   notice.textContent=uploaded&&uploaded.visitId!==reportVisit.value?'已上传的原件属于之前选择的就诊，请重新选择文件或已有原件。':reportUpload.files[0]?'':options.notice;
+  };
+  reportVisit.onchange=updateChoices;
+  reportChoice.onchange=()=>{reportUpload.value='';uploaded=null;state.textContent='';updateChoices();};
+  reportUpload.onchange=()=>{uploaded=null;state.textContent='';updateChoices();};
+ }
  }
  function showReport(id){const r=find(id);if(!r)return;const f=find(r.fileId);ctx.openDrawer(`<div class="report-flags">${badge(r.type,'visit')}${badge(r.status)}${badge(f?'已关联原件':'原件待补充')}</div><div class="report-metadata"><span>报告日期：${r.date}</span><span>来源：${esc(r.source||'未填写')}</span>${visitLink(r.visitId)}</div>${renderReportObservations(r.observations,esc)}<h3 class="clinical-label">报告原文 / 手工摘录</h3><div class="report-text">${esc(r.content||'尚未录入文字。上传原件不会自动识别，请按原文补充。')}</div>${r.note?`<h3 class="clinical-label">补充备注</h3><div class="report-text">${esc(r.note)}</div>`:''}${f?`<div class="report-original"><span>${icon('file',17)} ${esc(f.title)}</span><div>${btn('查看原件','med-preview-report:'+r.id)}<a class="btn" href="/api/files/${f.id}?space=${ctx.space}&workbench=${ctx.workbench}" download>${icon('download',14)}下载</a></div></div>`:'<div class="notice">原件待补充。可以编辑报告上传文件或关联已有资料。</div>'}`,esc(r.title),'保存原文与来源，不自动生成诊断',`${btn('关闭','close')}${btn('编辑报告','med-edit:'+id,'primary','edit')}`);}
  async function preview(id,backAction=''){const f=find(id);if(f?.kind==='file')await previews.open(f,{backAction});}
@@ -1508,7 +3084,7 @@ function createMedical(ctx){
 return { createMedical };
 })();
 
-const __workbenchModule19 = (() => {
+const __workbenchModule28 = (() => {
 // reader-shell.js
 
 const PREFERENCE_KEY='reading-appearance-v1';
@@ -1536,7 +3112,7 @@ function mountReaderShell(root,{title='',onClose}={}){
 return { readerPreferences, mountReaderShell };
 })();
 
-const __workbenchModule20 = (() => {
+const __workbenchModule29 = (() => {
 // reading-text.js
 
 // Preserve poem boundaries only for the explicitly supported collection export format.
@@ -1560,10 +3136,10 @@ function poetryTextSections(text){const first=text.indexOf('\n'),second=text.ind
 return { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections };
 })();
 
-const __workbenchModule21 = (() => {
+const __workbenchModule30 = (() => {
 // file-preview.js
-const { mountReaderShell } = __workbenchModule19;
-const { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections } = __workbenchModule20;
+const { mountReaderShell } = __workbenchModule28;
+const { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections } = __workbenchModule29;
 // Originals stay on this origin; sensitive preview data lives only for the current view.
 function createFilePreviews(ctx){
  const {esc,icon,btn}=ctx;let observer,queue=[],running=0,epoch=0,viewer=null;const jobs=new Map();
@@ -1638,14 +3214,16 @@ return { createFilePreviews };
 const { latestHealthRecord, healthRecordDate, healthRecordStatus } = __workbenchModule0;
 const { createCgmUI } = __workbenchModule1;
 const { normalizeHealthRoute } = __workbenchModule2;
-const { institutionFields, bindInstitutionPicker } = __workbenchModule4;
-const { fetchJSON, showFieldError, aiTag, aiWhen } = __workbenchModule5;
-const { createShell } = __workbenchModule12;
-const { createAccount } = __workbenchModule13;
-const { createDaily } = __workbenchModule14;
-const { createQuick } = __workbenchModule16;
-const { createMedical } = __workbenchModule18;
-const { createFilePreviews } = __workbenchModule21;
+const { institutionFields, bindInstitutionPicker, institutionMark } = __workbenchModule5;
+const { fetchJSON, showFieldError, aiTag, aiWhen } = __workbenchModule6;
+const { createShell, workbenchTheme } = __workbenchModule15;
+const { createLayoutUI } = __workbenchModule17;
+const { createComponentUI } = __workbenchModule21;
+const { createAccount } = __workbenchModule22;
+const { createDaily } = __workbenchModule23;
+const { createQuick } = __workbenchModule25;
+const { createMedical } = __workbenchModule27;
+const { createFilePreviews } = __workbenchModule30;
 let trashedIds=[];
 const $=(s,r=document)=>r.querySelector(s);
 const paths={compass:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4 6-2 6-6 2 2-6Z',map:'m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16M15 5v16',ticket:'M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4Zm12 0v3m0 3v2m0 3v3',building:'M5 21V3h14v18M2 21h20M9 7h1m4 0h1M9 11h1m4 0h1M10 21v-6h4v6',suitcase:'M8 6V3h8v3M5 6h14a2 2 0 0 1 2 2v11H3V8a2 2 0 0 1 2-2Zm2 0v13M17 6v13',leaf:'M20 4C12 3 3 7 4 15c1 7 12 7 15-1 1-3 1-7 1-10ZM5 19 16 8M10 14l-1-5M13 11l5 1',grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',heart:'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z',visit:'M8 3H5a2 2 0 0 0-2 2v4a5 5 0 0 0 10 0V5a2 2 0 0 0-2-2M8 14v2a5 5 0 0 0 10 0v-3M18 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4',exercise:'m3 9 6-6M2 6l4 4M5 3l4 4M15 21l6-6M14 17l4 4M17 14l4 4M8 8l8 8',meal:'M4 3v6a3 3 0 0 0 6 0V3M7 3v18M19 21V3c-5 3-5 10 0 10',metric:'M3 12h4l3-8 4 16 3-8h4',task:'M9 4h10a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4M8 2h8v4H8zM7 13l3 3 6-6',file:'M14 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9ZM14 2v7h7M7 14h10M7 18h7',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M10 2h4l1 3 3 1 3 3v4l-3 2-1 3-3 3h-4l-2-3-3-1-3-3v-4l3-2 1-3Z',arrow:'m9 5 7 7-7 7',plus:'M12 5v14M5 12h14',search:'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14m5 12 6 6',close:'m6 6 12 12M6 18 18 6',check:'m5 12 4 4L19 6',calendar:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2',sparkles:'m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4M18 4h4',clock:'M12 8v5l4 2M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20',edit:'m16 3 5 5M4 15 16 3l5 5L9 20l-6 1Z',trash:'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7',download:'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5',menu:'M3 6h18M3 12h18M3 18h18',moon:'M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11',scale:'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2M7 7a7 7 0 0 1 10 0M12 7l2-2',shield:'m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6ZM8 12l3 3 5-6',activity:'m3 17 6-6 4 4 8-11M16 4h5v5',info:'M12 11v6M12 7h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20'};
@@ -1655,6 +3233,8 @@ const names={visit:'就诊记录',exercise:'锻炼记录',meal:'饮食记录',me
 const metricNames={weight:'体重',pressure:'血压',sleep:'睡眠',glucose:'血糖',heart:'静息心率'};
 const units={weight:'kg',pressure:'mmHg',sleep:'小时',glucose:'mmol/L',heart:'次/分'};
 let space=localStorage.getItem('health-space')||'demo',route=location.hash.slice(1)||'dashboard',page=route.split('/')[0],items=[],settings={},today='',workbench=localStorage.getItem('active-workbench')||'health',workbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'资产',type:'finance'},{id:'travel',name:'旅行',type:'travel'},{id:'reading',name:'阅读',type:'reading'}],metricType='weight',range=14,query='',filterDate='',filterStatus='all',drawerKind=null,editing=null,undo=null;
+if(new URLSearchParams(location.search).has('componentPreview')){const requestedSpace=new URLSearchParams(location.search).get('space');if(['personal','demo'].includes(requestedSpace))space=requestedSpace;workbench='health';route='dashboard';page='dashboard';history.replaceState(null,'',location.pathname+location.search+'#dashboard');}
+if(new URLSearchParams(location.search).has('layoutPreview')){workbench='health';route='dashboard';page='dashboard';history.replaceState(null,'',location.pathname+location.search+'#dashboard');}
 const stateCache=new Map();let cacheEpoch=0;
 function invalidateStateCache(){stateCache.clear();cacheEpoch++;}
 // Test-only hook: acceptance scripts pre-create window.__zhihengTestHooks via an init script; production never has it, so nothing is exposed.
@@ -1679,7 +3259,7 @@ let loadSequence=0,applicationReady=false;
 function cacheState(key,data){stateCache.delete(key);stateCache.set(key,{data,at:Date.now()});if(stateCache.size>8)stateCache.delete(stateCache.keys().next().value);}
 // The session cookie was replaced by another account (e.g. signed in elsewhere): drop every cached byte and restart clean.
 const foreignOwner=data=>data&&data.owner!=null&&account.user?.id!=null&&data.owner!==account.user.id;
-function sessionReplaced(){shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};shownState=null;$('#app').replaceChildren();location.reload();}
+function sessionReplaced(){componentUI.cleanup();layoutUI.cleanup();shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};shownState=null;$('#app').replaceChildren();location.reload();}
 let shownState=null,refreshing=false,refreshFailure=null;
 // State requests abort after 8s and count as a failed refresh.
 const STATE_TIMEOUT_MS=8000;
@@ -1687,7 +3267,7 @@ const staleAge=at=>{const m=Math.floor((Date.now()-at)/60000);return m<1?'刚刚
 // Background refresh indicators: spinner beside the top bar title; thin retry banner above the content on failure.
 function refreshDecor(){const bar=$('#app .topbar')||$('#app main');let spin=$('#app .refresh-spinner');if(refreshing&&bar&&!spin){spin=document.createElement('span');spin.className='refresh-spinner';spin.setAttribute('role','status');spin.setAttribute('aria-label','正在更新');const title=$('#app main h1');if(title)title.append(spin);else (bar.querySelector('.workspace-label')||bar.firstElementChild||bar).after(spin);}if(!refreshing)spin?.remove();
  const main=$('#app main');let banner=$('#app .stale-banner');if(refreshFailure&&main&&!main.querySelector('.home-skeleton')){if(!banner){banner=document.createElement('div');banner.className='stale-banner';banner.setAttribute('role','status');banner.innerHTML='<span></span><button type="button" class="stale-retry"><span class="stale-retry-label">重试</span></button>';banner.querySelector('button').onclick=()=>{if(!refreshing)load({retainOnError:true,retry:true})};main.prepend(banner);}banner.firstChild.textContent=`网络不稳，显示的是${staleAge(refreshFailure.at)}的数据`;const retry=banner.querySelector('button');retry.disabled=refreshing;retry.classList.toggle('busy',refreshing);if(refreshing)retry.setAttribute('aria-busy','true');else retry.removeAttribute('aria-busy');retry.setAttribute('aria-label',refreshing?'正在重试':'重试');}else banner?.remove();}
-function applyState(key,data){cacheState(key,data);const same=shownState===key+'\n'+JSON.stringify(data)&&!$('#app .home-skeleton');shownState=key+'\n'+JSON.stringify(data);items=data.items;trashedIds=data.trashedIds||[];settings=data.settings;today=data.today;workbenches=data.workbenches||workbenches;if(!same)render();scheduleWorkbenchPrefetch()}
+function applyState(key,data){cacheState(key,data);const same=shownState===key+'\n'+JSON.stringify(data)&&!$('#app .home-skeleton');shownState=key+'\n'+JSON.stringify(data);items=data.items;trashedIds=data.trashedIds||[];settings=data.settings;account.syncName(settings.name);today=data.today;workbenches=data.workbenches||workbenches;layoutUI.setSnapshot(data.layout);componentUI.setView(data.componentView);if(!same)render();scheduleWorkbenchPrefetch()}
 // Idle prefetch of other workbenches into the same in-memory cache (sequential, online only, skipped on Save-Data).
 let prefetchTimer=null,prefetching=false;const PREFETCH_DELAY_MS=2000;// let the first screen settle before using the network
 const whenIdle=fn=>typeof requestIdleCallback==='function'?requestIdleCallback(fn,{timeout:3000}):setTimeout(fn,1200);
@@ -1698,7 +3278,7 @@ async function loadInner(sequence,retainOnError){const targetWorkbench=workbench
 function nav(id,label,ic){return `<button class="nav-btn ${page===id?'active':''}" data-action="nav:${id}">${icon(ic)}${label}</button>`}
 let renderedLocation=null;
 let cgmLocation='';
-function render(){const cgKey=JSON.stringify([account.user?.id||null,workbench,space,page]);if(cgmLocation!==cgKey){cgm.cleanup();cgmLocation=cgKey;}const locationKey=[account.user?.id||'local',workbench,space,route].join(':');const keep=renderedLocation===locationKey,mainTop=$('.main')?.scrollTop||0,listTop=$('.minimal-visit-list,.medical-resource-list')?.scrollTop||0;previews.cleanupThumbs();renderView();renderedLocation=locationKey;if(keep){const main=$('.main'),list=$('.minimal-visit-list,.medical-resource-list');if(main)main.scrollTop=mainTop;if(list)list.scrollTop=listTop;}if(applicationReady)previews.mount();if(applicationReady)refreshDecor();if(applicationReady&&page==='mine')loadTrashCount();}
+function render(){const cgKey=JSON.stringify([account.user?.id||null,workbench,space,page]);if(cgmLocation!==cgKey){cgm.cleanup();cgmLocation=cgKey;}const locationKey=[account.user?.id||'local',workbench,space,route].join(':');const keep=renderedLocation===locationKey,mainTop=$('.main')?.scrollTop||0,listTop=$('.minimal-visit-list,.medical-resource-list')?.scrollTop||0;previews.cleanupThumbs();renderView();if(applicationReady)componentUI.mount();renderedLocation=locationKey;if(keep){const main=$('.main'),list=$('.minimal-visit-list,.medical-resource-list');if(main)main.scrollTop=mainTop;if(list)list.scrollTop=listTop;}if(applicationReady)previews.mount();if(applicationReady)refreshDecor();if(applicationReady&&page==='mine')loadTrashCount();}
 // 「最近删除」 (30 days, every workbench of the current space): web and AI deletions; restore puts the record back unchanged.
 const TRASH_KINDS={visit:'就诊',exercise:'运动',meal:'餐食',metric:'身体指标',task:'待办',file:'资料',report:'报告',medication:'用药',dose:'服药',favorite:'收藏',water:'饮水',note:'备忘',asset_account:'账户',asset_holding:'资产',asset_liability:'负债',asset_transaction:'流水',asset_snapshot:'历史估值',travel_trip:'旅行',travel_stop:'地点',travel_booking:'预订',travel_check:'准备事项',reading_book:'书籍',reading_entry:'阅读记录'};let trashItems=[],lastRestored=null;
 const trashKind=x=>x.kind==='meal'&&x.mealType?x.mealType:TRASH_KINDS[x.kind]||'记录';
@@ -1713,15 +3293,15 @@ function trashRoute(x){if(x.workbench==='reading')return ({reading_book:'books',
 async function restoreTrash(id,withParent=false){const x=trashItems.find(t=>t.id===id),sourceSpace=space,sourceWorkbench=workbench,owner=account.user?.id,dialog=$('.drawer'),box=$('#trash-list');const current=()=>space===sourceSpace&&workbench===sourceWorkbench&&account.user?.id===owner;if(!x)return;try{const r=await api('/api/trash/restore',{method:'POST',body:JSON.stringify({id,withParent})},sourceSpace,sourceWorkbench);if(!current())return;lastRestored={...x,...r};const fresh=await api('/api/trash',{},sourceSpace,sourceWorkbench);if(!current())return;trashItems=fresh.items;if(box?.isConnected)box.innerHTML=trashList();await load();if(!current())return;loadTrashCount();toast(r.restoredCount>1?`已恢复 ${r.restoredCount} 条`:'已恢复','查看','trash-view');}
  catch(err){if(!current())return;if(err.code==='parent_deleted'){if(dialog&&!dialog.isConnected)return;const msg=err.message.replace(/，需要一起恢复$/,'')+'，一起恢复？';openDrawer(`<p class="section-desc">${msg}</p>`,'恢复记录',esc(x?`${trashKind(x)} · ${trashTitle(x)}`:''),`${btn('取消','trash-open')}${btn('一起恢复','trash-restore-with:'+id,'primary')}`);$('.drawer')?.classList.add('drawer-compact');return;}throw err;}}
 
-function renderView(){if(!applicationReady)return;if(workbench==='health'){const normalized=normalizeHealthRoute(route);if(normalized!==route){route=normalized;page=route.split('/')[0];history.replaceState(null,'','#'+route);}}if(!$('.drawer'))document.body.classList.remove('scroll-lock');if(workbench!=='health'){if(!(workbench==='finance'?['dashboard','financial','fixed','renewals','accounts','holdings','transactions','liabilities','history','documents','notes','tasks','mine']:workbench==='travel'?['dashboard','trip','places','bookings','checklist','documents','notes','tasks','mine']:workbench==='reading'?['dashboard','books','entries','tasks','documents','mine']:['dashboard','notes','tasks','documents','mine']).includes(page)){page='dashboard';route='dashboard';history.replaceState(null,'','#dashboard');}shell.renderOther();return;}if(!['dashboard','visit','exercise','meal','metric','task','file','settings','day','library','mine'].includes(page))page='dashboard';const title=route==='dashboard/tasks'?'待办与复查':({dashboard:'健康总览',visit:'就诊管理',exercise:'运动与锻炼',meal:'饮食记录',metric:'健康监测',task:'待办',file:'资料档案',settings:'设置',day:'每日回顾',library:'健康档案',mine:'我的'})[page];
- $('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('leaf',25)}</div><div><strong>知衡</strong><small>个人健康管理</small></div></div><div class="nav-label">我的健康</div>${nav('dashboard','健康总览','grid')}${nav('visit','就诊管理','visit')}${nav('exercise','运动与锻炼','exercise')}${nav('meal','饮食记录','meal')}${nav('metric','健康监测','metric')}${nav('file','资料原件','file')}${nav('day','每日回顾','calendar')}<div class="sidebar-bottom">${nav('settings','设置与连接','settings')}<div class="local-badge"><i class="dot"></i> 本地运行 · 数据保存在此电脑</div><div class="profile"><div class="avatar">C</div><div><strong>${esc(settings.name)}</strong><small>${space==='demo'?'正在浏览示例空间':'个人健康空间'}</small></div></div></div></aside><div class="workspace"><header class="topbar"><div class="breadcrumb"><button class="icon-btn mobile-menu" aria-label="打开导航" data-action="menu">${icon('menu')}</button><span class="workspace-label">个人健康工作台</span></div><div class="top-actions">${space==='demo'?'<span class="demo-label">虚构示例数据</span>':''}<select class="space-switch" id="space" aria-label="切换空间"><option value="demo" ${space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${space==='personal'?'selected':''}>个人空间</option></select><button class="ai-toggle" data-action="assistant">${icon('sparkles',16)}健康助手<span class="connection-label">未连接</span></button><div class="avatar" style="width:29px;height:29px;font-size:10px">C</div></div></header><main class="main ${page==='visit'&&route.includes('/')&&!['visit/reports','visit/medications','visit/files','visit/inbox'].includes(route)?'visit-detail-page':''}"><div class="heading"><div><h1>${title}</h1><p>${page==='dashboard'?esc(settings.focus||'记录、回顾与跟进'):pageDesc()}</p></div><div class="heading-tools">${page==='dashboard'&&route!=='dashboard/tasks'?`<span class="btn">${icon('calendar',14)}${today.replaceAll('-',' / ')}</span>`:''}${route==='dashboard/tasks'?btn('添加待办','add:task','primary','plus'):!['settings','day','library','mine'].includes(page)&&!(page==='visit'&&route!=='visit')?btn(page==='visit'?'添加就诊':'添加记录','add:'+(page==='dashboard'?'choose':page),'primary','plus'):''}</div></div>${page==='dashboard'?(route==='dashboard/tasks'?taskOverview():dashboard()):page==='visit'?medical.render():page==='metric'?monitoring():page==='settings'?settingsPage():page==='day'?daily.renderDay():page==='library'?shell.library():page==='mine'?shell.mine():listPage()}<footer class="footer"><span>知衡 · 本地健康记录</span><span>${space==='demo'?'示例空间 · 数据均为虚构':'个人空间 · 数据保存在本机'}</span></footer></main></div></div>`;
+function renderView(){if(!applicationReady)return;layoutUI.beforeRender();if(workbench==='health'){const normalized=normalizeHealthRoute(route);if(normalized!==route){route=normalized;page=route.split('/')[0];history.replaceState(null,'','#'+route);}}if(!$('.drawer'))document.body.classList.remove('scroll-lock');if(workbench!=='health'){if(!(workbench==='finance'?['dashboard','financial','fixed','renewals','accounts','holdings','transactions','liabilities','history','documents','notes','tasks','mine']:workbench==='travel'?['dashboard','trip','places','bookings','checklist','documents','notes','tasks','mine']:workbench==='reading'?['dashboard','books','entries','tasks','documents','mine']:['dashboard','notes','tasks','documents','mine']).includes(page)){page='dashboard';route='dashboard';history.replaceState(null,'','#dashboard');}shell.renderOther();return;}if(!['dashboard','visit','exercise','meal','metric','task','file','settings','day','library','mine'].includes(page))page='dashboard';const title=route==='dashboard/tasks'?'待办与复查':({dashboard:'健康总览',visit:'就诊管理',exercise:'运动与锻炼',meal:'饮食记录',metric:'健康监测',task:'待办',file:'资料档案',settings:'健康连接与数据',day:'每日回顾',library:'健康档案',mine:'我的'})[page];
+ $('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('leaf',25)}</div><div><strong>知衡</strong><small>个人健康管理</small></div></div><div class="nav-label">我的健康</div>${nav('dashboard','健康总览','grid')}${nav('visit','就诊管理','visit')}${nav('exercise','运动与锻炼','exercise')}${nav('meal','饮食记录','meal')}${nav('metric','健康监测','metric')}<div class="sidebar-bottom">${nav('settings','设置与连接','settings')}<div class="local-badge"><i class="dot"></i> 本地运行 · 数据保存在此电脑</div><div class="profile"><div class="avatar">C</div><div><strong>${esc(settings.name)}</strong><small>${space==='demo'?'正在浏览示例空间':'个人健康空间'}</small></div></div></div></aside><div class="workspace"><header class="topbar"><div class="breadcrumb"><button class="icon-btn mobile-menu" aria-label="打开导航" data-action="menu">${icon('menu')}</button><span class="workspace-label">个人健康工作台</span></div><div class="top-actions">${space==='demo'?'<span class="demo-label">虚构示例数据</span>':''}<select class="space-switch" id="space" aria-label="切换空间"><option value="demo" ${space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${space==='personal'?'selected':''}>个人空间</option></select><button class="ai-toggle" data-action="assistant">${icon('sparkles',16)}健康助手<span class="connection-label">未连接</span></button><div class="avatar" style="width:29px;height:29px;font-size:10px">C</div></div></header><main class="main ${page==='visit'&&route.includes('/')&&!['visit/reports','visit/medications','visit/files','visit/inbox'].includes(route)?'visit-detail-page':''}"><div class="heading"><div><h1>${title}</h1><p>${page==='dashboard'?esc(settings.focus||'记录、回顾与跟进'):pageDesc()}</p></div><div class="heading-tools">${page==='dashboard'&&route!=='dashboard/tasks'?`<span class="btn">${icon('calendar',14)}${today.replaceAll('-',' / ')}</span>`:''}${route==='dashboard/tasks'?btn('添加待办','add:task','primary','plus'):!['settings','day','library','mine'].includes(page)&&!(page==='visit'&&route!=='visit')?btn(page==='visit'?'添加就诊':'添加记录','add:'+(page==='dashboard'?'choose':page),'primary','plus'):''}</div></div>${page==='dashboard'?(route==='dashboard/tasks'?taskOverview():dashboard()):page==='visit'?medical.render():page==='metric'?monitoring():page==='settings'?settingsPage():page==='day'?daily.renderDay():page==='library'?shell.library():page==='mine'?shell.mine():listPage()}<footer class="footer"><span>知衡 · 本地健康记录</span><span>${space==='demo'?'示例空间 · 数据均为虚构':'个人空间 · 数据保存在本机'}</span></footer></main></div></div>`;
  $('#space').onchange=e=>setSpace(e.target.value);
  const search=$('#record-search');if(search)search.addEventListener('input',e=>{query=e.target.value;previews.cleanupThumbs();$('#records').innerHTML=recordRows(filtered());previews.mount()});
  $('#filter-date')?.addEventListener('change',e=>{filterDate=e.target.value;previews.cleanupThumbs();$('#records').innerHTML=recordRows(filtered());previews.mount()});
  $('#filter-status')?.addEventListener('change',e=>{filterStatus=e.target.value;previews.cleanupThumbs();$('#records').innerHTML=recordRows(filtered());previews.mount()});
- $('#trend-range')?.addEventListener('change',e=>{range=Number(e.target.value);render()});
+ $('#trend-range')?.addEventListener('change',e=>{range=Number(e.target.value);layoutUI.rememberTrend(metricType,range);render()});
  $('#settings-form')?.addEventListener('submit',saveSettings);
- medical.bind();daily.bind();shell.decorate();shell.originals.bind();cgm.mount();
+ medical.bind();daily.bind();shell.decorate();shell.originals.bind();cgm.mount();layoutUI.mount();
 }
 function pageDesc(){if(route==='dashboard/tasks')return '集中查看复查、预约和日常待办。';return ({visit:'把每次就诊、检查与后续安排，放在一起。',exercise:'记录每一次动起来，也留意身体的感受。',meal:'用简单的记录，慢慢看见自己的饮食习惯。',metric:'沿着时间看变化，每个数值都有自己的来处。',task:'把想做的事情，变成每天可完成的小步骤。',file:'让报告与资料有处可寻，随时为就诊做好准备。',settings:'管理你的健康空间、资料与连接。',day:'按天查看饮食、锻炼和饮水，随时补记。',library:'就诊、运动、饮食、监测与原始资料。',mine:'管理工作台、个人设置与数据空间。'})[page]||''}
 function stats(){const latest=t=>latestHealthRecord(items,'metric',today,t);const w=latest('weight'),p=latest('pressure'),s=latest('sleep');const mins=byKind('exercise').filter(x=>x.date===today).reduce((n,x)=>n+x.duration,0);return [{label:'最近体重',value:w?.value??'—',unit:w?'kg':'',ic:'scale',sub:w?`${healthRecordDate(w,today)} · ${healthRecordStatus(w,today)}`:'等待第一条记录',type:'weight'},{label:'今日运动',value:mins,unit:'分钟',ic:'exercise',sub:mins?'今天已记录':'今天还没有运动记录',type:'exercise'},{label:'最近睡眠',value:s?.value??'—',unit:s?'小时':'',ic:'moon',sub:s?`${healthRecordDate(s,today)} · ${healthRecordStatus(s,today)}`:'等待第一条记录',type:'sleep'},{label:'最近血压',value:p?`${p.value}/${p.secondary}`:'—',unit:p?'mmHg':'',ic:'heart',sub:p?`${healthRecordDate(p,today)} · ${healthRecordStatus(p,today)}`:'等待第一条记录',type:'pressure'}].map((s,i)=>`<article class="metric-card"><div class="metric-top">${s.label}<span class="metric-icon">${icon(s.ic,16)}</span></div><div class="metric-value">${s.value}<small>${s.unit}</small></div><div class="metric-bottom">${icon('clock',10)}${esc(s.sub)}</div>${space==='demo'&&i!==1?`<svg class="spark" viewBox="0 0 90 32" fill="none"><path d="M2 20 13 18 24 23 35 12 46 16 57 10 68 15 79 8 89 11" stroke="${['#88a66c','#be9b76','#a0aac1','#c69b8e'][i]}" stroke-width="1.5"/></svg>`:''}</article>`).join('')}
@@ -1731,7 +3311,7 @@ function chart(){const cutoff=new Date(today+'T12:00:00Z');cutoff.setUTCDate(cut
  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${metricNames[metricType]}历史趋势，共${data.length}条记录">${[0,1,2,3].map(i=>{const v=hi-i*(hi-lo)/3,yy=y(v);return `<line x1="45" y1="${yy}" x2="500" y2="${yy}" stroke="#edf1e6" stroke-dasharray="3 4"/><text x="33" y="${yy+3}" text-anchor="end" fill="#a3ae97" font-size="9">${v.toFixed(metricType==='weight'||metricType==='sleep'||metricType==='glucose'?1:0)}</text>`}).join('')}<path d="${line('value')}" stroke="var(--theme-ink)" stroke-width="2" fill="none"/>${metricType==='pressure'?`<path d="${line('secondary')}" stroke="#b89471" stroke-width="2" stroke-dasharray="4 4" fill="none"/>`:''}${data.map((d,i)=>`<circle cx="${x(i)}" cy="${y(d.value)}" r="3" fill="white" stroke="var(--theme-ink)" stroke-width="1.6"><title>${d.date} ${d.value}${d.secondary?'/'+d.secondary:''} ${d.unit}</title></circle>`).join('')}${[0,Math.floor((data.length-1)/2),data.length-1].filter((v,i,a)=>a.indexOf(v)===i).map(i=>`<text x="${x(i)}" y="151" fill="#a0ad91" font-size="9" text-anchor="middle">${fmtDate(data[i].date)}</text>`).join('')}</svg></div>`}
 function taskRows(a,upcoming=false){return a.map(t=>`<div class="task-row ${t.done?'done':''}"><button class="check ${t.done?'checked':''}" data-action="toggle:${t.id}" aria-label="${t.done?'取消完成':'完成'}：${esc(t.title)}" aria-pressed="${t.done}">${t.done?icon('check',12):''}</button><div class="task-copy"><strong>${esc(t.title)}</strong><small>${esc(t.time||'当天')} · ${upcoming?(t.date===today?'今天':esc(t.date))+(t.date<today?' · 已逾期':''):dateLabel(t.date)}</small></div><span class="pill ${catClass(t.category)}">${esc(t.category||'日常')}</span><button class="icon-btn" data-action="edit:${t.id}" aria-label="编辑${esc(t.title)}">${icon('edit',13)}</button></div>`).join('')}
 function dashboard(){
- const pending=byKind('task').filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));const tasks=pending.slice(0,5);
+ const pending=byKind('task').filter(x=>!x.done).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));const tasks=pending.slice(0,layoutUI.options('tasks').limit||5);
  const latest=type=>latestHealthRecord(items,'metric',today,type),reading=latest(metricType),lastExercise=latestHealthRecord(items,'exercise',today),report=latestHealthRecord(items,['report','file'],today);
  const cutoff=new Date(today+'T12:00:00Z');cutoff.setUTCDate(cutoff.getUTCDate()-6);const startDate=cutoff.toISOString().slice(0,10);
  const exercise=byKind('exercise').filter(x=>x.date>=startDate&&x.date<=today),minutes=exercise.reduce((n,x)=>n+Number(x.duration||0),0);
@@ -1742,7 +3322,7 @@ function dashboard(){
  const action=(label,name,ic='')=>`<button class="btn" data-action="${name}">${ic?icon(ic,18):''}${label}</button>`;
  const blank=(text,name,label)=>`<div class="health-empty"><p>${text}</p>${action(label,name,'plus')}</div>`;
  const trend=trendCard().replace('class="card"','class="card health-trend"').replace('<div class="tabs">',`<div class="health-trend-reading"><span>${reading?`${esc(reading.value)}${reading.secondary?'/'+esc(reading.secondary):''}`:'—'}<small>${esc(reading?.unit||units[metricType])}</small></span><p>${reading?`${esc(healthRecordDate(reading,today))} · ${healthRecordStatus(reading,today)}`:'还没有'+metricNames[metricType]+'记录'}</p></div><div class="tabs">`);
- return `<div class="health-overview"><div class="health-overview-heading"><h1>健康总览</h1><div class="health-quick-actions" aria-label="快捷记录">${action('记一餐','add:meal','meal')}${action('记运动','add:exercise','exercise')}${action('记数值','add:metric','metric')}${action('传报告','qc-open:file','file')}</div></div><div class="health-bento"><div class="health-primary"><div class="health-monitoring">${trend}<section class="health-body-metrics" aria-label="最近身体指标">${['weight','sleep','heart'].map(type=>{const m=latest(type);return `<button class="health-body-metric" data-action="trend:${type}"><span class="health-metric-symbol">${icon(({weight:'scale',sleep:'moon',heart:'heart'})[type],23)}</span><span class="health-metric-copy"><span>${metricNames[type]}</span><b>${m?esc(m.value):'—'}<small>${m?esc(m.unit):''}</small></b><time>${m?esc(healthRecordDate(m,today)):'尚未记录'}</time>${m?`<small class="health-record-status">${healthRecordStatus(m,today)}</small>`:''}</span>${icon('arrow',15)}</button>`;}).join('')}</section></div><div class="health-lower-grid"><section class="card health-exercise"><div class="card-head"><h2 class="card-title">近 7 天运动</h2><button class="text-btn" data-action="nav:exercise">运动记录 ${icon('arrow',12)}</button></div><div class="health-exercise-total"><b>${minutes}</b><span>分钟</span><small>${exercise.length} 次已记录的运动</small></div><div class="health-exercise-bars" role="img" aria-label="近7天运动时长，${days.map(x=>x.date+' '+x.minutes+'分钟').join('，')}">${days.map(d=>`<div class="health-exercise-day"><span>${d.minutes||''}</span><div><i style="height:${d.minutes/maxMinutes*100}%"></i></div><time>${d.date===today?'今天':d.date.slice(5).replace('-','/')}</time></div>`).join('')}</div>${lastExercise?`<article class="health-latest-exercise"><div><h3>最近一次运动</h3><time datetime="${esc(lastExercise.date)}${lastExercise.time?'T'+esc(lastExercise.time):''}">${esc(healthRecordDate(lastExercise,today))}</time><p>${esc(lastExercise.title||lastExercise.type||'运动')} · ${esc(lastExercise.duration)} 分钟</p><small class="health-record-status">${healthRecordStatus(lastExercise,today)}</small></div><button class="icon-btn" data-action="edit:${lastExercise.id}" aria-label="查看或编辑${esc(lastExercise.title)}">${icon('arrow',15)}</button></article>`:blank('还没有运动记录。','add:exercise','记运动')}</section><section class="card health-meals"><div class="card-head"><h2 class="card-title">最近饮食</h2><button class="text-btn" data-action="nav:meal">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${meals.length?meals.map(x=>`<article class="health-meal-row"><span class="health-meal-symbol">${icon('meal',27)}</span><div><h3>${esc(x.mealType||'餐食')} <time datetime="${esc(x.date)}${x.time?'T'+esc(x.time):''}">${esc(healthRecordDate(x,today))}</time></h3><p>${esc(x.title)}</p>${x.portion?`<small>${esc(x.portion)}</small>`:''}${aiTag(x)}<small class="health-record-status">${healthRecordStatus(x,today)}</small></div><button class="icon-btn" data-action="edit:${x.id}" aria-label="查看或编辑${esc(x.title)}">${icon('arrow',15)}</button></article>`).join(''):blank('还没有餐食记录。','add:meal','记一餐')}</div></section></div></div><aside class="health-secondary"><section class="card health-water"><div class="card-head"><h2 class="card-title">饮水</h2><button class="icon-btn" data-action="nav:day" aria-label="查看饮水明细">${icon('info',17)}</button></div><div class="health-water-content"><div class="health-water-ring" style="--water-progress:${waterPercent}%" role="img" aria-label="今日饮水${waterMl}毫升，记录目标${waterGoal}毫升，进度${waterPercent}%"><div><b>${waterMl}</b><span>/ ${waterGoal} ml</span></div></div><div class="health-water-actions">${action('记一次饮水','daily-water','plus')}<small>${water.length?`今天已记录 ${water.length} 次`:'今天还没有饮水记录'}</small><button class="text-btn" data-action="nav:settings">调整记录目标</button></div></div></section><section class="card health-tasks"><div class="card-head"><div><h2 class="card-title">近期待办</h2><p>${pending.length} 项未完成</p></div><button class="icon-btn" data-action="add:task" aria-label="添加待办">${icon('plus',17)}</button></div><div class="task-list">${tasks.length?taskRows(tasks,true):blank('安排一件接下来要做的事。','add:task','添加待办')}</div>${pending.length>tasks.length?`<p class="health-task-overflow">仅显示最近 ${tasks.length} 项</p>`:''}<button class="health-all-tasks" data-action="nav:dashboard/tasks">查看全部待办 ${icon('arrow',13)}</button></section><section class="card health-visits"><div class="card-head"><h2 class="card-title">最近就诊</h2><button class="text-btn" data-action="nav:visit">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${visits.length?visits.map(x=>`<button class="health-visit-row" data-action="med-open:${x.id}"><span class="health-metric-symbol">${icon('visit',23)}</span><span><b>${esc(x.title)}</b><small>${esc(healthRecordDate(x,today))} · ${esc(x.hospital||x.department||'机构待补充')}</small><small class="health-record-status">${healthRecordStatus(x,today)}</small></span>${icon('arrow',15)}</button>`).join(''):blank('还没有保存就诊记录。','add:visit','添加就诊')}</div></section><section class="card health-reports"><div class="card-head"><h2 class="card-title">最近报告与资料</h2><button class="text-btn" data-action="med-view:reports">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${report?`<button class="health-visit-row" data-action="${report.kind==='report'?'med-report':'med-preview'}:${report.id}"><span class="health-metric-symbol">${icon('file',23)}</span><span><b>${esc(report.title)}</b><small>${esc(healthRecordDate(report,today))}${report.kind==='report'?' · 报告文字':' · 原件'}</small><small class="health-record-status">${healthRecordStatus(report,today)}</small></span>${icon('arrow',15)}</button>`:blank('还没有报告或资料。','qc-open:file','上传资料')}</div></section></aside></div><details class="health-medication-summary"><summary><span>${icon('heart',18)}今日用药 <small>${medications.length?`${medications.length} 个进行中的方案`:'暂无进行中的方案'}</small></span><span>展开查看 ${icon('arrow',13)}</span></summary>${medical.todayCard()||`<div class="health-empty"><p>按原处方录入用药方案，再记录实际服用情况。</p><button class="text-btn" data-action="med-view:medications">用药管理 ${icon('arrow',12)}</button></div>`}</details></div>`;
+ return `<div class="health-overview"><div class="health-overview-heading"><h1>健康总览</h1><div class="health-quick-actions" aria-label="快捷记录">${action('记一餐','add:meal','meal')}${action('记运动','add:exercise','exercise')}${action('记数值','add:metric','metric')}${action('传报告','qc-open:file','file')}</div></div><div class="health-bento"><div class="health-primary"><div class="health-monitoring">${trend}<section class="health-body-metrics" aria-label="最近身体指标">${['weight','sleep','heart'].map(type=>{const m=latest(type);return `<button class="health-body-metric" data-action="trend:${type}"><span class="health-metric-symbol">${icon(({weight:'scale',sleep:'moon',heart:'heart'})[type],23)}</span><span class="health-metric-copy"><span>${metricNames[type]}</span><b>${m?esc(m.value):'—'}<small>${m?esc(m.unit):''}</small></b><time>${m?esc(healthRecordDate(m,today)):'尚未记录'}</time>${m?`<small class="health-record-status">${healthRecordStatus(m,today)}</small>`:''}</span>${icon('arrow',15)}</button>`;}).join('')}</section></div><div class="health-lower-grid"><section class="card health-exercise"><div class="card-head"><h2 class="card-title">近 7 天运动</h2><button class="text-btn" data-action="nav:exercise">运动记录 ${icon('arrow',12)}</button></div><div class="health-exercise-total"><b>${minutes}</b><span>分钟</span><small>${exercise.length} 次已记录的运动</small></div><div class="health-exercise-bars" role="img" aria-label="近7天运动时长，${days.map(x=>x.date+' '+x.minutes+'分钟').join('，')}">${days.map(d=>`<div class="health-exercise-day"><span>${d.minutes||''}</span><div><i style="height:${d.minutes/maxMinutes*100}%"></i></div><time>${d.date===today?'今天':d.date.slice(5).replace('-','/')}</time></div>`).join('')}</div>${lastExercise?`<article class="health-latest-exercise"><div><h3>最近一次运动</h3><time datetime="${esc(lastExercise.date)}${lastExercise.time?'T'+esc(lastExercise.time):''}">${esc(healthRecordDate(lastExercise,today))}</time><p>${esc(lastExercise.title||lastExercise.type||'运动')} · ${esc(lastExercise.duration)} 分钟</p><small class="health-record-status">${healthRecordStatus(lastExercise,today)}</small></div><button class="icon-btn" data-action="edit:${lastExercise.id}" aria-label="查看或编辑${esc(lastExercise.title)}">${icon('arrow',15)}</button></article>`:blank('还没有运动记录。','add:exercise','记运动')}</section><section class="card health-meals"><div class="card-head"><h2 class="card-title">最近饮食</h2><button class="text-btn" data-action="nav:meal">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${meals.length?meals.map(x=>`<article class="health-meal-row"><span class="health-meal-symbol">${icon('meal',27)}</span><div><h3>${esc(x.mealType||'餐食')} <time datetime="${esc(x.date)}${x.time?'T'+esc(x.time):''}">${esc(healthRecordDate(x,today))}</time></h3><p>${esc(x.title)}</p>${x.portion?`<small>${esc(x.portion)}</small>`:''}${aiTag(x)}<small class="health-record-status">${healthRecordStatus(x,today)}</small></div><button class="icon-btn" data-action="edit:${x.id}" aria-label="查看或编辑${esc(x.title)}">${icon('arrow',15)}</button></article>`).join(''):blank('还没有餐食记录。','add:meal','记一餐')}</div></section></div></div><aside class="health-secondary"><section class="card health-water"><div class="card-head"><h2 class="card-title">饮水</h2><button class="icon-btn" data-action="nav:day" aria-label="查看饮水明细">${icon('info',17)}</button></div><div class="health-water-content"><div class="health-water-ring" style="--water-progress:${waterPercent}%" role="img" aria-label="今日饮水${waterMl}毫升，记录目标${waterGoal}毫升，进度${waterPercent}%"><div><b>${waterMl}</b><span>/ ${waterGoal} ml</span></div></div><div class="health-water-actions">${action('记一次饮水','daily-water','plus')}<small>${water.length?`今天已记录 ${water.length} 次`:'今天还没有饮水记录'}</small><button class="text-btn" data-action="nav:settings">调整记录目标</button></div></div></section><section class="card health-tasks"><div class="card-head"><div><h2 class="card-title">近期待办</h2><p>${pending.length} 项未完成</p></div><button class="icon-btn" data-action="add:task" aria-label="添加待办">${icon('plus',17)}</button></div><div class="task-list">${tasks.length?taskRows(tasks,true):blank('安排一件接下来要做的事。','add:task','添加待办')}</div>${pending.length>tasks.length?`<p class="health-task-overflow">仅显示最近 ${tasks.length} 项</p>`:''}<button class="health-all-tasks" data-action="nav:dashboard/tasks">查看全部待办 ${icon('arrow',13)}</button></section><section class="card health-visits"><div class="card-head"><h2 class="card-title">最近就诊</h2><button class="text-btn" data-action="nav:visit">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${visits.length?visits.map(x=>`<button class="health-visit-row" data-action="med-open:${x.id}">${institutionMark(x,{esc,icon})}<span><b>${esc(x.title)}</b><small>${esc(healthRecordDate(x,today))} · ${esc(x.hospital||x.department||'机构待补充')}</small><small class="health-record-status">${healthRecordStatus(x,today)}</small></span>${icon('arrow',15)}</button>`).join(''):blank('还没有保存就诊记录。','add:visit','添加就诊')}</div></section><section class="card health-reports"><div class="card-head"><h2 class="card-title">最近报告与资料</h2><button class="text-btn" data-action="med-view:reports">全部 ${icon('arrow',12)}</button></div><div class="health-compact-list">${report?`<button class="health-visit-row" data-action="${report.kind==='report'?'med-report':'med-preview'}:${report.id}"><span class="health-metric-symbol">${icon('file',23)}</span><span><b>${esc(report.title)}</b><small>${esc(healthRecordDate(report,today))}${report.kind==='report'?' · 报告文字':' · 原件'}</small><small class="health-record-status">${healthRecordStatus(report,today)}</small></span>${icon('arrow',15)}</button>`:blank('还没有报告或资料。','qc-open:file','上传资料')}</div></section></aside></div><details class="health-medication-summary"><summary><span>${icon('heart',18)}今日用药 <small>${medications.length?`${medications.length} 个进行中的方案`:'暂无进行中的方案'}</small></span><span>展开查看 ${icon('arrow',13)}</span></summary>${medical.todayCard()||`<div class="health-empty"><p>按原处方录入用药方案，再记录实际服用情况。</p><button class="text-btn" data-action="med-view:medications">用药管理 ${icon('arrow',12)}</button></div>`}</details></div>`;
 }
 function detail(x){if(x.kind==='metric')return `${metricNames[x.type]} · ${x.value}${x.secondary?'/'+x.secondary:''} ${x.unit}${x.note?' · '+x.note:''}`;if(x.kind==='exercise')return `${x.type||'运动'} · ${x.duration} 分钟`;if(x.kind==='visit')return `${x.hospital||'机构待补充'} · ${x.city||'城市待补充'} · ${x.department||'未填写科室'} · ${x.status}`;if(x.kind==='meal')return `${x.mealType||'餐食'}`;if(x.kind==='water')return `${x.volume} ml`;return x.note||''}
 function fileReportAction(x){const report=byKind('report').find(r=>r.fileId===x.id);if(!report&&x.fileCategory!=='报告待整理'&&!(route==='visit/inbox'))return '';return `<button class="text-btn" data-action="${report?'med-report:'+report.id:'qc-organize:'+x.id}">${report?'查看就诊报告':'整理为就诊报告'} ${icon('arrow',11)}</button>`;}
@@ -1759,7 +3339,7 @@ function listPage(kind=listKind()){if(kind==='file')return shell.originals.rende
 function filterBar(kind=listKind()){return `<div class="filters"><div class="searchbox">${icon('search',15)}<input id="record-search" placeholder="搜索名称或备注…" aria-label="搜索记录" value="${esc(query)}"></div><div style="display:flex;gap:10px"><input class="filter-input" id="filter-date" type="date" aria-label="筛选日期" value="${filterDate}">${['visit','task','file'].includes(kind)?`<select id="filter-status" class="filter-input" aria-label="筛选状态"><option value="all">全部状态</option>${(kind==='file'?[['pending','待整理'],['linked','已关联']]:kind==='task'?[['done','已完成'],['open','待完成']]:[['待就诊','待就诊'],['已完成','已完成'],['待复查','待复查']]).map(([v,l])=>`<option value="${v}" ${filterStatus===v?'selected':''}>${l}</option>`).join('')}</select>`:''}${btn('重置','reset-filters')}</div></div>`}
 function recordRows(list){if(!list.length)return query||filterDate||filterStatus!=='all'?'<div class="empty">没有符合筛选条件的记录</div>':empty(listKind());return list.map(x=>`<article class="record">${x.kind==='file'?previews.thumb(x):`<span class="event-icon ${x.kind}">${icon(x.kind,19)}</span>`}<div class="record-info"><h3>${x.kind==='task'?`<button class="check ${x.done?'checked':''}" style="display:inline-grid;margin-right:8px;vertical-align:middle" data-action="toggle:${x.id}" aria-label="${x.done?'取消完成':'完成'}：${esc(x.title)}">${x.done?icon('check',12):''}</button>`:''}${x.kind==='file'?`<button class="link-title" data-action="med-preview:${x.id}">${esc(x.title)}</button>`:esc(x.title)}</h3>${aiTag(x)}<p>${x.date} ${esc(x.time||'')}${x.kind==='file'?` · ${Math.ceil(x.size/1024)} KB${x.visitId?' · 关联：'+esc(items.find(i=>i.id===x.visitId)?.title||'原记录已移除'):''}`:x.kind==='task'?` · ${esc(x.category||'日常')} · ${x.done?'已完成':'待完成'}`:' · '+esc(detail(x))}${x.kind==='task'&&x.visitId?` · <button class="text-btn visit-link" data-action="med-open:${x.visitId}">返回关联就诊 ${icon('arrow',11)}</button>`:''}</p>${daily.detail(x)}${x.kind==='meal'?quick.attachments(x):''}${x.kind==='file'?`<div class="file-intake-meta">${fileIsLinked(x)?'<span class="pill">已关联</span>':'<span class="pill neutral">待整理</span>'}${fileReportAction(x)}</div>`:''}${x.note&&['visit','task','file'].includes(x.kind)?`<div class="record-note">${esc(x.note)}</div>`:''}${x.kind==='visit'&&byKind('file').some(f=>f.visitId===x.id)?`<p>${byKind('file').filter(f=>f.visitId===x.id).map(f=>`<a href="/api/files/${f.id}?space=${space}&workbench=${workbench}" download>${icon('file',11)} ${esc(f.title)}</a>`).join(' · ')}</p>`:''}</div>${x.kind==='exercise'?`<div class="record-value">${x.duration}<small>分钟</small></div>`:x.kind==='metric'?`<div class="record-value">${x.value}${x.secondary?'/'+x.secondary:''}<small>${x.unit}</small></div>`:x.kind==='visit'?`<span class="pill visit">${x.status}</span>`:''}<div class="row-actions">${daily.rowActions(x)}${x.kind==='file'?`<a class="icon-btn" href="/api/files/${x.id}?space=${space}&workbench=${workbench}" download aria-label="下载${esc(x.title)}">${icon('download',16)}</a>`:''}<button class="icon-btn" data-action="edit:${x.id}" aria-label="编辑${esc(x.title)}">${icon('edit',15)}</button><button class="icon-btn" data-action="delete:${x.id}" aria-label="删除${esc(x.title)}">${icon('trash',15)}</button></div></article>`).join('')}
 function monitoring(){return `${cgm.card()}<div class="metrics">${stats()}</div>${trendCard()}<div style="height:23px"></div>${filterBar()}<section class="card"><div class="card-head"><h2 class="card-title">监测明细<span class="subtitle">数值按原始单位保存</span></h2></div><div id="records" class="record-list">${recordRows(filtered())}</div></section>`}
-function settingsPage(){return `${cgm.card()}<div class="settings-grid"><section class="card"><div class="card-head"><h2 class="card-title">个人空间</h2></div><form class="settings-pad" id="settings-form" novalidate><div class="field"><label for="display-name">怎么称呼你</label><input id="display-name" name="name" value="${esc(settings.name)}" maxlength="40" required></div><div class="field"><label for="focus">当前关注目标</label><textarea id="focus" name="focus" maxlength="180">${esc(settings.focus)}</textarea><small>记录你希望关注的方向，目标由你自己设定。</small></div><div class="field"><label for="water-goal">每日饮水目标</label><div class="goal-input"><input id="water-goal" name="waterGoalMl" type="text" inputmode="numeric" autocomplete="off" value="${esc(settings.waterGoalMl||2000)}"><span aria-hidden="true">ml</span></div><small>用于今日饮水进度，默认 2000 毫升。</small></div><button class="btn primary" type="submit">保存设置</button></form></section><section class="card"><div class="card-head"><h2 class="card-title">连接与数据</h2></div><div class="settings-pad"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px">${icon('sparkles',16)} AI 模型连接</span><span class="pill">尚未连接</span></div><p class="section-desc" style="margin-top:15px">当前版本可管理记录和生成本地摘要。云端模型对话和报告自动识别尚未接入。</p>${btn('查看健康助手','assistant','','sparkles')}<div class="notice">${icon('shield',17)} 数据仅保存在运行服务的这台电脑。示例空间和个人空间分别保存。</div><div style="margin-top:22px">${btn('导出当前空间记录','export','','download')}<p class="section-desc" style="margin-top:10px">导出 JSON 记录与附件信息；附件原件仍保留在本机。</p></div></div></section></div>`}
+function settingsPage(){return `${cgm.card()}<div class="settings-grid"><section class="card"><div class="card-head"><h2 class="card-title">连接与数据</h2></div><div class="settings-pad"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px">${icon('sparkles',16)} AI 模型连接</span><span class="pill">尚未连接</span></div><p class="section-desc" style="margin-top:15px">当前版本可管理记录和生成本地摘要。云端模型对话和报告自动识别尚未接入。</p>${btn('查看健康助手','assistant','','sparkles')}<div class="notice">${icon('shield',17)} 数据仅保存在运行服务的这台电脑。示例空间和个人空间分别保存。</div><div style="margin-top:22px">${btn('导出当前空间记录','export','','download')}<p class="section-desc" style="margin-top:10px">导出 JSON 记录与附件信息；附件原件仍保留在本机。</p></div></div></section></div>`}
 function field(label,name,value='',type='text',attrs=''){return `<div class="field"><label for="field-${name}">${label}</label><input id="field-${name}" name="${name}" type="${type}" value="${esc(value)}" ${attrs}></div>`}
 function select(label,name,options,value){return `<div class="field"><label for="field-${name}">${label}</label><select id="field-${name}" name="${name}">${options.map(o=>{let [v,l]=Array.isArray(o)?o:[o,o];return `<option value="${esc(v)}" ${v===value?'selected':''}>${esc(l)}</option>`}).join('')}</select></div>`}
 let previousFocus=null;
@@ -1771,12 +3351,12 @@ function guardSnapshot(){const f=$('.drawer form[data-discard-guard]');if(!f)ret
 function markDrawerBaseline(){drawerBaseline=guardSnapshot();}
 function drawerDirty(){const now=guardSnapshot();return now!==null&&drawerBaseline!==null&&now!==drawerBaseline;}
 // Close order: #14 token-reveal guard (「确定已保存？」) first, then #15 half-filled record guard (「放弃这条记录？」).
-function requestClose(){if(account.guardClose?.())return;if($('.discard-confirm'))return;if(!drawerDirty()){closeDrawer();return;}const layer=document.createElement('div');layer.className='discard-layer';layer.innerHTML='<div class="discard-scrim"></div><div class="discard-confirm" role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-desc"><h3 id="discard-title">放弃这条记录？</h3><p id="discard-desc">已填写的内容不会保存。</p><div class="discard-actions"><button type="button" class="btn" id="discard-keep">继续填写</button><button type="button" class="btn discard-yes" id="discard-yes">放弃</button></div></div>';$('#overlay').append(layer);const back=lastDrawerField;const keep=()=>{layer.remove();(back&&back.isConnected&&$('.drawer')?.contains(back)?back:$('.drawer form input:not([type=hidden]):not([type=file]),.drawer form textarea,.drawer form select'))?.focus();};layer.querySelector('#discard-keep').onclick=keep;layer.querySelector('.discard-scrim').onclick=keep;layer.querySelector('#discard-yes').onclick=()=>closeDrawer();layer.querySelector('#discard-keep').focus();}
+function requestClose(afterClose){const finish=()=>{if(typeof afterClose==='function')Promise.resolve().then(afterClose).catch(error=>toast(error.message));};if(componentUI.guardClose()||layoutUI.guardClose())return;if(account.guardClose?.())return;if($('.discard-confirm'))return;if(!drawerDirty()){closeDrawer();finish();return;}const layer=document.createElement('div');layer.className='discard-layer';layer.innerHTML='<div class="discard-scrim"></div><div class="discard-confirm" role="alertdialog" aria-modal="true" aria-labelledby="discard-title" aria-describedby="discard-desc"><h3 id="discard-title">放弃这条记录？</h3><p id="discard-desc">已填写的内容不会保存。</p><div class="discard-actions"><button type="button" class="btn" id="discard-keep">继续填写</button><button type="button" class="btn discard-yes" id="discard-yes">放弃</button></div></div>';$('#overlay').append(layer);const back=lastDrawerField;const keep=()=>{layer.remove();(back&&back.isConnected&&$('.drawer')?.contains(back)?back:$('.drawer form input:not([type=hidden]):not([type=file]),.drawer form textarea,.drawer form select'))?.focus();};if($('#layout-editor-form')){layer.querySelector('#discard-title').textContent='放弃布局修改？';layer.querySelector('#discard-desc').textContent='尚未应用的布局修改不会保存。';layer.querySelector('#discard-keep').textContent='继续编辑';}layer.querySelector('#discard-keep').onclick=keep;layer.querySelector('.discard-scrim').onclick=keep;if($('#component-editor-form,#component-placement-form')){layer.querySelector('#discard-title').textContent='放弃组件修改？';layer.querySelector('#discard-desc').textContent='尚未保存的组件修改不会保留。';layer.querySelector('#discard-keep').textContent='继续编辑';}layer.querySelector('#discard-yes').onclick=()=>{closeDrawer();finish();};layer.querySelector('#discard-keep').focus();}
 // A field hidden in a collapsed <details> (e.g. 时间与备注 date beyond max=today) must be visible for the browser to focus it.
 document.addEventListener('invalid',e=>{const t=e.target;if(t?.name==='date'&&t.validity?.rangeOverflow&&t.form){e.preventDefault();showFieldError(t.form,{field:'date',message:'不能记录未来的日期'});return;}const d=t.closest?.('details');if(d)d.open=true;},true);
 // Last field focused inside the drawer, so 「继续填写」 can return focus there instead of ×.
 let lastDrawerField=null;document.addEventListener('focusin',e=>{if(e.target.matches?.('.drawer input,.drawer textarea,.drawer select'))lastDrawerField=e.target;});
-function closeDrawer(){previews.cleanupViewer();quick.cleanup();$('#overlay').innerHTML='';document.body.classList.remove('scroll-lock');previousFocus?.focus({preventScroll:true})}
+function closeDrawer(){if($('#component-editor-form,#component-placement-form'))componentUI.onDrawerClose();if($('#layout-editor-form'))layoutUI.onDrawerClose();previews.cleanupViewer();quick.cleanup();$('#overlay').innerHTML='';document.body.classList.remove('scroll-lock');previousFocus?.focus({preventScroll:true})}
 function openForm(kind,id=null,draft={}){drawerKind=kind;editing=id;const x={...(items.find(i=>i.id===id)||{date:today,type:kind==='metric'?metricType:kind==='exercise'?'步行':'',status:'待就诊',category:'日常',mealType:'早餐'}),...draft};let fields='';
  if(kind==='metric')fields=select('监测项目','type',Object.entries(metricNames),x.type)+`<div class="form-grid">${field(x.type==='pressure'?'收缩压':'数值','value',x.value||'','number','required min="0.01" max="10000" step="any"')}${x.type==='pressure'?field('舒张压','secondary',x.secondary||'','number','required min="1" step="any"'):field('单位','unit',units[x.type],'text','readonly')}</div>`;
  if(kind==='visit')fields=institutionFields(x,{field,esc})+field('就诊医生','doctor',x.doctor||'','text','maxlength="250"')+select('当前状态','status',['待就诊','已完成','待复查'],x.status)+[['就诊原因 / 主诉','reason'],['医生记录 / 结论原文','assessment'],['医嘱与注意事项','instructions']].map(([l,k])=>`<div class="field"><label for="field-${k}">${l}</label><textarea id="field-${k}" name="${k}" maxlength="8000" placeholder="按实际情况或原文填写">${esc(x[k]||'')}</textarea></div>`).join('');
@@ -1802,8 +3382,12 @@ let toastTimer;function toast(message,actionLabel='',action=''){$('#toast').inne
 // Keep the toast 8px above the mobile bottom navigation (its rect already includes the safe-area inset).
 function placeToast(){const t=$('#toast'),nav=$('.bottom-tabs');const r=nav&&getComputedStyle(nav).display!=='none'?nav.getBoundingClientRect():null;t.style.bottom=r&&r.height?`${Math.max(0,window.innerHeight-r.top)+8}px`:'';}
 window.addEventListener('resize',()=>{if($('#toast')?.style.display==='flex')placeToast();});
-function navigate(p){if(!applicationReady)return;if(workbench==='health')p=normalizeHealthRoute(p);clearTimeout(toastTimer);if($('#toast'))$('#toast').style.display='none';route=p;page=p.split('/')[0];location.hash=p;query='';filterDate='';filterStatus='all';closeDrawer();render();window.scrollTo(0,0)}
+function navigate(p){if(!applicationReady)return;if(p!==route)componentUI.cleanup({resetView:false});if(p!=='dashboard')layoutUI.cleanup({resetSnapshot:false});if(workbench==='health')p=normalizeHealthRoute(p);clearTimeout(toastTimer);if($('#toast'))$('#toast').style.display='none';route=p;page=p.split('/')[0];location.hash=p;query='';filterDate='';filterStatus='all';closeDrawer();render();window.scrollTo(0,0)}
 document.addEventListener('click',async e=>{if(!applicationReady)return;const el=e.target.closest('[data-action]');if(!el)return;const [action,arg]=el.dataset.action.split(':');try{
+ if(componentUI.isPreview()&&!componentUI.allowsPreviewAction(action)){toast('正在预览组件，请先保存、继续编辑或退出预览');return;}
+ if(action.startsWith('component-')){if(layoutUI.isPreview()||layoutUI.isFrame()){toast('请先退出布局预览');return;}await componentUI.handle(action,arg);return;}
+ if(action.startsWith('layout-')){await layoutUI.handle(action,arg);return;}
+ if((layoutUI.isFrame()||layoutUI.isPreview())&&action!=='trend'){toast('正在预览布局，请先应用或退出预览');return;}
  if(action==='account-open'||action==='account-desktop'){await account.open();return;}
  if(action.startsWith('original-')){await shell.originals.handle(action,arg,el);return;}
  if(action.startsWith('reading-')){await shell.reading.handle(action,arg,el);return;}
@@ -1819,7 +3403,7 @@ document.addEventListener('click',async e=>{if(!applicationReady)return;const el
  else if(action==='edit'){const x=items.find(x=>x.id===arg);if(x.kind==='water'){await daily.handle('daily-water-edit',arg,el);return;}if(['meal','exercise'].includes(x.kind)){quick.open(x.kind,x);return;}if(['medication','report','dose'].includes(x.kind))medical.openMedical(x.kind,arg);else openForm(x.kind,arg)}
  else if(action==='close')requestClose();
  else if(action==='personal'){await setSpace('personal');toast('已进入个人空间')}
- else if(action==='trend'){metricType=arg;render()}
+ else if(action==='trend'){metricType=arg;layoutUI.rememberTrend(metricType,range);render()}
  else if(action==='toggle'){const x=items.find(x=>x.id===arg);await api('/api/items/'+arg,{method:'PUT',body:JSON.stringify({done:!x.done})});await load();toast(x.done?'已取消完成':'计划已完成，给自己一点肯定')}
  else if(action==='delete'){const x=items.find(x=>x.id===arg);openDrawer(`<p class="section-desc">确定移除「${esc(x.title)}」？移除后 12 秒内可以撤销，之后 30 天内可在「我的 → 最近删除」恢复。${x.kind==='visit'?'关联附件会保留在资料档案中。':''}</p>`,'移除记录',space==='demo'?'示例空间':'个人空间',`${btn('取消','close')}${btn('确认移除','confirm-delete:'+arg,'danger','trash')}`)}
  else if(action==='confirm-delete'){const targetSpace=space,targetWorkbench=workbench,targetName=workbenches.find(w=>w.id===workbench)?.name||'原工作台',dialog=$('.drawer');const r=await api('/api/items/'+arg,{method:'DELETE'},targetSpace,targetWorkbench);undo={space:targetSpace,workbench:targetWorkbench,name:targetName,record:r.deleted};if(dialog?.isConnected)closeDrawer();await load();toast(`已从${targetName}工作台移除记录`,`撤销${targetName}记录`,'undo')}
@@ -1835,21 +3419,26 @@ document.addEventListener('click',async e=>{if(!applicationReady)return;const el
  else if(action==='reset-filters'){query='';filterDate='';filterStatus='all';render()}
  else if(action==='export'){const data=await api('/api/export');const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`${workbench}-${space}-${today}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('记录已导出')}
  }catch(err){toast(err.message)}});
-document.addEventListener('keydown',e=>{if(!applicationReady)return;if(e.key==='Escape'){if($('.discard-confirm'))$('#discard-keep').click();else requestClose();}if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(workbench==='health')assistant();else shell.handle('shell-capture')}if(e.key==='Tab'&&$('.drawer')){const controls=[...$('.drawer').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.offsetParent!==null);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
+document.addEventListener('keydown',e=>{if(!applicationReady)return;if(e.key==='Escape'){if($('.discard-confirm'))$('#discard-keep').click();else requestClose();}if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();if(layoutUI.isBusy()||layoutUI.isPreview()||layoutUI.isFrame()||componentUI.isBusy()||componentUI.isPreview())return;if($('#layout-editor-form,#component-editor-form,#component-placement-form')){requestClose();return;}if(workbench==='health')assistant();else shell.handle('shell-capture')}if(e.key==='Tab'&&$('.drawer')){const controls=[...$('.drawer').querySelectorAll('button,input,select,textarea,a[href]')].filter(x=>!x.disabled&&x.offsetParent!==null);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}});
 window.addEventListener('hashchange',()=>{if(!applicationReady)return;const p=location.hash.slice(1)||'dashboard';if(p!==route)navigate(p)});
 const previews=createFilePreviews({closeDrawer,onRestore:()=>{if(!applicationReady)return;shownState=null;items=[];settings={};invalidateStateCache();$('#app').innerHTML=homeSkeleton();return load();},onUnauthorized:()=>account.handleUnauthorized(),get items(){return items},get space(){return space},get workbench(){return workbench},openDrawer,esc,icon,btn});
 const medical=createMedical({get originals(){return shell.originals},previews,get trashedIds(){return trashedIds},get items(){return items},get space(){return space},get today(){return today},get workbench(){return workbench},recordRows,fileIsLinked,api,load,render,navigate,openDrawer,closeDrawer,openForm,toast,icon,esc,field,select,btn});
 const quick=createQuick({markDrawerBaseline,get items(){return items},get space(){return space},get today(){return today},get workbench(){return workbench},get medical(){return medical},inbox:()=>navigate('visit/inbox'),api,load,navigate,openDrawer,closeDrawer,toast,icon,esc,field,btn});
 const cgm=createCgmUI({api,esc,icon,btn,openDrawer,closeDrawer,toast,get space(){return space},get workbench(){return workbench},get today(){return today},get userId(){return account.user?.id}});
 const daily=createDaily({markDrawerBaseline,get items(){return items},get settings(){return settings},get space(){return space},get today(){return today},get page(){return page},get workbench(){return workbench},get quick(){return quick},api,load,render,navigate,openDrawer,closeDrawer,toast,icon,esc,field,btn,recordRows});
-async function setSpace(next){shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();space=next==='personal'?'personal':'demo';localStorage.setItem('health-space',space);query='';filterDate='';filterStatus='all';undo=null;closeDrawer();items=[];loadSequence++;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;workbenches=cached.data.workbenches||workbenches;render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
-async function switchWorkbench(id){shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();if(!workbenches.some(w=>w.id===id)){toast('工作台不存在');return;}const routes=JSON.parse(localStorage.getItem('workbench-routes')||'{}');routes[workbench]=route;localStorage.setItem('workbench-routes',JSON.stringify(routes));closeDrawer();workbench=id;localStorage.setItem('active-workbench',id);items=[];settings={name:'Captain',focus:''};query='';filterDate='';filterStatus='all';undo=null;$('#toast').style.display='none';loadSequence++;route=routes[id]||'dashboard';page=route.split('/')[0];location.hash=route;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){/* stale-while-revalidate: any age */shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
+async function setSpace(next){componentUI.cleanup();layoutUI.cleanup();shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();space=next==='personal'?'personal':'demo';localStorage.setItem('health-space',space);query='';filterDate='';filterStatus='all';undo=null;closeDrawer();items=[];loadSequence++;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;workbenches=cached.data.workbenches||workbenches;layoutUI.setSnapshot(cached.data.layout);componentUI.setView(cached.data.componentView);render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
+async function switchWorkbench(id){componentUI.cleanup();layoutUI.cleanup();shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();if(!workbenches.some(w=>w.id===id)){toast('工作台不存在');return;}const routes=JSON.parse(localStorage.getItem('workbench-routes')||'{}');routes[workbench]=route;localStorage.setItem('workbench-routes',JSON.stringify(routes));closeDrawer();workbench=id;localStorage.setItem('active-workbench',id);items=[];query='';filterDate='';filterStatus='all';undo=null;$('#toast').style.display='none';loadSequence++;route=routes[id]||'dashboard';page=route.split('/')[0];location.hash=route;const cached=stateCache.get(cacheKey(space,workbench));refreshFailure=null;if(cached){/* stale-while-revalidate: any age */shownState=cacheKey(space,workbench)+'\n'+JSON.stringify(cached.data);items=cached.data.items;trashedIds=cached.data.trashedIds||[];settings=cached.data.settings;today=cached.data.today;layoutUI.setSnapshot(cached.data.layout);componentUI.setView(cached.data.componentView);render();await load({retainOnError:true});}else{shownState=null;renderSwitchSkeleton();await load();}}
 // Keep sidebar + bottom navigation; only the content area becomes the home skeleton while data loads.
 function renderSwitchSkeleton(){render();const main=$('#app main');if(main)main.innerHTML=homeSkeleton();else $('#app').innerHTML=homeSkeleton();}
 // Home skeleton shown the instant login succeeds, until the workbench renders.
 const homeSkeleton=()=>'<div class="home-skeleton" role="status" aria-busy="true" aria-label="正在打开工作台"><div class="sk sk-title"></div><div class="sk sk-card"></div><div class="sk sk-row"></div><div class="sk sk-row"></div><div class="sk sk-row short"></div></div>';
-const account=createAccount({openDrawer,closeDrawer,toast,onUnauthorized:()=>{shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};undo=null;},loginQuery:()=>'?space=personal&workbench=health',onAuthenticated:async(_user,result)=>{shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;invalidateStateCache();items=[];settings={};undo=null;loadSequence++;space='personal';workbench='health';route='dashboard';page='dashboard';workbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'资产',type:'finance'},{id:'travel',name:'旅行',type:'travel'},{id:'reading',name:'阅读',type:'reading'}];localStorage.setItem('health-space',space);localStorage.setItem('active-workbench',workbench);history.replaceState(null,'','#dashboard');$('#overlay').replaceChildren();$('#app').innerHTML=homeSkeleton();applicationReady=true;const state=result?.state;if(state&&result.me?.user?.id===account.user?.id&&state.space===space&&state.workbench?.id===workbench){loadSequence++;applyState(cacheKey(space,workbench),state);}else await load();}});
+const account=createAccount({openDrawer,closeDrawer,toast,onProfileChanged:async()=>{invalidateStateCache();await load();},onUnauthorized:()=>{componentUI.cleanup({keepLink:true});layoutUI.cleanup({keepLink:true});shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;loadSequence++;invalidateStateCache();items=[];settings={};undo=null;},loginQuery:()=>'?space=personal&workbench=health',onAuthenticated:async(_user,result)=>{componentUI.cleanup({keepLink:true});layoutUI.cleanup({keepLink:true});shell.assets.cleanup();shell.travel.cleanup();shell.reading.cleanup();shell.originals.cleanup();cgm.cleanup();previews.cleanupAll();closeDrawer();applicationReady=false;invalidateStateCache();items=[];settings={};undo=null;loadSequence++;space='personal';workbench='health';route='dashboard';page='dashboard';workbenches=[{id:'health',name:'健康',type:'health'},{id:'finance',name:'资产',type:'finance'},{id:'travel',name:'旅行',type:'travel'},{id:'reading',name:'阅读',type:'reading'}];localStorage.setItem('health-space',space);localStorage.setItem('active-workbench',workbench);history.replaceState(null,'','#dashboard');$('#overlay').replaceChildren();$('#app').innerHTML=homeSkeleton();applicationReady=true;const state=result?.state;if(state&&result.me?.user?.id===account.user?.id&&state.space===space&&state.workbench?.id===workbench){loadSequence++;applyState(cacheKey(space,workbench),state);}else await load();await layoutUI.initializePreview();await componentUI.initializePreview();}});
 const shell=createShell({get items(){return items},get settings(){return settings},get space(){return space},get today(){return today},get page(){return page},get workbench(){return workbench},get workbenches(){return workbenches},get account(){return account},healthOriginalAction:fileReportAction,previews,api,load,render,navigate,setSpace,switchWorkbench,refreshRegistry:async created=>{if(!workbenches.some(x=>x.id===created.id))workbenches.push(created)},openDrawer,closeDrawer,toast,icon,esc,field,btn});
+const layoutUI=createLayoutUI({get userId(){return account.user?.id},get ready(){return applicationReady},get workbench(){return workbench},get route(){return route},get space(){return space},api,load,render,openDrawer,closeDrawer,toast,esc,icon,invalidateCache:invalidateStateCache,enterDashboard:()=>{route='dashboard';page='dashboard';},getTrend:()=>({metric:metricType,range}),setTrend:(metric,days)=>{if(metric)metricType=metric;if(days)range=days},previewTheme:color=>{for(const [key,value]of Object.entries(workbenchTheme(color,'health')))document.body.style.setProperty(key,value)}});
+const componentUI=createComponentUI({get userId(){return account.user?.id},get ready(){return applicationReady},get workbench(){return workbench},get workbenches(){return workbenches},get route(){return route},get page(){return page},get space(){return space},api,load,render,openDrawer,closeDrawer,requestClose,toast,esc,icon,invalidateCache:invalidateStateCache,layoutReadOnly:()=>layoutUI.isPreview()||layoutUI.isFrame(),clearLayoutPreview:()=>layoutUI.cleanup({resetSnapshot:false}),enterDashboard:()=>{route=workbench==='reading'?'books':'dashboard';page=route;history.replaceState(null,'',location.pathname+location.search+'#'+route);}});
+if(new URLSearchParams(location.search).has('componentPreview'))layoutUI.cleanup({resetSnapshot:false});
 // One startup request (/api/bootstrap) replaces /api/auth/me + /api/state; any failure falls back to the old sequence.
 let boot=null;try{const body=await api('/api/bootstrap',{timeoutMs:7000});if(body?.me)boot=body;}catch{}
 if(await account.initialize(boot?.me)){applicationReady=true;if(account.enabled&&!localStorage.getItem('health-space'))space='personal';const state=boot?.state;if(state&&state.space===space&&state.workbench?.id===workbench){loadSequence++;applyState(cacheKey(space,workbench),state);}else await load();}
+await layoutUI.initializePreview();
+await componentUI.initializePreview();

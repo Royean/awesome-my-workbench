@@ -21,3 +21,50 @@ test('bookshelf provides PDF dropzone and rejects stale drop handlers',()=>{cons
 test('PDF drop import validates files and prefills a paper confirmation without uploading',()=>{const previous=globalThis.document;const c=fixture();let html='',writes=0,errors=[];const element={};globalThis.document={querySelector:()=>element};c.openDrawer=content=>{html=content};c.api=()=>{writes++};c.toast=message=>errors.push(message);try{const originals=createOriginals(c);for(const list of [[],[{name:'x.txt',size:12,type:'text/plain'}],[{name:'x.pdf',size:0}],[{name:'x.pdf',size:11*1024*1024}],[{name:'a.pdf',size:1},{name:'b.pdf',size:1}]])originals.importFiles(list);assert.equal(errors.length,5);assert.equal(html,'');originals.importFiles([{name:'<paper>.pdf',type:'application/pdf',size:1200}]);assert.match(html,/&lt;paper&gt;.pdf/);assert.match(html,/<option value="paper" selected>/);assert.match(html,/data-import-file/);assert.doesNotMatch(html,/accept="[^"]*" required/);assert.equal(writes,0);html='';c.workbench='health';originals.importFiles([{name:'paper.pdf',size:1200}]);assert.equal(html,'');}finally{globalThis.document=previous;}});
 test('reader saves scoped highlights and notes without closing viewer and reopens their exact original anchor',async()=>{const c=fixture();const f={id:'f1',kind:'file',bookId:book.id,mime:'text/plain'},foreign={id:'other',date:'2026-11-02',title:'foreign',kind:'reading_entry',bookId:'otherBook',fileId:'f1',annotationType:'highlight'};c.items=[{...book},f,foreign];let options,writes=0;c.previews.open=async(file,opts)=>{assert.equal(file.id,'f1');options=opts;};c.api=async(url,opts)=>({id:'mark'+(++writes),...JSON.parse(opts.body)});c.closeDrawer=()=>assert.fail('reader must remain open');c.load=()=>assert.fail('reader must remain open');const ui=createReading(c);await ui.handle('reading-read',book.id);assert.deepEqual(options.annotations,[]);assert.equal(options.onQuote,undefined);const mark=await options.onAnnotate({quote:'selected text',page:2,startOffset:4,endOffset:17,color:'yellow',annotationType:'highlight'});assert.equal(mark.fileId,'f1');assert.equal(mark.bookId,book.id);assert.equal(c.items.at(-1).id,'mark1');const note=await options.onAnnotate({quote:'selected text',page:2,startOffset:4,endOffset:17,color:'green',annotationType:'note',note:'my thought'});assert.equal(note.note,'my thought');await ui.handle('reading-read-note',mark.id);assert.equal(options.initialPage,2);assert.equal(options.initialAnnotation.startOffset,4);assert.equal(options.annotations.length,2);c.page='entries';const html=ui.render();assert.match(html,/reading-read-note:mark1/);assert.match(html,/划线/);assert.match(html,/批注/);c.space='demo';await assert.rejects(options.onAnnotate({quote:'bad',page:1}),/工作台或账号已变化/);assert.equal(writes,2);});
 test('reading overview counts recorded minutes in its actual rolling window and keeps plans as drawer actions',()=>{const c=fixture();c.items=[book,{id:'old',kind:'reading_entry',bookId:'b1',date:'2026-10-26',minutes:90},{id:'now',kind:'reading_entry',bookId:'b1',date:'2026-11-02',minutes:20},{id:'future',kind:'reading_entry',bookId:'b1',date:'2026-11-03',minutes:40},{id:'plan',kind:'task',title:'next reading',date:'2026-11-03',done:false}];const html=createReading(c).render();assert.match(html,/studio-reading-minutes"><strong>20<\/strong>/);assert.match(html,/shell-edit:plan/);assert.match(html,/reading-dropzone/);assert.doesNotMatch(html,/studio-reading-minutes"><strong>150<\/strong>/);});
+
+test('opening and browsing a note on another original leaves the shelf position intact', async () => {
+  const c = fixture();
+  const savedBook = {...book, status: 'finished', readerFileId: 'f1'};
+  const shelfBook = {...savedBook};
+  const shelfFile = {id: 'f1', kind: 'file', bookId: book.id, mime: 'application/pdf'};
+  const noteFile = {id: 'f2', kind: 'file', bookId: book.id, mime: 'text/plain'};
+  const note = {id: 'e1', kind: 'reading_entry', bookId: book.id, fileId: noteFile.id, page: 1, quote: 'text', startOffset: 0, endOffset: 4, annotationType: 'highlight'};
+  c.items = [shelfBook, shelfFile, noteFile, note];
+
+  let viewer;
+  const requests = [];
+  c.previews.open = async (file, options) => {
+    viewer = {file, options};
+    // The preview reports both its initial page and later navigation via onPage.
+    await options.onPage?.(options.initialPage, file.id === noteFile.id ? 3 : 240);
+  };
+  c.api = async (url, {method, body}) => {
+    const data = JSON.parse(body);
+    requests.push({url, method, data});
+    return {item: {id: 'e2', ...data}};
+  };
+
+  const ui = createReading(c);
+  await ui.handle('reading-read-note', note.id);
+  assert.equal(viewer.file, noteFile);
+  assert.equal(viewer.options.initialPage, 1);
+  assert.equal(viewer.options.initialAnnotation, note);
+  await viewer.options.onPage?.(2, 3);
+  assert.deepEqual(requests, []);
+  assert.deepEqual(shelfBook, savedBook);
+
+  const annotation = await viewer.options.onAnnotate({quote: 'more', page: 2, startOffset: 0, endOffset: 4, annotationType: 'note', note: 'my thought'});
+  assert.equal(annotation.fileId, noteFile.id);
+  assert.equal(c.items.at(-1), annotation);
+  assert.deepEqual(requests.map(({method, data}) => [method, data.kind]), [['POST', 'reading_entry']]);
+
+  await ui.handle('reading-read', book.id);
+  assert.equal(viewer.file, shelfFile);
+  assert.equal(viewer.options.initialPage, 42);
+  await viewer.options.onPage(43, 240);
+  assert.deepEqual(requests.slice(1).map(({method, data}) => [method, data.currentPage, data.readerFileId]), [
+    ['PUT', 42, shelfFile.id],
+    ['PUT', 43, shelfFile.id]
+  ]);
+  assert.equal(shelfBook.currentPage, 43);
+});

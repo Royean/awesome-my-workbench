@@ -38,3 +38,41 @@ test('editing a reloaded asset preserves a cleared renewal currency and its deta
  const c=fixture('fixed'),fields=[];c.items=[asset('cleared','server',{renewalAmount:199,renewalCurrency:'',currency:'CNY'})];c.field=(label,name,value)=>{fields.push({name,value});return '';};let html='';c.openDrawer=markup=>{html=markup;};c.toast=()=>{};const previous=globalThis.document;globalThis.document={querySelector:()=>({})};try{const ui=createAssetsUI(c);await ui.handle('asset-edit','cleared');assert.equal(fields.find(x=>x.name==='renewalCurrency').value,'');await ui.handle('asset-detail','cleared');assert.match(html,/199 · 币种待补/);assert.doesNotMatch(html,/¥199/);}finally{if(previous===undefined)delete globalThis.document;else globalThis.document=previous;}
 });
 test('asset dashboard preserves currency groups, incomplete liabilities and account balance attribution',()=>{const c=fixture('dashboard');c.items=[asset('fund','fund',{value:100}),asset('dollar','stock',{value:70,currency:'USD'}),{id:'cash-account',kind:'asset_account',title:'计入的账户',currency:'CNY',balance:50,includeInTotal:true,date:c.today},{id:'debt',kind:'asset_liability',title:'待核对负债',currency:'CNY',balance:null,status:'pending',date:c.today}];const html=createAssetsUI(c).render();assert.match(html,/CNY · 已知资产估值/);assert.match(html,/asset-overview-currency:USD/);assert.match(html,/明确计入的账户余额/);assert.match(html,/待核实（1项）/);assert.match(html,/150\.00/);assert.match(html,/70\.00/);assert.match(html,/按币种分别统计，不自动换汇/);});
+
+test('asset forms select the imported currency and retain the standard choices',async t=>{
+ const c=fixture('fixed');
+ c.items=[
+  {id:'account',kind:'asset_account',currency:'SGD',balance:125,includeInTotal:true},
+  asset('holding','server',{currency:'CAD',renewalAmount:49,renewalCurrency:'USD'}),
+  {id:'liability',kind:'asset_liability',currency:'SGD'},
+  {id:'transaction',kind:'asset_transaction',currency:'CAD'},
+  {id:'snapshot',kind:'asset_snapshot',currency:'SGD'},
+  {id:'standard',kind:'asset_account',currency:'EUR'}
+ ];
+ const fields={};
+ c.field=(label,name,value)=>{fields[name]=value;return '';};
+ let html='';
+ c.openDrawer=markup=>{html=markup;};
+ const previous=globalThis.document;
+ globalThis.document={querySelector:()=>({})};
+ t.after(()=>{if(previous===undefined)delete globalThis.document;else globalThis.document=previous;});
+
+ const ui=createAssetsUI(c);
+ const standardCurrencies=['CNY','USD','HKD','EUR','JPY','GBP'];
+ function checkCurrencyOptions(selected,options){
+  const select=html.match(/<select id="asset-currency"[^>]*>(.*?)<\/select>/)?.[1]||'';
+  assert.deepEqual(Array.from(select.matchAll(/<option value="([^"]+)"/g),match=>match[1]),options);
+  assert.match(select,new RegExp(`<option value="${selected}" selected>`));
+ }
+ for(const item of c.items){
+  await ui.handle('asset-edit',item.id);
+  const options=standardCurrencies.includes(item.currency)?standardCurrencies:[...standardCurrencies,item.currency];
+  checkCurrencyOptions(item.currency,options);
+  if(item.id==='holding'){
+   assert.equal(fields.renewalAmount,49);
+   assert.equal(fields.renewalCurrency,'USD');
+  }
+ }
+ await ui.handle('asset-add','asset_account');
+ checkCurrencyOptions('CNY',standardCurrencies);
+});

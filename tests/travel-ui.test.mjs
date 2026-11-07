@@ -13,3 +13,43 @@ test('travel date and ordering helpers respect leap days and do not mutate sourc
 test('travel selection is cleared across owner/space changes and its default theme is independent',()=>{const c=fixture();c.items=[t];c.page='trip';const u=createTravel(c);assert.match(u.render(),/虚构旅行/);c.account.user.id='another';c.items=[];assert.doesNotMatch(u.render(),/虚构旅行/);assert.match(u.render(),/先选择或新建/);assert.equal(workbenchTheme(undefined,'travel')['--theme-accent'],'#356A98');assert.equal(workbenchTheme(undefined,'finance')['--theme-accent'],'#A65343');assert.equal(workbenchTheme(undefined,'health')['--theme-accent'],'#2C6B51');});
 test('preparation forms allow dates before departure while stop dates stay inside the trip',async()=>{const c=fixture(),fields=[];c.items=[t];c.openDrawer=()=>{};c.toast=()=>{};c.field=(label,name,value,type,attrs)=>{fields.push({name,attrs});return '';};const previous=Object.getOwnPropertyDescriptor(globalThis,'document');Object.defineProperty(globalThis,'document',{configurable:true,value:{querySelector:()=>({})}});try{const u=createTravel(c);await u.handle('travel-add','travel_check');assert.equal(fields.find(x=>x.name==='date').attrs,'required');fields.length=0;await u.handle('travel-add','travel_stop');assert.match(fields.find(x=>x.name==='date').attrs,/min="2026-11-03"/);assert.match(fields.find(x=>x.name==='date').attrs,/max="2026-11-05"/);}finally{if(previous)Object.defineProperty(globalThis,'document',previous);else delete globalThis.document;}});
 test('travel dashboard summarizes only the selected trip and leaves map loading explicit',()=>{const c=fixture();c.items=[t,{id:'s1',kind:'travel_stop',tripId:t.id,date:t.date,time:'09:00',title:'本次旅行地点'},{id:'check',kind:'travel_check',tripId:t.id,date:c.today,title:'本次准备事项',done:true},{id:'b1',kind:'travel_booking',tripId:t.id,date:t.date,title:'本次预订',status:'confirmed'},{id:'other-stop',kind:'travel_stop',tripId:'other',date:t.date,title:'另一旅行地点'},{id:'other-check',kind:'travel_check',tripId:'other',date:c.today,title:'另一旅行准备事项'}];const html=createTravel(c).render();for(const text of ['旅行总览','每日行程','准备进度','本次旅行地点','本次预订','本次准备事项','加载地图'])assert.match(html,new RegExp(text));assert.doesNotMatch(html,/另一旅行地点|另一旅行准备事项|<img|<iframe/);assert.match(html,/--progress:100%/);assert.match(html,/travel-selected-trip/);});
+test('daily travel views omit cancelled bookings before limiting the preview', () => {
+  const c = fixture();
+  const booking = {kind:'travel_booking',tripId:t.id,date:t.date,bookingType:'flight'};
+  const cancelled = {...booking,id:'cancelled-first',title:'取消机票',time:'07:00',status:'cancelled'};
+  c.items = [
+    t,
+    {...booking,id:'confirmed',title:'确认机票',time:'10:00',status:'confirmed'},
+    cancelled,
+    {...booking,id:'legacy',title:'旧机票',time:'11:00'},
+    {kind:'travel_stop',tripId:t.id,date:t.date,id:'stop',title:'参观展览',time:'09:00'},
+    {...booking,id:'planned',title:'待确认机票',time:'08:00',status:'planned'},
+    {...booking,id:'cancelled-second',title:'取消住宿',date:'2026-11-04',status:'cancelled'},
+  ];
+  const travel = createTravel(c);
+  const preview = () => travel.render().match(/<section class="card domain-day-preview">([\s\S]*?)<\/section>/)[1];
+  const previewIds = () => Array.from(preview().matchAll(/class="domain-itinerary-row" data-action="travel-edit:([^"]+)"/g), match => match[1]);
+  const orderedIds = ['planned', 'stop', 'confirmed', 'legacy'];
+  assert.deepEqual(previewIds(), orderedIds);
+  assert.match(travel.render(), /<strong>5<\/strong><small>笔预订记录/);
+
+  c.page = 'trip';
+  const itinerary = travel.render();
+  const dailyIds = html => Array.from(html.matchAll(/data-action="travel-edit:([^"]+)" aria-label="编辑/g), match => match[1]);
+  assert.deepEqual(dailyIds(itinerary), orderedIds);
+  assert.match(itinerary, /<h2>2026-11-04<\/h2>.*?<\/header><p class="travel-day-empty">这一天还没有安排/);
+
+  c.page = 'bookings';
+  assert.match(travel.render(), /取消机票<\/strong><span class="travel-status cancelled">已取消<\/span>.*?data-action="travel-edit:cancelled-first"/);
+
+  c.page = 'dashboard';
+  c.today = '2026-11-04';
+  assert.deepEqual(previewIds(), []);
+  assert.match(preview(), /这一天还没有安排/);
+
+  cancelled.status = 'confirmed';
+  c.today = t.date;
+  assert.deepEqual(previewIds(), ['cancelled-first', ...orderedIds.slice(0, 3)]);
+  c.page = 'trip';
+  assert.deepEqual(dailyIds(travel.render()), ['cancelled-first', ...orderedIds]);
+});

@@ -187,6 +187,34 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "leshan-people",
+    "catalogHospitalId": "ahospital-05d275b74b24aac42afe",
+    "name": "乐山市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "乐山",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-3897da8321a4923077b8947ed46c1a968b63aa881380030259e495fc5a516490.png",
+    "website": "https://leshan-hospital.com.cn/",
+    "sourceUrl": "https://www.leshan-hospital.com.cn/aspx/index.html",
+    "logoSourceUrl": "https://www.leshan-hospital.com.cn/aspx/img/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-0fdc9b9c16409e20b61d",
+    "catalogHospitalId": "ahospital-0fdc9b9c16409e20b61d",
+    "name": "首都医科大学附属复兴医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-45968896b43c13f886562637c6ba56752123ccbe19251e681de0028c317e7e75.jpg",
+    "website": "https://www.bj-fxh.com.cn/",
+    "sourceUrl": "https://www.bj-fxh.com.cn/",
+    "logoSourceUrl": "https://www.bj-fxh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
     "id": "nanjing-gulou",
     "catalogHospitalId": "ahospital-19eb6ebd3f30af32360d",
     "name": "南京鼓楼医院",
@@ -202,6 +230,106 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.njglyy.com/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/nanjing-gulou.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-237ff1bce8629f101f52",
+    "catalogHospitalId": "ahospital-237ff1bce8629f101f52",
+    "name": "北京大学第六医院",
+    "aliases": [
+      "北医六院",
+      "北大六院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-fb0f174c4867812d6f0138dfe4e6fbcf2091e45e53c453fc7303fe3782321805.jpg",
+    "website": "https://www.pkuh6.cn/Html/Index.html",
+    "sourceUrl": "https://www.pkuh6.cn/Html/Index.html",
+    "logoSourceUrl": "https://www.pkuh6.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-first",
+    "catalogHospitalId": "ahospital-2c3abb0ce4f79bce1022",
+    "name": "北京大学第一医院",
+    "aliases": [
+      "北大医院",
+      "北大一院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-f4dd30fcec2168752b0b0abc7de14af9b7d38ffb5cd966028f043cf4edf11b94.jpg",
+    "website": "https://www.pkufh.com/",
+    "sourceUrl": "https://www.pkufh.com/",
+    "logoSourceUrl": "https://www.pkufh.com/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-33b9cad0b0e230408d81",
+    "catalogHospitalId": "ahospital-33b9cad0b0e230408d81",
+    "name": "吉林大学第一医院",
+    "aliases": [
+      "吉林大学白求恩第一医院",
+      "吉大一院"
+    ],
+    "kind": "hospital",
+    "city": "长春",
+    "province": "吉林省",
+    "logo": "/provider-logos/hospital-1167b8109f5d9f13f95ff2e7bc44e5c7df59c93b9df2dd5d68f45abbae702d72.png",
+    "website": "https://www.jdyy.cn/",
+    "sourceUrl": "https://www.jdyy.cn/",
+    "logoSourceUrl": "https://www.jdyy.cn/template/pc/skin/index/img/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-3d93e2ddf11039cb599e",
+    "catalogHospitalId": "ahospital-3d93e2ddf11039cb599e",
+    "name": "首都医科大学附属北京朝阳医院",
+    "aliases": [
+      "朝阳医院",
+      "北京朝阳医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-a51827d1f3b0667d42be73464679b9abd7d57ed8f547aaf4e602db8ba613be75.jpg",
+    "website": "https://www.bjcyh.com.cn/",
+    "sourceUrl": "https://www.bjcyh.com.cn/",
+    "logoSourceUrl": "https://www.bjcyh.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-3db10866722bfd13743c",
+    "catalogHospitalId": "ahospital-3db10866722bfd13743c",
+    "name": "山东省立医院",
+    "aliases": [
+      "山东第一医科大学附属省立医院"
+    ],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-c3e90679707ea3913e9b249456a6972333b9b7f586ab2deb334c9751f667f7f2.jpg",
+    "website": "https://www.sph.com.cn/",
+    "sourceUrl": "https://www.sph.com.cn/",
+    "logoSourceUrl": "https://www.sph.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "shandong-qilu-second",
+    "catalogHospitalId": "ahospital-3edef4a7305db5152337",
+    "name": "山东大学齐鲁第二医院",
+    "aliases": [
+      "山东大学第二医院"
+    ],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-330c5851b8fc4e76955dbb478637fd55a89e08b86f8a026a3a98d66e111bdae7.png",
+    "website": "https://www.sdey.net/",
+    "sourceUrl": "https://www.sdey.net/",
+    "logoSourceUrl": "https://www.sdey.net/statics/sdey_new/img/nav_logo.png",
+    "verifiedAt": "2026-11-06"
   },
   {
     "id": "zju-first",
@@ -240,6 +368,137 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "zigong-first",
+    "catalogHospitalId": "ahospital-664068814af5bc5be595",
+    "name": "自贡市第一人民医院",
+    "aliases": [
+      "自贡市仁济医学中心",
+      "自贡市一医院"
+    ],
+    "kind": "hospital",
+    "city": "自贡",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-8583d928102f6ba0f26222dee030acf5f8a6af2b1ba30e33250d6c45446a1290.png",
+    "website": "https://zgno1hos.com.cn/",
+    "sourceUrl": "https://www.zgno1hos.com.cn/",
+    "logoSourceUrl": "https://www.zgno1hos.com.cn/Template/Pc/images/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-6cd908ac222ccb130799",
+    "catalogHospitalId": "ahospital-6cd908ac222ccb130799",
+    "name": "楚雄州人民医院",
+    "aliases": [
+      "楚雄彝族自治州人民医院"
+    ],
+    "kind": "hospital",
+    "city": "楚雄",
+    "province": "云南省",
+    "logo": "/provider-logos/hospital-eb4decb6cb0a978fc22dc94f4c62d13938708412d5d917eb7ee5ab993082232c.png",
+    "website": "https://www.cxzrmyy.com/",
+    "sourceUrl": "https://www.cxzrmyy.com/",
+    "logoSourceUrl": "https://www.cxzrmyy.com/images/250805cx_rmyy_logo2.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "jinan-third",
+    "catalogHospitalId": "ahospital-7b5c39c7efb09e1d1e6e",
+    "name": "济南市第三人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "济南",
+    "province": "山东省",
+    "logo": "/provider-logos/hospital-6fbf322f2b5a162c9ae4a92fb80b06085e9fb3b4525e498c42f2d4c2c14e66bb.png",
+    "website": "https://www.jnslsy.cn/index.htm",
+    "sourceUrl": "https://www.jnslsy.cn/index.htm",
+    "logoSourceUrl": "https://www.jnslsy.cn/images/f-logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "ahospital-87366aa0de2962c2b8cb",
+    "catalogHospitalId": "ahospital-87366aa0de2962c2b8cb",
+    "name": "海南省人民医院",
+    "aliases": [
+      "海南医科大学附属海南医院"
+    ],
+    "kind": "hospital",
+    "city": "海口",
+    "province": "海南省",
+    "logo": "/provider-logos/hospital-cc97a9caec70f566fdb3351c912b7e1fbf64d88bf08925fd007844eae32fc9d7.png",
+    "website": "https://www.phhp.com.cn/",
+    "sourceUrl": "https://www.phhp.com.cn/",
+    "logoSourceUrl": "https://www.phhp.com.cn/new/images/logoa1.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-people",
+    "catalogHospitalId": "ahospital-a0f2fa02a98d9d20d73e",
+    "name": "北京大学人民医院",
+    "aliases": [
+      "北大人民医",
+      "北大人民医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-1d5b6c9788eb02b6a318d3cb08c7be500baa6780cf617f4341dd46a9a2a999a0.png",
+    "website": "https://www.pkuph.cn/",
+    "sourceUrl": "https://www.pkuph.cn/",
+    "logoSourceUrl": "https://www.pkuph.cn/Uploads/Picture/2025/09/02/s68b63d5fcbed0.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "beijing-tiantan",
+    "catalogHospitalId": "ahospital-a62441df522f47158f17",
+    "name": "首都医科大学附属北京天坛医院",
+    "aliases": [
+      "北京天坛医院",
+      "天坛医院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-656fa2c8885b0410890c73d8d82d8da362dd3f74ff98b6d6233cf1fd3b841ea8.jpg",
+    "website": "https://www.bjtth.cn/",
+    "sourceUrl": "https://www.bjtth.cn/Home/",
+    "logoSourceUrl": "https://www.bjtth.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "pku-third",
+    "catalogHospitalId": "ahospital-b576c87aa353eb9f1eda",
+    "name": "北京大学第三医院",
+    "aliases": [
+      "北医三院",
+      "北大三院"
+    ],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-fbbb1048f6eefe8e9f91bd353c373e84258b6994d71892de8caa1bf432e8cf16.jpg",
+    "website": "https://www.puh3.net.cn/",
+    "sourceUrl": "https://www.puh3.net.cn/info/2641/100461.htm",
+    "logoSourceUrl": "https://www.puh3.net.cn/__local/6/05/26/CBEBFAF1256AF3D62FAD11FBC81_DE3B2B45_10D91.jpg?e=.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "west-china-dental",
+    "catalogHospitalId": "ahospital-b89776fe42fea8e3b91e",
+    "name": "四川大学华西口腔医院",
+    "aliases": [
+      "华西口腔医院",
+      "华西口腔"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-2835c6238f873aa0a99902423e058a9a7bc1d38fc2182c2d25b8e09e95a93617.jpg",
+    "website": "https://www.hxkq.org/",
+    "sourceUrl": "https://www.hxkq.org/",
+    "logoSourceUrl": "https://www.hxkq.org/Sites/Uploaded/UserUpLoad/20210108/20210108102002.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
     "id": "sichuan-people",
     "catalogHospitalId": "ahospital-bd493e5d3528c4138233",
     "name": "四川省人民医院",
@@ -254,6 +513,52 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.samsph.cn/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/sichuan-people.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "shenzhen-people",
+    "catalogHospitalId": "ahospital-c3d047eadbed6571d88a",
+    "name": "深圳市人民医院",
+    "aliases": [
+      "深圳市人民医院（留医部）"
+    ],
+    "kind": "hospital",
+    "city": "深圳",
+    "province": "广东省",
+    "logo": "/provider-logos/hospital-e32809320c483d11bb68533d6db4b5ff8b79c3a0ddf04196df52d42fdabe8901.png",
+    "website": "https://www.szhospital.com/",
+    "sourceUrl": "https://www.szhospital.com/",
+    "logoSourceUrl": "https://www.szhospital.com/asset/images/nww/logo.png?ver=2024",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "qidong-people",
+    "catalogHospitalId": "ahospital-d3c13939b5f49e2c8bd4",
+    "name": "启东市人民医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "启东",
+    "province": "江苏省",
+    "logo": "/provider-logos/hospital-65d56239fc3d6980e849514147a2512f95ee77afeaa6fd2c4b08c8ab57db0ec6.png",
+    "website": "https://www.qdsrmyy.com/",
+    "sourceUrl": "https://www.qdsrmyy.com/",
+    "logoSourceUrl": "https://www.qdsrmyy.com/imgs/logo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "fudan-huashan",
+    "catalogHospitalId": "ahospital-e21ab155a4b76f4ec89a",
+    "name": "复旦大学附属华山医院",
+    "aliases": [
+      "华山医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-a536f1e336ea09e280b544357284302c26f90c26ec7cbadef183e97214b4eee9.png",
+    "website": "https://www.huashan.org.cn/",
+    "sourceUrl": "https://www.huashan.org.cn/",
+    "logoSourceUrl": "https://www.huashan.org.cn/images/logo114.png",
+    "verifiedAt": "2026-11-06"
   },
   {
     "id": "fudan-zhongshan",
@@ -289,6 +594,23 @@ const hospitalLogoMappings = [
     "verifiedAt": "2026-11-05"
   },
   {
+    "id": "ahospital-faa3abe07d21b6cd41fa",
+    "catalogHospitalId": "ahospital-faa3abe07d21b6cd41fa",
+    "name": "上海东方医院",
+    "aliases": [
+      "同济大学附属东方医院",
+      "上海市东方医院"
+    ],
+    "kind": "hospital",
+    "city": "上海",
+    "province": "上海市",
+    "logo": "/provider-logos/hospital-4994370138c965f09033dbf105a6132f73bfa967efb460a4d621a2f6b99ce6e0.png",
+    "website": "https://www.easthospital.cn/",
+    "sourceUrl": "https://www.easthospital.cn/",
+    "logoSourceUrl": "https://www.easthospital.cn/static/mobile/images/yindaologo.png",
+    "verifiedAt": "2026-11-06"
+  },
+  {
     "id": "wuhan-union",
     "catalogHospitalId": "ahospital-fc1f8495fcd0bd0ae1ee",
     "name": "华中科技大学同济医学院附属协和医院",
@@ -304,6 +626,20 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.whuh.com/",
     "logoSourceUrl": "https://vivid-dream.online/provider-logos/wuhan-union.png",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "ahospital-fede6c32ead377c78972",
+    "catalogHospitalId": "ahospital-fede6c32ead377c78972",
+    "name": "北京中医药大学东方医院",
+    "aliases": [],
+    "kind": "hospital",
+    "city": "北京",
+    "province": "北京市",
+    "logo": "/provider-logos/hospital-28c2bf5a62cd33ae68fee3e6801bdfb253210b3d1362fddc5e14f6207579201d.jpg",
+    "website": "https://www.dongfangyy.com.cn/",
+    "sourceUrl": "https://www.dongfangyy.com.cn/",
+    "logoSourceUrl": "https://www.dongfangyy.com.cn/Content/Areas/Common/images/logo/wxShare.jpg",
+    "verifiedAt": "2026-11-06"
   },
   {
     "id": "xinqiao-dental",
@@ -328,6 +664,215 @@ const hospitalLogoMappings = [
     "sourceUrl": "https://www.meiweigroup.com/catalog/8",
     "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
     "verifiedAt": "2026-11-05"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-gaoxin",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-gaoxin",
+    "name": "成都高新新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（高新院区）",
+      "新桥口腔（高新分院）",
+      "成都新桥口腔高新院区",
+      "新桥口腔（高新旗舰店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-guanghua",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-guanghua",
+    "name": "新桥口腔（光华院区）",
+    "aliases": [
+      "新桥口腔（光华品牌店）",
+      "新桥口腔（光华院区）",
+      "成都新桥瑞联路口腔门诊部",
+      "成都维乐口腔医院管理有限公司新桥瑞联路口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-qionglai",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-qionglai",
+    "name": "成都邛崃新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（邛崃院区）",
+      "新桥口腔（邛崃店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-rennan",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-rennan",
+    "name": "成都人南新桥口腔医院",
+    "aliases": [
+      "新桥口腔成都总院",
+      "新桥口腔（人南院区）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-shuhan",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-shuhan",
+    "name": "成都金牛蜀汉新迪新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（蜀汉品牌店）",
+      "新桥口腔（蜀汉院区）",
+      "新桥口腔（蜀汉分院）",
+      "成都新桥口腔蜀汉院区"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-wuhou-fujin",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-wuhou-fujin",
+    "name": "成都武侯新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（武侯店）",
+      "新桥口腔（武侯院区）",
+      "成都新桥口腔武侯院区",
+      "新桥口腔（武侯品牌店）"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-yiguanmiao",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-yiguanmiao",
+    "name": "成都新桥口腔医院（衣冠庙院区）",
+    "aliases": [
+      "新桥口腔（衣冠庙店）",
+      "新桥口腔（衣冠庙院区）",
+      "成都新桥口腔衣冠庙院区"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-chengdu-yushuang",
+    "catalogHospitalId": "supplement-xinqiao-dental-chengdu-yushuang",
+    "name": "新桥口腔（玉双院区）",
+    "aliases": [
+      "新桥口腔（玉双品牌店）",
+      "新桥口腔（玉双院区）",
+      "成都新桥玉双路口腔门诊部",
+      "成都维乐口腔医院管理有限公司新桥玉双路口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "成都",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-deyang",
+    "catalogHospitalId": "supplement-xinqiao-dental-deyang",
+    "name": "德阳维乐新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（德阳院区）",
+      "德阳新桥口腔门诊部"
+    ],
+    "kind": "hospital",
+    "city": "德阳",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-xining",
+    "catalogHospitalId": "supplement-xinqiao-dental-xining",
+    "name": "西宁新桥口腔医院",
+    "aliases": [
+      "新桥口腔（西宁院区）",
+      "西宁市新桥口腔医院有限公司"
+    ],
+    "kind": "hospital",
+    "city": "西宁",
+    "brandId": "xinqiao-dental",
+    "province": "青海省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
+  },
+  {
+    "id": "xinqiao-dental-zigong",
+    "catalogHospitalId": "supplement-xinqiao-dental-zigong",
+    "name": "自贡维乐新桥口腔门诊部",
+    "aliases": [
+      "新桥口腔（自贡院区）",
+      "自贡新桥口腔"
+    ],
+    "kind": "hospital",
+    "city": "自贡",
+    "brandId": "xinqiao-dental",
+    "province": "四川省",
+    "logo": "/provider-logos/hospital-66699bb57972917de9ea4c5b7884d394c4291d26235f832a81e23b6f94872216.jpg",
+    "website": "https://www.meiweigroup.com/catalog/8",
+    "sourceUrl": "https://www.meiweigroup.com/catalog/8",
+    "logoSourceUrl": "https://m.wxnum.cn/cover-ico/xqyake.jpg",
+    "verifiedAt": "2026-11-06"
   }
 ];
 return { hospitalLogoMappings };
@@ -714,20 +1259,47 @@ const __workbenchModule5 = (() => {
 const { institutions } = __workbenchModule4;
 const normalize=value=>String(value||'').normalize('NFKC').replace(/\s+/g,'').toLowerCase();
 const names=p=>[p.name,...(p.aliases||[])];
-const matchesName=(p,hospital)=>names(p).some(name=>{
- const key=normalize(name);if(key===hospital)return true;
- // Brand marks may cover a named branch, without claiming a specific clinic registration.
- return p.scope==='brand'&&hospital.startsWith(key)&&/^[（(][^()（）]{1,50}[）)]$/.test(hospital.slice(key.length));
-});
+const matchesName=(p,hospital)=>names(p).some(name=>normalize(name)===hospital);
+function brandBranchLabel(brand,hospital){
+ const parts=/^(.+)\(([^()]{1,50})\)$/.exec(hospital);
+ if(!parts||!matchesName(brand,parts[1]))return '';
+ return parts[2].replace(/分院$/,'院区');
+}
+
+function reviewedBranches(brand,hospital,label=brandBranchLabel(brand,hospital)){
+ const branches=institutions.filter(p=>p.brandId===brand.id);
+ const exact=branches.filter(p=>matchesName(p,hospital));
+ if(exact.length||!label)return exact;
+ return branches.filter(p=>names(p).some(name=>brandBranchLabel(brand,normalize(name))===label));
+}
+
 const hospitalBuildingIcon=()=>`<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#668371" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M7 10H4a1 1 0 0 0-1 1v10m14-11h3a1 1 0 0 1 1 1v10M2 21h20M10 21v-4h4v4M12 6v4m-2-2h4M10 13h.01M14 13h.01M4.5 14h.01M4.5 17h.01M19.5 14h.01M19.5 17h.01"/></svg>`;
+const cityKey=value=>normalize(value).replace(/市$/,'');
+const matchesCity=(p,city)=>!city||(p.scope==='brand'?(p.cities||[]).some(c=>cityKey(c)===city):!p.city||cityKey(p.city)===city);
+
 function resolveInstitution(visit){
- const city=normalize(visit.city).replace(/市$/,'');
- if(visit.hospitalId){const p=institutions.find(p=>p.id===visit.hospitalId)||null;return p?.scope==='brand'&&city&&!(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city)?null:p;}
- const hospital=normalize(visit.hospital);if(!hospital)return null;
+ const city=cityKey(visit.city),hospital=normalize(visit.hospital);
+ if(visit.hospitalId){
+  const selected=institutions.find(p=>p.id===visit.hospitalId)||null;
+  if((selected?.brandId||selected?.scope==='brand')&&!matchesCity(selected,city))return null;
+  const brand=selected?.brandId?institutions.find(p=>p.id===selected.brandId):selected?.scope==='brand'?selected:null;
+  if(brand&&hospital){
+   const branches=reviewedBranches(brand,hospital);
+   if(branches.length&&!branches.some(p=>selected.brandId?p.id===selected.id:matchesCity(p,city)))return null;
+  }
+  return selected;
+ }
+ if(!hospital)return null;
  const ambiguous=new Set(['省医院','省人民医院','人民医院','协和医院','中山医院','同济医院','鼓楼医院']);
- const matches=institutions.filter(p=>matchesName(p,hospital));
- const candidates=city?matches.filter(p=>p.scope==='brand'?(p.cities||[]).some(c=>normalize(c).replace(/市$/,'')===city):!p.city||normalize(p.city).replace(/市$/,'')===city):matches;
  if(!city&&ambiguous.has(hospital))return null;
+ const exactMatches=institutions.filter(p=>matchesName(p,hospital));
+ const matches=exactMatches.length?exactMatches:institutions.filter(p=>p.scope==='brand').flatMap(brand=>{
+  const label=brandBranchLabel(brand,hospital);
+  if(!label)return [];
+  const branches=reviewedBranches(brand,hospital,label);
+  return branches.length?branches:[brand];
+ });
+ const candidates=matches.filter(p=>matchesCity(p,city));
  return candidates.length===1?candidates[0]:null;
 }
 function institutionMark(visit,{esc,icon}){const p=resolveInstitution(visit);const crest=['sichuan-people','shanghai-ruijin','wuhan-tongji','wuhan-union','zju-first','nanjing-gulou','chongqing-xinqiao','rich-healthcare'].includes(p?.id);const dark=['west-china','wuhan-union','zju-first'].includes(p?.id);return `<span class="institution-mark${p?.logo?' has-logo':''}${p?.logo&&crest?' logo-crest':''}${p?.logo&&dark?' logo-dark':''}" aria-label="${esc(p?p.name:'机构待补充')}">${p?.logo?`<img src="${esc(p.logo)}" alt="${esc(p.name)}标识" loading="lazy" data-institution-logo><span hidden>${hospitalBuildingIcon()}</span>`:hospitalBuildingIcon()}</span>`;}
@@ -880,10 +1452,9 @@ return { enrichAssetHolding, assetGroup, assetDeadline };
 })();
 
 const __workbenchModule8 = (() => {
-// assets.js
-const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule7;
-const ASSET_CATEGORIES={cash:'现金',fund:'基金 / ETF',stock:'股票',server:'服务器',domain:'域名',property:'房产',vehicle:'车辆',equipment:'设备',subscription:'服务 / 订阅',other:'其他资产'};
-const ASSET_PAGES={dashboard:'资产总览',accounts:'账户',financial:'金融资产',fixed:'固定资产',renewals:'到期与续费',holdings:'全部资产',transactions:'流水',liabilities:'负债',history:'历史快照',documents:'资料',tasks:'待办',notes:'备忘',mine:'我的'};
+// asset-accounting.js
+
+// Shared read-only valuation rules for asset lists and the overview.
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 function assetValue(item){if(finite(item.value))return item.value;if(finite(item.quantity)&&finite(item.unitPrice))return item.quantity*item.unitPrice;return null;}
 // Account balance is opt-in. Imported account totals must not be added to their holdings twice.
@@ -891,9 +1462,140 @@ function assetProfit(item){const value=assetValue(item);return finite(item.cost)
 function calculateAssetTotals(items){const currencies=new Map();const group=c=>{const code=String(c||'CNY');if(!currencies.has(code))currencies.set(code,{currency:code,assets:0,liabilities:0,unknown:0,unknownLiabilities:0,pendingCount:0,pendingValue:0,pendingUnvalued:0,categories:{},dates:[]});return currencies.get(code);};
  for(const x of items){if(x.status==='closed')continue;if(x.status==='pending'&&x.kind==='asset_holding'){const g=group(x.currency),value=assetValue(x);g.pendingCount++;if(value===null)g.pendingUnvalued++;else g.pendingValue+=value;continue;}if(x.kind==='asset_holding'){const g=group(x.currency),v=assetValue(x);if(v===null){g.unknown++;continue;}g.assets+=v;g.categories[x.category||'other']=(g.categories[x.category||'other']||0)+v;if(x.valuationDate||x.sourceDate||x.date)g.dates.push(x.valuationDate||x.sourceDate||x.date);}else if(x.kind==='asset_account'&&x.includeInTotal===true){const g=group(x.currency);if(finite(x.balance))g.assets+=x.balance;else g.unknown++;if(x.balanceAsOf||x.date)g.dates.push(x.balanceAsOf||x.date);}else if(x.kind==='asset_liability'){const g=group(x.currency);if(finite(x.balance)&&x.status!=='pending')g.liabilities+=x.balance;else{g.unknown++;g.unknownLiabilities++;}if(x.asOfDate||x.date)g.dates.push(x.asOfDate||x.date);}}
  return [...currencies.values()].map(g=>({...g,net:g.unknownLiabilities?null:g.assets-g.liabilities,dates:[...new Set(g.dates)].sort()}));}
+return { assetValue, assetProfit, calculateAssetTotals };
+})();
+
+const __workbenchModule9 = (() => {
+// asset-overview.js
+const { assetValue, calculateAssetTotals } = __workbenchModule8;
+const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule7;
+const finite=v=>typeof v==='number'&&Number.isFinite(v);
+const code=x=>x.currency||'CNY';
+const snapshotAmount=new Intl.NumberFormat('en-US',{useGrouping:false,minimumFractionDigits:2,maximumFractionDigits:2});
+const sameAmount=(a,b)=>snapshotAmount.format(a)===snapshotAmount.format(b);
+const labels={cash:'现金与存款',fund:'基金 / ETF',stock:'股票',other:'其他金融资产'};
+const validDate=value=>typeof value==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(value)&&Number.isFinite(Date.parse(value+'T00:00:00Z'))&&new Date(value+'T00:00:00Z').toISOString().slice(0,10)===value;
+
+// Never convert currencies or count account totals unless explicitly opted in.
+function buildFinanceOverview(items,today,selectedCurrency=''){
+ const totals=calculateAssetTotals(items),contributions=[],missing=[];
+ const active=items.filter(x=>x.status!=='closed');
+ for(const raw of active){
+  const x=raw.kind==='asset_holding'?enrichAssetHolding(raw):raw;
+  if(x.kind==='asset_holding'&&x.status!=='pending'){
+   const value=assetValue(x),group=assetGroup(x);
+   if(value===null)missing.push(x);else contributions.push({id:x.id,currency:code(x),value,group,category:x.category||'other',accountId:x.accountId||''});
+  }else if(x.kind==='asset_account'&&x.includeInTotal===true){
+   if(!finite(x.balance))missing.push(x);else contributions.push({id:x.id,currency:code(x),value:x.balance,group:'financial',category:'cash',accountId:x.id});
+  }
+ }
+ const currencies=[...new Set([...totals.map(x=>x.currency),...active.filter(x=>x.kind==='asset_snapshot').map(code)])].sort((a,b)=>a==='CNY'?-1:b==='CNY'?1:a.localeCompare(b));
+ const currency=currencies.includes(selectedCurrency)?selectedCurrency:currencies[0]||'CNY';
+ const total=totals.find(x=>x.currency===currency)||{currency,assets:0,liabilities:0,unknown:0,unknownLiabilities:0,pendingCount:0,pendingValue:0,pendingUnvalued:0,dates:[]};
+ const valued=contributions.filter(x=>x.currency===currency),hasValue=valued.length>0;
+ const liabilities=active.filter(x=>x.kind==='asset_liability'&&code(x)===currency);
+ const unknownDebt=active.filter(x=>x.kind==='asset_liability'&&(!finite(x.balance)||x.status==='pending'));
+ const pending=active.filter(x=>x.kind==='asset_holding'&&x.status==='pending');
+ const due=active.filter(x=>x.kind==='asset_holding'&&['overdue','soon'].includes(assetDeadline(enrichAssetHolding(x),today).status));
+ const debtDue=active.filter(x=>x.kind==='asset_liability'&&validDate(x.dueDate)&&x.dueDate<=new Date(Date.parse(today+'T00:00:00Z')+30*86400000).toISOString().slice(0,10));
+ const tasks=active.filter(x=>x.kind==='task'&&!x.done);
+ const segments=['financial','fixed','other'].map(group=>({group,value:valued.filter(x=>x.group===group).reduce((sum,x)=>sum+x.value,0),valued:valued.filter(x=>x.group===group).length,unknown:missing.filter(x=>code(x)===currency&&(x.kind==='asset_account'?'financial':assetGroup(x))===group).length,count:active.filter(x=>x.kind==='asset_holding'&&code(x)===currency&&assetGroup(enrichAssetHolding(x))===group).length}));
+ return {currency,currencies,total,contributions,valued,hasValue,assets:hasValue?total.assets:null,net:hasValue&&!total.unknownLiabilities?total.net:null,segments,missing,unknownDebt,pending,due,debtDue,tasks,liabilities,accounts:items.filter(x=>x.kind==='asset_account')};
+}
+
+function financeDistribution(model,dimension='category'){
+ const financial=model.contributions.filter(x=>x.group==='financial'&&(dimension==='currency'||x.currency===model.currency));
+ const groups=new Map();
+ for(const x of financial){const key=dimension==='currency'?x.currency:dimension==='account'?x.accountId:x.category;groups.set(key,(groups.get(key)||0)+x.value);}
+ const total=financial.reduce((sum,x)=>sum+x.value,0);
+ return [...groups].map(([key,value])=>({key,value,currency:dimension==='currency'?key:model.currency,label:dimension==='currency'?key:dimension==='account'?(model.accounts.find(x=>x.id===key)?.title||'未关联账户'):(labels[key]||'其他金融资产'),percent:dimension==='currency'||!total?null:value/total*100})).sort((a,b)=>dimension==='currency'?a.currency.localeCompare(b.currency):b.value-a.value||a.label.localeCompare(b.label));
+}
+
+function financeSnapshots(items,currency,today,months=6){
+ const end=new Date(today+'T00:00:00Z');
+ const since=new Date(Date.UTC(end.getUTCFullYear(),end.getUTCMonth()-months+1,1)).toISOString().slice(0,10);
+ const grouped=new Map();let invalid=0;
+ for(const x of items){
+  if(x.kind!=='asset_snapshot'||code(x)!==currency||!validDate(x.date)||x.date>today||x.date<since||['pending','closed'].includes(x.status))continue;
+  const derived=finite(x.assetValue)&&finite(x.liabilityValue)?x.assetValue-x.liabilityValue:null;
+  const value=finite(x.totalValue)?x.totalValue:derived;
+  if(value===null){invalid++;continue;}
+  if(derived!==null&&finite(x.totalValue)&&!sameAmount(x.totalValue,derived)){invalid++;continue;}
+  if(!grouped.has(x.date))grouped.set(x.date,[]);
+  grouped.get(x.date).push(value);
+ }
+ const points=[];let conflicts=0;
+ for(const [date,values] of grouped){if(values.some(x=>!sameAmount(x,values[0]))){conflicts++;continue;}points.push({date,value:values[0]});}
+ points.sort((a,b)=>a.date.localeCompare(b.date));
+ return {points,invalid,conflicts,since,delta:points.length>1?points.at(-1).value-points.at(-2).value:null};
+}
+
+function createAssetOverview(ctx){
+ const {esc,icon,btn}=ctx;let selectedCurrency='',dimension='category',months=6,scope='';
+ const money=(value,currency)=>finite(value)?new Intl.NumberFormat('zh-CN',{style:'currency',currency:/^[A-Z]{3}$/.test(currency)?currency:'CNY',maximumFractionDigits:2}).format(value):'—';
+ const compact=value=>new Intl.NumberFormat('zh-CN',{notation:'compact',maximumFractionDigits:1}).format(value);
+ const key=()=>[ctx.account?.user?.id||'',ctx.workbench,ctx.space].join(':');
+ const clean=()=>{selectedCurrency='';dimension='category';months=6;scope='';};
+ function ensure(){if(scope!==key()){clean();scope=key();}}
+ function switcher(action,choices,current,label){return `<div class="finance-segmented" role="group" aria-label="${label}">${choices.map(([value,title])=>`<button type="button" data-action="${action}:${value}" aria-pressed="${String(value===current)}">${title}</button>`).join('')}</div>`;}
+ function state(text,action,label){return `<div class="finance-empty"><span>${icon('activity',22)}</span><p>${text}</p>${action?btn(label,action,'text-btn'):''}</div>`;}
+ function chart(history,currency){
+  if(history.points.length<2)return state(history.points.length?'已有 1 次净额快照，再记录一次即可查看变化。':'还没有可比较的净额快照，记录后再看变化。','asset-add:asset_snapshot','记录历史快照');
+  const points=history.points,width=660,height=215,left=90,right=42,top=26,bottom=34;
+  const values=points.map(x=>x.value),low=Math.min(...values),high=Math.max(...values),padding=Math.max((high-low)*.18,Math.abs(high)*.03,1),min=low-padding,max=high+padding;
+  const first=Date.parse(points[0].date),last=Date.parse(points.at(-1).date);
+  const coords=points.map(p=>({x:left+(Date.parse(p.date)-first)/(last-first)*(width-left-right),y:top+(max-p.value)/(max-min)*(height-top-bottom),...p}));
+  const path=coords.map((p,i)=>`${i?'L':'M'}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
+  const ticks=Array.from({length:4},(_,i)=>{const value=min+(max-min)*i/3,y=top+(max-value)/(max-min)*(height-top-bottom);return `<line x1="${left}" x2="${width-right}" y1="${y}" y2="${y}" class="finance-gridline"/><text x="${left-12}" y="${y+4}" text-anchor="end">${esc(compact(value,currency))}</text>`;}).join('');
+  const xlabels=[0,...(coords.length>2?[Math.floor((coords.length-1)/2)]:[]),coords.length-1].map(i=>`<text x="${coords[i].x}" y="${height-7}" text-anchor="middle">${points[i].date.slice(5).replace('-','/')}</text>`).join('');
+  return `<svg class="finance-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(currency+'净额历史变化，'+points.length+'次快照；最新'+money(points.at(-1).value,currency))}">${ticks}<path d="${path}" class="finance-chart-line"/>${coords.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4"><title>${esc(p.date+' · '+money(p.value,currency))}</title></circle>`).join('')}${xlabels}</svg><details class="finance-chart-data"><summary>查看快照数据（${points.length} 次）</summary><div class="finance-data-scroll"><table><caption>${esc(currency)} 净额历史快照</caption><thead><tr><th scope="col">日期</th><th scope="col">已记录净额</th></tr></thead><tbody>${points.map(p=>`<tr><td>${esc(p.date)}</td><td>${money(p.value,currency)}</td></tr>`).join('')}</tbody></table></div></details>`;
+ }
+ function render(){
+  ensure();const m=buildFinanceOverview(ctx.items,ctx.today,selectedCurrency);selectedCurrency=m.currency;
+  const {currency,total}=m,history=financeSnapshots(ctx.items,currency,ctx.today,months),allHistory=financeSnapshots(ctx.items,currency,ctx.today,1200),rows=financeDistribution(m,dimension);
+  const financial=m.segments[0],fixed=m.segments[1];
+  const selectedUnknown=m.missing.filter(x=>code(x)===currency).length;
+  const groups=total.dates.length?`${total.dates[0]}${total.dates.length>1?' 至 '+total.dates.at(-1):''}`:'估值日期待补';
+  const heroLabel=total.unknownLiabilities?'已知资产估值':'已估值净额';
+  const pendingValue=total.pendingCount?` · ${total.pendingCount} 项待核对估值 ${money(total.pendingValue,currency)}，未计入`:'';
+  const totalNotice=`${selectedUnknown?`${selectedUnknown} 项资产未估值，未计入`:'按已记录资产与负债统计'}${pendingValue}`;
+  const delta=allHistory.delta,deltaText=delta===null?'—':`${delta>0?'+':''}${money(delta,currency)}`;
+  const deltaDates=delta===null?'待补可比快照':`${allHistory.points.at(-2).date} → ${allHistory.points.at(-1).date}`;
+  const originalAmounts=m.currencies.filter(c=>c!==currency).map(c=>{const model=buildFinanceOverview(ctx.items,ctx.today,c);return `<button data-action="asset-overview-currency:${esc(c)}">${esc(c)} <strong>${money(model.assets,c)}</strong></button>`;}).join('');
+  const distribution=rows.length?`<div class="finance-distribution-rows">${rows.map((r,i)=>`<div class="finance-distribution-row"><span class="finance-category"><i class="finance-dot finance-color-${i%4}"></i>${esc(r.label)}</span><strong>${money(r.value,r.currency)}</strong>${r.percent===null?`<span class="finance-share">${esc(r.currency)}</span>`:`<div class="finance-bar"><i class="finance-color-${i%4}" style="width:${Math.max(0,Math.min(100,r.percent)).toFixed(2)}%"></i></div><span class="finance-share">${r.percent.toFixed(1)}%</span>`}</div>`).join('')}</div>`:state('有已确认估值的金融资产后，将在这里展示分布。','nav:financial','查看金融资产');
+  const warnings=[...(m.missing.length?[{text:`${m.missing.length} 项估值待补`,route:'holdings'}]:[]),...(m.unknownDebt.length?[{text:`${m.unknownDebt.length} 项负债待核实`,route:'liabilities'}]:[]),...(m.pending.length?[{text:`${m.pending.length} 项资产待核对`,route:'holdings'}]:[]),...(m.due.length?[{text:`${m.due.length} 项近期到期与续费`,route:'renewals'}]:[]),...(m.debtDue.length?[{text:`${m.debtDue.length} 项还款安排`,route:'renewals'}]:[]),...(m.tasks.length?[{text:`${m.tasks.length} 项待办`,route:'tasks'}]:[])];
+  const attention=`<section class="finance-attention" aria-label="当前空间需要关注"><strong><i></i>${warnings.length?'需要关注':'近期事项'}</strong><div>${warnings.length?warnings.map(w=>`<button data-action="nav:${w.route}">${w.text}</button>`).join(''):'暂无已记录的近期事项'}</div>${btn('查看事项 →','nav:renewals','text-btn')}</section>`;
+  const historyWarning=history.conflicts+history.invalid?`<p class="finance-history-warning">${history.conflicts?`${history.conflicts} 个日期的快照净额冲突，已暂不绘制。`:''}${history.invalid?`${history.invalid} 条快照缺少完整净额或金额口径不一致。`:''}${btn('核对快照','nav:history','text-btn')}</p>`:'';
+  const financeRows=financeDistribution(m,'category');
+  const stacked=financial.value>0?`<div class="finance-stacked" aria-hidden="true">${financeRows.map((r,i)=>`<i class="finance-color-${i%4}" style="width:${Math.max(0,r.percent||0)}%"></i>`).join('')}</div>`:'';
+  const other=m.segments[2];
+  return `<div class="finance-overview" data-currency="${esc(currency)}"><header class="finance-overview-heading"><div><h1>资产总览</h1><p>一眼看清家底与变化</p></div><div class="finance-overview-tools"><label class="finance-currency-label"><span>展示币种</span><select id="finance-overview-currency" aria-label="展示币种">${(m.currencies.length?m.currencies:['CNY']).map(c=>`<option value="${esc(c)}" ${c===currency?'selected':''}>${esc(c)}${({CNY:' 人民币',USD:' 美元',HKD:' 港币',EUR:' 欧元',JPY:' 日元',GBP:' 英镑'})[c]||''}</option>`).join('')}</select></label>${ctx.space==='demo'?'<span class="finance-demo-tag">示例数据</span>':''}${btn('记录','shell-capture','primary','plus')}</div></header><section class="finance-summary" aria-label="所选币种财务汇总"><div class="finance-summary-metrics"><div class="finance-hero"><span>${esc(currency)} · ${heroLabel}</span><strong>${money(total.unknownLiabilities?m.assets:m.net,currency)}</strong><small>${total.unknownLiabilities?'净额待核实，待补负债信息':'仅含已记录且有估值的资产与负债'}</small></div><div><span>已估值资产</span><strong>${money(m.assets,currency)}</strong><small>金融与固定资产分别维护</small></div><div><span>已记录负债</span><strong>${total.unknownLiabilities?'待核实（'+total.unknownLiabilities+'项）':m.liabilities.length?money(total.liabilities,currency):'—'}</strong><small>${total.unknownLiabilities?(m.liabilities.some(x=>finite(x.balance)&&x.status!=='pending')?'已确认部分 '+money(total.liabilities,currency):'尚无已确认余额'):m.liabilities.length?'以已记录未偿余额为准':'暂无负债记录'}</small></div><div><span>快照变化</span><strong class="${delta!==null&&delta>0?'finance-positive':''}">${deltaText}</strong><small>${deltaDates}</small></div></div><div class="finance-summary-note"><span>${esc(totalNotice)}</span><span>估值日期 ${esc(groups)}</span></div></section>${originalAmounts?`<div class="finance-other-currencies"><span>其他币种已估值资产</span>${originalAmounts}<small>原币分别统计，不自动换汇</small></div>`:''}<div class="finance-analytics"><section class="finance-panel finance-distribution"><div class="finance-panel-heading"><h2>金融资产分布</h2>${switcher('asset-overview-dimension',[['category','按类别'],['account','按账户'],['currency','按币种']],dimension,'资产分布维度')}</div>${distribution}<p class="finance-panel-footnote">${dimension==='currency'?'各币种分别列示原币金额，不计算跨币种占比。':`占 ${esc(currency)} 已估值金融资产比例，含明确计入的账户余额。`}</p></section><section class="finance-panel finance-trend"><div class="finance-panel-heading"><div><h2>净额变化</h2><p>按历史快照 · 不等同投资收益</p></div>${switcher('asset-overview-range',[['6','近6个月'],['12','近一年']],String(months),'快照时间范围')}</div>${chart(history,currency)}${historyWarning}</section></div>${attention}<div class="finance-management"><section class="finance-panel finance-financial-summary"><div class="finance-panel-heading"><h2>金融资产</h2><small>${financial.count} 项持仓</small></div><strong class="finance-module-amount">${money(financial.valued?financial.value:null,currency)}</strong><p>现金与存款 / 基金 / 股票</p>${stacked}<div class="finance-module-note">${financial.unknown?`${financial.unknown} 项未估值 · `:''}含明确计入的账户余额</div><div class="finance-module-links">${btn('查看持仓 →','nav:financial','text-btn')}${btn('账户管理','nav:accounts','text-btn')}</div></section><section class="finance-panel finance-fixed-summary"><div class="finance-panel-heading"><h2>固定资产</h2><small>${fixed.count} 项</small></div><strong class="finance-module-amount">${money(fixed.valued?fixed.value:null,currency)}</strong><p>实物资产 · 设备与数字服务</p><div class="finance-fixed-facts"><span>${icon('building',17)}已估值 ${fixed.valued} 项</span><span>${icon('file',17)}未估值 ${fixed.unknown} 项</span></div><div class="finance-module-note">续费参考费用不作为资产估值</div><div class="finance-module-links">${btn('查看资产 →','nav:fixed','text-btn')}${btn('维护与续费','nav:renewals','text-btn')}</div></section></div>${other.count?`<div class="finance-unclassified">另有 ${other.count} 项其他分区资产${other.valued?'，已估值 '+money(other.value,currency):''}。${btn('查看并整理','nav:holdings','text-btn')}</div>`:''}<footer class="finance-overview-footer"><span>按币种分别统计，不自动换汇 · 金额与估值日期以原记录为准</span><div>${btn('历史记录','nav:history','text-btn')}${btn('全部资产明细','nav:holdings','text-btn')}</div></footer></div>`;
+ }
+ function repaint(focusAction){const box=document.querySelector('.finance-overview');if(!box)return;box.outerHTML=render();bind();if(focusAction)document.querySelector(`[data-action="${focusAction}"]`)?.focus({preventScroll:true});}
+ function bind(){const select=document.querySelector('#finance-overview-currency');if(select)select.onchange=e=>{selectedCurrency=e.target.value;repaint();document.querySelector('#finance-overview-currency')?.focus({preventScroll:true});};}
+ function handle(action,arg){ensure();if(action==='asset-overview-currency'&&/^[A-Z]{3}$/.test(arg))selectedCurrency=arg;else if(action==='asset-overview-dimension'&&['category','account','currency'].includes(arg))dimension=arg;else if(action==='asset-overview-range'&&['6','12'].includes(arg))months=Number(arg);else return;repaint(action+':'+arg);}
+ return {render,bind,handle,cleanup:clean};
+}
+return { buildFinanceOverview, financeDistribution, financeSnapshots, createAssetOverview };
+})();
+
+const __workbenchModule10 = (() => {
+// assets.js
+const { assetGroup, enrichAssetHolding, assetDeadline } = __workbenchModule7;
+const { assetValue: valueOf, assetProfit: profitOf, calculateAssetTotals: totalsOf } = __workbenchModule8;
+const { createAssetOverview } = __workbenchModule9;
+const ASSET_CATEGORIES={cash:'现金',fund:'基金 / ETF',stock:'股票',server:'服务器',domain:'域名',property:'房产',vehicle:'车辆',equipment:'设备',subscription:'服务 / 订阅',other:'其他资产'};
+const ASSET_PAGES={dashboard:'资产总览',accounts:'账户',financial:'金融资产',fixed:'固定资产',renewals:'到期与续费',holdings:'全部资产',transactions:'流水',liabilities:'负债',history:'历史快照',documents:'资料',tasks:'待办',notes:'备忘',mine:'我的'};
+
+
+const finite=v=>typeof v==='number'&&Number.isFinite(v);
+function assetValue(item){return valueOf(item);}
+function assetProfit(item){return profitOf(item);}
+function calculateAssetTotals(items){return totalsOf(items);}
 function assetRenewalCost(item){if(!finite(item.renewalAmount))return '未知 / 未核实';return typeof item.renewalCurrency==='string'&&/^[A-Z]{3}$/.test(item.renewalCurrency)?new Intl.NumberFormat('zh-CN',{style:'currency',currency:item.renewalCurrency,maximumFractionDigits:2}).format(item.renewalAmount):String(item.renewalAmount)+' · 币种待补';}
 function assetRowsForPage(items,page){const rows=items.filter(x=>x.kind==='asset_holding').map(enrichAssetHolding);return page==='financial'?rows.filter(x=>assetGroup(x)==='financial'):page==='fixed'?rows.filter(x=>assetGroup(x)==='fixed'):rows;}
 function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',category='all',account='all',deadlineFilter='all',location='',pendingDelete=null;
+ const overviewUI=createAssetOverview(ctx);
  const all=kind=>ctx.items.filter(x=>x.kind===kind).map(x=>kind==='asset_holding'?enrichAssetHolding(x):x),find=id=>{const x=ctx.items.find(x=>x.id===id);return x?.kind==='asset_holding'?enrichAssetHolding(x):x;},page=()=>ASSET_PAGES[ctx.page]?ctx.page:'dashboard';
  const currency=x=>String(x.currency||'CNY');const money=(v,c='CNY')=>finite(v)?new Intl.NumberFormat('zh-CN',{style:'currency',currency:/^[A-Z]{3}$/.test(c)?c:'CNY',maximumFractionDigits:2}).format(v):'未填写';
  const amount=x=>x.kind==='asset_liability'&&!finite(x.balance)?'待核实':money(x.kind==='asset_holding'?assetValue(x):x.kind==='asset_snapshot'?x.totalValue:x.kind==='asset_transaction'?x.amount:x.balance,currency(x));
@@ -903,7 +1605,7 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  const sourceLine=x=>`${x.valuationDate||x.balanceAsOf||x.asOfDate||x.sourceDate||x.date||'日期待补'}${x.source?' · '+esc(x.source):''}`;
  const accountName=x=>find(x.accountId)?.title||x.accountId||'未指定账户';
  const options=()=>[['','不关联账户'],...all('asset_account').map(x=>[x.id,x.title])];
- function cleanup(){search='';category='all';account='all';deadlineFilter='all';location='';pendingDelete=null;}
+ function cleanup(){overviewUI.cleanup();search='';category='all';account='all';deadlineFilter='all';location='';pendingDelete=null;}
  function filtered(list){return list.filter(x=>(!search||`${x.title} ${x.note||''} ${x.externalId||''} ${x.source||''} ${x.provider||''} ${x.identifier||''}`.toLowerCase().includes(search.toLowerCase()))&&(category==='all'||x.category===category)&&(account==='all'||x.accountId===account));}
  function categoryChoices(){const p=page(),base=p==='fixed'?['server','domain','property','vehicle','equipment','subscription','other']:p==='financial'?['cash','fund','stock','other']:Object.keys(ASSET_CATEGORIES);const present=assetRowsForPage(ctx.items,p).map(x=>x.category);return Object.entries(ASSET_CATEGORIES).filter(([key])=>base.includes(key)||present.includes(key));}
  function tools(holdings=false,deadlines=false){return `<div class="asset-toolbar"><label class="asset-search">${icon('search',17)}<input id="asset-search" aria-label="搜索资产记录" value="${esc(search)}" placeholder="搜索名称、代码或备注…"></label>${holdings?`<select id="asset-category-filter" aria-label="按资产类别筛选"><option value="all">全部类别</option>${categoryChoices().map(([v,l])=>`<option value="${v}" ${category===v?'selected':''}>${l}</option>`).join('')}</select><select id="asset-account" aria-label="按账户筛选"><option value="all">全部账户</option>${all('asset_account').map(x=>`<option value="${esc(x.id)}" ${account===x.id?'selected':''}>${esc(x.title)}</option>`).join('')}</select>`:''}${deadlines?`<select id="asset-deadline-filter" aria-label="按到期状态筛选">${[['all','全部期限'],['overdue','日期已过'],['soon','30天内'],['unknown','未填日期']].map(([v,l])=>`<option value="${v}" ${deadlineFilter===v?'selected':''}>${l}</option>`).join('')}</select>`:''}</div>`;}
@@ -911,28 +1613,25 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  function lifecycleLine(x){if(x.kind!=='asset_holding')return '';const d=assetDeadline(x,ctx.today),parts=[x.provider,x.identifier].filter(Boolean);return `${parts.length?`<small>${parts.map(esc).join(' · ')}</small>`:''}${d.eligible?`<small class="asset-deadline asset-deadline-${esc(d.status)}">${esc(deadlineText(x))}</small>`:''}`;}
  function row(x){const type=x.kind==='asset_holding'?ASSET_CATEGORIES[x.category]||'其他资产':kindName(x.kind);return `<article class="asset-record"><button class="asset-record-main" data-action="asset-detail:${esc(x.id)}"><span class="asset-record-icon">${icon(x.kind==='asset_liability'?'task':x.kind==='asset_account'?'grid':x.category==='server'?'building':x.category==='domain'?'compass':'activity',20)}</span><span class="asset-record-copy"><strong>${esc(x.title)}</strong><small>${esc(type)}${x.accountId?' · '+esc(accountName(x)):''}${status(x)?' · '+esc(status(x)):''}</small>${lifecycleLine(x)}<small>${sourceLine(x)}</small></span><span class="asset-record-amount">${esc(amount(x))}<small>${currency(x)}${x.kind==='asset_holding'&&assetGroup(x)==='fixed'?'<br>资产估值':x.kind==='asset_holding'&&assetProfit(x)!==null?'<br>'+esc(money(assetProfit(x),currency(x))):x.kind==='asset_holding'?'<br>成本待核实':''}${x.kind==='asset_holding'&&finite(x.renewalAmount)?'<br>续费参考 '+esc(assetRenewalCost(x)):''}</small></span>${icon('arrow',15)}</button></article>`;}
  function renewalItems(){return all('asset_holding').filter(x=>{const d=assetDeadline(x,ctx.today);return d.eligible&&d.status!=='closed';}).sort((a,b)=>(assetDeadline(a,ctx.today).date||'9999-99-99').localeCompare(assetDeadline(b,ctx.today).date||'9999-99-99')||String(a.title).localeCompare(String(b.title)));}
- function sectionCards(){const holdings=all('asset_holding');return `<div class="asset-section-grid"><button data-action="nav:financial"><span>${icon('activity',23)}</span><strong>金融资产</strong><small>现金、基金与股票 · ${holdings.filter(x=>assetGroup(x)==='financial').length} 项</small></button><button data-action="nav:fixed"><span>${icon('building',23)}</span><strong>固定资产</strong><small>服务器、域名、房产与设备 · ${holdings.filter(x=>assetGroup(x)==='fixed').length} 项</small></button><button data-action="nav:renewals"><span>${icon('calendar',23)}</span><strong>事项</strong><small>${pendingCount()?(tasks.length+debts.length)+' 项安排':'查看到期、续费与待办'}</small></button></div>`;}
  function pendingCount(){const soon=new Date(Date.parse(ctx.today+'T00:00:00Z')+30*86400000).toISOString().slice(0,10);return all('task').filter(x=>!x.done).length+renewalItems().filter(x=>['overdue','soon'].includes(assetDeadline(x,ctx.today).status)).length+all('asset_liability').filter(x=>x.status!=='closed'&&x.dueDate&&x.dueDate<=soon).length;}
  function liabilitySchedule(){const list=all('asset_liability').filter(x=>x.status!=='closed'&&x.dueDate).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));return list.length?`<section class="card asset-task-card"><div class="card-head"><h2 class="card-title">还款安排</h2>${btn('管理负债','nav:liabilities')}</div>${list.map(x=>`<p class="asset-pad asset-muted">到期日 ${esc(x.dueDate)}${x.dueDate<ctx.today?' · 日期已过':''}</p>${row(x)}`).join('')}</section>`:'';}
- function renewalSummary(){const list=renewalItems().filter(x=>['overdue','soon'].includes(assetDeadline(x,ctx.today).status)).slice(0,4);return list.length?`<section class="card asset-renewal-summary"><div class="card-head"><h2 class="card-title">近期到期与续费</h2>${btn('查看全部','nav:renewals')}</div>${list.map(row).join('')}</section>`:'';}
  function empty(text,kind){return `<div class="asset-empty">${icon('grid',28)}<h3>${text}</h3><p>先留下一条记录，来源和日期可以一起保存。</p>${kind?btn('添加'+kindName(kind),'asset-add:'+kind,'primary','plus'):''}</div>`;}
- function overview(){
-  const totals=calculateAssetTotals(ctx.items),unknown=totals.reduce((n,g)=>n+g.unknown,0),holdings=all('asset_holding'),accounts=all('asset_account');
-  const active=holdings.filter(x=>x.status!=='closed'),financial=active.filter(x=>assetGroup(x)==='financial'),fixed=active.filter(x=>assetGroup(x)==='fixed');
-  const renewals=renewalItems().filter(x=>['overdue','soon'].includes(assetDeadline(x,ctx.today).status)),tasks=all('task').filter(x=>!x.done),debts=all('asset_liability').filter(x=>x.status!=='closed'&&x.dueDate).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
-  const compactEmpty=(text,action,label)=>`<div class="domain-empty"><span>${icon('grid',23)}</span><p>${esc(text)}</p>${action?btn(label,action,'text-btn'):''}</div>`;
-  const head=(title,action,label,extra='')=>`<div class="card-head"><h2 class="card-title">${title}${extra?` <span class="subtitle">${extra}</span>`:''}</h2>${action?btn(label,action,'text-btn'):''}</div>`;
-  const totalCards=totals.length?totals.map(g=>`<section class="card asset-total domain-total"><div class="asset-total-head"><span>${esc(g.currency)} · ${g.unknownLiabilities?'已知资产估值':'已估值净额'}</span>${icon('grid',19)}</div><strong>${money(g.unknownLiabilities?g.assets:g.net,g.currency)}</strong><dl><div><dt>已记录资产</dt><dd>${money(g.assets,g.currency)}</dd></div><div><dt>已记录负债</dt><dd>${g.unknownLiabilities?'待核实（'+g.unknownLiabilities+'项）':money(g.liabilities,g.currency)}</dd></div></dl><small>${g.dates.length?`${g.dates[0]}${g.dates.length>1?' 至 '+g.dates.at(-1):''} · 来源快照，非实时估值`:'估值日期待补'}${g.unknown-g.unknownLiabilities?` · ${g.unknown-g.unknownLiabilities} 项资产未估值，未计入`:''}${g.pendingCount?` · 待核对估值 ${money(g.pendingValue,g.currency)}（${g.pendingCount}项，未计入）${g.pendingUnvalued?'，其中'+g.pendingUnvalued+'项金额未知':''}`:''}</small></section>`).join(''):`<section class="card asset-total domain-total"><div class="asset-total-head"><span>我的资产</span>${icon('grid',19)}</div><strong>尚无估值</strong><p>没有填写金额的资产会保留，不会当作零元。</p>${btn('添加第一笔资产','asset-add:asset_holding','primary','plus')}</section>`;
-  const allocation=totals.filter(g=>g.assets>0).map(g=>{const categories=[...Object.entries(g.categories)];const includedAccounts=accounts.filter(x=>currency(x)===g.currency&&x.status!=='closed'&&x.includeInTotal===true&&finite(x.balance)).reduce((n,x)=>n+x.balance,0);if(includedAccounts)categories.push(['account',includedAccounts]);return `<div class="domain-allocation-group"><h3>${esc(g.currency)} <span>按已记录资产估值</span></h3>${categories.map(([k,v])=>`<div class="asset-allocation-row"><span><i class="domain-allocation-dot"></i>${esc(k==='account'?'计入的账户余额':ASSET_CATEGORIES[k]||k)}</span><strong>${money(v,g.currency)}</strong><div><i style="width:${Math.max(0,Math.min(100,v/g.assets*100)).toFixed(2)}%"></i></div></div>`).join('')}</div>`;}).join('');
-  return `<div class="studio-domain-dashboard studio-assets-dashboard"><div class="domain-main"><section class="domain-board"><div class="domain-board-head"><div><span class="domain-kicker">ASSETS OVERVIEW</span><h2>资产总览</h2></div><div class="domain-head-actions">${btn('添加资产','asset-add:asset_holding','','plus')}${btn('记录流水','asset-add:asset_transaction','primary','file')}</div></div><div class="domain-section-nav">${[['financial','金融资产',financial.length],['fixed','固定资产',fixed.length],['renewals','到期与续费',renewals.length]].map(([page,label,count])=>`<button data-action="nav:${page}">${label}<span>${count}</span>${icon('arrow',13)}</button>`).join('')}</div><div class="domain-asset-bento"><div class="domain-total-stack">${totalCards}</div><section class="card domain-allocation">${head('资产构成','nav:holdings','全部资产')}<div class="asset-allocation">${allocation||compactEmpty('有可靠估值后，将在这里展示资产构成。')}</div></section></div><section class="card domain-financial">${head('金融资产','nav:financial','查看全部',financial.length+' 项')}${financial.slice(0,3).map(row).join('')||compactEmpty('还没有金融资产记录','asset-add:asset_holding','添加资产')}</section><p class="asset-accounting-note domain-accounting-note">按币种分别统计，不自动换汇；账户余额仅明确勾选计入时加总。流水仅留档，不重复改变持仓。${unknown?'尚有未估值或待核对项目。':''}</p></section><section class="card domain-transactions">${head('最近流水','nav:transactions','全部流水')}${all('asset_transaction').sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,3).map(row).join('')||compactEmpty('还没有流水记录','asset-add:asset_transaction','记一笔流水')}</section></div><aside class="domain-aside"><section class="card domain-renewals">${head('近期到期与续费','nav:renewals','查看全部')}${renewals.slice(0,3).map(row).join('')||compactEmpty('近 30 天暂无已记录的到期与续费安排。')}</section><section class="card domain-pending">${head('待办与还款','nav:tasks','全部事项',(tasks.length+debts.length)+' 项安排')}${tasks.slice(0,3).map(x=>`<button class="domain-task-row" data-action="nav:tasks">${icon('task',18)}<span><strong>${esc(x.title)}</strong><small>${esc(x.date||'日期待补')}</small></span>${icon('arrow',13)}</button>`).join('')}${debts.slice(0,2).map(x=>`<div class="domain-debt"><small>还款日 ${esc(x.dueDate)}${x.dueDate<ctx.today?' · 日期已过':''}</small>${row(x)}</div>`).join('')||(!tasks.length?compactEmpty('暂无已记录的待办与还款安排。'):'')}</section><section class="card domain-fixed">${head('固定资产','nav:fixed','查看全部',fixed.length+' 项')}${fixed.slice(0,3).map(row).join('')||compactEmpty('服务器、域名与设备可保留为未估值。','asset-add:asset_holding','添加资产')}</section><section class="card domain-accounts">${head('账户与资料','nav:accounts','账户管理',accounts.length+' 个账户')}<div class="domain-account-preview">${accounts.slice(0,2).map(row).join('')||compactEmpty('还没有账户记录','asset-add:asset_account','添加账户')}</div><div class="domain-resource-links">${[['accounts','账户','grid'],['documents','资产资料','file'],['history','历史快照','calendar'],['liabilities','负债','task']].map(([page,label,ic])=>`<button data-action="nav:${page}">${icon(ic,20)}<span>${label}</span></button>`).join('')}</div></section></aside></div>`;
- }
+ function overview(){return overviewUI.render();}
+
  function documents(){if(ctx.originals)return ctx.originals.render();const files=filtered(all('file'));return `${tools()}<section class="card"><div class="card-head"><h2 class="card-title">资料原件 <span class="subtitle">${files.length} 份</span></h2>${btn('上传资料','asset-upload','primary','plus')}</div><p class="asset-pad asset-muted">保存账单、证明和导入原始文件。点击缩略图或名称查看原件。</p>${files.map(f=>`<article class="asset-document">${ctx.previews?.thumb(f,'asset-preview:'+f.id)||icon('file',24)}<div><button class="link-title" data-action="asset-preview:${esc(f.id)}">${esc(f.title)}</button><small>${esc(f.date)} · ${Math.ceil((f.size||0)/1024)}KB</small>${f.note?`<p>${esc(f.note)}</p>`:''}</div><button class="icon-btn" data-action="asset-delete:${esc(f.id)}" aria-label="删除${esc(f.title)}">${icon('trash',16)}</button></article>`).join('')||empty('还没有资料原件')}</section>`;}
  function listFor(p){const kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[p];let list=['financial','fixed','holdings'].includes(p)?assetRowsForPage(ctx.items,p):p==='renewals'?renewalItems():all(kind);if(p==='renewals'&&deadlineFilter!=='all')list=list.filter(x=>assetDeadline(x,ctx.today).status===deadlineFilter);return filtered(list);}
  function records(p){const kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[p],list=listFor(p).sort((a,b)=>p==='renewals'?(assetDeadline(a,ctx.today).date||'9999-99-99').localeCompare(assetDeadline(b,ctx.today).date||'9999-99-99'):b.date.localeCompare(a.date));return `${tools(['holdings','financial','fixed'].includes(p),p==='renewals')}${p==='fixed'?`<div class="asset-section-links">${btn('到期与续费','nav:renewals')}</div>`+'<p class="asset-accounting-note">固定资产与数字服务单独管理。续费参考费用不作为资产估值。</p>':p==='renewals'?'<p class="asset-accounting-note">仅按已记录日期提醒；续费日与到期日分别保留。不会自动付款或推定服务状态。</p>':''}<section class="card"><div class="card-head"><h2 class="card-title">${ASSET_PAGES[p]} <span class="subtitle" id="asset-list-count">${list.length} 条</span></h2>${btn(p==='fixed'?'添加固定资产':p==='financial'?'添加金融资产':p==='renewals'?'添加服务器 / 域名':'添加'+kindName(kind),'asset-add:'+kind,'primary','plus')}</div>${p==='history'?'<p class="asset-pad asset-muted">历史快照单独保存，不计入当前资产总额。</p>':''}<div id="asset-record-list">${list.map(row).join('')||empty(p==='renewals'?'暂无匹配的到期安排':'还没有'+ASSET_PAGES[p],kind)}</div></section>`;}
  function render(){const key=[ctx.workbench,ctx.space,ctx.account?.user?.id||'',ctx.page].join(':');if(location!==key){cleanup();location=key;}return `<div class="assets-content">${ctx.space==='demo'?'<div class="asset-demo">示例空间 · 所有数据均为虚构，与个人资产分别保存。</div>':''}${page()==='dashboard'?overview():page()==='documents'?documents():records(page())}</div>`;}
- function bind(){if(page()==='documents'&&ctx.originals){ctx.originals.bind();return;}const input=document.querySelector('#asset-search');if(input)input.oninput=e=>{search=e.target.value;repaintList();};const cat=document.querySelector('#asset-category-filter');if(cat)cat.onchange=e=>{category=e.target.value;repaintList();};const ac=document.querySelector('#asset-account');if(ac)ac.onchange=e=>{account=e.target.value;repaintList();};const due=document.querySelector('#asset-deadline-filter');if(due)due.onchange=e=>{deadlineFilter=e.target.value;repaintList();};}
+ function bind(){if(page()==='dashboard'){overviewUI.bind();return;}if(page()==='documents'&&ctx.originals){ctx.originals.bind();return;}const input=document.querySelector('#asset-search');if(input)input.oninput=e=>{search=e.target.value;repaintList();};const cat=document.querySelector('#asset-category-filter');if(cat)cat.onchange=e=>{category=e.target.value;repaintList();};const ac=document.querySelector('#asset-account');if(ac)ac.onchange=e=>{account=e.target.value;repaintList();};const due=document.querySelector('#asset-deadline-filter');if(due)due.onchange=e=>{deadlineFilter=e.target.value;repaintList();};}
  function repaintList(){const list=document.querySelector('#asset-record-list'),kind={accounts:'asset_account',holdings:'asset_holding',financial:'asset_holding',fixed:'asset_holding',renewals:'asset_holding',transactions:'asset_transaction',liabilities:'asset_liability',history:'asset_snapshot'}[page()];if(list){const rows=listFor(page());const count=document.querySelector('#asset-list-count');if(count)count.textContent=rows.length+' 条';list.innerHTML=rows.map(row).join('')||empty('没有匹配的记录',kind);}else if(page()==='documents'){const box=document.querySelector('.assets-content');ctx.previews?.cleanupThumbs();if(box)box.innerHTML=documents();bind();ctx.previews?.mount();}}
- function fields(kind,x){const num=(l,n,signed=false)=>field(l,n,x[n]??'','number',(signed?'':'min="0" ')+'step="any"');const cur=select('币种','currency',[['CNY','CNY 人民币'],['USD','USD 美元'],['HKD','HKD 港币'],['EUR','EUR 欧元'],['JPY','JPY 日元'],['GBP','GBP 英镑']],x.currency||'CNY');let html=cur;
+ function fields(kind,x){
+  const num=(l,n,signed=false)=>field(l,n,x[n]??'','number',(signed?'':'min="0" ')+'step="any"');
+  const currentCurrency=x.currency||'CNY';
+  const currencies=[['CNY','CNY 人民币'],['USD','USD 美元'],['HKD','HKD 港币'],['EUR','EUR 欧元'],['JPY','JPY 日元'],['GBP','GBP 英镑']];
+  if(typeof currentCurrency==='string'&&/^[A-Z]{3}$/.test(currentCurrency)&&!currencies.some(([code])=>code===currentCurrency)){
+   currencies.push([currentCurrency,currentCurrency]);
+  }
+  let html=select('币种','currency',currencies,currentCurrency);
   if(kind==='asset_account')html+=field('账户类型','accountType',x.accountType||'','text','maxlength="80" placeholder="银行 / 券商 / 支付账户"')+field('机构','institution',x.institution||'','text','maxlength="250"')+num('账户余额（可留空）','balance')+field('余额日期','balanceAsOf',x.balanceAsOf||x.date||ctx.today,'date')+`<label class="asset-check"><input type="checkbox" name="includeInTotal" ${x.includeInTotal?'checked':''}><span>将账户余额计入资产总额<small>只用于独立现金余额；若余额已包含下方持仓，请不要勾选。</small></span></label>`;
   if(kind==='asset_holding')html+=select('资产分区','assetGroup',[['financial','金融资产'],['fixed','固定资产'],['other','其他资产']],assetGroup({...x,kind:'asset_holding'}))+select('资产类别','category',Object.entries(ASSET_CATEGORIES),x.category||'other')+select('所属账户','accountId',options(),x.accountId||'')+`<div class="form-grid">${num('数量 / 份额（选填）','quantity')}${num('单价 / 净值（选填）','unitPrice')}</div>`+num('当前估值（选填）','value')+num('账本总成本（选填）','cost')+field('估值日期','valuationDate',x.valuationDate||x.date||ctx.today,'date')+select('状态','status',[['active','在用 / 持有'],['closed','已结束'],['pending','待核对']],x.status||'active')+`<details class="asset-lifecycle-fields" ${assetGroup({...x,kind:'asset_holding'})==='fixed'?'open':''}><summary>期限与续费信息（选填）</summary>${field('服务商 / 注册商','provider',x.provider||'','text','maxlength="250"')}${field('资产标识 / 域名','identifier',x.identifier||'','text','maxlength="250"')}<div class="form-grid">${field('到期日期','expiresOn',x.expiresOn||'','date')}${field('续费安排日期','renewalOn',x.renewalOn||'','date')}</div><div class="form-grid">${num('续费参考费用（未知留空）','renewalAmount')}${field('续费币种','renewalCurrency',Object.hasOwn(x,'renewalCurrency')?(x.renewalCurrency??''):(x.currency||''),'text','maxlength="3" pattern="[A-Z]{3}"')}</div>${select('平台自动续费状态','renewalMode',[['unknown','未知 / 未核实'],['manual','未开启自动续费'],['automatic','已开启自动续费']],x.renewalMode||'unknown')}<p class="asset-muted">到期日期与续费安排分别记录；续费费用不计入资产估值。</p></details>`+'<p class="asset-muted">估值留空时，仅在数量和单价都已知时计算；没有可靠价格的固定资产保留为未估值。</p>';
   if(kind==='asset_liability')html+=num('未偿余额（未核实时留空）','balance')+select('关联账户','accountId',options(),x.accountId||'')+field('余额确认日期','asOfDate',x.asOfDate||x.date||ctx.today,'date')+field('到期日（选填）','dueDate',x.dueDate||'','date')+select('状态','status',[['active','尚未结清'],['closed','已结清'],['pending','待核对']],x.status||'active');
@@ -944,13 +1643,13 @@ function createAssetsUI(ctx){const {esc,icon,btn,field}=ctx;let search='',catego
  function detail(id){const x=find(id);if(!x)return;const facts=[...(x.kind==='asset_holding'?[['资产分区',({financial:'金融资产',fixed:'固定资产',other:'其他资产'})[assetGroup(x)]],['服务商 / 注册商',x.provider||'未注明'],['资产标识',x.identifier||'未注明'],['到期日期',x.expiresOn||'未填写'],['续费安排日期',x.renewalOn||'未填写'],['日期提醒',deadlineText(x)||'无须填写期限'],['续费参考费用',assetRenewalCost(x)],['平台自动续费',({unknown:'未知 / 未核实',manual:'未开启',automatic:'已开启'})[x.renewalMode]||'未知 / 未核实']]:[]),['金额 / 估值',amount(x)],['币种',currency(x)],['状态',status(x)||'按原记录'],['类别',ASSET_CATEGORIES[x.category]||x.accountType||x.transactionType||kindName(x.kind)],['账户',x.accountId?accountName(x):'未关联'],['记录日期',x.date],['估值 / 确认日期',x.valuationDate||x.balanceAsOf||x.asOfDate||x.sourceDate||'未注明'],['数量 / 份额',finite(x.quantity)?String(x.quantity):'未注明'],['单价 / 净值',finite(x.unitPrice)?String(x.unitPrice):'未注明'],['账本成本',finite(x.cost)?money(x.cost,currency(x)):'待核实'],['来源',x.source||'手工记录'],['外部编号',x.externalId||'未注明']];ctx.openDrawer(`<dl class="asset-detail-grid">${facts.map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${x.note?`<h3 class="clinical-label">备注与来源说明</h3><div class="report-text">${esc(x.note)}</div>`:''}${x.referenceUrl&&/^https:\/\//.test(x.referenceUrl)?`<a class="btn" href="${esc(x.referenceUrl)}" target="_blank" rel="noopener noreferrer">打开来源页面</a>`:''}`,esc(x.title),kindName(x.kind),`${btn('删除','asset-delete:'+id)}${btn('编辑','asset-edit:'+id,'primary','edit')}`);}
  function remove(id){const x=find(id);if(!x)return;pendingDelete={id,space:ctx.space,workbench:ctx.workbench,owner:ctx.account?.user?.id};ctx.openDrawer(`<p class="asset-delete-summary">删除「${esc(x.title)}」${x.kind!=='file'?' · '+esc(amount(x)):''}？</p><p class="section-desc">记录将放入最近删除，30 天内可以恢复。</p>`,'删除'+kindName(x.kind),'仅删除当前工作台中的这条记录',`${btn('取消','close')}${btn('确认删除','asset-confirm-delete:'+id,'primary')}`);}
  function upload(){const sourceSpace=ctx.space,sourceWorkbench=ctx.workbench,owner=ctx.account?.user?.id;ctx.openDrawer(`<form id="asset-upload-form">${field('资料名称（选填）','title','','text','maxlength="120"')}${field('资料日期','date',ctx.today,'date','required')}<label class="asset-file-picker">${icon('file',25)}<span>选择账单或证明原件</span><input name="file" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,.txt" required><small>PDF、图片、TXT · 单份最大10MB</small></label><div class="field"><label for="asset-upload-note">备注与来源</label><textarea id="asset-upload-note" name="note" maxlength="5000"></textarea></div><div id="asset-upload-error" role="alert"></div></form>`,'上传资产资料','文件保存在当前资产空间，不会自动改动余额',`${btn('取消','close')}<button class="btn primary" form="asset-upload-form" type="submit">上传原件</button>`);const form=document.querySelector('#asset-upload-form');form.onsubmit=async e=>{e.preventDefault();if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench||ctx.account?.user?.id!==owner){ctx.toast('空间或账号已变化，请重新打开表单');return;}const button=document.querySelector('[form="asset-upload-form"]');button.disabled=true;try{const file=form.elements.file.files[0];if(!file||file.size>10*1024*1024)throw Error('请选择不超过10MB的文件');const content=await new Promise((r,j)=>{const reader=new FileReader();reader.onload=()=>r(String(reader.result).split(',')[1]);reader.onerror=()=>j(Error('文件读取失败'));reader.readAsDataURL(file)});await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:form.elements.title.value||file.name,date:form.elements.date.value,note:form.elements.note.value,content})},sourceSpace,sourceWorkbench);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast('资产资料已保存');}catch(error){if(form.isConnected)document.querySelector('#asset-upload-error').innerHTML=`<div class="form-error">${esc(error.message)}</div>`;}finally{button.disabled=false;}};}
- async function handle(action,id){if(action==='asset-add')edit(id);else if(action==='asset-edit'){const x=find(id);if(x)edit(x.kind,id);}else if(action==='asset-detail')detail(id);else if(action==='asset-delete')remove(id);else if(action==='asset-confirm-delete'){const p=pendingDelete;if(!p||p.id!==id||p.space!==ctx.space||p.workbench!==ctx.workbench||p.owner!==ctx.account?.user?.id){ctx.toast('空间已变化，请重新操作');return;}await ctx.api('/api/items/'+id,{method:'DELETE'},p.space,p.workbench);ctx.closeDrawer();await ctx.load();ctx.toast('已移入最近删除');pendingDelete=null;}else if(action==='asset-preview'){const f=find(id);if(f?.kind==='file')await ctx.previews.open(f);}else if(action==='asset-upload'){if(ctx.originals)await ctx.originals.handle('original-upload');else upload();}}
+ async function handle(action,id){if(action.startsWith('asset-overview-')){overviewUI.handle(action,id);return;}if(action==='asset-add')edit(id);else if(action==='asset-edit'){const x=find(id);if(x)edit(x.kind,id);}else if(action==='asset-detail')detail(id);else if(action==='asset-delete')remove(id);else if(action==='asset-confirm-delete'){const p=pendingDelete;if(!p||p.id!==id||p.space!==ctx.space||p.workbench!==ctx.workbench||p.owner!==ctx.account?.user?.id){ctx.toast('空间已变化，请重新操作');return;}await ctx.api('/api/items/'+id,{method:'DELETE'},p.space,p.workbench);ctx.closeDrawer();await ctx.load();ctx.toast('已移入最近删除');pendingDelete=null;}else if(action==='asset-preview'){const f=find(id);if(f?.kind==='file')await ctx.previews.open(f);}else if(action==='asset-upload'){if(ctx.originals)await ctx.originals.handle('original-upload');else upload();}}
  return {render,bind,handle,cleanup,pendingCount,liabilitySchedule,titles:ASSET_PAGES};
 }
 return { assetValue, assetProfit, calculateAssetTotals, assetRenewalCost, assetRowsForPage, createAssetsUI };
 })();
 
-const __workbenchModule9 = (() => {
+const __workbenchModule11 = (() => {
 // travel-map.js
 
 // Local Leaflet code; third-party tiles are requested only after an explicit UI action.
@@ -1011,9 +1710,9 @@ function mountTravelMap(container,{points=[],onPick}={}){
 return { travelMapPoints, mountTravelMap };
 })();
 
-const __workbenchModule10 = (() => {
+const __workbenchModule12 = (() => {
 // travel.js
-const { mountTravelMap } = __workbenchModule9;
+const { mountTravelMap } = __workbenchModule11;
 const TRAVEL_PAGES={dashboard:'我的旅行',trip:'每日行程',places:'地点地图',bookings:'预订',checklist:'出发准备',documents:'票据资料',mine:'我的'};
 const TRIP_STATUS={planned:'计划中',active:'旅行中',completed:'已结束',cancelled:'已取消'};
 const STOP_CATEGORIES={attraction:'景点',food:'餐饮',stay:'住宿',transport:'交通',other:'其他'};
@@ -1022,6 +1721,12 @@ function travelMapUrl(item){const query=new URLSearchParams({keyword:[item.title
 function travelSafeUrl(value){try{const url=new URL(value);return ['https:','http:'].includes(url.protocol)?url.href:'';}catch{return '';}}
 function travelDays(start,end){const out=[];let day=new Date(start+'T12:00:00Z'),last=new Date(end+'T12:00:00Z');if(!Number.isFinite(+day)||!Number.isFinite(+last))return out;for(let i=0;i<367&&day<=last;i++,day.setUTCDate(day.getUTCDate()+1))out.push(day.toISOString().slice(0,10));return out;}
 function travelSorted(rows){return [...rows].sort((a,b)=>(a.date||'').localeCompare(b.date||'')||(a.time||'99:99').localeCompare(b.time||'99:99')||(a.position||0)-(b.position||0)||(a.title||'').localeCompare(b.title||''));}
+function dailyItinerary(stops, bookings, day) {
+  return travelSorted([
+    ...stops.filter(stop => stop.date === day),
+    ...bookings.filter(booking => booking.date === day && booking.status !== 'cancelled'),
+  ]);
+}
 function createTravel(ctx){
  const {esc,icon,btn,field}=ctx;
  let selectedTrip='',scopeKey='',query='',statusFilter='all',pendingDelete=null,mapCleanup=null,mapObserver=null;
@@ -1044,7 +1749,7 @@ function createTravel(ctx){
  function dashboard(){
   const t=trip(),rows=trips().filter(t=>(statusFilter==='all'||t.status===statusFilter)&&(!query||`${t.title} ${t.destination||''} ${t.note||''}`.toLowerCase().includes(query.toLowerCase())));
   const checks=children('travel_check'),done=checks.filter(x=>x.done).length,stops=children('travel_stop'),reservations=travelSorted(children('travel_booking')),days=t?travelDays(t.startDate||t.date,t.endDate||t.date):[];
-  const focusDay=days.find(day=>day>=ctx.today)||days.at(-1),dayIndex=days.indexOf(focusDay),dayRows=travelSorted([...stops,...reservations].filter(x=>x.date===focusDay));
+  const focusDay=days.find(day=>day>=ctx.today)||days.at(-1),dayIndex=days.indexOf(focusDay),dayRows=dailyItinerary(stops,reservations,focusDay);
   const until=t?Math.round((Date.parse((t.startDate||t.date)+'T00:00:00Z')-Date.parse(ctx.today+'T00:00:00Z'))/86400000):null;
   const head=(title,action,label)=>`<div class="card-head"><h2 class="card-title">${title}</h2>${action?btn(label,action,'text-btn'):''}</div>`;
   const compactEmpty=(text,action,label)=>`<div class="domain-empty"><span>${icon('compass',23)}</span><p>${esc(text)}</p>${action?btn(label,action,'text-btn'):''}</div>`;
@@ -1053,7 +1758,7 @@ function createTravel(ctx){
  function rowActions(x,{toggle=false}={}){return `<div class="travel-row-actions">${toggle?`<button class="check ${x.done?'checked':''}" data-action="travel-toggle:${esc(x.id)}" aria-label="${x.done?'取消完成':'完成'}${esc(x.title)}" aria-pressed="${!!x.done}">${x.done?icon('check',13):''}</button>`:''}<button class="icon-btn" data-action="travel-edit:${esc(x.id)}" aria-label="编辑${esc(x.title)}">${icon('edit',16)}</button><button class="icon-btn" data-action="travel-delete:${esc(x.id)}" aria-label="删除${esc(x.title)}">${icon('trash',16)}</button></div>`;}
  function stopRow(x){return `<article class="travel-place-row"><div class="travel-time">${esc(x.time||'未定')}<small>${esc(STOP_CATEGORIES[x.category]||'地点')}</small></div><div class="travel-row-copy"><strong class="${x.done?'completed':''}">${esc(x.title)}</strong>${x.address?`<p>${esc(x.address)}</p>`:''}${x.note?`<p class="travel-muted">${esc(x.note)}</p>`:''}<a href="${esc(travelMapUrl(x))}" target="_blank" rel="noopener noreferrer" class="travel-nav-link">高德地图搜索 ${icon('arrow',12)}</a>${finite(x.lat)&&finite(x.lng)?'<small>已标记地图位置</small>':'<small>未标注坐标</small>'}</div>${rowActions(x,{toggle:true})}</article>`;}
  function bookingRow(x){const link=travelSafeUrl(x.referenceUrl);return `<article class="travel-booking-row"><span class="travel-booking-symbol">${icon(x.bookingType==='hotel'?'building':'ticket',21)}</span><div class="travel-row-copy"><div class="travel-row-title"><strong>${esc(x.title)}</strong><span class="travel-status ${esc(x.status)}">${esc({planned:'待确认',confirmed:'已确认',cancelled:'已取消'}[x.status]||'待确认')}</span></div><small>${esc(BOOKING_TYPES[x.bookingType]||'预订')} · ${esc(x.date)}${x.time?' '+esc(x.time):''}${x.endDate?' 至 '+esc(x.endDate):''}</small>${x.location?`<p>${esc(x.location)}</p>`:''}${x.confirmationCode?`<p>确认号：<span class="travel-confirmation">${esc(x.confirmationCode)}</span></p>`:''}${x.note?`<p class="travel-muted">${esc(x.note)}</p>`:''}${link?`<a href="${esc(link)}" target="_blank" rel="noopener noreferrer" class="travel-nav-link">打开预订链接 ${icon('arrow',12)}</a>`:''}${money(x)?`<small>预订金额 ${esc(money(x))} · 仅供留档</small>`:''}</div>${rowActions(x)}</article>`;}
- function itinerary(){const t=trip(),stops=children('travel_stop'),bookings=children('travel_booking');const used=travelDays(t.startDate||t.date,t.endDate||t.date);return `<div class="travel-section-head"><p>日期与时间按目的地当地时间记录。</p><div>${btn('添加地点','travel-add:travel_stop','primary','plus')}${btn('添加预订','travel-add:travel_booking','','ticket')}</div></div>${used.map((day,i)=>{const rows=travelSorted([...stops.filter(x=>x.date===day),...bookings.filter(x=>x.date===day)]);return `<section class="card travel-day"><header class="travel-day-head"><span>DAY ${i+1}</span><h2>${day}</h2><button class="text-btn" data-action="travel-add-day:${day}">${icon('plus',14)}地点</button></header>${rows.length?rows.map(x=>x.kind==='travel_stop'?stopRow(x):bookingRow(x)).join(''):'<p class="travel-day-empty">这一天还没有安排，留一点自由时间。</p>'}</section>`;}).join('')}`;}
+ function itinerary(){const t=trip(),stops=children('travel_stop'),bookings=children('travel_booking');const used=travelDays(t.startDate||t.date,t.endDate||t.date);return `<div class="travel-section-head"><p>日期与时间按目的地当地时间记录。</p><div>${btn('添加地点','travel-add:travel_stop','primary','plus')}${btn('添加预订','travel-add:travel_booking','','ticket')}</div></div>${used.map((day,i)=>{const rows=dailyItinerary(stops,bookings,day);return `<section class="card travel-day"><header class="travel-day-head"><span>DAY ${i+1}</span><h2>${day}</h2><button class="text-btn" data-action="travel-add-day:${day}">${icon('plus',14)}地点</button></header>${rows.length?rows.map(x=>x.kind==='travel_stop'?stopRow(x):bookingRow(x)).join(''):'<p class="travel-day-empty">这一天还没有安排，留一点自由时间。</p>'}</section>`;}).join('')}`;}
  function mapPanel(){const located=children('travel_stop').filter(x=>finite(x.lat)&&finite(x.lng));return `<section class="card travel-map-section"><div class="card-head"><h2 class="card-title">地点地图 <span class="subtitle">${located.length} 个位置</span></h2></div><div class="travel-map" id="travel-map"><div class="travel-map-placeholder">${icon('map',35)}<h3>在地图上看看这一程</h3><p>点击后加载 OpenStreetMap。地图服务将收到瓦片请求；不读取手机定位。</p>${btn('加载地图','travel-map','','map')}</div></div><p class="travel-map-note">坐标使用 WGS84。地图不可用时，下方地点和高德搜索仍可使用。</p></section>`;}
  function places(){const rows=travelSorted(children('travel_stop'));return `<div class="travel-section-head"><p>先记下地点；有坐标时会显示在地图上。</p>${btn('添加地点','travel-add:travel_stop','primary','plus')}</div>${mapPanel()}<section class="card"><div class="card-head"><h2 class="card-title">地点清单 <span class="subtitle">${rows.length} 个</span></h2></div>${rows.map(stopRow).join('')||empty('还没有地点','travel_stop','写下名字或地址就能保存，坐标可以稍后补。')}</section>`;}
  function bookings(){const rows=travelSorted(children('travel_booking'));return `<div class="travel-section-head"><p>交通、住宿与门票统一留档，不进行下单或付款。</p>${btn('添加预订','travel-add:travel_booking','primary','plus')}</div><section class="card">${rows.map(bookingRow).join('')||empty('还没有预订记录','travel_booking','保留时间、地点、确认号，出门时随手可查。')}</section>`;}
@@ -1096,7 +1801,7 @@ function createTravel(ctx){
 return { TRAVEL_PAGES, TRIP_STATUS, STOP_CATEGORIES, BOOKING_TYPES, travelMapUrl, travelSafeUrl, travelDays, travelSorted, createTravel };
 })();
 
-const __workbenchModule11 = (() => {
+const __workbenchModule13 = (() => {
 // reading.js
 
 const READING_TYPES={book:'书本',paper:'论文',article:'文章',report:'报告',other:'其他'};
@@ -1133,7 +1838,9 @@ function createReading(ctx){
  function render(){ensure();return `<div class="reading-content">${ctx.space==='demo'?'<p class="reading-demo">示例空间 · 体验记录与个人阅读分别保存</p>':''}${ctx.page==='entries'?records():ctx.page==='documents'?`<div class="reading-section-head">${btn('返回书架','nav:books','text-btn','arrow')}</div>`+ctx.originals.render({title:'导入与管理阅读文件'}):shelf()}</div>`;}
  function bind(){const dropzone=document.querySelector('#reading-dropzone'),boundScope=snapshot();if(dropzone){dropzone.ondragover=e=>{e.preventDefault();if(current(boundScope)){dropzone.classList.add('dragover');if(e.dataTransfer)e.dataTransfer.dropEffect='copy';}};dropzone.ondragleave=e=>{if(!dropzone.contains(e.relatedTarget))dropzone.classList.remove('dragover');};dropzone.ondrop=e=>{e.preventDefault();dropzone.classList.remove('dragover');if(!current(boundScope)||!dropzone.isConnected)return ctx.toast('工作台或账号已变化，请重新打开');ctx.originals.importFiles(e.dataTransfer?.files);};}const typeFilter=document.querySelector('#reading-type-filter');if(typeFilter)typeFilter.onchange=e=>{materialType=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const entrySearch=document.querySelector('#reading-entry-search');if(entrySearch)entrySearch.oninput=e=>{entryQuery=e.target.value;const start=e.target.selectionStart;ctx.render();const fresh=document.querySelector('#reading-entry-search');fresh?.focus({preventScroll:true});fresh?.setSelectionRange(start,start);};const search=document.querySelector('#reading-search');if(search)search.oninput=e=>{query=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const filter=document.querySelector('#reading-status-filter');if(filter)filter.onchange=e=>{status=e.target.value;document.querySelector('#reading-shelf').innerHTML=shelfRows();};const book=document.querySelector('#reading-book-filter');if(book)book.onchange=e=>{bookFilter=e.target.value;ctx.render();};if(ctx.page==='documents')ctx.originals.bind();ctx.previews?.mount();}
  function detail(id){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id);ctx.openDrawer(`<div class="reading-detail-top">${cover(b)}<div><span class="reading-badge">${READING_STATUS[b.status]}</span><span class="reading-badge">${READING_TYPES[b.materialType||'book']}</span><h2>${esc(b.title)}</h2><p>${esc(b.author||'作者未填写')}</p></div></div>${progress(b)}${b.note?`<p class="reading-detail-note">${esc(b.note)}</p>`:''}<div class="reading-detail-actions">${btn('记阅读','reading-session:'+id,'','calendar')}${btn('记摘录','reading-excerpt:'+id,'','file')}${btn('编辑材料','reading-edit:'+id,'','edit')}</div><h3>阅读记录与摘录</h3><section class="reading-detail-entries">${entries().filter(x=>x.bookId===id).slice(0,10).map(entryRow).join('')||'<p class="reading-muted">还没有记录，读到哪里都可以记下来。</p>'}</section><h3>关联原件 <small>${files.length} 份</small></h3><p class="reading-muted">在阅读资料中上传原件并选择所属书籍。</p>${files.map(f=>`<div class="reading-file">${ctx.previews.thumb(f,'original-preview:'+f.id)}<button data-action="original-preview:${esc(f.id)}">${esc(f.title||f.name)}</button></div>`).join('')}${btn('管理阅读资料','reading-documents','','file')}${btn('删除书籍','reading-delete:'+id,'text-btn','trash')}`,'书籍详情','阅读工作台',`${btn('关闭','close')}${btn('更新进度','reading-progress:'+id,'primary','edit')}`);ctx.previews?.mount();}
- async function read(id,annotation=null){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id).sort((a,b)=>a.id.localeCompare(b.id)),file=files.find(x=>x.id===annotation?.fileId)||files.find(x=>x.id===b.readerFileId)||files[0];if(annotation&&!files.some(x=>x.id===annotation.fileId)){ctx.toast('这条笔记关联的原文件已移除，请先恢复原文件');return;}if(!file){detail(id);ctx.toast('请先导入并关联这本书的文件');return;}const s=snapshot();let saves=Promise.resolve();await ctx.previews.open(file,{initialPage:annotation?.fileId===file.id?annotation.page:!b.readerFileId||file.id===b.readerFileId?b.currentPage||1:1,initialAnnotation:annotation,annotations:ctx.items.filter(x=>x.kind==='reading_entry'&&x.bookId===id&&x.fileId===file.id&&x.annotationType),onAnnotate:async annotation=>{if(!current(s))throw Error('工作台或账号已变化，请重新打开');const {quote='',page,startOffset,endOffset,color='yellow',annotationType='highlight',note=''}=annotation;const body={kind:'reading_entry',bookId:id,fileId:file.id,title:annotationType==='highlight'?'阅读划线':'阅读批注',date:ctx.today,entryType:'excerpt',quote,note,page,startOffset,endOffset,color,annotationType};const response=await ctx.api('/api/items',{method:'POST',headers:headers(s),body:JSON.stringify(body)},s.space,s.workbench);const record=response.item||response;if(current(s)&&record.id)ctx.items.push(record);return record;},onPage:(page,totalPages)=>{saves=saves.catch(()=>{}).then(async()=>{if(!current(s))return;const update={currentPage:page,totalPages,status:'reading',readerFileId:file.id};await ctx.api('/api/items/'+encodeURIComponent(id),{method:'PUT',headers:headers(s),body:JSON.stringify({kind:'reading_book',...update})},s.space,s.workbench);if(current(s))Object.assign(b,update);}).catch(error=>{if(current(s))ctx.toast('阅读位置保存失败：'+error.message);});return saves;}});}
+ async function read(id,annotation=null){const b=find(id);if(b?.kind!=='reading_book')return;const files=ctx.items.filter(x=>x.kind==='file'&&x.bookId===id).sort((a,b)=>a.id.localeCompare(b.id)),file=files.find(x=>x.id===annotation?.fileId)||files.find(x=>x.id===b.readerFileId)||files[0];if(annotation&&!files.some(x=>x.id===annotation.fileId)){ctx.toast('这条笔记关联的原文件已移除，请先恢复原文件');return;}if(!file){detail(id);ctx.toast('请先导入并关联这本书的文件');return;}const s=snapshot();let saves=Promise.resolve();await ctx.previews.open(file,{initialPage:annotation?.fileId===file.id?annotation.page:!b.readerFileId||file.id===b.readerFileId?b.currentPage||1:1,initialAnnotation:annotation,annotations:ctx.items.filter(x=>x.kind==='reading_entry'&&x.bookId===id&&x.fileId===file.id&&x.annotationType),onAnnotate:async annotation=>{if(!current(s))throw Error('工作台或账号已变化，请重新打开');const {quote='',page,startOffset,endOffset,color='yellow',annotationType='highlight',note=''}=annotation;const body={kind:'reading_entry',bookId:id,fileId:file.id,title:annotationType==='highlight'?'阅读划线':'阅读批注',date:ctx.today,entryType:'excerpt',quote,note,page,startOffset,endOffset,color,annotationType};const response=await ctx.api('/api/items',{method:'POST',headers:headers(s),body:JSON.stringify(body)},s.space,s.workbench);const record=response.item||response;if(current(s)&&record.id)ctx.items.push(record);return record;},
+  // Browsing from a note keeps its anchor separate from the shelf's resume position.
+  onPage:annotation?undefined:(page,totalPages)=>{saves=saves.catch(()=>{}).then(async()=>{if(!current(s))return;const update={currentPage:page,totalPages,status:'reading',readerFileId:file.id};await ctx.api('/api/items/'+encodeURIComponent(id),{method:'PUT',headers:headers(s),body:JSON.stringify({kind:'reading_book',...update})},s.space,s.workbench);if(current(s))Object.assign(b,update);}).catch(error=>{if(current(s))ctx.toast('阅读位置保存失败：'+error.message);});return saves;}});}
  function form(kind,id,defaults={},progressOnly=false){ensure();const old=id?find(id):null;if(id&&!old)return;const x=old||defaults,s=snapshot();if(kind==='reading_entry'&&!books().length){ctx.toast('请先添加一本书');form('reading_book');return;}let fields='';
  if(kind==='reading_book'){if(!progressOnly)fields=select('材料类型','materialType',Object.entries(READING_TYPES),x.materialType||'book')+field('材料名称','title',x.title||'','text','required maxlength="120"')+field('作者（选填）','author',x.author||'','text','maxlength="200"')+field('加入日期','date',x.date||ctx.today,'date','required');else fields=`<p class="reading-form-book">${esc(x.title)}</p>`;
  fields+=select('阅读状态','status',Object.entries(READING_STATUS),x.status||'wish')+`<div class="form-grid">${field('总页数（选填）','totalPages',x.totalPages??'','number','min="1" max="1000000" step="1"')}${field('当前读到第几页（选填）','currentPage',x.currentPage??'','number','min="0" max="1000000" step="1"')}</div><p class="reading-muted">没有页码的书可以只记录状态；完成状态由你选择。</p>`;if(!progressOnly)fields+=text('备注（选填）','note',x.note||'');
@@ -1148,7 +1855,7 @@ function createReading(ctx){
 return { READING_TYPES, READING_STATUS, READING_PAGES, readingProgress, readingBooks, createReading };
 })();
 
-const __workbenchModule12 = (() => {
+const __workbenchModule14 = (() => {
 // originals.js
 const { aiTag } = __workbenchModule6;
 // One metadata browser for every workbench. Original bytes stay in the existing same-origin viewer.
@@ -1185,12 +1892,12 @@ function createOriginals(ctx){
 return { originalType, filterOriginals, createOriginals };
 })();
 
-const __workbenchModule13 = (() => {
+const __workbenchModule15 = (() => {
 // shell.js
-const { createAssetsUI } = __workbenchModule8;
-const { createTravel } = __workbenchModule10;
-const { createReading } = __workbenchModule11;
-const { createOriginals } = __workbenchModule12;
+const { createAssetsUI } = __workbenchModule10;
+const { createTravel } = __workbenchModule12;
+const { createReading } = __workbenchModule13;
+const { createOriginals } = __workbenchModule14;
 function workbenchTheme(value,type='health'){const color=/^#[0-9a-f]{6}$/i.test(value||'')?value:(type==='finance'?'#A65343':type==='travel'?'#356A98':type==='reading'?'#74634F':'#2C6B51');const rgb=[1,3,5].map(i=>parseInt(color.slice(i,i+2),16));const mix=(weight)=>'#'+rgb.map(v=>Math.round(v*(1-weight)+255*weight).toString(16).padStart(2,'0')).join('');const light=rgb.reduce((n,v,i)=>n+[.2126,.7152,.0722][i]*(v/255<=.04045?v/255/12.92:((v/255+.055)/1.055)**2.4),0);return {'--theme-accent':color,'--theme-soft':mix(.92),'--theme-border':mix(.72),'--theme-ink':light>.15?'#30332F':color,'--theme-on-accent':light>.179?'#000000':'#FFFFFF','--theme-chart':light>.25?'#'+rgb.map(v=>Math.round(v*.55).toString(16).padStart(2,'0')).join(''):color,'--shell-accent':light>.15?'#30332F':color,'--shell-soft':mix(.92),'--shell-line':mix(.72),'--green':light>.15?'#30332F':color};}
 
 
@@ -1246,10 +1953,10 @@ function createShell(ctx){
  const parent=({accounts:'financial',liabilities:'financial',holdings:'dashboard',history:'dashboard',tasks:'renewals',notes:'documents'})[p]||p;
  const sections=parent==='financial'?[['financial','持仓'],['accounts','账户'],['liabilities','负债']]:parent==='documents'?[['documents','原件'],['notes','备忘']]:parent==='renewals'?[['renewals','到期与待办'],['tasks','全部待办']]:parent==='dashboard'?[['dashboard','总览'],['history','历史记录'],['holdings','资产明细']]:[];
  const subnav=sections.length?`<nav class="asset-section-links asset-subnav" aria-label="页内导航">${sections.map(([id,label])=>`<button class="btn ${p===id?'active':''}" data-action="nav:${id}" ${p===id?'aria-current="page"':''}>${label}</button>`).join('')}</nav>`:'';
- content=subnav+content;
+ content=(p==='dashboard'?'':subnav)+content;
  const entries=[['dashboard','总览','grid'],['financial','金融资产','activity'],['fixed','固定资产','building'],['transactions','流水','file'],['renewals','事项','calendar'],['documents','资料','file']];
  const navButton=(id,label,ic)=>`<button class="nav-btn ${parent===id?'active':''}" data-action="nav:${id}" ${parent===id?'aria-current="page"':''}>${icon(ic,18)}${label}${id==='renewals'&&assets.pendingCount()?`<span class="asset-nav-count">${assets.pendingCount()}</span>`:''}</button>`;
- document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('grid',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>navButton(id,label,ic)).join('')}<div class="sidebar-bottom">${navButton('mine','我的','settings')}<div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人资产工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main"><div class="heading asset-page-heading"><div><h1>${esc(p==='dashboard'?w.name+'工作台':p==='renewals'?'事项':assets.titles[p])}</h1><p>${description(w)}</p></div><div class="asset-heading-actions">${btn('记录','shell-capture','primary','plus')}${btn('导出记录','export','','download')}</div></div><nav class="asset-mobile-sections" aria-label="资产模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${parent===id?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;
+ document.querySelector('#app').innerHTML=`<div class="app"><aside class="sidebar"><div class="brand"><div class="brand-mark">${icon('grid',25)}</div><div><strong>知衡</strong><small>我的工作台</small></div></div><div class="nav-label">${esc(w.name)}</div>${entries.map(([id,label,ic])=>navButton(id,label,ic)).join('')}<div class="sidebar-bottom">${navButton('mine','我的','settings')}<div class="local-badge">${ctx.space==='demo'?'示例空间 · 虚构体验':'个人空间 · 独立记录'}</div></div></aside><div class="workspace"><header class="topbar"><div class="workspace-label">个人资产工作台</div><div class="top-actions">${btn('主题色','shell-theme','','settings')}<select id="space" class="space-switch" aria-label="切换空间"><option value="demo" ${ctx.space==='demo'?'selected':''}>示例空间 · 虚构</option><option value="personal" ${ctx.space==='personal'?'selected':''}>个人空间</option></select></div></header><main class="main generic-main">${p==='dashboard'?'':`<div class="heading asset-page-heading"><div><h1>${esc(p==='dashboard'?w.name+'工作台':p==='renewals'?'事项':assets.titles[p])}</h1><p>${description(w)}</p></div><div class="asset-heading-actions">${btn('记录','shell-capture','primary','plus')}${btn('导出记录','export','','download')}</div></div>`}<nav class="asset-mobile-sections" aria-label="资产模块">${entries.filter(([id])=>!['dashboard','mine'].includes(id)).map(([id,label])=>`<button class="${parent===id?'active':''}" data-action="nav:${id}">${label}</button>`).join('')}</nav>${content}<footer class="footer"><span>我的工作台</span><span>${esc(w.name)} · ${ctx.space==='demo'?'示例空间':'个人空间'}</span></footer></main></div></div>`;
  document.querySelector('#space').onchange=event=>ctx.setSpace(event.target.value);decorate();assets.bind();
  }
 
@@ -1263,7 +1970,7 @@ function createShell(ctx){
 
  function theme(){const w=current(),targetWorkbench=ctx.workbench,owner=ctx.account?.user?.id,currentColor=/^#[0-9a-f]{6}$/i.test(w.themeColor||'')?w.themeColor:(w.type==='finance'?'#A65343':w.type==='travel'?'#356A98':w.type==='reading'?'#74634F':'#2C6B51'),palette=['#77BC32','#2C6B51','#A65343','#356A98','#72559A','#74634F','#3B757C','#D9A63C'];ctx.openDrawer(`<form id="workbench-theme-form"><p class="section-desc">仅修改「${esc(w.name)}」的主题色，其他工作台分别保存。</p><div class="theme-palette">${palette.map(c=>`<button type="button" class="theme-swatch ${c.toLowerCase()===currentColor.toLowerCase()?'selected':''}" data-color="${c}" aria-pressed="${c.toLowerCase()===currentColor.toLowerCase()}" style="background:${c}" aria-label="选择颜色 ${c}"></button>`).join('')}</div><div class="theme-controls"><div class="field"><label for="theme-picker">选色</label><input id="theme-picker" type="color" value="${currentColor}"></div>${field('自定义颜色','themeColor',currentColor,'text','required pattern="#[0-9a-fA-F]{6}" maxlength="7"')}</div><div class="theme-preview"><strong>你的工作台，你的颜色</strong><span>按钮、导航与重点信息会使用这个颜色。</span></div><div id="theme-error" role="alert"></div></form>`,'工作台主题色',esc(w.name)+'工作台',`${btn('取消','close')}<button class="btn primary" form="workbench-theme-form" type="submit">保存主题色</button>`);const form=document.querySelector('#workbench-theme-form'),picker=form.querySelector('#theme-picker'),input=form.elements.themeColor;const preview=()=>{if(/^#[0-9a-f]{6}$/i.test(input.value)){picker.value=input.value;const box=form.querySelector('.theme-preview');for(const [key,value] of Object.entries(workbenchTheme(input.value,w.type)))box.style.setProperty(key,value);box.innerHTML=`<strong>你的工作台，你的颜色</strong><span>仅应用于「${esc(w.name)}」的按钮、导航与重点信息。</span><span class="btn primary">主要操作</span>`;for(const sw of form.querySelectorAll('[data-color]')){const selected=sw.dataset.color.toLowerCase()===input.value.toLowerCase();sw.classList.toggle('selected',selected);sw.setAttribute('aria-pressed',String(selected));}}};picker.oninput=()=>{input.value=picker.value;preview();};input.oninput=preview;preview();for(const sw of form.querySelectorAll('[data-color]'))sw.onclick=()=>{input.value=sw.dataset.color;preview();};form.onsubmit=async e=>{e.preventDefault();if(ctx.workbench!==targetWorkbench||ctx.account?.user?.id!==owner){ctx.toast('工作台或账号已变化，请重新打开');return;}const button=document.querySelector('[form="workbench-theme-form"]');button.disabled=true;try{const result=await ctx.api('/api/workbenches/'+encodeURIComponent(targetWorkbench),{method:'PATCH',body:JSON.stringify({themeColor:input.value})});const updated=result.workbench||result;Object.assign(w,updated);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast('主题色已保存');}catch(error){if(form.isConnected)form.querySelector('#theme-error').innerHTML=`<div class="form-error">${esc(error.message)}</div>`;}finally{button.disabled=false;}};
  }
- function addRecord(kind,id){const old=ctx.items.find(x=>x.id===id);const targetSpace=ctx.space,targetWorkbench=ctx.workbench,targetName=current().name,targetOwner=ctx.account?.user?.id;const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date());ctx.openDrawer(`<form id="shell-record-form"><div class="shell-context">${esc(current().name)}工作台 · ${ctx.space==='demo'?'示例空间':'个人空间'}</div>${field(kind==='task'?'待办事项':'标题','title',old?.title||'','text','required maxlength="120"')}<div class="form-grid">${field(kind==='task'?'安排日期':'日期','date',old?.date||ctx.today,'date','required')}${field('时间（选填）','time',old?.time||time,'time')}</div><div class="field"><label for="shell-record-note">${kind==='task'?'补充说明':'备忘内容'}</label><textarea id="shell-record-note" name="note" maxlength="5000" placeholder="写下需要留存的信息…">${esc(old?.note||'')}</textarea></div><div id="shell-record-error" role="alert"></div></form>`,`${old?'编辑':kind==='task'?'添加':'写一条'}${kind==='task'?'待办':'备忘'}`,`保存到${esc(current().name)}工作台`,`${btn('取消','close')}<button form="shell-record-form" type="submit" class="btn primary">保存</button>`);const form=document.querySelector('#shell-record-form');form.onsubmit=async e=>{e.preventDefault();if(ctx.space!==targetSpace||ctx.workbench!==targetWorkbench||ctx.account?.user?.id!==targetOwner||!form.isConnected){ctx.toast('工作台或账号已变化，请重新打开');return;}const button=document.querySelector('[form="shell-record-form"][type=submit]');button.disabled=true;try{const data=Object.fromEntries(new FormData(form));await ctx.api(old?'/api/items/'+id:'/api/items',{method:old?'PUT':'POST',body:JSON.stringify({...data,kind,...(kind==='task'?{done:old?.done||false,category:'日常'}:{})})},targetSpace,targetWorkbench);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast(`已保存到${targetName}工作台`);}catch(err){if(form.isConnected)document.querySelector('#shell-record-error').innerHTML=`<div class="form-error">${esc(err.message)}</div>`;else ctx.toast(err.message);}finally{button.disabled=false}};}
+ function addRecord(kind,id){const old=ctx.items.find(x=>x.id===id);const targetSpace=ctx.space,targetWorkbench=ctx.workbench,targetName=current().name,targetOwner=ctx.account?.user?.id;const time=old?(old.time??''):new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date());ctx.openDrawer(`<form id="shell-record-form"><div class="shell-context">${esc(current().name)}工作台 · ${ctx.space==='demo'?'示例空间':'个人空间'}</div>${field(kind==='task'?'待办事项':'标题','title',old?.title||'','text','required maxlength="120"')}<div class="form-grid">${field(kind==='task'?'安排日期':'日期','date',old?.date||ctx.today,'date','required')}${field('时间（选填）','time',time,'time')}</div><div class="field"><label for="shell-record-note">${kind==='task'?'补充说明':'备忘内容'}</label><textarea id="shell-record-note" name="note" maxlength="5000" placeholder="写下需要留存的信息…">${esc(old?.note||'')}</textarea></div><div id="shell-record-error" role="alert"></div></form>`,`${old?'编辑':kind==='task'?'添加':'写一条'}${kind==='task'?'待办':'备忘'}`,`保存到${esc(current().name)}工作台`,`${btn('取消','close')}<button form="shell-record-form" type="submit" class="btn primary">保存</button>`);const form=document.querySelector('#shell-record-form');form.onsubmit=async e=>{e.preventDefault();if(ctx.space!==targetSpace||ctx.workbench!==targetWorkbench||ctx.account?.user?.id!==targetOwner||!form.isConnected){ctx.toast('工作台或账号已变化，请重新打开');return;}const button=document.querySelector('[form="shell-record-form"][type=submit]');button.disabled=true;try{const data=Object.fromEntries(new FormData(form));await ctx.api(old?'/api/items/'+id:'/api/items',{method:old?'PUT':'POST',body:JSON.stringify({...data,kind,...(kind==='task'?{done:old?.done||false,category:'日常'}:{})})},targetSpace,targetWorkbench);if(form.isConnected)ctx.closeDrawer();await ctx.load();ctx.toast(`已保存到${targetName}工作台`);}catch(err){if(form.isConnected)document.querySelector('#shell-record-error').innerHTML=`<div class="form-error">${esc(err.message)}</div>`;else ctx.toast(err.message);}finally{button.disabled=false}};}
  function createWorkbench(){ctx.openDrawer(`<form id="workbench-create"><div class="helper">新工作台可保存资料、备忘与待办。健康记录会留在原工作台。</div>${field('工作台名称','name','','text','required maxlength="24" placeholder="例如：工作、学习或家庭"')}<div id="workbench-error" role="alert"></div></form>`,'创建工作台','独立管理一类事情',`${btn('取消','close')}<button class="btn primary" form="workbench-create" type="submit">创建并进入</button>`);const form=document.querySelector('#workbench-create');form.onsubmit=async e=>{e.preventDefault();const button=document.querySelector('[form="workbench-create"]');button.disabled=true;try{const data=await ctx.api('/api/workbenches',{method:'POST',body:JSON.stringify({name:form.elements.name.value,type:'other'})});const created=data.workbench||data;await ctx.refreshRegistry(created);if(!form.isConnected){await ctx.load();ctx.toast('工作台已创建，可从切换列表进入');return;}ctx.closeDrawer();await ctx.switchWorkbench(created.id);}catch(err){if(form.isConnected)document.querySelector('#workbench-error').innerHTML=`<div class="form-error">${esc(err.message)}</div>`;else ctx.toast(err.message);}finally{button.disabled=false}};}
  async function handle(action,arg){if(action==='shell-picker')switcher();else if(action==='shell-switch'){ctx.closeDrawer();await ctx.switchWorkbench(arg)}else if(action==='shell-create')createWorkbench();else if(action==='shell-capture')capture();else if(action==='shell-add')addRecord(arg);else if(action==='shell-edit'){const item=ctx.items.find(x=>x.id===arg);if(item)addRecord(item.kind,arg)}else if(action==='shell-toggle'){const item=ctx.items.find(x=>x.id===arg);if(item){await ctx.api('/api/items/'+item.id,{method:'PUT',body:JSON.stringify({done:!item.done})});await ctx.load()}}
  else if(action==='shell-spaces')ctx.openDrawer(`<div class="workbench-options"><button class="workbench-option" data-action="shell-space:personal"><span>${icon('shield',21)}</span><span><strong>个人空间</strong><small>记录你自己的资料</small></span>${ctx.space==='personal'?icon('check',18):''}</button><button class="workbench-option" data-action="shell-space:demo"><span>${icon('grid',21)}</span><span><strong>示例空间</strong><small>虚构数据，用于体验，不写入个人档案</small></span>${ctx.space==='demo'?icon('check',18):''}</button></div>`,'选择数据空间',`${esc(current().name)}工作台内的两类数据分别保存`);
@@ -1281,7 +1988,7 @@ function createShell(ctx){
 return { workbenchTheme, createShell };
 })();
 
-const __workbenchModule14 = (() => {
+const __workbenchModule16 = (() => {
 // layout-config.js
 
 // Shared, declarative health-dashboard contract. No DOM or arbitrary executable styles.
@@ -1355,9 +2062,9 @@ function applyLayoutChanges(config,currentTheme,changes){
 return { LAYOUT_WIDGETS, defaultLayoutConfig, layoutValidationError, validateLayoutConfig, applyLayoutChanges };
 })();
 
-const __workbenchModule15 = (() => {
+const __workbenchModule17 = (() => {
 // layout-editor.js
-const { LAYOUT_WIDGETS, defaultLayoutConfig, applyLayoutChanges } = __workbenchModule14;
+const { LAYOUT_WIDGETS, defaultLayoutConfig, applyLayoutChanges } = __workbenchModule16;
 const clone=value=>structuredClone(value);
 const selectors={trend:'.health-trend',bodyMetrics:'.health-body-metrics',water:'.health-water',tasks:'.health-tasks',exercise:'.health-exercise',meals:'.health-meals',visits:'.health-visits',reports:'.health-reports',medications:'.health-medication-summary'};
 const validPreview=value=>typeof value==='string'&&/^[a-f0-9-]{36}$/i.test(value);
@@ -1527,7 +2234,7 @@ function createLayoutUI(ctx){
 return { createLayoutUI };
 })();
 
-const __workbenchModule16 = (() => {
+const __workbenchModule18 = (() => {
 // component-schema.js
 
 // Shared component vocabulary. Definitions contain data, never executable markup or queries.
@@ -1626,7 +2333,7 @@ const COMPONENT_DEFINITION_SCHEMA={
 return { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, componentValidationError, validateComponentDefinition, COMPONENT_DEFINITION_SCHEMA };
 })();
 
-const __workbenchModule17 = (() => {
+const __workbenchModule19 = (() => {
 // component-card.js
 
 // Render only the evaluated component model. Definitions and data queries never
@@ -1711,7 +2418,7 @@ function renderComponentCard(model,options={}){
 return { renderComponentCard };
 })();
 
-const __workbenchModule18 = (() => {
+const __workbenchModule20 = (() => {
 // component-draft.js
 
 // Merge deliberate draft edits onto a freshly read definition after a conflict.
@@ -1742,11 +2449,11 @@ function mergeComponentDraft(base,draft,fresh){
 return { mergeComponentDraft };
 })();
 
-const __workbenchModule19 = (() => {
+const __workbenchModule21 = (() => {
 // components.js
-const { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, validateComponentDefinition } = __workbenchModule16;
-const { renderComponentCard } = __workbenchModule17;
-const { mergeComponentDraft } = __workbenchModule18;
+const { COMPONENT_CATALOG, COMPONENT_TEMPLATES, createComponentDefinition, validateComponentDefinition } = __workbenchModule18;
+const { renderComponentCard } = __workbenchModule19;
+const { mergeComponentDraft } = __workbenchModule20;
 const clone=value=>structuredClone(value),same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const initialQuery=new URLSearchParams(location.search);
 const uuid=value=>typeof value==='string'&&/^[a-f0-9-]{36}$/i.test(value);
@@ -1930,7 +2637,7 @@ function createComponentUI(ctx){
 return { createComponentUI };
 })();
 
-const __workbenchModule20 = (() => {
+const __workbenchModule22 = (() => {
 // account.js
 const { fetchJSON } = __workbenchModule6;
 const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -2126,7 +2833,7 @@ function createAccount({openDrawer, closeDrawer, toast = () => {}, onAuthenticat
 return { createAccount };
 })();
 
-const __workbenchModule21 = (() => {
+const __workbenchModule23 = (() => {
 // daily.js
 const { showFieldError, aiTag } = __workbenchModule6;
 function createDaily(ctx){
@@ -2160,7 +2867,7 @@ function createDaily(ctx){
 return { createDaily };
 })();
 
-const __workbenchModule22 = (() => {
+const __workbenchModule24 = (() => {
 // quick-defaults.js
 
 // Pure defaults for the quick-capture sheets (unit-tested in tests/quick-defaults.test.mjs).
@@ -2178,10 +2885,10 @@ function systolicComplete(value){const v=String(value??'').trim();if(!/^\d+$/.te
 return { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete };
 })();
 
-const __workbenchModule23 = (() => {
+const __workbenchModule25 = (() => {
 // quick.js
 const { showFieldError } = __workbenchModule6;
-const { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete } = __workbenchModule22;
+const { mealTypeForHour, shanghaiHour, exerciseDefaults, lastMetricType, systolicComplete } = __workbenchModule24;
 function createQuick(ctx){
  const {icon,esc,btn,field}=ctx;
  const metricNames={weight:'体重',pressure:'血压',glucose:'血糖',sleep:'睡眠',heart:'静息心率'};
@@ -2253,7 +2960,7 @@ function createQuick(ctx){
 return { createQuick };
 })();
 
-const __workbenchModule24 = (() => {
+const __workbenchModule26 = (() => {
 // report-data.js
 
 // Escape every source value. Empty reference/flag means unrecorded, never 'normal'.
@@ -2264,9 +2971,9 @@ function renderReportObservations(rows,esc){
 return { renderReportObservations };
 })();
 
-const __workbenchModule25 = (() => {
+const __workbenchModule27 = (() => {
 // medical.js
-const { renderReportObservations } = __workbenchModule24;
+const { renderReportObservations } = __workbenchModule26;
 const { institutionMark } = __workbenchModule5;
 const { showFieldError, aiTag } = __workbenchModule6;
 function createMedical(ctx){
@@ -2298,9 +3005,25 @@ function createMedical(ctx){
  function medicationImage(m){const f=find(m.imageFileId);return f?.kind==='file'&&['image/png','image/jpeg','image/webp'].includes(f.mime)?`<span class="medication-image">${previews.thumb(f)}</span>`:`<span class="event-icon metric medication-image-empty">${icon('heart',21)}</span>`;}
  function medicationCard(m){const date=doseDate||ctx.today,logs=sort(all('dose').filter(d=>d.medicationId===m.id)),active=m.status==='进行中'&&m.date<=date&&(!m.endDate||m.endDate>=date),canLog=date<=ctx.today;const times=m.scheduleMode==='asNeeded'?[]:m.times||[];return `<section class="card medication-card"><div class="medication-head">${medicationImage(m)}<div><h3>${esc(m.title)}</h3>${aiTag(m)}<p>${esc(m.prescriber||'处方来源待补充')} · ${m.date} 至 ${m.endDate||'未指定结束日期'}</p>${visitLink(m.visitId)}</div>${badge(m.status,m.status==='进行中'?'':'neutral')}${actions(m,m.status==='进行中'?`<button class="btn" data-action="med-status:${m.id}">停用方案</button>`:'')}</div><div class="medication-facts"><div><small>单次用量（按原处方）</small><strong>${esc(m.dosage)}</strong></div><div><small>用药途径</small><strong>${esc(m.route)}</strong></div><div><small>频次 / 用法</small><strong>${esc(m.frequency)}</strong></div><div><small>服用安排</small><strong>${m.scheduleMode==='asNeeded'?'按需记录':times.map(esc).join(' / ')}</strong></div></div>${m.note?`<div class="medication-note">${esc(m.note)}</div>`:''}<div class="dose-area"><div class="dose-heading"><strong>${date} · 服用记录</strong>${btn('补记一次服用','med-dose:'+m.id,'','plus')}</div>${active&&times.length?times.map(time=>{const d=logs.find(d=>d.date===date&&d.scheduledTime===time);return `<div class="dose-row"><span class="dose-time">${time}</span><span class="dose-outcome ${d?.outcome==='已服用'?'taken':''}">${d?esc(d.outcome)+(d.time?' · 实际 '+esc(d.time):''):'待记录'}</span>${d?aiTag(d):''}${d?`<button class="text-btn" data-action="med-edit:${d.id}">更正记录 ${icon('edit',12)}</button>`:canLog?`<div class="dose-actions"><button class="btn" data-action="med-take:${m.id}" data-time="${time}">记录服用</button><button class="text-btn" data-action="med-skip:${m.id}" data-time="${time}">跳过</button></div>`:''}</div>`}).join(''):`<p class="muted dose-explanation">${m.scheduleMode==='asNeeded'?'按需用药不预设次数，实际使用后记录。':m.status!=='进行中'?'方案已结束或停用，不再生成待服事项，历史记录仍保留。':'所选日期不在方案起止范围内。'}</p>`}</div><details class="dose-history"><summary>全部服用历史 <span>${logs.length} 条</span></summary>${logs.length?logs.map(d=>`<div class="dose-row"><div><strong>${d.date} ${esc(d.scheduledTime||'补记')}</strong>${aiTag(d)}<small>${esc(d.outcome)}${d.time?' · 实际 '+esc(d.time):''}${d.note?' · '+esc(d.note):''}</small></div>${actions(d)}</div>`).join(''):'<p class="muted">尚无服用记录。</p>'}</details></section>`;}
  function bind(){const date=document.querySelector('#medical-file-date');if(date)date.onchange=e=>{fileDate=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount();};const input=document.querySelector('#medical-search');if(input)input.oninput=e=>{search=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};const statusEl=document.querySelector('#medical-status');if(statusEl)statusEl.onchange=e=>{status=e.target.value;previews.cleanupThumbs();document.querySelector('#medical-list').innerHTML=listContent();previews.mount()};for(const input of document.querySelectorAll('#med-dose-date,#field-doseDate'))input.onchange=e=>{doseDate=e.target.value||ctx.today;ctx.render()};}
- function medicationImageFields(m){const files=all('file').filter(f=>['image/png','image/jpeg','image/webp'].includes(f.mime));const existing=find(m.imageFileId);return `<div class="medication-image-editor"><h3>药品图片（可选）</h3><div id="med-image-current">${existing?previews.thumb(existing,''):'<p class="muted">暂无药品图片</p>'}</div>${select('选择已保存的图片','imageFileId',[['','不关联图片'],...files.map(f=>[f.id,`${f.title} · ${f.date}`]),...(m.imageFileId&&!existing?[[m.imageFileId,'原图片已删除（保留原关联）']]:[])],m.imageFileId||'')}<label class="upload-box">${icon('file',22)}<p>拍摄药盒或选择图片</p><input type="file" id="medication-image-upload" accept="image/png,image/jpeg,image/webp" aria-label="拍摄药盒或上传药品图片"><small>PNG、JPG、WEBP · 最大 10MB</small></label><button type="button" class="btn" id="med-image-remove">移除图片关联</button><p class="section-desc">使用你上传的真实图片，点图片可查看原图。</p><div id="medication-upload-state" role="status" aria-live="polite"></div></div>`;}
- function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old?.visitId||visitId||x.visitId||activeId||'';let body='';
- if(kind==='report'){const files=all('file').filter(f=>!f.visitId||f.visitId===x.visitId);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+select('关联已有原件（可选）','fileId',[['','暂不关联'],...files.map(f=>[f.id,f.title])],x.fileId||'')+`<label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
+ function medicationImageFields(m){const files=all('file').filter(f=>['image/png','image/jpeg','image/webp'].includes(f.mime));const existing=find(m.imageFileId);return `<div class="medication-image-editor"><h3>药品图片（可选）</h3><div id="med-image-current">${existing?previews.thumb(existing,''):'<p class="muted">暂无药品图片</p>'}</div>${select('选择已保存的图片','imageFileId',[['','不关联图片'],...files.map(f=>[f.id,`${f.title} · ${f.date}`]),...(m.imageFileId&&!existing?[[m.imageFileId,'原图片已删除（保留原关联）']]:[])],m.imageFileId||'')}<label class="upload-box">${icon('file',22)}<p>拍摄药盒或选择图片</p><input type="file" id="medication-image-upload" accept="image/png,image/jpeg,image/webp" aria-label="拍摄药盒或上传药品图片"><small>PNG、JPG、WEBP · 最大 10MB</small></label><button type="button" class="btn" id="med-image-cancel-upload" hidden>取消待上传</button> <button type="button" class="btn" id="med-image-remove">移除图片关联</button><p class="section-desc">使用你上传的真实图片，点图片可查看原图。</p><div id="medication-upload-state" role="status" aria-live="polite"></div></div>`;}
+ function reportOriginalChoices(visitId,selected,old){
+  const otherVisitFiles=new Set(all('report').filter(r=>r.id!==old?.id&&r.visitId&&r.visitId!==visitId).map(r=>r.fileId));
+  const files=all('file').filter(f=>(!f.visitId||f.visitId===visitId)&&!otherVisitFiles.has(f.id));
+  const choices=[['','暂不关联'],...files.map(f=>[f.id,f.title])];
+  const historicalId=(old?.visitId||'')===visitId?old?.fileId:'';
+  if(historicalId&&!files.some(f=>f.id===historicalId)){
+   const file=find(historicalId);
+   choices.push([historicalId,file?`${file.title}（保留原关联）`:'原件已删除（保留原关联）']);
+  }
+  const blocked=Boolean(selected&&!choices.some(([value])=>value===selected));
+  if(blocked)choices.push([selected,`${find(selected)?.title||'原件已删除'}（此就诊不可用）`,true]);
+  const notice=blocked?'此就诊无法使用已选原件。请换选原件、上传新原件或选择「暂不关联」。'
+   :selected&&selected===historicalId&&!files.some(f=>f.id===selected)?'此报告可以保留原件的历史关联，也可以更换或解除关联。':'';
+  const options=choices.map(([value,label,disabled])=>`<option value="${esc(value)}"${value===selected?' selected':''}${disabled?' disabled':''}>${esc(label)}</option>`).join('');
+  return {options,notice,blocked};
+ }
+ function openMedical(kind,id=null,visitId='',preset={}){const old=find(id);if(!old&&kind!=='dose'&&!all('visit').length){ctx.openDrawer(`<div class="medical-empty">${icon('visit',30)}<h3>先建立一次就诊</h3><p>报告和用药方案需要关联就诊，方便保留来源与后续安排。</p>${btn('添加就诊','add:visit','primary','plus')}</div>`,'关联就诊','先建立来源，再整理报告与用药');return;}const x={date:ctx.today,status:kind==='report'?'待补充':'进行中',type:'就诊记录',scheduleMode:'scheduled',times:[],...old,...preset};x.visitId=old&&kind==='report'?(old.visitId||''):(old?.visitId||visitId||x.visitId||activeId||'');let body='';
+ if(kind==='report'){const originals=reportOriginalChoices(x.visitId,x.fileId||'',old);body=select('报告分类','type',['就诊记录','检验报告','影像报告','处方','出院记录','其他'],x.type)+select('报告状态','status',['待出报告','待补充','待核对','已归档'],x.status)+field('报告来源 / 机构','source',x.source||'','text','maxlength="250"')+textarea('报告原文 / 手工摘录','content',x.content||'','按原始报告逐字录入结论，不将推测写成检查事实。')+`<div class="field"><label for="field-fileId">关联已有原件（可选）</label><select id="field-fileId" name="fileId" aria-describedby="report-original-notice">${originals.options}</select><small id="report-original-notice" role="status">${originals.notice}</small></div><label class="upload-box">${icon('file',24)}<p>也可以上传一份新原件</p><input type="file" id="report-upload" accept=".pdf,.png,.jpg,.jpeg,.txt,.webp" aria-label="上传报告原件"><small>PDF、图片、TXT · 最大 10MB · 不自动解析</small></label><div id="report-upload-state"></div>`;}
  if(kind==='medication')body=`<div class="helper">请按原始处方或医生交代填写。此处只记录方案，不推算用量。</div>`+medicationImageFields(x)+field('单次用量（含单位）','dosage',x.dosage||'','text','required maxlength="250" placeholder="按处方原文填写"')+`<div class="form-grid">${field('用药途径','route',x.route||'','text','required maxlength="250" placeholder="按处方填写"')}${field('频次 / 用法','frequency',x.frequency||'','text','required maxlength="250" placeholder="按处方填写"')}</div>`+field('处方医生 / 来源','prescriber',x.prescriber||'','text','maxlength="250"')+select('记录方式','scheduleMode',[['scheduled','按指定时间记录'],['asNeeded','按需使用，不设次数']],x.scheduleMode)+`<div id="med-time-field" ${x.scheduleMode==='asNeeded'?'hidden':''}>${field('每日服用时间','times',(x.times||[]).join(', '),'text','placeholder="例如 08:00, 20:00"')}<p class="section-desc">时间以逗号分隔，最多 12 个；只用于应用内记录，不发送系统提醒。</p></div>`+field('结束日期（可选）','endDate',x.endDate||'','date')+select('方案状态','status',['进行中','已停用','已完成'],x.status);
  if(kind==='dose'){const med=find(x.medicationId);if(!med){ctx.toast('找不到用药方案');return}body=`<div class="helper"><b>${esc(med.title)}</b><br>${esc(med.dosage)} · ${esc(med.frequency)}<br>${x.scheduledTime?'对应计划时段 '+esc(x.scheduledTime):'补记一次实际使用，不额外生成计划次数。'}</div><input type="hidden" name="medicationId" value="${med.id}"><input type="hidden" name="scheduledTime" value="${esc(x.scheduledTime||'')}">`+select('服用结果','outcome',['已服用','跳过'],x.outcome||'已服用')+field('实际服用时间（跳过时可留空）','time',x.time||new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',hour:'2-digit',minute:'2-digit'}).format(new Date()),'time');}
  const label={report:'就诊报告',medication:'用药方案',dose:'服用记录'}[kind];
@@ -2308,13 +3031,158 @@ function createMedical(ctx){
  ctx.openDrawer(`<form id="medical-form"><div class="helper">${ctx.space==='demo'?'示例空间 · 虚构示例，不构成处方':'个人空间 · 按原始记录填写'}</div>${kind==='dose'?'':select('关联就诊','visitId',visitOptions(x.visitId),x.visitId)}${field(kind==='medication'?'药物名称':kind==='report'?'报告标题':'记录名称','title',x.title||'','text','required maxlength="120"')}${field(kind==='medication'?'开始日期':'记录日期','date',x.date,'date',kind==='dose'?`required max="${ctx.today}"`:'required')}${body}${textarea(kind==='dose'?'备注 / 跳过原因（跳过必填）':'补充备注','note',x.note||'')}<div id="medical-error" role="alert"></div></form>`,`${id?'编辑':'添加'}${label}`,`${ctx.space==='demo'?'示例空间':'个人空间'} · 保存后回到当前页面`,`${btn('取消','close')}<button type="submit" form="medical-form" class="btn primary">${icon('check',14)}保存${label}</button>`);
  document.querySelector('#field-scheduleMode')?.addEventListener('change',e=>{document.querySelector('#med-time-field').hidden=e.target.value==='asNeeded'});
  if(kind==='dose'){const outcome=document.querySelector('#field-outcome');const timeField=document.querySelector('#field-time').closest('.field');timeField.hidden=outcome.value==='跳过';outcome.onchange=()=>{timeField.hidden=outcome.value==='跳过'};}
- let uploaded=null;
- document.querySelector('#medical-form').onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const imageControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-remove,[name="imageFileId"]')]:[];const data=Object.fromEntries(new FormData(e.target));imageControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
- if(kind==='medication'){const file=e.target.querySelector('#medication-image-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');const state=e.target.querySelector('#medication-upload-state');try{state.textContent='正在读取并上传药品图片…';if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content})},sourceSpace,sourceWorkbench);}data.imageFileId=uploaded.id;state.textContent='图片上传成功，正在保存用药方案…';}catch(error){state.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';throw error;}}}
- if(kind==='report'){const file=document.querySelector('#report-upload').files[0];if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);document.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
- await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;imageControls.forEach(el=>el.disabled=false)}};
- if(kind==='medication'){const form=document.querySelector('#medical-form'),upload=form.querySelector('#medication-image-upload'),choice=form.elements.imageFileId,state=form.querySelector('#medication-upload-state');const update=()=>{const file=find(choice.value);form.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};upload.onchange=()=>{uploaded=null;const file=upload.files[0];state.textContent=file?'待上传：'+file.name+'（保存用药方案时上传）':'';};choice.onchange=()=>{upload.value='';uploaded=null;state.textContent='';update();};form.querySelector('#med-image-remove').onclick=()=>{choice.value='';upload.value='';uploaded=null;state.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};previews.mount();}
- if(kind==='report')document.querySelector('#report-upload').onchange=()=>{uploaded=null;document.querySelector('#report-upload-state').innerHTML=''};
+ const form=document.querySelector('#medical-form');
+ const reportChoice=kind==='report'?form.elements.fileId:null;
+ const reportVisit=kind==='report'?form.elements.visitId:null;
+ const reportUpload=kind==='report'?form.querySelector('#report-upload'):null;
+ let uploaded=null,initialMedicationImage,removeMedicationImage=false;
+ let selectedMedicationImage=null,medicationUpload=null,uploadFieldError=null;
+ const medicationForm=kind==='medication'?form:null;
+ const uploadState=medicationForm?.querySelector('#medication-upload-state');
+ const cancelUpload=medicationForm?.querySelector('#med-image-cancel-upload');
+ const visitChoice=medicationForm?.elements.visitId;
+ const visitUploadError=medicationForm?document.createElement('div'):null;
+ if(visitUploadError){
+  visitUploadError.id='medication-upload-visit-error';
+  visitUploadError.className='form-error';
+  visitUploadError.hidden=true;
+  visitUploadError.setAttribute('role','alert');
+  visitChoice.insertAdjacentElement('afterend',visitUploadError);
+ }
+ const showVisitUploadError=message=>{
+  visitUploadError.hidden=false;
+  visitUploadError.textContent=message+'。请选择有效就诊后重试，或在药品图片处选择「'+cancelUpload.textContent+'」。';
+  visitChoice.setAttribute('aria-invalid','true');
+  visitChoice.setAttribute('aria-describedby',visitUploadError.id);
+  visitChoice.disabled=false;
+  visitChoice.focus();
+  uploadState.textContent='待上传图片和处方草稿已保留。';
+ };
+ const clearVisitUploadError=()=>{
+  if(!visitUploadError.textContent)return;
+  visitUploadError.textContent='';
+  visitUploadError.hidden=true;
+  if(visitChoice.getAttribute('aria-describedby')===visitUploadError.id){
+   visitChoice.removeAttribute('aria-describedby');
+   visitChoice.removeAttribute('aria-invalid');
+  }
+ };
+ const clearUploadErrors=()=>{
+  clearVisitUploadError();
+  if(!uploadFieldError?.isConnected)return;
+  const described=medicationForm.querySelector(`[aria-describedby="${CSS.escape(uploadFieldError.id)}"]`);
+  described?.removeAttribute('aria-describedby');
+  described?.removeAttribute('aria-invalid');
+  uploadFieldError.remove();
+  uploadFieldError=null;
+ };
+ form.onsubmit=async e=>{e.preventDefault();const submit=document.querySelector('.drawer-foot button[type=submit]');submit.disabled=true;const attachmentControls=kind==='medication'?[...e.target.querySelectorAll('#medication-image-upload,#med-image-cancel-upload,#med-image-remove,[name="imageFileId"],[name="visitId"]')]:kind==='report'?[reportVisit,reportChoice,reportUpload]:[];const data=Object.fromEntries(new FormData(e.target));attachmentControls.forEach(el=>el.disabled=true);try{if(ctx.space!==sourceSpace||ctx.workbench!==sourceWorkbench)throw Error('空间已切换，请重新打开表单');if(kind==='medication')data.times=data.scheduleMode==='asNeeded'?[]:String(data.times||'').split(/[,，\s]+/).filter(Boolean);
+ if(kind==='medication'){
+ // The select starts with the image seen when the drawer opened. An unchanged
+ // value must not replace a newer association created while the drawer was open.
+ if(id&&!removeMedicationImage&&data.imageFileId===initialMedicationImage)delete data.imageFileId;
+ const file=selectedMedicationImage;
+ if(file){
+  clearUploadErrors();
+  if(!data.visitId){showVisitUploadError('请选择关联就诊');return;}
+  try{
+   if(file.size>10*1024*1024)throw Error('药品图片不能超过 10MB');
+   if(!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('请选择 PNG、JPG 或 WEBP 图片');
+   uploadState.textContent='正在读取并上传药品图片…';
+   if(!medicationUpload||medicationUpload.visitId!==data.visitId)medicationUpload={visitId:data.visitId,id:crypto.randomUUID()};
+   if(!medicationUpload.body){
+    const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('图片读取失败'));reader.readAsDataURL(file)});
+    medicationUpload.body=JSON.stringify({name:file.name,title:(data.title+' · 药品图片').slice(0,120),date:data.date,visitId:data.visitId,fileCategory:'药品图片',content,uploadAttemptId:medicationUpload.id});
+   }
+   // Keep the same request when the server may have committed before the response was lost.
+   medicationUpload.result??=await ctx.api('/api/upload',{method:'POST',body:medicationUpload.body},sourceSpace,sourceWorkbench);
+   data.imageFileId=medicationUpload.result.id;
+   cancelUpload.textContent='放弃本次图片关联';
+   uploadState.textContent='图片上传成功，正在保存用药方案…';
+  }catch(error){
+   // A validation rejection lets the user fix fields. Keep the key to prevent a second original.
+   if(error.status===400&&error.code==='validation_failed'&&error.field!=='visitId'&&medicationUpload&&!medicationUpload.uncertain)medicationUpload.body=null;
+   if(!e.target.isConnected)throw error;
+   cancelUpload.textContent='取消待上传';
+   if(error.status===400&&error.code==='validation_failed'&&error.field==='visitId'){
+    showVisitUploadError(error.message);
+   }else if(error.uncertainWrite){
+    medicationUpload.uncertain=true;
+    uploadState.textContent='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。未收到上传结果，也可取消待上传。';
+   }else{
+    const message='图片上传失败，原有图片关联及处方内容已保留。可重试或重新选择图片。';
+    if(showFieldError(e.target,error)){
+     uploadFieldError=e.target.querySelector(`#${CSS.escape(error.field+'-field-error')}`);
+     uploadState.textContent=message;
+    }else{
+     uploadState.textContent=message+' '+error.message;
+    }
+   }
+   return;
+  }
+ }}
+ if(kind==='report'){
+  const file=reportUpload.files[0];
+  const selected=reportOriginalChoices(data.visitId,reportChoice.value,old);
+  if(!file&&selected.blocked)throw Error(selected.notice);
+  if(uploaded&&uploaded.visitId!==data.visitId)throw Error('已上传的原件属于之前选择的就诊，请重新选择文件或已有原件。');
+  data.fileId=reportChoice.value;
+  if(file){if(file.size>10*1024*1024)throw Error('原件不能超过 10MB');if(!uploaded){const content=await new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result.split(',')[1]);reader.onerror=()=>reject(Error('文件读取失败'));reader.readAsDataURL(file)});uploaded=await ctx.api('/api/upload',{method:'POST',body:JSON.stringify({name:file.name,title:file.name,date:data.date,visitId:data.visitId,content})},sourceSpace,sourceWorkbench);e.target.querySelector('#report-upload-state').innerHTML=`<p class="notice">${esc(uploaded.title)} 已保存到资料档案，待关联本报告。</p>`;}data.fileId=uploaded.id;}}
+ await ctx.api(id?'/api/items/'+id:'/api/items',{method:id?'PUT':'POST',body:JSON.stringify({...data,kind})},sourceSpace,sourceWorkbench);if(document.querySelector('#medical-form')===e.target)ctx.closeDrawer();await ctx.load();ctx.toast(label+'已保存到健康工作台');}catch(err){if(e.target.isConnected&&medicationUpload?.result)uploadState.textContent='图片已保存到资料档案。可重试保存方案或放弃本次图片关联。';if(e.target.isConnected&&showFieldError(e.target,err))return;const errorTarget=e.target.isConnected?e.target.querySelector('#medical-error'):null;if(!errorTarget){ctx.toast(err.message);return;}errorTarget.innerHTML=`<div class="form-error">${esc(err.message)}</div>`}finally{submit.disabled=false;attachmentControls.forEach(el=>el.disabled=false)}};
+ if(kind==='medication'){
+  const upload=medicationForm.querySelector('#medication-image-upload'),choice=medicationForm.elements.imageFileId;
+  initialMedicationImage=choice.value;
+  const update=()=>{const file=find(choice.value);medicationForm.querySelector('#med-image-current').innerHTML=file?previews.thumb(file,''):'<p class="muted">暂无药品图片</p>';previews.mount();};
+  const clearUpload=()=>{
+   upload.value='';
+   selectedMedicationImage=null;
+   medicationUpload=null;
+   cancelUpload.hidden=true;
+   clearUploadErrors();
+  };
+  const showPending=()=>{
+   cancelUpload.hidden=!selectedMedicationImage;
+   cancelUpload.textContent=medicationUpload?.result?'放弃本次图片关联':'取消待上传';
+   if(medicationUpload?.result&&medicationUpload.visitId===visitChoice.value){
+    uploadState.textContent='图片已保存到资料档案，待关联用药方案。';
+   }else{
+    uploadState.textContent=selectedMedicationImage?'待上传：'+selectedMedicationImage.name+'（保存用药方案时上传）':'';
+   }
+  };
+  // An identical selection should fire change. Cancelling the picker keeps the retained File.
+  upload.onclick=()=>{upload.value='';};
+  upload.onchange=()=>{
+   selectedMedicationImage=upload.files[0]||null;
+   medicationUpload=null;
+   clearUploadErrors();
+   showPending();
+  };
+  visitChoice.onchange=()=>{
+   clearVisitUploadError();
+   if(selectedMedicationImage)showPending();
+  };
+  cancelUpload.onclick=()=>{
+   const stored=medicationUpload?.result,uncertain=medicationUpload?.uncertain;
+   clearUpload();
+   upload.focus();
+   uploadState.textContent=stored?'已放弃本次图片关联，原件仍保存在资料档案。':
+    uncertain?'已取消待上传。若上传已完成，原件仍保存在资料档案。':'已取消待上传。';
+  };
+  choice.onchange=()=>{removeMedicationImage=false;clearUpload();uploadState.textContent='';update();};
+  medicationForm.querySelector('#med-image-remove').onclick=()=>{removeMedicationImage=true;choice.value='';clearUpload();uploadState.textContent='保存后移除关联，原图片仍保存在资料档案。';update();};
+  previews.mount();
+ }
+ if(kind==='report'){
+  const notice=form.querySelector('#report-original-notice'),state=form.querySelector('#report-upload-state');
+  const updateChoices=()=>{
+   const options=reportOriginalChoices(reportVisit.value,reportChoice.value,old);
+   reportChoice.innerHTML=options.options;
+   notice.textContent=uploaded&&uploaded.visitId!==reportVisit.value?'已上传的原件属于之前选择的就诊，请重新选择文件或已有原件。':reportUpload.files[0]?'':options.notice;
+  };
+  reportVisit.onchange=updateChoices;
+  reportChoice.onchange=()=>{reportUpload.value='';uploaded=null;state.textContent='';updateChoices();};
+  reportUpload.onchange=()=>{uploaded=null;state.textContent='';updateChoices();};
+ }
  }
  function showReport(id){const r=find(id);if(!r)return;const f=find(r.fileId);ctx.openDrawer(`<div class="report-flags">${badge(r.type,'visit')}${badge(r.status)}${badge(f?'已关联原件':'原件待补充')}</div><div class="report-metadata"><span>报告日期：${r.date}</span><span>来源：${esc(r.source||'未填写')}</span>${visitLink(r.visitId)}</div>${renderReportObservations(r.observations,esc)}<h3 class="clinical-label">报告原文 / 手工摘录</h3><div class="report-text">${esc(r.content||'尚未录入文字。上传原件不会自动识别，请按原文补充。')}</div>${r.note?`<h3 class="clinical-label">补充备注</h3><div class="report-text">${esc(r.note)}</div>`:''}${f?`<div class="report-original"><span>${icon('file',17)} ${esc(f.title)}</span><div>${btn('查看原件','med-preview-report:'+r.id)}<a class="btn" href="/api/files/${f.id}?space=${ctx.space}&workbench=${ctx.workbench}" download>${icon('download',14)}下载</a></div></div>`:'<div class="notice">原件待补充。可以编辑报告上传文件或关联已有资料。</div>'}`,esc(r.title),'保存原文与来源，不自动生成诊断',`${btn('关闭','close')}${btn('编辑报告','med-edit:'+id,'primary','edit')}`);}
  async function preview(id,backAction=''){const f=find(id);if(f?.kind==='file')await previews.open(f,{backAction});}
@@ -2337,7 +3205,7 @@ function createMedical(ctx){
 return { createMedical };
 })();
 
-const __workbenchModule26 = (() => {
+const __workbenchModule28 = (() => {
 // reader-shell.js
 
 const PREFERENCE_KEY='reading-appearance-v1';
@@ -2365,7 +3233,7 @@ function mountReaderShell(root,{title='',onClose}={}){
 return { readerPreferences, mountReaderShell };
 })();
 
-const __workbenchModule27 = (() => {
+const __workbenchModule29 = (() => {
 // reading-text.js
 
 // Preserve poem boundaries only for the explicitly supported collection export format.
@@ -2389,10 +3257,10 @@ function poetryTextSections(text){const first=text.indexOf('\n'),second=text.ind
 return { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections };
 })();
 
-const __workbenchModule28 = (() => {
+const __workbenchModule30 = (() => {
 // file-preview.js
-const { mountReaderShell } = __workbenchModule26;
-const { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections } = __workbenchModule27;
+const { mountReaderShell } = __workbenchModule28;
+const { readerTextPages, highlightSegments, poetryDisplayText, poetryTextSections } = __workbenchModule29;
 // Originals stay on this origin; sensitive preview data lives only for the current view.
 function createFilePreviews(ctx){
  const {esc,icon,btn}=ctx;let observer,queue=[],running=0,epoch=0,viewer=null;const jobs=new Map();
@@ -2469,14 +3337,14 @@ const { createCgmUI } = __workbenchModule1;
 const { normalizeHealthRoute } = __workbenchModule2;
 const { institutionFields, bindInstitutionPicker, institutionMark } = __workbenchModule5;
 const { fetchJSON, showFieldError, aiTag, aiWhen } = __workbenchModule6;
-const { createShell, workbenchTheme } = __workbenchModule13;
-const { createLayoutUI } = __workbenchModule15;
-const { createComponentUI } = __workbenchModule19;
-const { createAccount } = __workbenchModule20;
-const { createDaily } = __workbenchModule21;
-const { createQuick } = __workbenchModule23;
-const { createMedical } = __workbenchModule25;
-const { createFilePreviews } = __workbenchModule28;
+const { createShell, workbenchTheme } = __workbenchModule15;
+const { createLayoutUI } = __workbenchModule17;
+const { createComponentUI } = __workbenchModule21;
+const { createAccount } = __workbenchModule22;
+const { createDaily } = __workbenchModule23;
+const { createQuick } = __workbenchModule25;
+const { createMedical } = __workbenchModule27;
+const { createFilePreviews } = __workbenchModule30;
 let trashedIds=[];
 const $=(s,r=document)=>r.querySelector(s);
 const paths={compass:'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20m4 6-2 6-6 2 2-6Z',map:'m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2Zm6-2v16M15 5v16',ticket:'M3 5h18v5a2 2 0 0 0 0 4v5H3v-5a2 2 0 0 0 0-4Zm12 0v3m0 3v2m0 3v3',building:'M5 21V3h14v18M2 21h20M9 7h1m4 0h1M9 11h1m4 0h1M10 21v-6h4v6',suitcase:'M8 6V3h8v3M5 6h14a2 2 0 0 1 2 2v11H3V8a2 2 0 0 1 2-2Zm2 0v13M17 6v13',leaf:'M20 4C12 3 3 7 4 15c1 7 12 7 15-1 1-3 1-7 1-10ZM5 19 16 8M10 14l-1-5M13 11l5 1',grid:'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',heart:'M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z',visit:'M8 3H5a2 2 0 0 0-2 2v4a5 5 0 0 0 10 0V5a2 2 0 0 0-2-2M8 14v2a5 5 0 0 0 10 0v-3M18 8a2 2 0 1 0 0 4 2 2 0 0 0 0-4',exercise:'m3 9 6-6M2 6l4 4M5 3l4 4M15 21l6-6M14 17l4 4M17 14l4 4M8 8l8 8',meal:'M4 3v6a3 3 0 0 0 6 0V3M7 3v18M19 21V3c-5 3-5 10 0 10',metric:'M3 12h4l3-8 4 16 3-8h4',task:'M9 4h10a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4M8 2h8v4H8zM7 13l3 3 6-6',file:'M14 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9ZM14 2v7h7M7 14h10M7 18h7',settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M10 2h4l1 3 3 1 3 3v4l-3 2-1 3-3 3h-4l-2-3-3-1-3-3v-4l3-2 1-3Z',arrow:'m9 5 7 7-7 7',plus:'M12 5v14M5 12h14',search:'M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14m5 12 6 6',close:'m6 6 12 12M6 18 18 6',check:'m5 12 4 4L19 6',calendar:'M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2',sparkles:'m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5ZM20 2v4M18 4h4',clock:'M12 8v5l4 2M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20',edit:'m16 3 5 5M4 15 16 3l5 5L9 20l-6 1Z',trash:'M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7M14 10v7',download:'M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5',menu:'M3 6h18M3 12h18M3 18h18',moon:'M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11',scale:'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2M7 7a7 7 0 0 1 10 0M12 7l2-2',shield:'m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6ZM8 12l3 3 5-6',activity:'m3 17 6-6 4 4 8-11M16 4h5v5',info:'M12 11v6M12 7h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20'};

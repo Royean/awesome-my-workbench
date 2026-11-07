@@ -104,3 +104,27 @@ test('rejects a truncated WebP before replacing an existing logo map', () => fix
  assert.throws(() => exportHospitalLogoMap(source,pub),/Only reviewed PNG\/JPEG\/WebP/);
  assert.equal(readFileSync(path.join(pub,'hospital-logo-map.js'),'utf8'),'prior-review-map');
 }));
+
+
+test('reviewed ambiguous aliases cannot return through inherited catalog aliases',()=>fixture(({source,pub,row,insert})=>{
+ row.aliases_json=JSON.stringify(['虚构历史全名','歧义简称']);
+ row.details_json=JSON.stringify({logoMapping:{publicId:'fictional-approved',city:'成都',reviewedAt:'2026-11-08',aliases:['已核实完整别名','歧义简称'],excludedAliases:[' 歧义简称 ']}});
+ insert(row);const before=readFileSync(source);exportHospitalLogoMap(source,pub);
+ const mapping=mappings(pub)[0];assert.deepEqual(mapping.aliases,['虚构历史全名','已核实完整别名']);
+ institutions.push(mapping);
+ try{
+  assert.equal(resolveInstitution({hospital:'歧义简称',city:'成都'}),null);
+  assert.equal(resolveInstitution({hospital:'虚构历史全名',city:'成都'})?.id,mapping.id);
+  assert.equal(resolveInstitution({hospital:'已核实完整别名',city:'成都'})?.id,mapping.id);
+  assert.equal(resolveInstitution({hospitalId:mapping.id,city:'成都'})?.id,mapping.id);
+ }finally{institutions.pop()}
+ assert.deepEqual(readFileSync(source),before);
+}));
+test('malformed reviewed alias exclusions leave the previous export intact',()=>{
+ for(const excludedAliases of ['歧义简称',[null],[' ']])fixture(({source,pub,row,insert})=>{
+  row.details_json=JSON.stringify({logoMapping:{publicId:'fictional-approved',city:'成都',reviewedAt:'2026-11-08',excludedAliases}});insert(row);
+  mkdirSync(pub);const target=path.join(pub,'hospital-logo-map.js');writeFileSync(target,'prior-review-map');
+  assert.throws(()=>exportHospitalLogoMap(source,pub),/Invalid reviewed alias exclusions/);
+  assert.equal(readFileSync(target,'utf8'),'prior-review-map');assert.equal(existsSync(path.join(pub,'provider-logos')),false);
+ });
+});

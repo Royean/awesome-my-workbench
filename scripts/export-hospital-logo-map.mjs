@@ -19,8 +19,12 @@ export function exportHospitalLogoMap(catalog,publicDir){
    const rawAliases=JSON.parse(row.aliases_json);
    if(!Array.isArray(rawAliases)||(config.aliases!==undefined&&!Array.isArray(config.aliases)))throw Error('Invalid aliases: '+id);
    const name=config.name??row.name;if(typeof name!=='string'||!name.trim())throw Error('Invalid name: '+id);
-   const aliases=[...new Set([...rawAliases,...(config.aliases||[]),...(name!==row.name?[row.name]:[])])];
-   if(!Array.isArray(aliases)||aliases.some(a=>typeof a!=='string'))throw Error('Invalid aliases: '+id);
+   const inheritedAliases=[...new Set([...rawAliases,...(config.aliases||[]),...(name!==row.name?[row.name]:[])])];
+   if(inheritedAliases.some(a=>typeof a!=='string'))throw Error('Invalid aliases: '+id);
+   const excludedAliases=config.excludedAliases??[];
+   if(!Array.isArray(excludedAliases)||excludedAliases.some(a=>typeof a!=='string'||!a.trim()))throw Error('Invalid reviewed alias exclusions: '+id);
+   const excluded=new Set(excludedAliases.map(a=>a.trim()));
+   const aliases=inheritedAliases.filter(a=>!excluded.has(a.trim()));
    if(config.city!==undefined&&typeof config.city!=='string')throw Error('Invalid reviewed city: '+id);
    if(config.scope!==undefined&&!['brand','institution'].includes(config.scope))throw Error('Invalid mapping scope: '+id);
    if(config.brandId!==undefined&&(typeof config.brandId!=='string'||!config.brandId||config.scope==='brand'))throw Error('Invalid branch brand ID: '+id);

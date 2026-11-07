@@ -14,3 +14,69 @@ test('rejects hash mismatch and duplicate public ID without changing existing ex
 test('whitespace is not an explicitly reviewed institution city',()=>fixture(({source,pub,row,insert})=>{row.details_json=JSON.stringify({logoMapping:{publicId:'fictional-approved',city:'   ',reviewedAt:'2026-11-05'}});insert(row);assert.throws(()=>exportHospitalLogoMap(source,pub))}));
 test('brand resolution respects reviewed city scope for named branches and explicit IDs',()=>{const brand={id:'acceptance-fictional-brand',name:'虚构口腔品牌',aliases:['虚构牙科'],scope:'brand',city:'',cities:['成都'],logo:'/fixture.png'};institutions.push(brand);try{assert.equal(resolveInstitution({hospital:'虚构口腔品牌（高新分院）',city:'成都市'})?.id,brand.id);assert.equal(resolveInstitution({hospital:'虚构牙科(高新分院)',city:'成都'})?.id,brand.id);assert.equal(resolveInstitution({hospital:'虚构口腔品牌（高新分院）',city:'北京'}),null);assert.equal(resolveInstitution({hospitalId:brand.id,hospital:'虚构口腔品牌（高新分院）',city:'北京'}),null);assert.equal(resolveInstitution({hospital:'虚构口腔品牌合作医院',city:'成都'}),null);}finally{institutions.pop()}});
 test('unknown explicit identity and ambiguous names never fall back; legacy identities remain stable',()=>{assert.equal(resolveInstitution({hospitalId:'unknown-id',hospital:'四川省人民医院',city:'成都'}),null);assert.equal(resolveInstitution({hospital:'协和医院'}),null);assert.equal(resolveInstitution({hospital:'四川省人民医院',city:'成都'})?.id,'sichuan-people');assert.equal(resolveInstitution({hospital:'重庆新桥医院',city:'重庆'})?.id,'chongqing-xinqiao');assert.equal(new Set(institutions.map(x=>x.id)).size,institutions.length)});
+
+test('reviewed Xinqiao branches use the approved brand asset and take precedence for exact names', () => {
+ const brand = resolveInstitution({hospital:'新桥口腔', city:'成都'});
+ const highTech = resolveInstitution({hospital:'新桥口腔（高新分院）', city:'成都市'});
+ const rennan = resolveInstitution({hospital:'新桥口腔成都总院', city:'成都'});
+ const yiguanmiao = resolveInstitution({hospital:'新桥口腔（衣冠庙院区）', city:'成都'});
+ assert.equal(brand?.id, 'xinqiao-dental');
+ assert.equal(highTech?.id, 'xinqiao-dental-chengdu-gaoxin');
+ assert.equal(rennan?.id, 'xinqiao-dental-chengdu-rennan');
+ assert.equal(yiguanmiao?.id, 'xinqiao-dental-chengdu-yiguanmiao');
+ for (const branch of [highTech, rennan, yiguanmiao]) assert.equal(branch.logo, brand.logo);
+ assert.equal(resolveInstitution({hospital:'新桥口腔（高新分院）', city:'西宁'}), null);
+ assert.equal(resolveInstitution({hospitalId:highTech.id, hospital:'新桥口腔（高新分院）', city:'西宁'}), null);
+ assert.equal(resolveInstitution({hospitalId:brand.id, hospital:'新桥口腔（高新分院）', city:'西宁'}), null);
+ assert.equal(resolveInstitution({hospitalId:highTech.id, hospital:'新桥口腔（高新分院）', city:'成都'})?.id, highTech.id);
+ assert.equal(resolveInstitution({hospitalId:brand.id, hospital:'新桥口腔（高新分院）', city:'成都'})?.id, brand.id);
+ assert.equal(resolveInstitution({hospital:'新桥口腔（西宁院区）', city:'西宁'})?.id, 'xinqiao-dental-xining');
+ assert.equal(resolveInstitution({hospitalId:brand.id, hospital:'成都新桥口腔医院', city:'成都'})?.logo, brand.logo);
+ assert.equal(resolveInstitution({hospital:'新桥口腔（某分院）', city:'德阳'})?.id, brand.id);
+ assert.equal(resolveInstitution({hospital:'重庆新桥医院', city:'重庆'})?.id, 'chongqing-xinqiao');
+});
+
+test('branch export requires its reviewed brand to cover the branch city', () => fixture(({source,pub,row,insert}) => {
+ insert({...row, hospital_id:'branch', details_json:JSON.stringify({logoMapping:{
+  publicId:'branch', brandId:'brand', city:'成都', reviewedAt:'2026-11-05',
+ }})});
+ assert.throws(() => exportHospitalLogoMap(source,pub), /Branch needs a reviewed brand/);
+ insert({...row, hospital_id:'brand', details_json:JSON.stringify({logoMapping:{
+  publicId:'brand', scope:'brand', cities:['成都'], reviewedAt:'2026-11-05',
+ }})});
+ assert.equal(exportHospitalLogoMap(source,pub).assets,1);
+ assert.equal(mappings(pub).find(m=>m.id==='branch').brandId,'brand');
+}));
+
+test('a saved Xinqiao branch ID falls back when the visit names a different reviewed branch', () => {
+ const hospitalId = 'xinqiao-dental-chengdu-gaoxin';
+ for (const [hospital, city] of [
+  ['新桥口腔（西宁院区）', '成都'],
+  ['新桥口腔（衣冠庙院区）', '成都'],
+  ['新桥口腔医院（衣冠庙分院）', '成都'],
+  ['新桥口腔（西宁分院）', ''],
+ ]) {
+  assert.equal(resolveInstitution({hospitalId, hospital, city}), null, hospital);
+ }
+ assert.equal(resolveInstitution({hospitalId, hospital:'新桥口腔医院（高新分院）', city:'成都'})?.id, hospitalId);
+ assert.equal(resolveInstitution({hospitalId})?.id, hospitalId);
+ assert.equal(resolveInstitution({hospitalId:'sichuan-people', hospital:'自定义医院名称', city:'西宁'})?.id, 'sichuan-people');
+});
+
+test('reviewed branch labels are matched across brand aliases before applying the city filter', () => {
+ for (const [hospital, city, expectedId] of [
+  ['新桥口腔（西宁分院）', '西宁市', 'xinqiao-dental-xining'],
+  ['成都新桥口腔医院（高新分院）', '成都', 'xinqiao-dental-chengdu-gaoxin'],
+  ['新桥口腔医院（衣冠庙分院）', '成都', 'xinqiao-dental-chengdu-yiguanmiao'],
+  ['新桥口腔（西宁分院）', '成都', null],
+  ['成都新桥口腔医院（高新分院）', '西宁', null],
+  ['新桥口腔医院（某分院）', '德阳', 'xinqiao-dental'],
+  ['自定义机构（西宁分院）', '西宁', null],
+ ]) {
+  assert.equal(resolveInstitution({hospital, city})?.id ?? null, expectedId, hospital + city);
+ }
+ const hospitalId = 'xinqiao-dental';
+ const hospital = '新桥口腔医院（西宁分院）';
+ assert.equal(resolveInstitution({hospitalId, hospital, city:'成都'}), null);
+ assert.equal(resolveInstitution({hospitalId, hospital, city:'西宁'})?.id, hospitalId);
+});

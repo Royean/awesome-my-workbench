@@ -23,6 +23,7 @@ export function exportHospitalLogoMap(catalog,publicDir){
    if(!Array.isArray(aliases)||aliases.some(a=>typeof a!=='string'))throw Error('Invalid aliases: '+id);
    if(config.city!==undefined&&typeof config.city!=='string')throw Error('Invalid reviewed city: '+id);
    if(config.scope!==undefined&&!['brand','institution'].includes(config.scope))throw Error('Invalid mapping scope: '+id);
+   if(config.brandId!==undefined&&(typeof config.brandId!=='string'||!config.brandId||config.scope==='brand'))throw Error('Invalid branch brand ID: '+id);
    const city=(config.city||'').trim();
    const cities=config.cities||[];
    if(config.scope==='brand'){
@@ -40,9 +41,13 @@ export function exportHospitalLogoMap(catalog,publicDir){
    const filename='hospital-'+sha+'.'+extension;
    assets.push({filename,bytes});
    mappings.push({id,catalogHospitalId:row.hospital_id,name,aliases,kind:'hospital',city,
-    ...(config.scope==='brand'?{scope:'brand',cities}:{}),province:row.province,
+    ...(config.scope==='brand'?{scope:'brand',cities}:{}),...(config.brandId?{brandId:config.brandId}:{}),province:row.province,
     logo:'/provider-logos/'+filename,website:config.website||row.logo_source_page,
     sourceUrl:row.logo_source_page,logoSourceUrl:row.logo_source_url,verifiedAt:config.reviewedAt});
+  }
+  const brands=new Map(mappings.filter(m=>m.scope==='brand').map(m=>[m.id,m]));
+  for(const mapping of mappings){
+   if(mapping.brandId&&!brands.get(mapping.brandId)?.cities.includes(mapping.city))throw Error('Branch needs a reviewed brand in its city: '+mapping.id);
   }
   // Validate the whole set before writing; pending candidates and private records never enter this file.
   fs.mkdirSync(path.join(publicDir,'provider-logos'),{recursive:true});

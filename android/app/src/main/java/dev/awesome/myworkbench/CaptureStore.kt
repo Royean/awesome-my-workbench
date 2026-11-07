@@ -123,7 +123,7 @@ internal class CapturePrefs(context: Context) {
             // Retain only source/cutover history by owner; never restore consent or a current source selection.
             exerciseOriginSince = prefs.getString("exercise_since_owner:$id", "") ?: ""
             exerciseLastSource = prefs.getString("exercise_last_source_owner:$id", "") ?: ""
-            lastSuccess = "尚未上传"; stepStatus = "尚未读取"
+            lastSuccess = "尚未上传"; stepStatus = "尚未读取"; healthStatus = "尚未读取其他健康数据"
         }
         owner = id; ownerName = name; paused = false; error = ""
     }

@@ -46,9 +46,14 @@ class CaptureIsolationTest {
         val prefs = CapturePrefs(context)
         assertTrue(prefs.paused); assertFalse(prefs.notifications); assertFalse(prefs.steps); assertTrue(prefs.selected.isEmpty()); assertTrue(prefs.healthKinds.isEmpty()); assertFalse(prefs.distance); assertEquals("", prefs.exerciseSource); assertTrue(prefs.exerciseSources.isEmpty()); assertFalse(prefs.exerciseSourceExplicit)
         prefs.bind("fictional-a", "虚构A"); prefs.notifications = true; prefs.steps = true; prefs.healthKinds = setOf("weight", "sleep"); prefs.distance = true; prefs.exerciseSource = "fictional.source"; prefs.exerciseSources = setOf("fictional.source"); prefs.exerciseSourceExplicit = true; prefs.selected = setOf("cmb.pb")
+        prefs.healthStatus = "运动记录：已读取1条"
+        prefs.bind("fictional-a", "虚构A重绑")
+        assertEquals("运动记录：已读取1条", CapturePrefs(context).healthStatus)
         prefs.pause("账号变化")
         assertTrue(CapturePrefs(context).paused)
         prefs.bind("fictional-b", "虚构B")
+        assertEquals("尚未读取其他健康数据", prefs.healthStatus)
+        assertEquals("尚未读取其他健康数据", CapturePrefs(context).healthStatus)
         assertFalse(prefs.notifications); assertFalse(prefs.steps); assertTrue(prefs.selected.isEmpty()); assertTrue(prefs.healthKinds.isEmpty()); assertFalse(prefs.distance); assertEquals("", prefs.exerciseSource); assertTrue(prefs.exerciseSources.isEmpty()); assertFalse(prefs.exerciseSourceExplicit)
     }
     @Test fun sourceDisableAndRevokedPermissionsStopQueuedData() {

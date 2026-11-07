@@ -33,7 +33,7 @@ if(window.__zhihengTestHooks&&typeof window.__zhihengTestHooks==='object')window
 const cacheKey=(requestSpace,requestWorkbench)=>`${account.user?.id||'local'}:${requestSpace}:${requestWorkbench}`;
 const api=async(url,opt={},requestSpace=space,requestWorkbench=workbench)=>{
  const writing=opt.method&&!['GET','HEAD'].includes(opt.method.toUpperCase());
- const hubRequest=url.startsWith('/api/developer-hub/');
+ const hubRequest=url.startsWith('/api/developer-hub/')||url.startsWith('/api/agent-execution/');
  if(writing&&!hubRequest)invalidateStateCache();
  try{const body=await fetchJSON(url+(url.includes('?')?'&':'?')+'space='+encodeURIComponent(requestSpace)+'&workbench='+encodeURIComponent(requestWorkbench),(writing||hubRequest||url.startsWith('/api/cgm/')||url.startsWith('/api/capture'))?{...opt,headers:{...opt.headers,'X-Workbench-Owner':account.user?.id||''}}:opt);
   if((hubRequest||url.startsWith('/api/cgm/')||url.startsWith('/api/capture'))&&foreignOwner(body)){sessionReplaced();throw Object.assign(new Error('登录账号已变化，请重新打开页面'),{status:409});}
@@ -91,6 +91,7 @@ async function restoreTrash(id,withParent=false){const x=trashItems.find(t=>t.id
  catch(err){if(!current())return;if(err.code==='parent_deleted'){if(dialog&&!dialog.isConnected)return;const msg=err.message.replace(/，需要一起恢复$/,'')+'，一起恢复？';openDrawer(`<p class="section-desc">${msg}</p>`,'恢复记录',esc(x?`${trashKind(x)} · ${trashTitle(x)}`:''),`${btn('取消','trash-open')}${btn('一起恢复','trash-restore-with:'+id,'primary')}`);$('.drawer')?.classList.add('drawer-compact');return;}throw err;}}
 
 function renderView(){if(!applicationReady)return;layoutUI.beforeRender();
+ if(!isHubRoute(route))developerHub.leave?.();
  if(isHubRoute(route)){
   overview.cleanup();
   if(!$('.drawer'))document.body.classList.remove('scroll-lock');

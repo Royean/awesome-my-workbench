@@ -1,0 +1,11 @@
+{
+  "serverUrl": "https://workbench.example.com",
+  "projects": [
+    {
+      "id": "my-project",
+      "name": "My project",
+      "path": "/absolute/path/to/registered/git-project"
+    }
+  ],
+  "codexPath": "/absolute/path/to/codex"
+}

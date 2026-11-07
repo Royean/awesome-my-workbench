@@ -1,3 +1,5 @@
+import { createExecutionUI } from './hub-execution.js';
+
 const API = '/api/developer-hub/issues';
 const ROUTE = 'development';
 const DETAIL = /^development\/issues\/([0-9a-f-]{36})$/i;
@@ -24,6 +26,7 @@ const updatedFirst = (a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || 
 
 export function createHubDevelopment(ctx) {
   const { esc, icon } = ctx;
+  const execution = createExecutionUI(ctx);
   let state;
   let mounted;
   function current() {
@@ -220,7 +223,9 @@ export function createHubDevelopment(ctx) {
   function render(route = ROUTE) {
     const data = current();
     const id = DETAIL.exec(route)?.[1];
-    return `<div class="dev-hub" data-dev-hub>${id ? detail(data, id) : list(data)}</div>`;
+    const tasks = route.split('/')[1] === 'tasks';
+    const tabs = `<nav class="dev-view-tabs" aria-label="开发视图"><a href="#development" data-dev-action="requirements"${tasks ? '' : ' aria-current="page"'}>${icon('grid', 16)}需求</a><a href="#development/tasks" data-dev-action="agent-tasks"${tasks ? ' aria-current="page"' : ''}>${icon('activity', 16)}Agent 任务</a></nav>`;
+    return `<div class="dev-hub" data-dev-hub>${tabs}${tasks ? execution.render('tasks', { taskId: route.split('/')[2], baseRoute: 'development/tasks' }) : id ? detail(data, id) : list(data)}</div>`;
   }
 
   function rerender(data) {
@@ -354,7 +359,10 @@ export function createHubDevelopment(ctx) {
     if (!panel) return;
     const data = current();
     mounted = { panel };
-    if (!data.loaded && !data.loading && !data.loadError) void load(data);
+    const tasks = route.split('/')[1] === 'tasks';
+    if (tasks) execution.bind(panel, 'tasks', { taskId: route.split('/')[2], baseRoute: 'development/tasks' });
+    else execution.cleanup();
+    if (!tasks && !data.loaded && !data.loading && !data.loadError) void load(data);
     const row = data.issues.find(issue => issue.id === DETAIL.exec(route)?.[1]);
     const results = panel.querySelector('[data-dev-results]');
     const status = panel.querySelector('[data-dev-field="status"]');
@@ -380,7 +388,12 @@ export function createHubDevelopment(ctx) {
       const target = event.target.closest('[data-dev-action]');
       if (!target || current() !== data) return;
       const { devAction, id } = target.dataset;
-      if (devAction === 'add' && !data.loading) add(data);
+      if (devAction === 'requirements' || devAction === 'agent-tasks') {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        ctx.navigate(devAction === 'agent-tasks' ? 'development/tasks' : ROUTE);
+      }
+      else if (devAction === 'add' && !data.loading) add(data);
       else if (devAction === 'detail') ctx.navigate(`${ROUTE}/issues/${id}`);
       else if (devAction === 'back') ctx.navigate(ROUTE);
       else if (devAction === 'teams') ctx.navigate('ai-teams/agents');
@@ -406,5 +419,5 @@ export function createHubDevelopment(ctx) {
     };
   }
 
-  return { render, bind, cleanup() { state = undefined; mounted = undefined; } };
+  return { render, bind, cleanup() { execution.cleanup(); state = undefined; mounted = undefined; } };
 }
